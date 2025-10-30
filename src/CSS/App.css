@@ -1,0 +1,299 @@
+:root{
+  font-family: 'Poppins', sans-serif;
+
+  --dark-mode: #111111;
+  --light-mode: #ffffff;
+  --navbar-offset: 72px; /* adjust if your navbar height differs */
+}
+
+body{
+  margin: 0;
+  padding: 0;
+
+  padding-left: auto;
+  padding-right: auto;
+
+  background-color: var(--dark-mode);
+  color: var(--light-mode);
+}
+
+/* Smooth scrolling for in-page anchors and offset for sticky navbar */
+html { scroll-behavior: smooth; }
+
+/* make anchors land below sticky navbar */
+section { scroll-margin-top: var(--navbar-offset); }
+
+/* make main sections take the full viewport (minus navbar) so only Home shows initially */
+main > section {
+  min-height: calc(100vh - var(--navbar-offset));
+  padding: 3rem 0;
+}
+
+/* NavBar Glass look */
+.glass-navbar{
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  background: rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  transition: background 200ms ease, box-shadow 200ms ease, backdrop-filter 200ms ease;
+  border-radius: 8px;
+}
+
+.glass-navbar .navbar-brand,
+.glass-navbar .nav-link{
+  color: #ffffff !important;
+}
+
+.glass-navbar .navbar-toggler{
+  border-color: rgba(255,255,255,0.2);
+}
+
+.glass-navbar .navbar-toggler-icon{
+  filter: invert(1) brightness(2);
+}
+
+/* Mode Switcher */
+.ModeSwitcher {
+  position: fixed;
+  top: 5rem;
+  right: 2rem;
+  z-index: 2050;
+}
+
+.ModeSwitcher button {
+  width: 60px;
+  height: 60px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  border: none;
+  z-index: 1050;
+  overflow: visible;
+  line-height: 0;
+}
+
+.ModeSwitcher button svg,
+.ModeSwitcher button img {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+body.light-mode {
+  --dark-mode: #ffffff;
+  --light-mode: #111111;
+  background-color: var(--dark-mode);
+  color: var(--light-mode);
+}
+
+body.light-mode .glass-navbar {
+  background: rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+body.light-mode .glass-navbar .navbar-brand,
+body.light-mode .glass-navbar .nav-link {
+  color: #111 !important;
+}
+
+.mode-btn{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(6px) saturate(120%);
+  z-index: 2060;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+.mode-btn.dark{
+  background: rgba(255,255,255,0.02);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.mode-btn.light{
+  background: rgba(0, 0, 0, 0.06);
+  color: #111;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(6px) saturate(120%);
+}
+
+.mode-btn:focus {
+  outline: 3px solid rgba(255,255,255,0.12);
+  outline-offset: 2px;
+}
+
+/* Main */
+
+/* Home Section */
+.Home {
+  /* occupy the visible viewport area below the navbar and center content */
+  min-height: calc(100vh - var(--navbar-offset));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.Home h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.Home p:nth-child(1) {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.Home > p:nth-of-type(2) {
+  font-size: 24px;
+  font-weight: 400;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: justify;
+}
+
+.Resume{
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--light-mode);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: background 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.Resume:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  cursor : pointer;
+}
+
+/* Projects */
+
+/* centered container used across sections for consistent left-aligned content */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* left-align section headings like the screenshot */
+.Projects .container h2,
+.OtherSection .container h2 {
+  text-align: left;
+  font-size: clamp(1.75rem, 3.4vw, 2.25rem);
+  margin: 0 0 0 0;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* adjust subtitle / description under the heading, left aligned */
+.Projects .container p {
+  font-size: 16px;
+  text-align: left;
+  max-width: 720px;
+  color: inherit;
+  transition: color 220ms ease;
+}
+
+@media (max-width: 640px) {
+  :root { --navbar-offset: 64px; }
+  .ModeSwitcher { top: 4.25rem; right: 1rem; }
+  .Home { padding-top: calc(var(--navbar-offset) + 1rem); }
+  .Projects .container h2 { font-size: 32px; }
+}
+
+/* Projects grid and glass cards */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.project-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.25);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+}
+
+.project-media {
+  flex: 1 1 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+}
+
+.project-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.project-body h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--light-mode);
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.85rem;
+}
+
+.project-cta {
+  margin-top: 0.25rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: var(--light-mode);
+}
