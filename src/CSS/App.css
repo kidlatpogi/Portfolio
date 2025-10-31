@@ -78,6 +78,12 @@ body{
   overflow: hidden;
 }
 
+@media (max-width: 640px) {
+  body {
+    overflow: auto;
+  }
+}
+
 * {
   font-family: 'Poppins', sans-serif;
 }
@@ -498,37 +504,115 @@ body.light-mode .project-cta {
 }
 
 .Skills-card {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
   border-radius: 14px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 320px;
-  box-shadow: 0 6px 22px rgba(0,0,0,0.25);
-  backdrop-filter: blur(8px) saturate(120%);
-  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  min-height: 250px;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.22);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
 }
 
 body.light-mode .Skills-card {
-  background: rgba(0,0,0,0.08);
-  border: 1px solid rgba(0,0,0,0.16);
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.14);
   box-shadow: 0 6px 22px rgba(0,0,0,0.12);
 }
 
 .Skills-card-body {
-  padding: 1.25rem;
+  padding: 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  align-items: center;
+  align-items: flex-start; /* left align content to match design */
 }
 
 .Skills-card h3 {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  font-size: 1.125rem;
+  font-weight: 800;
   color: var(--light-mode);
+  width: 100%;
+}
+
+.skill-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  padding: 6px;
+}
+
+.tags {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: var(--tag-bg, rgba(255,255,255,0.03));
+  border: 1px solid var(--tag-border, rgba(255,255,255,0.12));
+  color: var(--tag-color, inherit);
+  font-size: 0.88rem;
+  transition: background 220ms, border-color 220ms, color 220ms;
+}
+
+.Skills-card p {
+  margin: 0.2rem 0;
+  opacity: 0.95;
+  font-size: 0.95rem;
+}
+
+body.light-mode .tag {
+  --tag-bg: rgba(0,0,0,0.06);
+  --tag-border: rgba(0,0,0,0.16);
+  --tag-color: #222;
+}
+
+/* make skill-icon contrast in light mode */
+body.light-mode .skill-icon {
+  background: rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.tags-grid {
+  display: grid;
+  /* force 2 columns x 2 rows layout for tag lists */
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(40px, auto);
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .tags-grid {
+    grid-template-columns: 1fr; /* stack to single column on small screens */
+  }
+}
+
+@media (max-width: 880px) {
+  .Skills-grid { gap: 1rem; }
+  .Skills-card { min-height: 260px; }
+}
+
+@media (max-width: 480px) {
+  .skill-icon { width: 32px; height: 32px; }
+  .tag { padding: 0.35rem 0.7rem; font-size: 0.82rem; }
 }
 
 /* Certifications -------------------------------------------------------------------------------------*/
@@ -572,16 +656,91 @@ body.light-mode .Skills-card {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 250px;
+  min-height: 200px;
   box-shadow: 0 6px 22px rgba(0,0,0,0.25);
   backdrop-filter: blur(8px) saturate(120%);
   -webkit-backdrop-filter: blur(8px) saturate(120%);
+}
+
+.Certifications-card .card-grid {
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: auto;
+  gap: 0.35rem;
+  align-items: start;
+}
+
+.Certifications-card .card-header{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+  justify-content:space-between;
+}
+
+.Certifications-card h3{
+  margin:0;
+  font-size:1.05rem;
+  font-weight:800;
+  color:var(--light-mode);
+}
+
+.cert-badge{
+  display:inline-block;
+  background: rgba(255,255,255,0.06);
+  color: var(--light-mode);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight:700;
+}
+
+.cert-badge a{
+  color: inherit;
+  text-decoration: none;
+}
+
+.cert-issuer, .cert-year {
+  margin:0;
+  opacity:0.9;
+  font-size:0.95rem;
+  margin-top: 1rem;
+}
+
+.cert-year{
+  margin-bottom: 1rem;
+}
+
+.cert-link a{
+  color: inherit;
+  text-decoration: none;
+  background: rgba(255,255,255,0.02);
+  padding: 0.35rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Light mode adjustments for badge and link */
+body.light-mode .cert-badge,
+body.light-mode .cert-link a{
+  background: rgba(0,0,0,0.06);
+  color: #111;
+  border: 1px solid rgba(0,0,0,0.12);
 }
 
 body.light-mode .Certifications-card {
   background: rgba(0,0,0,0.08);
   border: 1px solid rgba(0,0,0,0.16);
   box-shadow: 0 6px 22px rgba(0,0,0,0.12);
+}
+
+.card-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  padding: 1rem;
+  align-items: center;
 }
 
 /* Get in touch -------------------------------------------------------------------------------------*/
