@@ -1,3 +1,61 @@
+.Contact-connect-card,
+.Contact-response-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  transition: background 220ms, border-color 220ms, box-shadow 220ms;
+  color: #fff;
+  padding: 1.5rem 1.5rem 1.2rem 1.5rem;
+  margin-bottom: 1rem;
+}
+
+body.light-mode .Contact-connect-card,
+body.light-mode .Contact-response-card {
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.16);
+  color: #111;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+.Contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 12px;
+  padding: 0.7em 1em;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1.05em;
+  margin-bottom: 0.7em;
+  text-decoration: none;
+  transition: background 220ms, border-color 220ms, color 220ms;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.Contact-link:hover,
+.Contact-link:focus {
+  color: #2196f3;
+  color: #fff;
+  border-color: #2196f3;
+}
+body.light-mode .Contact-link {
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.16);
+  color: #111;
+}
+body.light-mode .Contact-link:hover,
+body.light-mode .Contact-link:focus {
+  background: #ffe066;
+  color: #111;
+  border-color: #ffe066;
+}
 :root{
   font-family: 'Poppins', sans-serif;
 
@@ -15,15 +73,18 @@ body{
 
   background-color: var(--dark-mode);
   color: var(--light-mode);
+  font-family: 'Poppins', sans-serif;
+
+  overflow: hidden;
 }
 
-/* Smooth scrolling for in-page anchors and offset for sticky navbar */
+* {
+  font-family: 'Poppins', sans-serif;
+}
 html { scroll-behavior: smooth; }
 
-/* make anchors land below sticky navbar */
 section { scroll-margin-top: var(--navbar-offset); }
 
-/* make main sections take the full viewport (minus navbar) so only Home shows initially */
 main > section {
   min-height: calc(100vh - var(--navbar-offset));
   padding: 3rem 0;
@@ -46,6 +107,26 @@ main > section {
 .glass-navbar .navbar-brand,
 .glass-navbar .nav-link{
   color: #ffffff !important;
+  font-family: 'Poppins', sans-serif;
+  transition: color 220ms, background 220ms;
+}
+
+.glass-navbar .navbar-brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.glass-navbar .nav-link {
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin: 0 0.25rem;
+}
+
+.glass-navbar .nav-link:hover,
+.glass-navbar .nav-link:focus {
+  background: #2196f3;
+  color: #fff !important;
 }
 
 .glass-navbar .navbar-toggler{
@@ -101,8 +182,15 @@ body.light-mode .glass-navbar {
   -webkit-backdrop-filter: blur(10px) saturate(120%);
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
 }
+
 body.light-mode .glass-navbar .navbar-brand,
 body.light-mode .glass-navbar .nav-link {
+  color: #111 !important;
+}
+
+body.light-mode .glass-navbar .nav-link:hover,
+body.light-mode .glass-navbar .nav-link:focus {
+  background: #ffc107;
   color: #111 !important;
 }
 
@@ -128,6 +216,17 @@ body.light-mode .glass-navbar .nav-link {
 }
 
 .mode-btn.light{
+.Contact-send-btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.Contact-status {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  color: #cdd6e0;
+}
+.Contact-status.success { color: #7be495; }
+.Contact-status.error { color: #ff7575; }
   background: rgba(0, 0, 0, 0.06);
   color: #111;
   border: 1px solid rgba(0, 0, 0, 0.08);
@@ -140,9 +239,42 @@ body.light-mode .glass-navbar .nav-link {
   outline-offset: 2px;
 }
 
+/* Theme transition overlay - expanding circular reveal from the switcher */
+.theme-anim{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 3000;
+  mix-blend-mode: normal;
+  --x: 50px; /* will be overridden inline */
+  --y: 50px; /* will be overridden inline */
+  --r: 0px;  /* will be overridden inline */
+  --anim-bg: #ffffff;
+  /* initially clipped to a tiny circle at the button */
+  clip-path: circle(0px at var(--x) var(--y));
+  transition: clip-path 560ms cubic-bezier(.2,.9,.2,1), opacity 320ms linear;
+  background: var(--anim-bg);
+  opacity: 1;
+}
+
+.theme-anim.active{
+  /* expand to the full radius computed in inline var --r */
+  clip-path: circle(var(--r) at var(--x) var(--y));
+}
+
+/* Small fade to smooth the in-between look when toggling back-and-forth quickly */
+.theme-anim::after{
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
 /* Main */
 
-/* Home Section */
+/* Home Section -------------------------------------------------------------------------------------*/
 .Home {
   /* occupy the visible viewport area below the navbar and center content */
   min-height: calc(100vh - var(--navbar-offset));
@@ -195,7 +327,7 @@ body.light-mode .glass-navbar .nav-link {
   cursor : pointer;
 }
 
-/* Projects */
+/* Projects -------------------------------------------------------------------------------------*/
 
 /* centered container used across sections for consistent left-aligned content */
 .container {
@@ -241,8 +373,8 @@ body.light-mode .glass-navbar .nav-link {
 }
 
 .project-card {
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
   border-radius: 14px;
   overflow: hidden;
   display: flex;
@@ -255,7 +387,17 @@ body.light-mode .glass-navbar .nav-link {
 
 .project-media {
   flex: 1 1 0;
-  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08));
+}
+
+body.light-mode .project-card {
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.16);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.12);
+}
+
+body.light-mode .project-media {
+  background: linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.08));
 }
 
 .project-body {
@@ -273,6 +415,11 @@ body.light-mode .glass-navbar .nav-link {
   color: var(--light-mode);
 }
 
+.project-body a{
+  text-decoration: none;
+  color: inherit;
+}
+
 .tags {
   display: flex;
   gap: 0.5rem;
@@ -284,16 +431,454 @@ body.light-mode .glass-navbar .nav-link {
   display: inline-block;
   padding: 0.3rem 0.6rem;
   border-radius: 999px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.04);
+  background: var(--tag-bg, rgba(255,255,255,0.03));
+  border: 1px solid var(--tag-border, rgba(255,255,255,0.12));
+  color: var(--tag-color, inherit);
   font-size: 0.85rem;
+  transition: background 220ms, border-color 220ms, color 220ms;
+}
+
+body.light-mode .tag {
+  --tag-bg: rgba(0,0,0,0.06);
+  --tag-border: rgba(0,0,0,0.18);
+  --tag-color: #222;
 }
 
 .project-cta {
   margin-top: 0.25rem;
   padding: 0.5rem 1.25rem;
   border-radius: 999px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: var(--cta-bg, rgba(255,255,255,0.03));
+  border: 1px solid var(--cta-border, rgba(255,255,255,0.12));
+  color: var(--cta-color, var(--light-mode));
+  transition: background 220ms, border-color 220ms, color 220ms;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+body.light-mode .project-cta {
+  --cta-bg: rgba(0,0,0,0.06);
+  --cta-border: rgba(0,0,0,0.18);
+  --cta-color: #222;
+}
+
+/* Technical Skills -------------------------------------------------------------------------------------*/
+.Skills .container h2,
+.OtherSection .container h2 {
+  text-align: left;
+  font-size: clamp(1.75rem, 3.4vw, 2.25rem);
+  margin: 0 0 0 0;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.Skills .container p {
+  font-size: 16px;
+  text-align: left;
+  max-width: 720px;
+  color: inherit;
+  transition: color 220ms ease;
+}
+
+@media (max-width: 640px) {
+  :root { --navbar-offset: 64px; }
+  .ModeSwitcher { top: 4.25rem; right: 1rem; }
+  .Home { padding-top: calc(var(--navbar-offset) + 1rem); }
+  .Skills .container h2 { font-size: 32px; }
+}
+
+.Skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.Skills-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.25);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+}
+
+body.light-mode .Skills-card {
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.16);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.12);
+}
+
+.Skills-card-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.Skills-card h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: var(--light-mode);
+}
+
+/* Certifications -------------------------------------------------------------------------------------*/
+.Certifications .container h2,
+.OtherSection .container h2 {
+  text-align: left;
+  font-size: clamp(1.75rem, 3.4vw, 2.25rem);
+  margin: 0 0 0 0;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.Certifications .container p {
+  font-size: 16px;
+  text-align: left;
+  max-width: 720px;
+  color: inherit;
+  transition: color 220ms ease;
+}
+
+@media (max-width: 640px) {
+  :root { --navbar-offset: 64px; }
+  .ModeSwitcher { top: 4.25rem; right: 1rem; }
+  .Home { padding-top: calc(var(--navbar-offset) + 1rem); }
+  .Certifications .container h2 { font-size: 32px; }
+}
+
+.Certifications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.Certifications-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 250px;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.25);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+}
+
+body.light-mode .Certifications-card {
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.16);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.12);
+}
+
+/* Get in touch -------------------------------------------------------------------------------------*/
+.Contact .container h2,
+.OtherSection .container h2 {
+  text-align: left;
+  font-size: clamp(1.75rem, 3.4vw, 2.25rem);
+  margin: 0;
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.Contact .container p {
+  font-size: 16px;
+  text-align: left;
+  max-width: 720px;
+  color: inherit;
+  transition: color 220ms ease;
+}
+
+@media (max-width: 640px) {
+  :root { --navbar-offset: 64px; }
+  .ModeSwitcher { top: 4.25rem; right: 1rem; }
+  .Home { padding-top: calc(var(--navbar-offset) + 1rem); }
+  .Contact .container h2 { font-size: 32px; }
+}
+
+.Contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.Contact-form-card,
+.Contact-connect-card,
+.Contact-response-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+  transition: background 220ms, border-color 220ms, box-shadow 220ms;
+  padding: 2rem 1.5rem;
+}
+
+.Contact-form-card {
+  min-height: 340px;
+}
+
+.Contact-connect-card {
+  min-height: 300px;
+}
+
+.Contact-response-card {
+  min-height: 200px;
+}
+
+.Contact-connect-card h3,
+.Contact-response-card h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--light-mode);
+}
+
+.Contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.Contact-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.Contact-row .Contact-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.Contact-email-row {
+  font-size: 14px;
+  color: inherit;
+  text-align: center;
+  opacity: 0.85;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 0.5rem;
+}
+
+.Contact-email-row a {
+  color: #6ec1e4;
+  text-decoration: none;
+  transition: color 200ms;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.Contact-email-row a:hover {
+  color: #2196f3;
+}
+
+body.light-mode .Contact-email-row {
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+body.light-mode .Contact-email-row a:hover {
+  color: #ffc107;
+}
+
+.Contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.Contact-field label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--light-mode);
+}
+
+.Contact-field label span {
+  color: #ff4444;
+}
+
+.Contact-field input,
+.Contact-field textarea {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.12);
+  color: var(--light-mode);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 200ms, background 200ms;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  outline: none;
+}
+
+.Contact-field input::placeholder,
+.Contact-field textarea::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+.Contact-field input:focus,
+.Contact-field textarea:focus {
+  border-color: #6ec1e4;
+  background: rgba(255,255,255,0.18);
+}
+
+body.light-mode .Contact-field input,
+body.light-mode .Contact-field textarea {
+  border: 1px solid rgba(0,0,0,0.18);
+  background: rgba(0,0,0,0.08);
+  color: #111;
+}
+
+body.light-mode .Contact-field input::placeholder,
+body.light-mode .Contact-field textarea::placeholder {
+  color: rgba(0,0,0,0.5);
+}
+
+.Contact-send-btn {
+  padding: 0.85rem 2rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: var(--light-mode);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  transition: background 200ms, border-color 200ms, box-shadow 200ms, color 200ms;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  align-self: flex-start;
+}
+
+.Contact-send-btn:hover,
+.Contact-send-btn:focus {
+  background: #2196f3;
+  border-color: #2196f3;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(33, 150, 243, 0.4);
+  outline: none;
+}
+
+body.light-mode .Contact-form-card,
+body.light-mode .Contact-connect-card,
+body.light-mode .Contact-response-card {
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.16);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+body.light-mode .Contact-send-btn {
+  background: rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.18);
+  color: #111;
+}
+
+body.light-mode .Contact-send-btn:hover,
+body.light-mode .Contact-send-btn:focus {
+  background: #ffc107;
+  border-color: #ffc107;
+  color: #111;
+  box-shadow: 0 8px 24px rgba(255, 193, 7, 0.4);
+}
+
+.Contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: 0.7em;
+  text-decoration: none;
+  transition: background 220ms, border-color 220ms, color 220ms, box-shadow 220ms;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.Contact-link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.Contact-link-desc {
+  margin-left: auto;
+  font-size: 0.85rem;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.Contact-link:hover,
+.Contact-link:focus {
+  background: #2196f3;
+  color: #fff;
+  border-color: #2196f3;
+  box-shadow: 0 4px 16px rgba(33, 150, 243, 0.4);
+}
+
+body.light-mode .Contact-link {
+  background: rgba(0,0,0,0.08);
+  border: 1px solid rgba(0,0,0,0.16);
+  color: #111;
+}
+
+body.light-mode .Contact-link:hover,
+body.light-mode .Contact-link:focus {
+  background: #ffc107;
+  color: #111;
+  border-color: #ffc107;
+  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.4);
+}
+
+.Contact-response-card p {
+  margin: 0;
+  line-height: 1.6;
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* Footer -------------------------------------------------------------------------------------*/
+footer {
+  background: var(--footer-bg, rgba(255,255,255,0.02));
+  border-top: 1px solid var(--footer-border, rgba(255,255,255,0.04));
+  padding: 1.5rem 0;
+  text-align: center;
+  color: var(--footer-color, var(--light-mode));
+  font-size: 0.9rem;
+  transition: background 220ms, border-color 220ms, color 220ms;
+}
+
+body.light-mode footer {
+  --footer-bg: rgba(0,0,0,0.06);
+  --footer-border: rgba(0,0,0,0.18);
+  --footer-color: #222;
 }
