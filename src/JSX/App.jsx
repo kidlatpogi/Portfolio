@@ -116,31 +116,96 @@ function App() {
             </div>
           </section>
 
-          {/* Technical Skills */}
+          {/* SKILLS */}
           <section className='Skills' id='Skills'>
             <div className="container">
               <h2>Technical Skills</h2>
               <p>Core technologies and tools I work with</p>
+
               <div className="Skills-grid">
-
-                {/* Core Skills */}
+                {/* FRONTEND */}
                 <article className="Skills-card">
                   <div className="Skills-card-body">
-                    <h3>CORE SKILLS</h3>
+                    <h3>
+                      <span className="skill-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M16 18l6-6-6-6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M8 6l-6 6 6 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                      FRONTEND
+                    </h3>
+                    <div className='tags-grid'>
+                      <p className='tag'>HTML5</p>
+                      <p className='tag'>CSS3</p>
+                      <p className='tag'>JavaScript</p>
+                      <p className='tag'>React JS</p>
+                      <p className='tag'>React Native</p>
+                    </div>
                   </div>
                 </article>
 
-                {/* Frameworks */}
+                {/* BACKEND */}
                 <article className="Skills-card">
                   <div className="Skills-card-body">
-                    <h3>FRAMEWORKS</h3>
+                    <h3>
+                      <span className="skill-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="3" y="4" width="18" height="6" rx="1" stroke="currentColor" strokeWidth="1.4" />
+                          <rect x="7" y="14" width="10" height="6" rx="1" stroke="currentColor" strokeWidth="1.4" />
+                        </svg>
+                      </span>
+                      BACKEND
+                    </h3>
+                    <div className='tags-grid'>
+                      <p className='tag'>Node.js</p>
+                      <p className='tag'>Express</p>
+                      <p className='tag'>MongoDB</p>
+                      <p className='tag'>PostgreSQL</p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+
+              <div className='Skills-grid'>
+                {/* TOOLS */}
+                <article className="Skills-card">
+                  <div className="Skills-card-body">
+                    <h3>
+                      <span className="skill-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 2v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M12 18v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.4" />
+                        </svg>
+                      </span>
+                      TOOLS
+                    </h3>
+                    <div className='tags-grid'>
+                      <p className='tag'>Git</p>
+                      <p className='tag'>GitHub</p>
+                      <p className='tag'>VS Code</p>
+                      <p className='tag'>Godot</p>
+                    </div>
                   </div>
                 </article>
 
-                {/* Tools */}
+                {/* DESIGN */}
                 <article className="Skills-card">
                   <div className="Skills-card-body">
-                    <h3>TOOLS</h3>
+                    <h3>
+                      <span className="skill-icon" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 2l3 7h7l-5.5 4 2 7L12 17l-6.5 3 2-7L2 9h7l3-7z" stroke="currentColor" strokeWidth="0.9" strokeLinejoin="round" strokeLinecap="round" />
+                        </svg>
+                      </span>
+                      DESIGN
+                    </h3>
+                    <div className='tags-grid'>
+                      <p className='tag'>Photoshop</p>
+                      <p className='tag'>Canva</p>
+                      <p className='tag'>Figma</p>
+                    </div>
                   </div>
                 </article>
               </div>
@@ -155,20 +220,72 @@ function App() {
 
               <h4>MAJOR CERTIFICATIONS</h4>
               <div className="Certifications-grid">
-                <article className="Certifications-card"></article>
-                <article className="Certifications-card"></article>
+                <article className="Certifications-card">
+                  <div className='card-grid'>
+                    <div className='card-header'>
+                      <h3>ITS-Database Certification</h3>
+                      <span className='cert-badge' aria-hidden='true'><a href="https://www.credly.com/badges/ec097417-e36a-4642-b03b-df96919ae380/public_url" target="_blank" rel="noopener noreferrer">Verified</a></span>
+                    </div>
+                    <p className='cert-issuer'>Certiport</p>
+                    <p className='cert-year'>2025</p>
+                    <p className='cert-link'><a href="https://raw.githubusercontent.com/kidlatpogi/kidlatpogi/refs/heads/main/assets/certifications/it-specialist-databases-certificate.png" target="_blank" rel="noopener noreferrer">View Credential</a></p>
+                  </div>
+                </article>
+                
+                <article className="Certifications-card">
+                  <div className='card-grid'>
+                    <div className='card-header'>
+                      <h3>Responsive Web-Design Certification</h3>
+                      <span className='cert-badge' aria-hidden='true'><a href="https://www.freecodecamp.org/certification/kidlat/responsive-web-design" target="_blank" rel="noopener noreferrer">Verified</a></span>
+                    </div>
+                    <p className='cert-issuer'>FreeCodeCamp</p>
+                    <p className='cert-year'>2024</p>
+                    <p className='cert-link'><a href="https://raw.githubusercontent.com/kidlatpogi/kidlatpogi/refs/heads/main/assets/certifications/responsive-web-design-certificate.png" target="_blank" rel="noopener noreferrer">View Credential</a></p>
+                  </div>
+                </article>
               </div>
 
               <h4>ADDITIONAL CERTIFICATIONS</h4>
               <div className="Certifications-grid">
-                <article className="Certifications-card"></article>
-                <article className="Certifications-card"></article>
-                <article className="Certifications-card"></article>
+                <article className="Certifications-card">
+                  <div className='card-grid'>
+                    <div className='card-header'>
+                      <h3>Git Training Certification</h3>
+                      <span className='cert-badge' aria-hidden='true'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">Verified</a></span>
+                    </div>
+                    <p className='cert-issuer'>SkillUp by Simplilearn</p>
+                    <p className='cert-year'>2025</p>
+                    <p className='cert-link'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">View Credential</a></p>
+                  </div>
+                </article>
+
+                <article className="Certifications-card">
+                  <div className='card-grid'>
+                    <div className='card-header'>
+                      <h3>Cloud Computing Certification</h3>
+                      <span className='cert-badge' aria-hidden='true'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">Verified </a></span>
+                    </div>
+                    <p className='cert-issuer'>SkillUp by Simplilearn</p>
+                    <p className='cert-year'>2025</p>
+                    <p className='cert-link'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">View Credential</a></p>
+                  </div>
+                </article>
+
+                <article className="Certifications-card">
+                  <div className='card-grid'>
+                    <div className='card-header'>
+                      <h3>DevOps Certification</h3>
+                      <span className='cert-badge' aria-hidden='true'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true" target='_blank' rel="noopener noreferrer">Verified</a></span>
+                    </div>
+                    <p className='cert-issuer'>SkillUp by Simplilearn</p>
+                    <p className='cert-year'>2025</p>
+                    <p className='cert-link'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">View Credential</a></p>
+                  </div>
+                </article>
               </div>
             </div>
           </section>
 
-          {/* Get in touch */}
           {/* Get in touch */}
           <section className='Contact' id='Contact'>
             <div className="container">
