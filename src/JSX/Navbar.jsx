@@ -81,18 +81,30 @@ export function Nav({ brand = 'Zeus Bautista', children, className = '' }) {
             <span className="navbar-toggler-icon" />
           </button>
           <a className="navbar-brand" href="#" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <img 
-              src="/thunder-blue.png" 
-              alt="Thunder Icon" 
-              className="navbar-thunder-icon dark-mode-thunder"
-              style={{ width: '28px', height: '28px', display: 'block' }}
-            />
-            <img 
-              src="/thunder-yellow.png" 
-              alt="Thunder Icon" 
-              className="navbar-thunder-icon light-mode-thunder"
-              style={{ width: '28px', height: '28px', display: 'none' }}
-            />
+            {/* Dark mode thunder icon - blue */}
+            <svg 
+              className="navbar-thunder-icon dark-mode-thunder" 
+              width="28" 
+              height="28" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ display: 'block' }}
+            >
+              <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" fill="#6EC1E4" stroke="#6EC1E4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            {/* Light mode thunder icon - yellow */}
+            <svg 
+              className="navbar-thunder-icon light-mode-thunder" 
+              width="28" 
+              height="28" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+              style={{ display: 'none' }}
+            >
+              <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" fill="#FFC107" stroke="#FFC107" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
             {brand}
           </a>
           <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id="navbarNav">
