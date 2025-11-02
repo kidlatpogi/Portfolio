@@ -2,6 +2,8 @@ import { useState } from 'react'
 import '../CSS/App.css'
 import Nav, { NavItem } from './Navbar'
 import ModeSwitcher from '../JS/ModeSwitcher.jsx'
+import GitHubStarButton from '../JS/GitHubStarButton.jsx'
+import TypingEffect from '../JS/TypingEffect.jsx'
 
 function App() {
   const [contactStatus, setContactStatus] = useState('idle') // 'idle' | 'sending' | 'success' | 'error'
@@ -35,7 +37,7 @@ function App() {
 
   return (
       <div> 
-        <Nav className="Nav glass-navbar" brand="Zeus Angelo">
+        <Nav className="Nav glass-navbar" brand="Zeus Bautista">
           <NavItem to="#Home">Home</NavItem>
           <NavItem to="#Projects">Projects</NavItem>
           <NavItem to="#Skills">Skills</NavItem>
@@ -52,17 +54,38 @@ function App() {
           {/* Home */}
           <section className='Home' id='Home'>
             <h1>Hi, I'm Zeus Angelo Bautista</h1>
-            <p>Aspiring Front-End Developer & Responsive Web Design Specialist</p>
+            <p>
+              <TypingEffect 
+                texts={[
+                  'Aspiring Front-End Developer & Responsive Web Design Specialist',
+                  'Building Beautiful & Functional Web Experiences',
+                  'Passionate About Clean Code & User Interface Design'
+                ]}
+                typingSpeed={80}
+                deletingSpeed={40}
+                pauseDuration={2500}
+              />
+            </p>
             <p>I'm Zeus Bautista, a focused 3rd-year I.T. student dedicated to full-cycle application development. I specialize in building user-friendly web experiences and managing efficient data structures. This is supported by my Database Management certification and practical experience in preparing data for seamless system integration.</p>
             
-            <a
-              className="Resume"
-              href="/RESUME SAMPLE.pdf"
-              download="Zeus_Angelo_Bautista_Resume.pdf"
-              aria-label="Download Zeus Angelo Bautista resume"
-            >
-              Download Resume
-            </a>
+            {/* Button grid - Download Resume and GitHub Star button */}
+            <div className="Home-button-grid">
+              <a
+                className="Resume"
+                href="/Zeus_Angelo_Bautista_Resume.pdf"
+                download="Zeus_Angelo_Bautista_Resume.pdf"
+                aria-label="Download Zeus Angelo Bautista resume"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download Resume
+              </a>
+
+              <GitHubStarButton repo="kidlatpogi/kidlatpogi" className="Resume" />
+            </div>
           </section>
 
           {/* Projects */}
@@ -158,10 +181,9 @@ function App() {
                       BACKEND
                     </h3>
                     <div className='tags-grid'>
-                      <p className='tag'>Node.js</p>
-                      <p className='tag'>Express</p>
-                      <p className='tag'>MongoDB</p>
-                      <p className='tag'>PostgreSQL</p>
+                      <p className='tag'>SQL</p>
+                      <p className='tag'>Firebase</p>
+                      <p className='tag'>Python</p>
                     </div>
                   </div>
                 </article>
@@ -224,11 +246,23 @@ function App() {
                   <div className='card-grid'>
                     <div className='card-header'>
                       <h3>ITS-Database Certification</h3>
-                      <span className='cert-badge' aria-hidden='true'><a href="https://www.credly.com/badges/ec097417-e36a-4642-b03b-df96919ae380/public_url" target="_blank" rel="noopener noreferrer">Verified</a></span>
+                      <span className='cert-badge' aria-hidden='true'>
+                        <a href="https://www.credly.com/badges/ec097417-e36a-4642-b03b-df96919ae380/public_url" target="_blank" rel="noopener noreferrer">
+                          Verified
+                        </a>
+                      </span>
                     </div>
                     <p className='cert-issuer'>Certiport</p>
                     <p className='cert-year'>2025</p>
-                    <p className='cert-link'><a href="https://raw.githubusercontent.com/kidlatpogi/kidlatpogi/refs/heads/main/assets/certifications/it-specialist-databases-certificate.png" target="_blank" rel="noopener noreferrer">View Credential</a></p>
+                    <p className='cert-link'>
+                      <a href="https://raw.githubusercontent.com/kidlatpogi/kidlatpogi/refs/heads/main/assets/certifications/it-specialist-databases-certificate.png" target="_blank" rel="noopener noreferrer">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        View Credential
+                      </a>
+                    </p>
                   </div>
                 </article>
                 
@@ -236,11 +270,23 @@ function App() {
                   <div className='card-grid'>
                     <div className='card-header'>
                       <h3>Responsive Web-Design Certification</h3>
-                      <span className='cert-badge' aria-hidden='true'><a href="https://www.freecodecamp.org/certification/kidlat/responsive-web-design" target="_blank" rel="noopener noreferrer">Verified</a></span>
+                      <span className='cert-badge' aria-hidden='true'>
+                        <a href="https://www.freecodecamp.org/certification/kidlat/responsive-web-design" target="_blank" rel="noopener noreferrer">
+                          Verified
+                        </a>
+                      </span>
                     </div>
                     <p className='cert-issuer'>FreeCodeCamp</p>
                     <p className='cert-year'>2024</p>
-                    <p className='cert-link'><a href="https://raw.githubusercontent.com/kidlatpogi/kidlatpogi/refs/heads/main/assets/certifications/responsive-web-design-certificate.png" target="_blank" rel="noopener noreferrer">View Credential</a></p>
+                    <p className='cert-link'>
+                      <a href="https://raw.githubusercontent.com/kidlatpogi/kidlatpogi/refs/heads/main/assets/certifications/responsive-web-design-certificate.png" target="_blank" rel="noopener noreferrer">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        View Credential
+                      </a>
+                    </p>
                   </div>
                 </article>
               </div>
@@ -251,11 +297,23 @@ function App() {
                   <div className='card-grid'>
                     <div className='card-header'>
                       <h3>Git Training Certification</h3>
-                      <span className='cert-badge' aria-hidden='true'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">Verified</a></span>
+                      <span className='cert-badge' aria-hidden='true'>
+                        <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">
+                          Verified
+                        </a>
+                      </span>
                     </div>
                     <p className='cert-issuer'>SkillUp by Simplilearn</p>
                     <p className='cert-year'>2025</p>
-                    <p className='cert-link'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">View Credential</a></p>
+                    <p className='cert-link'>
+                      <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        View Credential
+                      </a>
+                    </p>
                   </div>
                 </article>
 
@@ -263,11 +321,23 @@ function App() {
                   <div className='card-grid'>
                     <div className='card-header'>
                       <h3>Cloud Computing Certification</h3>
-                      <span className='cert-badge' aria-hidden='true'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">Verified </a></span>
+                      <span className='cert-badge' aria-hidden='true'>
+                        <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">
+                          Verified
+                        </a>
+                      </span>
                     </div>
                     <p className='cert-issuer'>SkillUp by Simplilearn</p>
                     <p className='cert-year'>2025</p>
-                    <p className='cert-link'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">View Credential</a></p>
+                    <p className='cert-link'>
+                      <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        View Credential
+                      </a>
+                    </p>
                   </div>
                 </article>
 
@@ -275,11 +345,23 @@ function App() {
                   <div className='card-grid'>
                     <div className='card-header'>
                       <h3>DevOps Certification</h3>
-                      <span className='cert-badge' aria-hidden='true'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true" target='_blank' rel="noopener noreferrer">Verified</a></span>
+                      <span className='cert-badge' aria-hidden='true'>
+                        <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true" target='_blank' rel="noopener noreferrer">
+                          Verified
+                        </a>
+                      </span>
                     </div>
                     <p className='cert-issuer'>SkillUp by Simplilearn</p>
                     <p className='cert-year'>2025</p>
-                    <p className='cert-link'><a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">View Credential</a></p>
+                    <p className='cert-link'>
+                      <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        View Credential
+                      </a>
+                    </p>
                   </div>
                 </article>
               </div>
@@ -379,8 +461,9 @@ function App() {
                     <a className='Contact-link' href='/RESUME SAMPLE.pdf' download='Zeus_Angelo_Bautista_Resume.pdf'>
                       <span className='Contact-link-icon'>
                         <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-                          <path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/>
-                          <polyline points='14 2 14 8 20 8'/>
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                          <polyline points="7 10 12 15 17 10"></polyline>
+                          <line x1="12" y1="15" x2="12" y2="3"></line>
                         </svg>
                       </span>
                       Resume
