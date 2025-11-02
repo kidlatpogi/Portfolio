@@ -20,7 +20,7 @@ export default function ModeSwitcher() {
       // Change favicon to yellow thunder
       const favicon = document.querySelector('link[rel="icon"]')
       if (favicon) {
-        favicon.href = './src/assets/thunder-yellow.png'
+        favicon.href = '/thunder-yellow.png'
       }
     } else {
       document.body.classList.remove(cls)
@@ -28,7 +28,7 @@ export default function ModeSwitcher() {
       // Change favicon to blue thunder
       const favicon = document.querySelector('link[rel="icon"]')
       if (favicon) {
-        favicon.href = './src/assets/thunder-blue.png'
+        favicon.href = '/thunder-blue.png'
       }
     }
   }, [isLight])  // toggle with an expanding circular animation from the button position

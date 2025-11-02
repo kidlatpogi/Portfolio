@@ -4,9 +4,108 @@ import Nav, { NavItem } from './Navbar'
 import ModeSwitcher from '../JS/ModeSwitcher.jsx'
 import GitHubStarButton from '../JS/GitHubStarButton.jsx'
 import TypingEffect from '../JS/TypingEffect.jsx'
+import ParticlesBackground from '../JS/ParticlesBackground.jsx'
+import ExpandingCards from '../JS/ExpandingCards.jsx'
+import VisitorCounter from '../JS/VisitorCounter.jsx'
+import CertificateModal from '../JS/CertificateModal.jsx'
+import LoadingScreen from '../JS/LoadingScreen.jsx'
+
+// Import certificate images
+import itDatabaseCert from '../assets/certifications/it-specialist-databases-certificate.png'
+import responsiveWebCert from '../assets/certifications/responsive-web-design-certificate.png'
+import gitCert from '../assets/certifications/git-certification.png'
+import cloudCert from '../assets/certifications/cloud-computing-certification.png'
+import devOpsCert from '../assets/certifications/dev-ops-certification.png'
+
+// Import project images
+import roomReservationImg from '../assets/Project Overview/RoomReservationSystem.png'
+import safeLink from '../assets/Project Overview/SafeLink.png'
+
+function smoothScrollToId(id, duration = 600) {
+  const el = document.getElementById(id.replace('#', ''))
+  if (!el) return
+  const navbar = document.querySelector('.glass-navbar')
+  const offset = (navbar && navbar.offsetHeight) ? navbar.offsetHeight : 72
+  const start = window.scrollY || window.pageYOffset
+  const end = el.getBoundingClientRect().top + start - offset - 8 // small gap
+  const distance = end - start
+  let startTime = null
+
+  function easeInOutQuad(t) { return t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t }
+
+  function animate(time) {
+    if (!startTime) startTime = time
+    const timeElapsed = time - startTime
+    const progress = Math.min(timeElapsed / duration, 1)
+    const eased = easeInOutQuad(progress)
+    window.scrollTo(0, Math.round(start + distance * eased))
+    if (timeElapsed < duration) requestAnimationFrame(animate)
+  }
+
+  requestAnimationFrame(animate)
+}
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true)
+  const [showContent, setShowContent] = useState(false)
   const [contactStatus, setContactStatus] = useState('idle') // 'idle' | 'sending' | 'success' | 'error'
+  const [selectedCertificate, setSelectedCertificate] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleLoadComplete = () => {
+    setIsLoading(false)
+    // Slight delay before showing content for smooth transition
+    setTimeout(() => setShowContent(true), 100)
+  }
+
+  // Certificate data
+  const certificates = {
+    itDatabase: {
+      title: 'ITS-Database Certification',
+      issuer: 'Certiport',
+      year: '2025',
+      image: itDatabaseCert,
+      verifyUrl: 'https://www.credly.com/badges/ec097417-e36a-4642-b03b-df96919ae380/public_url'
+    },
+    responsiveWeb: {
+      title: 'Responsive Web-Design Certification',
+      issuer: 'FreeCodeCamp',
+      year: '2024',
+      image: responsiveWebCert,
+      verifyUrl: 'https://www.freecodecamp.org/certification/kidlat/responsive-web-design'
+    },
+    git: {
+      title: 'Git Training Certification',
+      issuer: 'SkillUp by Simplilearn',
+      year: '2025',
+      image: gitCert,
+      verifyUrl: 'https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true'
+    },
+    cloud: {
+      title: 'Cloud Computing Certification',
+      issuer: 'SkillUp by Simplilearn',
+      year: '2025',
+      image: cloudCert,
+      verifyUrl: 'https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true'
+    },
+    devOps: {
+      title: 'DevOps Certification',
+      issuer: 'SkillUp by Simplilearn',
+      year: '2025',
+      image: devOpsCert,
+      verifyUrl: 'https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true'
+    }
+  }
+
+  const openCertificateModal = (certKey) => {
+    setSelectedCertificate(certificates[certKey])
+    setIsModalOpen(true)
+  }
+
+  const closeCertificateModal = () => {
+    setIsModalOpen(false)
+    setTimeout(() => setSelectedCertificate(null), 300) // Delay clearing to allow fade out
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -37,13 +136,20 @@ function App() {
 
   return (
       <div> 
-        <Nav className="Nav glass-navbar" brand="Zeus Bautista">
-          <NavItem to="#Home">Home</NavItem>
-          <NavItem to="#Projects">Projects</NavItem>
-          <NavItem to="#Skills">Skills</NavItem>
-          <NavItem to="#Certifications">Certifications</NavItem>
-          <NavItem to="#Contact">Contact</NavItem>
-        </Nav>
+        {isLoading && <LoadingScreen onLoadComplete={handleLoadComplete} />}
+        
+        <div className={`app-content ${showContent ? 'fade-in' : 'hidden'}`}>
+          <ParticlesBackground />
+          
+          {/* Navigation */}
+          <Nav className="Nav glass-navbar" brand="Zeus Bautista">
+            <NavItem to="#Home">Home</NavItem>
+            <NavItem to="#Projects">Projects</NavItem>
+            <NavItem to="#ExpandingCards">Designs</NavItem>
+            <NavItem to="#Skills">Skills</NavItem>
+            <NavItem to="#Certifications">Certifications</NavItem>
+            <NavItem to="#Contact">Contact</NavItem>
+          </Nav>
 
         <div>
           <ModeSwitcher className="mode-btn light" />
@@ -93,9 +199,13 @@ function App() {
             <div className="container">
               <h2>Projects</h2>
               <p>Real-world applications demonstrating front-end development, database management, and problem-solving skills.</p>
+              
+              <h3 style={{ marginTop: '3rem', marginBottom: '1rem' }}>Development Projects</h3>
               <div className="projects-grid">
                 <article className="project-card">
-                  <div className="project-media" />
+                  <div className="project-media">
+                    <img src={safeLink} alt="SafeLink Mobile Screens" className="project-image" />
+                  </div>
                   <div className="project-body">
                     <h3>SafeLink Mobile</h3>
                     <div className="tags">
@@ -116,7 +226,9 @@ function App() {
                 </article>
 
                 <article className="project-card">
-                  <div className="project-media" />
+                  <div className="project-media">
+                    <img src={roomReservationImg} alt="Room Reservation System" className="project-image" />
+                  </div>
                   <div className="project-body">
                     <h3>Room Reservation System</h3>
                     <div className="tags">
@@ -131,11 +243,48 @@ function App() {
                           <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
                         </svg>
                       </span>
-                      Code
+                      <a href="https://github.com/kidlatpogi/Room-Reservation-System.git" target='_blank' rel="noopener noreferrer">Code</a>
                     </button>
                   </div>
                 </article>
               </div>
+
+              <div className="project-buttons-grid">
+                <button 
+                  className="project-showcase-btn gallery-btn"
+                  onClick={() => smoothScrollToId('ExpandingCards')}
+                >
+                  <span>See Photoshop Gallery</span>
+                  <svg className="arrow-down-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <polyline points="19 12 12 19 5 12"></polyline>
+                  </svg>
+                </button>
+
+                <a 
+                  href="https://github.com/kidlatpogi/Olympus"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-showcase-btn olympus-btn"
+                >
+                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                  </svg>
+                  <span>Explore my Side Projects</span>
+                  <svg className="arrow-right-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </section>
+
+          {/* EXPANDING CARDS - PHOTOSHOP GALLERY */}
+          <section className='ExpandingCards' id='ExpandingCards'>
+            <div className="container">
+              <h2>Graphic Design Portfolio</h2>
+              <ExpandingCards />
             </div>
           </section>
 
@@ -255,13 +404,13 @@ function App() {
                     <p className='cert-issuer'>Certiport</p>
                     <p className='cert-year'>2025</p>
                     <p className='cert-link'>
-                      <a href="https://raw.githubusercontent.com/kidlatpogi/kidlatpogi/refs/heads/main/assets/certifications/it-specialist-databases-certificate.png" target="_blank" rel="noopener noreferrer">
+                      <button onClick={() => openCertificateModal('itDatabase')} className="view-cert-btn">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
                           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                           <circle cx="12" cy="12" r="3"></circle>
                         </svg>
                         View Credential
-                      </a>
+                      </button>
                     </p>
                   </div>
                 </article>
@@ -279,13 +428,13 @@ function App() {
                     <p className='cert-issuer'>FreeCodeCamp</p>
                     <p className='cert-year'>2024</p>
                     <p className='cert-link'>
-                      <a href="https://raw.githubusercontent.com/kidlatpogi/kidlatpogi/refs/heads/main/assets/certifications/responsive-web-design-certificate.png" target="_blank" rel="noopener noreferrer">
+                      <button onClick={() => openCertificateModal('responsiveWeb')} className="view-cert-btn">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
                           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                           <circle cx="12" cy="12" r="3"></circle>
                         </svg>
                         View Credential
-                      </a>
+                      </button>
                     </p>
                   </div>
                 </article>
@@ -306,13 +455,13 @@ function App() {
                     <p className='cert-issuer'>SkillUp by Simplilearn</p>
                     <p className='cert-year'>2025</p>
                     <p className='cert-link'>
-                      <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">
+                      <button onClick={() => openCertificateModal('git')} className="view-cert-btn">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
                           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                           <circle cx="12" cy="12" r="3"></circle>
                         </svg>
                         View Credential
-                      </a>
+                      </button>
                     </p>
                   </div>
                 </article>
@@ -330,13 +479,13 @@ function App() {
                     <p className='cert-issuer'>SkillUp by Simplilearn</p>
                     <p className='cert-year'>2025</p>
                     <p className='cert-link'>
-                      <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">
+                      <button onClick={() => openCertificateModal('cloud')} className="view-cert-btn">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
                           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                           <circle cx="12" cy="12" r="3"></circle>
                         </svg>
                         View Credential
-                      </a>
+                      </button>
                     </p>
                   </div>
                 </article>
@@ -354,13 +503,13 @@ function App() {
                     <p className='cert-issuer'>SkillUp by Simplilearn</p>
                     <p className='cert-year'>2025</p>
                     <p className='cert-link'>
-                      <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">
+                      <button onClick={() => openCertificateModal('devOps')} className="view-cert-btn">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
                           <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                           <circle cx="12" cy="12" r="3"></circle>
                         </svg>
                         View Credential
-                      </a>
+                      </button>
                     </p>
                   </div>
                 </article>
@@ -489,6 +638,17 @@ function App() {
           </div>
         </footer>
 
+        {/* Visitor Counter */}
+        <VisitorCounter />
+
+        {/* Certificate Modal */}
+        <CertificateModal 
+          isOpen={isModalOpen}
+          onClose={closeCertificateModal}
+          certificate={selectedCertificate}
+        />
+        
+        </div>
       </div>
   )
 }
