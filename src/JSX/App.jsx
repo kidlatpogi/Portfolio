@@ -4,6 +4,7 @@ import Nav, { NavItem } from './Navbar'
 import ModeSwitcher from '../JS/ModeSwitcher.jsx'
 import GitHubStarButton from '../JS/GitHubStarButton.jsx'
 import TypingEffect from '../JS/TypingEffect.jsx'
+import ParticlesBackground from '../JS/ParticlesBackground.jsx'
 
 function App() {
   const [contactStatus, setContactStatus] = useState('idle') // 'idle' | 'sending' | 'success' | 'error'
@@ -37,6 +38,7 @@ function App() {
 
   return (
       <div> 
+        <ParticlesBackground />
         <Nav className="Nav glass-navbar" brand="Zeus Bautista">
           <NavItem to="#Home">Home</NavItem>
           <NavItem to="#Projects">Projects</NavItem>
