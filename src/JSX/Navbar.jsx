@@ -36,7 +36,7 @@ export function Nav({ brand = 'Zeus Bautista', children, className = '' }) {
     setIsMenuOpen(false)
   }
 
-  // Close menu when clicking outside on mobile and lock body scroll
+  // Close menu when clicking outside and lock body scroll on mobile
   React.useEffect(() => {
     const handleClickOutside = (e) => {
       if (isMenuOpen && window.innerWidth <= 991) {
@@ -48,24 +48,22 @@ export function Nav({ brand = 'Zeus Bautista', children, className = '' }) {
       }
     }
 
-    if (isMenuOpen) {
+    if (isMenuOpen && window.innerWidth <= 991) {
       document.addEventListener('click', handleClickOutside)
-      // Lock body scroll when menu is open
       document.body.style.overflow = 'hidden'
     } else {
-      // Unlock body scroll when menu is closed
       document.body.style.overflow = ''
     }
 
     return () => {
       document.removeEventListener('click', handleClickOutside)
-      // Clean up - ensure scroll is unlocked
       document.body.style.overflow = ''
     }
   }, [isMenuOpen])
 
   // use navbar-dark for white text and add a custom glass-navbar class
   const classes = `navbar navbar-expand-lg navbar-dark glass-navbar ${className}`.trim()
+  
   return (
     <>
       <nav className={classes}>
@@ -80,7 +78,7 @@ export function Nav({ brand = 'Zeus Bautista', children, className = '' }) {
           >
             <span className="navbar-toggler-icon" />
           </button>
-          <a className="navbar-brand" href="#" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <a className="navbar-brand" href="#" onClick={(e) => { e.preventDefault(); smoothScrollToId('Home'); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             {/* Dark mode thunder icon - blue */}
             <svg 
               className="navbar-thunder-icon dark-mode-thunder" 
@@ -107,24 +105,19 @@ export function Nav({ brand = 'Zeus Bautista', children, className = '' }) {
             </svg>
             {brand}
           </a>
+          
+          {/* Navigation - works for all screen sizes */}
           <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id="navbarNav">
             <ul className="navbar-nav ms-auto">
               {React.Children.map(children, (child, i) => (
                 <li className="nav-item" key={i}>
-                  {React.cloneElement(child, {
-                    onClick: (e) => {
-                      if (child.props.onClick) child.props.onClick(e)
-                      closeMenu()
-                    }
-                  })}
+                  {child}
                 </li>
               ))}
             </ul>
           </div>
         </div>
       </nav>
-      {/* Backdrop overlay for closing menu */}
-      {isMenuOpen && <div className="navbar-backdrop-overlay" onClick={closeMenu}></div>}
     </>
   )
 }
@@ -134,13 +127,41 @@ export function NavItem({ to = '#', children }) {
     // if this is an in-page hash link, intercept and run the animated scroll
     if (to && to.startsWith('#')) {
       e.preventDefault()
-      smoothScrollToId(to)
+      e.stopPropagation()
+      
+      // Check if mobile menu is open and close it
+      const isMobile = window.innerWidth <= 991
+      if (isMobile) {
+        const navbarCollapse = document.getElementById('navbarNav')
+        const toggleButton = document.querySelector('.navbar-toggler')
+        
+        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+          // Close mobile menu
+          navbarCollapse.classList.remove('show')
+          if (toggleButton) {
+            toggleButton.setAttribute('aria-expanded', 'false')
+          }
+          
+          // Unlock body scroll
+          document.body.style.overflow = ''
+          
+          // Scroll after menu closes
+          setTimeout(() => {
+            smoothScrollToId(to)
+          }, 300)
+        } else {
+          // Menu not open, scroll immediately
+          smoothScrollToId(to)
+        }
+      } else {
+        // Desktop - just scroll immediately
+        smoothScrollToId(to)
+      }
+      
       // remove the fragment from the URL (keep pathname + search)
       const cleanUrl = window.location.pathname + window.location.search
-      if (history.replaceState) {
-        history.replaceState(null, '', cleanUrl)
-      } else if (history.pushState) {
-        history.pushState(null, '', cleanUrl)
+      if (window.history && window.history.replaceState) {
+        window.history.replaceState(null, '', cleanUrl)
       }
     }
   }
