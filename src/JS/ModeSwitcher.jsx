@@ -11,19 +11,27 @@ export default function ModeSwitcher() {
     }
   })
 
-    useEffect(() => {
-      // Ensure body has the correct class on theme change
-      const cls = 'light-mode'
-      if (isLight) {
-        document.body.classList.add(cls)
-        if (typeof localStorage !== 'undefined') localStorage.setItem('theme', 'light')
-      } else {
-        document.body.classList.remove(cls)
-        if (typeof localStorage !== 'undefined') localStorage.setItem('theme', 'dark')
+  useEffect(() => {
+    // Ensure body has the correct class on theme change
+    const cls = 'light-mode'
+    if (isLight) {
+      document.body.classList.add(cls)
+      if (typeof localStorage !== 'undefined') localStorage.setItem('theme', 'light')
+      // Change favicon to yellow thunder
+      const favicon = document.querySelector('link[rel="icon"]')
+      if (favicon) {
+        favicon.href = './src/assets/thunder-yellow.png'
       }
-    }, [isLight])
-
-  // toggle with an expanding circular animation from the button position
+    } else {
+      document.body.classList.remove(cls)
+      if (typeof localStorage !== 'undefined') localStorage.setItem('theme', 'dark')
+      // Change favicon to blue thunder
+      const favicon = document.querySelector('link[rel="icon"]')
+      if (favicon) {
+        favicon.href = './src/assets/thunder-blue.png'
+      }
+    }
+  }, [isLight])  // toggle with an expanding circular animation from the button position
   function toggle(e) {
     // prevent toggle if an animation is already running
     if (document.body.dataset.themeAnimating === '1') return
