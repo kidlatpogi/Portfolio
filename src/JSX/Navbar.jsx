@@ -1,6 +1,4 @@
 import React from 'react'
-import thunderBlue from '../assets/thunder-blue.png'
-import thunderYellow from '../assets/thunder-yellow.png'
 
 // Smooth scrolling helper: scroll to an element id while accounting for sticky navbar offset
 function smoothScrollToId(id, duration = 600) {
@@ -84,13 +82,13 @@ export function Nav({ brand = 'Zeus Bautista', children, className = '' }) {
           </button>
           <a className="navbar-brand" href="#" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <img 
-              src={thunderBlue} 
+              src="/thunder-blue.png" 
               alt="Thunder Icon" 
               className="navbar-thunder-icon dark-mode-thunder"
               style={{ width: '28px', height: '28px', display: 'block' }}
             />
             <img 
-              src={thunderYellow} 
+              src="/thunder-yellow.png" 
               alt="Thunder Icon" 
               className="navbar-thunder-icon light-mode-thunder"
               style={{ width: '28px', height: '28px', display: 'none' }}
