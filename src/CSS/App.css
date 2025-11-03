@@ -455,17 +455,24 @@ body.light-mode .Home p {
 
 .particles-tooltip {
   position: absolute;
-  bottom: calc(100% + 10px);
+  bottom: calc(100% + 60px);
   right: 0;
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
+  background: rgba(255, 255, 255, 0.85);
+  color: black;
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 0.85rem;
   white-space: nowrap;
   pointer-events: none;
   animation: tooltipFadeIn 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+/* Hide tooltip on mobile/touch devices */
+@media (max-width: 768px) {
+  .particles-tooltip {
+    display: none;
+  }
 }
 
 .particles-tooltip::after {
@@ -474,7 +481,7 @@ body.light-mode .Home p {
   top: 100%;
   right: 20px;
   border: 6px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.9);
+  border-top-color: rgba(255, 255, 255, 0.85);
 }
 
 body.light-mode .particles-tooltip {
@@ -632,6 +639,8 @@ body.light-mode .glass-navbar .nav-link:focus {
   font-size: clamp(16px, 4vw, 20px);
   font-weight: 600;
   min-height: 32px;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 /* Typing effect styles */
@@ -641,9 +650,12 @@ body.light-mode .glass-navbar .nav-link:focus {
 
 .typing-cursor {
   display: inline-block;
+  width: 2px;
+  height: 1em;
   margin-left: 2px;
+  background-color: currentColor;
   animation: blink 1s infinite;
-  font-weight: 400;
+  vertical-align: text-bottom;
 }
 
 @keyframes blink {
@@ -651,20 +663,26 @@ body.light-mode .glass-navbar .nav-link:focus {
   51%, 100% { opacity: 0; }
 }
 
-.Home > p:nth-of-type(2) {
+.Home > p:nth-of-type(2),
+.bio-text {
   font-size: clamp(16px, 4vw, 24px);
   font-weight: 400;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 0 1.5rem;
-  text-align: center;
-  line-height: 1.6;
+  text-align: justify;
+  text-indent: 2em;
+  text-justify: inter-word;
+  line-height: 1.8;
 }
 
 @media (max-width: 640px) {
-  .Home > p:nth-of-type(2) {
+  .Home > p:nth-of-type(2),
+  .bio-text {
     text-align: center;
+    text-indent: 0;
     padding: 0 1rem;
+    line-height: 1.6;
   }
 }
 
@@ -1205,15 +1223,12 @@ body.light-mode .olympus-btn:hover {
 }
 
 .Skills-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
-  margin-top: 1.5rem;
+  display: none;
 }
 
 .Skills-card {
   background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 2px solid rgba(255,255,255,0.12);
   border-radius: 14px;
   overflow: hidden;
   display: flex;
@@ -1222,26 +1237,224 @@ body.light-mode .olympus-btn:hover {
   box-shadow: 0 6px 22px rgba(0,0,0,0.22);
   backdrop-filter: blur(10px) saturate(120%);
   -webkit-backdrop-filter: blur(10px) saturate(120%);
-  transition: border-color 220ms, box-shadow 220ms, transform 180ms;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
+  position: relative;
+  transform-style: preserve-3d;
 }
 
-.Skills-card:hover {
-  background: rgba(110, 193, 228, 0.1);
-  border-color: rgba(110, 193, 228, 0.3);
-  box-shadow: 0 8px 28px rgba(110, 193, 228, 0.2), 0 0 0 2px rgba(110, 193, 228, 0.15);
-  transform: translateY(-4px);
+/* Frontend - Azure Blue */
+.frontend-card {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.frontend-card:hover {
+  border-color: rgba(59, 130, 246, 1);
+  background: rgba(59, 130, 246, 0.08);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(59, 130, 246, 0.4),
+    inset 0 0 30px rgba(59, 130, 246, 0.1);
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Backend - Orange/Amber */
+.backend-card {
+  border-color: rgba(251, 146, 60, 0.3);
+}
+
+.backend-card:hover {
+  border-color: rgba(251, 146, 60, 1);
+  background: rgba(251, 146, 60, 0.08);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(251, 146, 60, 0.4),
+    inset 0 0 30px rgba(251, 146, 60, 0.1);
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Tools - Purple */
+.tools-card {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.tools-card:hover {
+  border-color: rgba(168, 85, 247, 1);
+  background: rgba(168, 85, 247, 0.08);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(168, 85, 247, 0.4),
+    inset 0 0 30px rgba(168, 85, 247, 0.1);
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Design - Crimson Pink */
+.design-card {
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+.design-card:hover {
+  border-color: rgba(244, 63, 94, 1);
+  background: rgba(244, 63, 94, 0.08);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(244, 63, 94, 0.4),
+    inset 0 0 30px rgba(244, 63, 94, 0.1);
+  transform: translateY(-8px) scale(1.02);
 }
 
 body.light-mode .Skills-card {
   background: rgba(0,0,0,0.06);
-  border: 1px solid rgba(0,0,0,0.14);
+  border: 2px solid rgba(0,0,0,0.14);
   box-shadow: 0 6px 22px rgba(0,0,0,0.12);
 }
 
-body.light-mode .Skills-card:hover {
-  background: rgba(255, 193, 7, 0.1);
-  border-color: rgba(255, 193, 7, 0.4);
-  box-shadow: 0 8px 28px rgba(255, 193, 7, 0.2), 0 0 0 2px rgba(255, 193, 7, 0.15);
+/* Frontend - Azure Blue (Light Mode) */
+body.light-mode .frontend-card {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+body.light-mode .frontend-card:hover {
+  border-color: rgba(59, 130, 246, 1);
+  background: rgba(59, 130, 246, 0.08);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.2),
+    0 0 30px rgba(59, 130, 246, 0.3),
+    inset 0 0 30px rgba(59, 130, 246, 0.08);
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Backend - Orange/Amber (Light Mode) */
+body.light-mode .backend-card {
+  border-color: rgba(251, 146, 60, 0.3);
+}
+
+body.light-mode .backend-card:hover {
+  border-color: rgba(251, 146, 60, 1);
+  background: rgba(251, 146, 60, 0.08);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.2),
+    0 0 30px rgba(251, 146, 60, 0.3),
+    inset 0 0 30px rgba(251, 146, 60, 0.08);
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Tools - Purple (Light Mode) */
+body.light-mode .tools-card {
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+body.light-mode .tools-card:hover {
+  border-color: rgba(168, 85, 247, 1);
+  background: rgba(168, 85, 247, 0.08);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.2),
+    0 0 30px rgba(168, 85, 247, 0.3),
+    inset 0 0 30px rgba(168, 85, 247, 0.08);
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Design - Crimson Pink (Light Mode) */
+body.light-mode .design-card {
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+body.light-mode .design-card:hover {
+  border-color: rgba(244, 63, 94, 1);
+  background: rgba(244, 63, 94, 0.08);
+  box-shadow: 
+    0 15px 50px rgba(0, 0, 0, 0.2),
+    0 0 30px rgba(244, 63, 94, 0.3),
+    inset 0 0 30px rgba(244, 63, 94, 0.08);
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Stacking Container */
+.skills-stack-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  height: 300px;
+  margin: 2rem auto;
+  perspective: 1000px;
+}
+
+.Skills-card.stack-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  will-change: transform, opacity;
+}
+
+/* Card Stacking Animation - Triggered on Click */
+.Skills-card.stack-active {
+  animation: cardCycle 2s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes cardCycle {
+  0% {
+    transform: translateX(0) translateY(0) scale(1);
+    opacity: 1;
+  }
+  25% {
+    transform: translateX(30px) translateY(30px) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(0) translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) translateY(0) scale(0.95);
+    opacity: 0.3;
+  }
+}
+
+/* Stack Indicator Dots */
+.stack-indicators {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.indicator-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.indicator-dot:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.indicator-dot.active {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+body.light-mode .indicator-dot {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+body.light-mode .indicator-dot:hover {
+  border-color: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .indicator-dot.active {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(0, 0, 0, 0.8);
 }
 
 .Skills-card-body {
@@ -1286,6 +1499,7 @@ body.light-mode .Skills-card:hover {
 
 .tag {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   padding: 0.45rem 0.9rem;
@@ -1295,6 +1509,7 @@ body.light-mode .Skills-card:hover {
   color: var(--tag-color, inherit);
   font-size: 0.88rem;
   transition: background 220ms, border-color 220ms, color 220ms;
+  white-space: nowrap;
 }
 
 .Skills-card p {
@@ -1316,23 +1531,26 @@ body.light-mode .skill-icon {
 }
 
 .tags-grid {
-  display: grid;
-  /* force 2 columns x 2 rows layout for tag lists */
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: minmax(40px, auto);
+  display: flex;
+  flex-wrap: wrap;
   gap: 0.6rem;
   margin-top: 0.5rem;
+  align-items: center;
 }
 
 @media (max-width: 640px) {
   .tags-grid {
-    grid-template-columns: 1fr; /* stack to single column on small screens */
+    gap: 0.5rem;
   }
 }
 
 @media (max-width: 880px) {
   .Skills-grid { gap: 1rem; }
   .Skills-card { min-height: 260px; }
+  .skills-stack-container {
+    height: 280px;
+    max-width: 350px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1380,6 +1598,18 @@ body.light-mode .skill-icon {
 
 .Certifications-card {
   background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.25);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+}
+
+.Certifications-card-photo {
   border: 1px solid rgba(255,255,255,0.16);
   border-radius: 14px;
   overflow: hidden;
@@ -1908,6 +2138,51 @@ body.light-mode footer {
   border-radius: 999px;
   font-size: 0.9rem;
   line-height: 1;
+}
+
+/* Make star icon and label more balanced and responsive */
+.gh-star-icon-wrap{ display:inline-flex; align-items:center; justify-content:center; }
+.gh-star-icon{ width:28px; height:28px; display:block; flex-shrink:0; margin-bottom: 6px; transition: transform 160ms ease; }
+.gh-star-btn .gh-star-label{ display:inline-flex; align-items:center; gap:0.45rem; }
+
+/* Slightly larger and centered when used in header */
+.Resume.gh-star-btn, .gh-star-btn.Resume{ padding:0.85rem 1.75rem; font-size:1.02rem }
+
+/* Improve Skills cards visuals */
+.Skills-card{ 
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+}
+.Skills-card:hover{ transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.35); }
+.Skills-card .Skills-card-body{ padding:1.25rem; }
+.Skills-card h3{ display:flex; align-items:center; gap:0.6rem; font-size:1.05rem; }
+.Skills-card .tag{ background: rgba(255,255,255,0.03); padding:0.45rem 0.7rem; border-radius:999px; display:inline-block; margin:0.25rem 0.25rem 0 0; }
+
+/* Certificate card styles - clean text-only design */
+.Certifications-card { 
+  background: rgba(255,255,255,0.02); 
+  border-radius: 12px; 
+  padding: 1.25rem; 
+  border: 1px solid rgba(255,255,255,0.04);
+  transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+.Certifications-card:hover { 
+  background: rgba(255,255,255,0.04); 
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.Certifications-card .card-header { margin-bottom: 0.75rem; }
+.Certifications-card .card-header h3 { margin: 0 0 0.5rem 0; font-size: 1.1rem; display: flex; align-items: center; gap: 0.6rem; }
+.Certifications-card .cert-issuer { margin: 0.25rem 0; font-size: 0.95rem; opacity: 0.85; }
+.Certifications-card .cert-year { margin: 0.25rem 0 0.75rem 0; font-size: 0.9rem; opacity: 0.75; }
+.Certifications-card .cert-link { margin: 0; }
+
+@media (max-width: 640px) {
+  .gh-star-icon{ width:22px; height:22px }
+  .gh-star-btn{ padding:0.6rem 1rem }
+  .Skills-card:hover{ transform:none; box-shadow:none }
 }
 
 body.light-mode .gh-star-btn{ 

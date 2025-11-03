@@ -2,109 +2,42 @@ import { useState } from 'react'
 import '../CSS/App.css'
 import Nav, { NavItem } from './Navbar'
 import ModeSwitcher from '../JS/ModeSwitcher.jsx'
-import GitHubStarButton from '../JS/GitHubStarButton.jsx'
-import TypingEffect from '../JS/TypingEffect.jsx'
 import ParticlesBackground from '../JS/ParticlesBackground.jsx'
-import ExpandingCards from '../JS/ExpandingCards.jsx'
-import VisitorCounter from '../JS/VisitorCounter.jsx'
+import AnalyticsTracker from '../JS/AnalyticsTracker.jsx'
 import CertificateModal from '../JS/CertificateModal.jsx'
 import LoadingScreen from '../JS/LoadingScreen.jsx'
 
-// Import certificate images
-import itDatabaseCert from '../assets/certifications/it-specialist-databases-certificate.png'
-import responsiveWebCert from '../assets/certifications/responsive-web-design-certificate.png'
-import gitCert from '../assets/certifications/git-certification.png'
-import cloudCert from '../assets/certifications/cloud-computing-certification.png'
-import devOpsCert from '../assets/certifications/dev-ops-certification.png'
+// Section components
+import HeroSection from './HeroSection'
+import ProjectsSection from './ProjectsSection'
+import ExpandingCards from '../JS/ExpandingCards'
+import SkillsSection from './SkillsSection'
+import CertificationsSection from './CertificationsSection'
+import ContactSection from './ContactSection'
 
-// Import project images
-import roomReservationImg from '../assets/Project Overview/RoomReservationSystem.png'
-import safeLink from '../assets/Project Overview/SafeLink.png'
-
-function smoothScrollToId(id, duration = 600) {
-  const el = document.getElementById(id.replace('#', ''))
-  if (!el) return
-  const navbar = document.querySelector('.glass-navbar')
-  const offset = (navbar && navbar.offsetHeight) ? navbar.offsetHeight : 72
-  const start = window.scrollY || window.pageYOffset
-  const end = el.getBoundingClientRect().top + start - offset - 8 // small gap
-  const distance = end - start
-  let startTime = null
-
-  function easeInOutQuad(t) { return t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t }
-
-  function animate(time) {
-    if (!startTime) startTime = time
-    const timeElapsed = time - startTime
-    const progress = Math.min(timeElapsed / duration, 1)
-    const eased = easeInOutQuad(progress)
-    window.scrollTo(0, Math.round(start + distance * eased))
-    if (timeElapsed < duration) requestAnimationFrame(animate)
-  }
-
-  requestAnimationFrame(animate)
-}
+// Certificates data
+import { CERTIFICATES_DATA } from '../constants/certificatesData'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [showContent, setShowContent] = useState(false)
-  const [contactStatus, setContactStatus] = useState('idle') // 'idle' | 'sending' | 'success' | 'error'
+  const [contactStatus, setContactStatus] = useState('idle')
   const [selectedCertificate, setSelectedCertificate] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleLoadComplete = () => {
     setIsLoading(false)
-    // Slight delay before showing content for smooth transition
     setTimeout(() => setShowContent(true), 100)
   }
 
-  // Certificate data
-  const certificates = {
-    itDatabase: {
-      title: 'ITS-Database Certification',
-      issuer: 'Certiport',
-      year: '2025',
-      image: itDatabaseCert,
-      verifyUrl: 'https://www.credly.com/badges/ec097417-e36a-4642-b03b-df96919ae380/public_url'
-    },
-    responsiveWeb: {
-      title: 'Responsive Web-Design Certification',
-      issuer: 'FreeCodeCamp',
-      year: '2024',
-      image: responsiveWebCert,
-      verifyUrl: 'https://www.freecodecamp.org/certification/kidlat/responsive-web-design'
-    },
-    git: {
-      title: 'Git Training Certification',
-      issuer: 'SkillUp by Simplilearn',
-      year: '2025',
-      image: gitCert,
-      verifyUrl: 'https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true'
-    },
-    cloud: {
-      title: 'Cloud Computing Certification',
-      issuer: 'SkillUp by Simplilearn',
-      year: '2025',
-      image: cloudCert,
-      verifyUrl: 'https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true'
-    },
-    devOps: {
-      title: 'DevOps Certification',
-      issuer: 'SkillUp by Simplilearn',
-      year: '2025',
-      image: devOpsCert,
-      verifyUrl: 'https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true'
-    }
-  }
-
   const openCertificateModal = (certKey) => {
-    setSelectedCertificate(certificates[certKey])
+    setSelectedCertificate(CERTIFICATES_DATA[certKey])
     setIsModalOpen(true)
   }
 
   const closeCertificateModal = () => {
     setIsModalOpen(false)
-    setTimeout(() => setSelectedCertificate(null), 300) // Delay clearing to allow fade out
+    setTimeout(() => setSelectedCertificate(null), 300)
   }
 
   async function handleSubmit(e) {
@@ -122,163 +55,41 @@ function App() {
       if (res.ok) {
         setContactStatus('success')
         form.reset()
-        // clear status after a short delay
         setTimeout(() => setContactStatus('idle'), 5000)
       } else {
         setContactStatus('error')
       }
     } catch (err) {
-      // log network or unexpected errors and show friendly message
       console.error('Contact submit error', err)
       setContactStatus('error')
     }
   }
 
   return (
-      <div> 
-        {isLoading && <LoadingScreen onLoadComplete={handleLoadComplete} />}
+    <div>
+      {isLoading && <LoadingScreen onLoadComplete={handleLoadComplete} />}
+      
+      <div className={`app-content ${showContent ? 'fade-in' : 'hidden'}`}>
+        <ParticlesBackground />
         
-        <div className={`app-content ${showContent ? 'fade-in' : 'hidden'}`}>
-          <ParticlesBackground />
-          
-          {/* Navigation */}
-          <Nav className="Nav glass-navbar" brand="Zeus Bautista">
-            <NavItem to="#Home">Home</NavItem>
-            <NavItem to="#Projects">Projects</NavItem>
-            <NavItem to="#ExpandingCards">Designs</NavItem>
-            <NavItem to="#Skills">Skills</NavItem>
-            <NavItem to="#Certifications">Certifications</NavItem>
-            <NavItem to="#Contact">Contact</NavItem>
-          </Nav>
+        {/* Navigation */}
+        <Nav className="Nav glass-navbar" brand="Zeus Bautista">
+          <NavItem to="#Home">Home</NavItem>
+          <NavItem to="#Projects">Projects</NavItem>
+          <NavItem to="#ExpandingCards">Designs</NavItem>
+          <NavItem to="#Skills">Skills</NavItem>
+          <NavItem to="#Certifications">Certifications</NavItem>
+          <NavItem to="#Contact">Contact</NavItem>
+        </Nav>
 
         <div>
           <ModeSwitcher className="mode-btn light" />
         </div>
 
         <main>
+          <HeroSection />
 
-          {/* Home */}
-          <section className='Home' id='Home'>
-            <h1>Hi, I'm Zeus Angelo Bautista</h1>
-            <p>
-              <TypingEffect 
-                texts={[
-                  'Aspiring Front-End Developer & Responsive Web Design Specialist',
-                  'Building Beautiful & Functional Web Experiences',
-                  'Passionate About Clean Code & User Interface Design'
-                ]}
-                typingSpeed={80}
-                deletingSpeed={40}
-                pauseDuration={2500}
-              />
-            </p>
-            <p>I'm Zeus Bautista, a focused 3rd-year I.T. student dedicated to full-cycle application development. I specialize in building user-friendly web experiences and managing efficient data structures. This is supported by my Database Management certification and practical experience in preparing data for seamless system integration.</p>
-            
-            {/* Button grid - Download Resume and GitHub Star button */}
-            <div className="Home-button-grid">
-              <a
-                className="Resume"
-                href="/Zeus_Angelo_Bautista_Resume.pdf"
-                download="Zeus_Angelo_Bautista_Resume.pdf"
-                aria-label="Download Zeus Angelo Bautista resume"
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                Download Resume
-              </a>
-
-              <GitHubStarButton repo="kidlatpogi/kidlatpogi" className="Resume" />
-            </div>
-          </section>
-
-          {/* Projects */}
-          <section className='Projects' id='Projects'>
-            <div className="container">
-              <h2>Projects</h2>
-              <p>Real-world applications demonstrating front-end development, database management, and problem-solving skills.</p>
-              
-              <h3 style={{ marginTop: '3rem', marginBottom: '1rem' }}>Development Projects</h3>
-              <div className="projects-grid">
-                <article className="project-card">
-                  <div className="project-media">
-                    <img src={safeLink} alt="SafeLink Mobile Screens" className="project-image" />
-                  </div>
-                  <div className="project-body">
-                    <h3>SafeLink Mobile</h3>
-                    <div className="tags">
-                      <span className="tag">React Native</span>
-                      <span className="tag">JavaScript</span>
-                      <span className="tag">Firebase</span>
-                      <span className="tag">Mobile</span>
-                    </div>
-                    <button className="project-cta">
-                      <span className="cta-icon" aria-hidden="true" style={{display:'inline-flex',alignItems:'center',marginRight:'0.5em'}}>
-                        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style={{display:'block'}}>
-                          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                        </svg>
-                      </span>
-                      <a href="https://github.com/kidlatpogi/SafeLink" target="_blank" rel="noopener noreferrer">Code</a>
-                    </button>
-                  </div>
-                </article>
-
-                <article className="project-card">
-                  <div className="project-media">
-                    <img src={roomReservationImg} alt="Room Reservation System" className="project-image" />
-                  </div>
-                  <div className="project-body">
-                    <h3>Room Reservation System</h3>
-                    <div className="tags">
-                      <span className="tag">HTML5</span>
-                      <span className="tag">CSS3</span>
-                      <span className="tag">JavaScript</span>
-                      <span className="tag">SQL</span>
-                    </div>
-                    <button className="project-cta">
-                      <span className="cta-icon" aria-hidden="true" style={{display:'inline-flex',alignItems:'center',marginRight:'0.5em'}}>
-                        <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style={{display:'block'}}>
-                          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                        </svg>
-                      </span>
-                      <a href="https://github.com/kidlatpogi/Room-Reservation-System.git" target='_blank' rel="noopener noreferrer">Code</a>
-                    </button>
-                  </div>
-                </article>
-              </div>
-
-              <div className="project-buttons-grid">
-                <button 
-                  className="project-showcase-btn gallery-btn"
-                  onClick={() => smoothScrollToId('ExpandingCards')}
-                >
-                  <span>See Photoshop Gallery</span>
-                  <svg className="arrow-down-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <polyline points="19 12 12 19 5 12"></polyline>
-                  </svg>
-                </button>
-
-                <a 
-                  href="https://github.com/kidlatpogi/Olympus"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="project-showcase-btn olympus-btn"
-                >
-                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                  </svg>
-                  <span>Explore my Side Projects</span>
-                  <svg className="arrow-right-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </a>
-              </div>
-            </div>
-          </section>
+          <ProjectsSection />
 
           {/* EXPANDING CARDS - PHOTOSHOP GALLERY */}
           <section className='ExpandingCards' id='ExpandingCards'>
@@ -288,348 +99,11 @@ function App() {
             </div>
           </section>
 
-          {/* SKILLS */}
-          <section className='Skills' id='Skills'>
-            <div className="container">
-              <h2>Technical Skills</h2>
-              <p>Core technologies and tools I work with</p>
+          <SkillsSection />
 
-              <div className="Skills-grid">
-                {/* FRONTEND */}
-                <article className="Skills-card">
-                  <div className="Skills-card-body">
-                    <h3>
-                      <span className="skill-icon" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M16 18l6-6-6-6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M8 6l-6 6 6 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </span>
-                      FRONTEND
-                    </h3>
-                    <div className='tags-grid'>
-                      <p className='tag'>HTML5</p>
-                      <p className='tag'>CSS3</p>
-                      <p className='tag'>JavaScript</p>
-                      <p className='tag'>React JS</p>
-                      <p className='tag'>React Native</p>
-                    </div>
-                  </div>
-                </article>
+          <CertificationsSection onOpenModal={openCertificateModal} />
 
-                {/* BACKEND */}
-                <article className="Skills-card">
-                  <div className="Skills-card-body">
-                    <h3>
-                      <span className="skill-icon" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <rect x="3" y="4" width="18" height="6" rx="1" stroke="currentColor" strokeWidth="1.4" />
-                          <rect x="7" y="14" width="10" height="6" rx="1" stroke="currentColor" strokeWidth="1.4" />
-                        </svg>
-                      </span>
-                      BACKEND
-                    </h3>
-                    <div className='tags-grid'>
-                      <p className='tag'>SQL</p>
-                      <p className='tag'>Firebase</p>
-                      <p className='tag'>Python</p>
-                    </div>
-                  </div>
-                </article>
-              </div>
-
-              <div className='Skills-grid'>
-                {/* TOOLS */}
-                <article className="Skills-card">
-                  <div className="Skills-card-body">
-                    <h3>
-                      <span className="skill-icon" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M12 2v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M12 18v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                          <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.4" />
-                        </svg>
-                      </span>
-                      TOOLS
-                    </h3>
-                    <div className='tags-grid'>
-                      <p className='tag'>Git</p>
-                      <p className='tag'>GitHub</p>
-                      <p className='tag'>VS Code</p>
-                      <p className='tag'>Godot</p>
-                    </div>
-                  </div>
-                </article>
-
-                {/* DESIGN */}
-                <article className="Skills-card">
-                  <div className="Skills-card-body">
-                    <h3>
-                      <span className="skill-icon" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M12 2l3 7h7l-5.5 4 2 7L12 17l-6.5 3 2-7L2 9h7l3-7z" stroke="currentColor" strokeWidth="0.9" strokeLinejoin="round" strokeLinecap="round" />
-                        </svg>
-                      </span>
-                      DESIGN
-                    </h3>
-                    <div className='tags-grid'>
-                      <p className='tag'>Photoshop</p>
-                      <p className='tag'>Canva</p>
-                      <p className='tag'>Figma</p>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-          </section>
-
-          {/* Certifications */}
-          <section className='Certifications' id='Certifications'>
-            <div className="container">
-              <h2>Certifications</h2>
-              <p>Industry-recognized credentials validating my technical expertise</p>
-
-              <h4>MAJOR CERTIFICATIONS</h4>
-              <div className="Certifications-grid">
-                <article className="Certifications-card">
-                  <div className='card-grid'>
-                    <div className='card-header'>
-                      <h3>ITS-Database Certification</h3>
-                      <span className='cert-badge' aria-hidden='true'>
-                        <a href="https://www.credly.com/badges/ec097417-e36a-4642-b03b-df96919ae380/public_url" target="_blank" rel="noopener noreferrer">
-                          Verified
-                        </a>
-                      </span>
-                    </div>
-                    <p className='cert-issuer'>Certiport</p>
-                    <p className='cert-year'>2025</p>
-                    <p className='cert-link'>
-                      <button onClick={() => openCertificateModal('itDatabase')} className="view-cert-btn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        View Credential
-                      </button>
-                    </p>
-                  </div>
-                </article>
-                
-                <article className="Certifications-card">
-                  <div className='card-grid'>
-                    <div className='card-header'>
-                      <h3>Responsive Web-Design Certification</h3>
-                      <span className='cert-badge' aria-hidden='true'>
-                        <a href="https://www.freecodecamp.org/certification/kidlat/responsive-web-design" target="_blank" rel="noopener noreferrer">
-                          Verified
-                        </a>
-                      </span>
-                    </div>
-                    <p className='cert-issuer'>FreeCodeCamp</p>
-                    <p className='cert-year'>2024</p>
-                    <p className='cert-link'>
-                      <button onClick={() => openCertificateModal('responsiveWeb')} className="view-cert-btn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        View Credential
-                      </button>
-                    </p>
-                  </div>
-                </article>
-              </div>
-
-              <h4>ADDITIONAL CERTIFICATIONS</h4>
-              <div className="Certifications-grid">
-                <article className="Certifications-card">
-                  <div className='card-grid'>
-                    <div className='card-header'>
-                      <h3>Git Training Certification</h3>
-                      <span className='cert-badge' aria-hidden='true'>
-                        <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">
-                          Verified
-                        </a>
-                      </span>
-                    </div>
-                    <p className='cert-issuer'>SkillUp by Simplilearn</p>
-                    <p className='cert-year'>2025</p>
-                    <p className='cert-link'>
-                      <button onClick={() => openCertificateModal('git')} className="view-cert-btn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        View Credential
-                      </button>
-                    </p>
-                  </div>
-                </article>
-
-                <article className="Certifications-card">
-                  <div className='card-grid'>
-                    <div className='card-header'>
-                      <h3>Cloud Computing Certification</h3>
-                      <span className='cert-badge' aria-hidden='true'>
-                        <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true" target="_blank" rel="noopener noreferrer">
-                          Verified
-                        </a>
-                      </span>
-                    </div>
-                    <p className='cert-issuer'>SkillUp by Simplilearn</p>
-                    <p className='cert-year'>2025</p>
-                    <p className='cert-link'>
-                      <button onClick={() => openCertificateModal('cloud')} className="view-cert-btn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        View Credential
-                      </button>
-                    </p>
-                  </div>
-                </article>
-
-                <article className="Certifications-card">
-                  <div className='card-grid'>
-                    <div className='card-header'>
-                      <h3>DevOps Certification</h3>
-                      <span className='cert-badge' aria-hidden='true'>
-                        <a href="https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true" target='_blank' rel="noopener noreferrer">
-                          Verified
-                        </a>
-                      </span>
-                    </div>
-                    <p className='cert-issuer'>SkillUp by Simplilearn</p>
-                    <p className='cert-year'>2025</p>
-                    <p className='cert-link'>
-                      <button onClick={() => openCertificateModal('devOps')} className="view-cert-btn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '0.3em', verticalAlign: 'middle' }}>
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                          <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        View Credential
-                      </button>
-                    </p>
-                  </div>
-                </article>
-              </div>
-            </div>
-          </section>
-
-          {/* Get in touch */}
-          <section className='Contact' id='Contact'>
-            <div className="container">
-              <h2>Get in Touch</h2>
-              <p>Open to internship opportunities, freelance projects, and collaborations. Fill out the form below and I'll get back to you within 24 hours or earlier.</p>
-            
-              {/* Forms Card */}
-              <div className='Contact-grid'>
-                <div className='Contact-form-card'>
-                  <form className='Contact-form' onSubmit={handleSubmit} action="https://formspree.io/f/manlplre" method="POST">
-
-                    {/* Form Fields */}
-                    <div className='Contact-row'>
-                      <div className='Contact-field'>
-                        <label htmlFor='name'>Name <span>*</span></label>
-                        <input type='text' id='name' name='name' placeholder='Your name' required />
-                      </div>
-                      
-                      <div className='Contact-field'>
-                        <label htmlFor='email'>Email <span>*</span></label>
-                        <input type='email' id='email' name='email' placeholder='your.email@example.com' required />
-                      </div>
-                    </div>
-
-                    <div className='Contact-field'>
-                      <label htmlFor='subject'>Subject <span>*</span></label>
-                      <input type='text' id='subject' name='subject' placeholder="What's this about?" required />
-                    </div>
-                    
-                    <div className='Contact-field'>
-                      <label htmlFor='message'>Message <span>*</span></label>
-                      <textarea id='message' name='message' rows='4' placeholder='Tell me about your project, opportunity, or question...' required></textarea>
-                    </div>
-                    
-                    {/* honeypot for bots */}
-                    <input type="text" name="_gotcha" style={{display:'none'}} />
-
-                    <button type='submit' className='Contact-send-btn' disabled={contactStatus === 'sending'}>
-                      <svg width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-                        <line x1='22' y1='2' x2='11' y2='13'></line>
-                        <polygon points='22 2 15 22 11 13 2 9 22 2'></polygon>
-                      </svg>
-                      Send Message
-                    </button>
-
-                    {/* status messages */}
-                    {contactStatus === 'sending' && <div className='Contact-status'>Sending…</div>}
-                    {contactStatus === 'success' && <div className='Contact-status success'>Message sent — thanks!</div>}
-                    {contactStatus === 'error' && <div className='Contact-status error'>Something went wrong. Please try again or email directly.</div>}
-
-                    <div className='Contact-email-row'>
-                      <span>Prefer email? Reach me directly at{' '}
-                        <a href='mailto:bautistaangelozeus17@gmail.com'>
-                          <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-                            <rect x='3' y='5' width='18' height='14' rx='2' ry='2'></rect>
-                            <polyline points='3 7 12 13 21 7'></polyline>
-                          </svg>
-                          bautistaangelozeus17@gmail.com
-                        </a>
-                      </span>
-                    </div>
-                  </form>
-                </div>
-
-                {/* Connect Card */}
-                <div className='Contact-side-cards'>
-                  <div className='Contact-connect-card'>
-                    <h3>Connect With Me</h3>
-                    <a className='Contact-link' href='https://github.com/kidlatpogi' target='_blank' rel='noopener noreferrer'>
-                      <span className='Contact-link-icon'>
-                        <svg width='18' height='18' viewBox='0 0 16 16' fill='currentColor'>
-                          <path d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z'/>
-                        </svg>
-                      </span>
-                      GitHub
-                      <span className='Contact-link-desc'>View my code</span>
-                    </a>
-                    
-                    <a className='Contact-link' href='https://linkedin.com/in/zeusbautista' target='_blank' rel='noopener noreferrer'>
-                      <span className='Contact-link-icon'>
-                        <svg width='18' height='18' viewBox='0 0 24 24' fill='currentColor'>
-                          <path d='M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z'/>
-                          <rect x='2' y='9' width='4' height='12'/>
-                          <circle cx='4' cy='4' r='2'/>
-                        </svg>
-                      </span>
-                      LinkedIn
-                      <span className='Contact-link-desc'>Professional profile</span>
-                    </a>
-                    
-                    <a className='Contact-link' href='/RESUME SAMPLE.pdf' download='Zeus_Angelo_Bautista_Resume.pdf'>
-                      <span className='Contact-link-icon'>
-                        <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'>
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                          <polyline points="7 10 12 15 17 10"></polyline>
-                          <line x1="12" y1="15" x2="12" y2="3"></line>
-                        </svg>
-                      </span>
-                      Resume
-                      <span className='Contact-link-desc'>Download PDF</span>
-                    </a>
-                  </div>
-
-                  {/* Response Card */}
-                  <div className='Contact-response-card'>
-                    <h3>Response Time</h3>
-                    <p>I typically respond to all inquiries within 24 hours. For urgent matters, please reach out via LinkedIn.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
+          <ContactSection contactStatus={contactStatus} onSubmit={handleSubmit} />
         </main>
 
         <footer>
@@ -638,8 +112,8 @@ function App() {
           </div>
         </footer>
 
-        {/* Visitor Counter */}
-        <VisitorCounter />
+        {/* Silent Analytics Tracker */}
+        <AnalyticsTracker />
 
         {/* Certificate Modal */}
         <CertificateModal 
@@ -647,9 +121,8 @@ function App() {
           onClose={closeCertificateModal}
           certificate={selectedCertificate}
         />
-        
-        </div>
       </div>
+    </div>
   )
 }
 
