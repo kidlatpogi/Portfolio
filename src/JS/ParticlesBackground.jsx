@@ -143,16 +143,22 @@ function ParticlesBackground() {
     localStorage.setItem('particlesEnabled', JSON.stringify(newState))
   }
 
+  const handleToggleClick = () => {
+    toggleParticles()
+    setShowTooltip(false) // Hide tooltip after click
+  }
+
   if (!isEnabled) {
     return (
       <div 
         className="particles-toggle-wrapper"
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
+        onTouchStart={() => setShowTooltip(false)}
       >
         <button 
           className="particles-toggle" 
-          onClick={toggleParticles}
+          onClick={handleToggleClick}
           aria-label="Enable particles"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -165,7 +171,7 @@ function ParticlesBackground() {
         </button>
         {showTooltip && (
           <div className="particles-tooltip">
-            Click to enable particle effects ✨
+            Click to enable particle effects
           </div>
         )}
       </div>

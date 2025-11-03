@@ -2,32 +2,15 @@ import { useState, useEffect } from 'react'
 
 // GitHub star button component that fetches the repo star count and checks if user has starred
 function GitHubStarButton({ repo, style, className }) {
-  const [stars, setStars] = useState(null)
   const [isStarred, setIsStarred] = useState(false)
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     let mounted = true
     
-    // Fetch repo data for star count
-    fetch(`https://api.github.com/repos/${repo}`)
-      .then((r) => {
-        if (!r.ok) throw new Error('GitHub API error')
-        return r.json()
-      })
-      .then((data) => {
-        if (mounted && data && typeof data.stargazers_count === 'number') {
-          setStars(data.stargazers_count)
-        }
-      })
-      .catch(() => {
-        // silently ignore; we can show fallback text
-        if (mounted) setStars(null)
-      })
-
     // Check if user has starred (localStorage simulation)
     const starredRepos = JSON.parse(localStorage.getItem('starredRepos') || '[]')
-    if (starredRepos.includes(repo)) {
+    if (mounted && starredRepos.includes(repo)) {
       setIsStarred(true)
     }
 
@@ -85,25 +68,26 @@ function GitHubStarButton({ repo, style, className }) {
   return (
     <>
       <button
+        type="button"
         className={`${className || "gh-star-btn"} ${isStarred ? 'starred' : ''}`}
         style={style}
         onClick={handleClick}
-        aria-label={`${isStarred ? 'Starred' : 'Star'} ${repo} on GitHub`}
+        aria-label={`${isStarred ? 'Following' : 'Follow My Development Progress'} ${repo} on GitHub`}
       >
-        <svg 
-          width="24" 
-          height="24" 
-          viewBox="0 0 16 16" 
-          fill={isStarred ? '#FFD700' : 'currentColor'} 
-          xmlns="http://www.w3.org/2000/svg" 
-          aria-hidden="true" 
-          focusable="false"
-          style={{ transition: 'fill 200ms ease', flexShrink: 0, display: 'block' }}
-        >
-          <path d="M8 12.027l3.247 1.709-.62-3.618 2.623-2.56-3.625-.53L8 4.178l-1.624 2.85-3.625.53 2.623 2.56-.62 3.618L8 12.027z" />
-        </svg>
-        <span className="gh-star-label" style={{ display: 'flex', alignItems: 'center' }}>{isStarred ? 'Starred' : 'Give me a Star'}</span>
-        {stars !== null && <span className="gh-star-count" style={{ display: 'flex', alignItems: 'center' }}>{stars.toLocaleString()}</span>}
+        <span className="gh-star-icon-wrap" aria-hidden="true">
+          <svg 
+            className="gh-star-icon"
+            width="28" 
+            height="28" 
+            viewBox="0 0 16 16" 
+            fill={isStarred ? '#FFD700' : 'currentColor'} 
+            xmlns="http://www.w3.org/2000/svg" 
+            focusable="false"
+          >
+            <path d="M8 12.027l3.247 1.709-.62-3.618 2.623-2.56-3.625-.53L8 4.178l-1.624 2.85-3.625.53 2.623 2.56-.62 3.618L8 12.027z" />
+          </svg>
+        </span>
+        <span className="gh-star-label">{isStarred ? 'Following' : 'Follow My Development Progress'}</span>
       </button>
 
       {showModal && (
