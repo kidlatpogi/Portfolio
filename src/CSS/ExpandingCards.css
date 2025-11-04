@@ -17,7 +17,7 @@
   border-radius: 20px;
   cursor: pointer;
   position: relative;
-  transition: flex 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: flex 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s ease, opacity 0.35s ease;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   /* Prevent downloading and screenshots */
@@ -26,6 +26,29 @@
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-touch-callout: none;
+}
+
+/* Promote each card to its own layer and limit repaint scope */
+.expanding-card {
+  will-change: flex, transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  contain: paint;
+}
+
+/* Background image element (replaces background-image inline style) */
+.expanding-card .card-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 .expanding-card::before {

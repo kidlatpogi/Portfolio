@@ -44,6 +44,7 @@ const DesignModal = memo(({ isOpen, modalImage, onClose }) => {
             src={modalImage.image} 
             alt={modalImage.title}
             className="design-modal-image"
+            loading="lazy"
             onContextMenu={(e) => e.preventDefault()}
             onDragStart={(e) => e.preventDefault()}
             draggable="false"

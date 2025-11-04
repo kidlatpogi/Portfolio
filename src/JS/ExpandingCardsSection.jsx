@@ -1,15 +1,6 @@
-import React from 'react';
-import ExpandingCards from '../JS/ExpandingCards.jsx';
+import React from 'react'
 
-function ExpandingCardsSection() {
-  return (
-    <section className='ExpandingCards' id='ExpandingCards'>
-      <div className="container">
-        <h2>Graphic Design Portfolio</h2>
-        <ExpandingCards />
-      </div>
-    </section>
-  );
+// Minimal stub - archive removed. This component is unused; kept as no-op to avoid import errors.
+export default function ExpandingCardsSection() {
+	return null
 }
-
-export default ExpandingCardsSection;

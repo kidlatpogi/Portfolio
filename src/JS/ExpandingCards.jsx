@@ -4,7 +4,6 @@ import DesignCard from './DesignCard'
 import DesignModal from './DesignModal'
 
 // Import images (use optimized variants where available)
-import multo from '../assets/Photoshop/Multo-800.avif'
 import cloud9 from '../assets/Photoshop/Cloud9-800.webp'
 import ketchup from '../assets/Photoshop/Ketchup-800.webp'
 
@@ -59,7 +58,8 @@ const CARDS_DATA = [
   {
     id: 3,
     title: 'Multo Music Poster',
-    image: multo,
+    // use the imported optimized 800w AVIF
+    image: Multo800,
   imageSrc: Multo800,
   imageSrcSet: `${Multo400} 400w, ${Multo800} 800w, ${Multo1200} 1200w`,
   imageSizes: '(max-width: 600px) 100vw, 33vw',

@@ -3,12 +3,12 @@ import { kv } from '@vercel/kv'
 export default async function handler(req, res) {
   // Simple admin-protected endpoint. Use a secret stored in Vercel env: ADMIN_SECRET
   const auth = req.headers.authorization
-  if (!auth || auth !== `Bearer ${process.env.ADMIN_SECRET}`) {
+  if (!auth || auth !== `Bearer ${globalThis.process?.env?.ADMIN_SECRET}`) {
     return res.status(401).json({ error: 'unauthorized' })
   }
 
   try {
-    const ids = (process.env.LIKED_IDS || '').split(',').filter(Boolean)
+    const ids = ((globalThis.process?.env?.LIKED_IDS) || '').split(',').filter(Boolean)
     const out = {}
     await Promise.all(ids.map(async (id) => {
       const v = await kv.get(`likes:${id}`)
