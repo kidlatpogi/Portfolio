@@ -679,8 +679,9 @@ body.light-mode .glass-navbar .nav-link:focus {
 @media (max-width: 640px) {
   .Home > p:nth-of-type(2),
   .bio-text {
-    text-align: center;
-    text-indent: 0;
+    text-align: justify;
+    text-justify: inter-word;
+    text-indent: 2em;
     padding: 0 1rem;
     line-height: 1.6;
   }
@@ -816,6 +817,91 @@ body.light-mode .Resume:hover {
   -webkit-backdrop-filter: blur(8px) saturate(120%);
 }
 
+/* Hover overlay: slide-down glass panel anchored to top of the photo */
+.project-card { position: relative; overflow: hidden; }
+/* ensure the media area is the positioning context for the overlay */
+.project-media { position: relative; overflow: hidden; }
+
+.project-media .project-overlay {
+position: absolute;
+  top: 0;
+  left: 0; /* Keep left 0 to align to the left side of the parent */
+  /* Remove 'right: 0;' to allow the width to shrink to content size */
+  
+  z-index: 10;
+  /* Keep overlay compact (only covers the top area of the image) */
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  /* Add 'width: fit-content;' to make it shrink-wrap its content */
+  width: fit-content; 
+  /* Add 'max-width: 100%;' to ensure it doesn't overflow the parent */
+  max-width: 100%; 
+
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-110%);
+  transition: opacity 260ms cubic-bezier(.2,.9,.2,1), transform 300ms cubic-bezier(.2,.9,.2,1);
+  padding: 0.5rem 0.75rem;
+}
+
+/* glass background behind the overlay content */
+.project-media .project-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Remove 'right: 0;' here as well */
+  /* Remove 'height: 100%;' to allow the height to shrink to content size */
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-radius: 0 0 10px 10px;
+  pointer-events: none;
+}
+
+.project-media .project-overlay-inner {
+  position: relative;
+  z-index: 11;
+  color: var(--light-mode);
+  text-align: left;
+  max-width: 95%;
+  padding: 0 1rem;
+}
+.project-media .project-overlay-inner p {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  line-height: 1.15;
+  margin: 0;
+}
+
+.project-overlay-inner p{
+  text-align: justify;
+}
+
+.project-card:hover .project-image{
+  filter: blur(10px) brightness(0.6) opacity(0.8);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.project-image{
+  filter: none;
+  box-shadow: none;
+  transition: 
+    filter 300ms ease-in-out,
+    box-shadow 300ms ease-in-out;
+}
+
+.project-media .project-overlay h4 { margin: 0 0 0.25rem; font-size: 1.05rem; }
+.project-media .project-overlay p { margin: 0; font-size: 0.9rem; opacity: 0.95; }
+.project-media img { transition: transform 360ms cubic-bezier(.2,.9,.2,1); display:block; }
+.project-card:hover .project-media .project-overlay,
+.project-card:focus-within .project-media .project-overlay { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.project-card:hover .project-media img,
+.project-card:focus-within .project-media img { transform: scale(1.06); }
+
 .project-media {
   flex: 1 1 0;
   background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08));
@@ -857,6 +943,11 @@ body.light-mode .Resume:hover {
   /* Mobile: remove padding so image fully fills the card media area */
   .project-media { height: 180px; padding: 0; }
   .project-media img { object-fit: cover; width:100%; height:100%; }
+
+  /* Ensure project card stacks content vertically on small screens so media is shown above body */
+  .project-card { flex-direction: column; }
+  .project-media { order: 0; width: 100%; height: auto; min-height: 120px; }
+  .project-media img, .project-image { width: 100%; height: auto; object-fit: cover; display: block; }
 }
 
 body.light-mode .project-card {
@@ -884,6 +975,28 @@ body.light-mode .project-media {
   color: var(--light-mode);
   line-height: 1.3;
 }
+
+/* GitHub description tooltip for project code links */
+.gh-tooltip-wrapper { position: relative; display: inline-block; }
+.gh-tooltip-wrapper:focus { outline: none; }
+.gh-tooltip {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(100% + 8px);
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease, transform 150ms ease;
+  z-index: 1200;
+}
+.gh-tooltip-wrapper:hover .gh-tooltip,
+.gh-tooltip-wrapper:focus .gh-tooltip { opacity: 1; transform: translateX(-50%) translateY(-4px); }
 
 .project-body a{
   text-decoration: none;

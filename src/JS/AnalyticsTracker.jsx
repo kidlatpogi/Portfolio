@@ -11,6 +11,11 @@ import { doc, runTransaction } from 'firebase/firestore'
 function AnalyticsTracker() {
   useEffect(() => {
     const trackVisitor = async () => {
+      // If Firestore wasn't initialized (missing env vars), skip tracking
+      if (!db) {
+        // Keep behavior silent — just exit early
+        return
+      }
       try {
         // Check if user has visited before
         const hasVisited = localStorage.getItem('hasVisitedPortfolio')
