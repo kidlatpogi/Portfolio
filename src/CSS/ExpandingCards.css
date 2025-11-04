@@ -108,23 +108,23 @@ body.light-mode .expanding-card {
   position: absolute;
   top: 15px;
   right: 15px;
-  /* Provide a solid background fallback for browsers that don't support backdrop-filter */
-  background-color: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.15);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* Stronger, high-contrast background to ensure visibility across browsers */
+  background: rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 25px;
-  padding: 8px 14px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  transition: all 0.18s ease;
-  z-index: 1000; /* raise above images/overlays */
-  opacity: 0;
-  transform: translateY(-6px) scale(0.98);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  z-index: 10000; /* raise above images/overlays */
+  opacity: 1 !important; /* always visible */
+  transform: translateY(0) scale(1);
   pointer-events: auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
 }
 
 /* Show the heart when the card is active OR when the user hovers/focuses the card/button.
@@ -134,9 +134,9 @@ body.light-mode .expanding-card {
 .expanding-card:focus-within .heart-button,
 .heart-button:focus,
 .heart-button:focus-visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0) scale(1.05);
   transition-delay: 0;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.55);
 }
 
 .heart-button:hover {
@@ -148,13 +148,16 @@ body.light-mode .expanding-card {
 .heart-icon {
   width: 20px;
   height: 20px;
-  fill: rgba(255, 255, 255, 0.7);
-  transition: all 0.3s ease;
+  /* Use currentColor so we can control via color on the button for cross-browser consistency */
+  fill: currentColor !important;
+  color: rgba(255,255,255,0.9);
+  transition: transform 0.28s ease, color 0.18s ease;
 }
 
 .heart-button.liked .heart-icon {
-  fill: #ff4757;
-  animation: heartPulse 0.3s ease;
+  color: #ff4757 !important;
+  transform: scale(1.12);
+  animation: heartPulse 0.32s ease;
 }
 
 .like-count {

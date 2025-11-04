@@ -139,10 +139,16 @@ function ExpandingCards() {
 
       // If this is a new like, notify serverless endpoint (Vercel KV) to increment global counter
       if (!isCurrentlyLiked) {
-        fetch(`/api/likes?id=${encodeURIComponent(cardId)}`, { method: 'POST' }).catch((e) => {
-          // ignore server errors; counts remain local
-          console.warn('Failed to report like to server:', e)
-        })
+        try {
+          const resp = await fetch(`/api/reactions?id=${encodeURIComponent(cardId)}`, { method: 'POST' })
+          if (!resp.ok) {
+            // Server returned an error (or KV not configured) — fall back to local only
+            console.warn('Server reaction endpoint responded with error:', resp.status)
+          }
+        } catch (e) {
+          // Likely blocked by client (adblock/shields) or network issue — keep local counts
+          console.warn('Failed to report like to server (possibly blocked):', e)
+        }
       }
     } catch (err) {
       // If localStorage is unavailable or fails, silently ignore

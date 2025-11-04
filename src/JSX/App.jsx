@@ -3,8 +3,7 @@ import '../CSS/App.css'
 import Nav, { NavItem } from './Navbar'
 import ModeSwitcher from '../JS/ModeSwitcher.jsx'
 import ParticlesBackground from '../JS/ParticlesBackground.jsx'
-import AnalyticsTracker from '../JS/AnalyticsTracker.jsx'
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from '@vercel/analytics/react';
 import CertificateModal from '../JS/CertificateModal.jsx'
 import LoadingScreen from '../JS/LoadingScreen.jsx'
 
@@ -80,6 +79,9 @@ function App() {
 
   return (
     <div>
+      {/* Only mount Vercel Analytics when explicitly enabled or on the deployed site to reduce blocked requests */}
+      {typeof window !== 'undefined' && (import.meta.env.PROD && (import.meta.env.VITE_ENABLE_VERCEL_ANALYTICS === 'true' || window.location.hostname.endsWith('.vercel.app') || window.location.hostname === 'zeusbautista.vercel.app')) && <Analytics />}
+
       {isLoading && <LoadingScreen onLoadComplete={handleLoadComplete} />}
       
       <div className={`app-content ${showContent ? 'fade-in' : 'hidden'}`}>
@@ -127,9 +129,7 @@ function App() {
           </div>
         </footer>
 
-  {/* Silent Analytics Tracker */}
-  <AnalyticsTracker />
-  <Analytics />
+  {/* Vercel Analytics is mounted via <Analytics /> above; removed unused AnalyticsTracker to avoid runtime errors */}
 
         {/* Certificate Modal */}
         <CertificateModal 

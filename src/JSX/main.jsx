@@ -4,7 +4,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '../CSS/index.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import App from './App.jsx'
-import { initVercelAnalytics } from '../JS/loadVercelAnalytics'
 
 // Detect system theme preference and apply it before render
 const detectSystemTheme = () => {
@@ -30,10 +29,7 @@ const detectSystemTheme = () => {
 // Apply theme immediately
 detectSystemTheme()
 
-// Initialize optional Vercel Analytics if VITE_VERCEL_INSIGHTS_URL is set
-if (typeof window !== 'undefined') {
-  initVercelAnalytics()
-}
+// Vercel Analytics is mounted via <Analytics /> inside App.jsx when using @vercel/analytics/react
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
