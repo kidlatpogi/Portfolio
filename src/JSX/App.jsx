@@ -3,7 +3,7 @@ import '../CSS/App.css'
 import Nav, { NavItem } from './Navbar'
 import ModeSwitcher from '../JS/ModeSwitcher.jsx'
 import ParticlesBackground from '../JS/ParticlesBackground.jsx'
-import AnalyticsTracker from '../JS/AnalyticsTracker.jsx'
+import { Analytics } from '@vercel/analytics/react';
 import CertificateModal from '../JS/CertificateModal.jsx'
 import LoadingScreen from '../JS/LoadingScreen.jsx'
 
@@ -79,6 +79,8 @@ function App() {
 
   return (
     <div>
+      <Analytics />
+
       {isLoading && <LoadingScreen onLoadComplete={handleLoadComplete} />}
       
       <div className={`app-content ${showContent ? 'fade-in' : 'hidden'}`}>
