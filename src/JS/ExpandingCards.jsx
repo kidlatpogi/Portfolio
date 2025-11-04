@@ -119,40 +119,46 @@ function ExpandingCards() {
 
   const handleLike = useCallback(async (e, cardId) => {
     e.stopPropagation()
-    
-    const isCurrentlyLiked = userLiked[cardId] || false
-    const newUserLiked = { ...userLiked, [cardId]: !isCurrentlyLiked }
-    
-    // Optimistic update
-    setUserLiked(newUserLiked)
-    localStorage.setItem('portfolioUserReactions', JSON.stringify(newUserLiked))
+    const key = String(cardId)
+
+    // Use functional state update to avoid stale closures and make updates atomic
+    setUserLiked((prev) => {
+      const wasLiked = !!prev[key]
+      const next = { ...prev, [key]: !wasLiked }
+      try {
+        localStorage.setItem('portfolioUserReactions', JSON.stringify(next))
+      } catch (err) {
+        console.warn('Failed to persist reactions state to localStorage:', err)
+      }
+      return next
+    })
+
     // Persist a local-only reactions count object so counts survive reloads for this browser
     try {
-      // Persist local counts for this browser
       const countsKey = 'portfolioReactionsCounts'
       const raw = localStorage.getItem(countsKey)
       const counts = raw ? JSON.parse(raw) : {}
-      const currentCount = counts[cardId] || 0
-      const newCount = isCurrentlyLiked ? Math.max(0, currentCount - 1) : currentCount + 1
-      counts[cardId] = newCount
+      const currentCount = counts[key] || 0
+
+      // Determine new count based on previous state snapshot — safe because we already updated storage above
+      const wasLiked = !!userLiked[key]
+      const newCount = wasLiked ? Math.max(0, currentCount - 1) : currentCount + 1
+      counts[key] = newCount
       localStorage.setItem(countsKey, JSON.stringify(counts))
 
-      // If this is a new like, notify serverless endpoint (Vercel KV) to increment global counter
-      if (!isCurrentlyLiked) {
+      // If this is a new reaction (wasn't liked), notify serverless endpoint (Vercel KV)
+      if (!wasLiked) {
         try {
-          const resp = await fetch(`/api/reactions?id=${encodeURIComponent(cardId)}`, { method: 'POST' })
+          const resp = await fetch(`/api/reactions?id=${encodeURIComponent(key)}`, { method: 'POST' })
           if (!resp.ok) {
-            // Server returned an error (or KV not configured) — fall back to local only
             console.warn('Server reaction endpoint responded with error:', resp.status)
           }
         } catch (e) {
-          // Likely blocked by client (adblock/shields) or network issue — keep local counts
           console.warn('Failed to report reaction to server (possibly blocked):', e)
         }
       }
     } catch (err) {
-      // If localStorage is unavailable or fails, silently ignore
-      console.warn('Failed to persist local likes count:', err)
+      console.warn('Failed to persist local reactions count:', err)
     }
   }, [userLiked])
 
@@ -189,6 +195,8 @@ function ExpandingCards() {
         isOpen={isModalOpen}
         modalImage={modalImage}
         onClose={handleCloseModal}
+        userLiked={userLiked}
+        onReact={handleLike}
       />
     </>
   )

@@ -400,6 +400,34 @@ body.light-mode .view-full-button:hover {
   -ms-user-select: none;
 }
 
+/* Position the reaction button in modal top-right of the image container */
+.design-modal-image-container .reaction-button {
+  position: absolute;
+  top: 40px;
+  right: 25px;
+  z-index: 20; /* above modal controls but below global overlays */
+  background: rgba(0,0,0,0.5);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  color: #fff;
+}
+
+/* Make sure modal close button stays top-left and visible */
+.design-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 30;
+}
+
+@media (max-width: 480px) {
+  .design-modal-image-container .reaction-button {
+    top: 15px;
+    right: 15px;
+    padding: 6px 8px;
+  }
+  .design-modal-close { top: 3px; right: 8px; }
+}
+
 .design-modal-image-container::after {
   content: '';
   position: absolute;
@@ -617,3 +645,4 @@ body.light-mode .expanding-card-title {
   }
 }
 
+}
