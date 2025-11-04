@@ -4,7 +4,6 @@ import Nav, { NavItem } from './Navbar'
 import ModeSwitcher from '../JS/ModeSwitcher.jsx'
 import ParticlesBackground from '../JS/ParticlesBackground.jsx'
 import AnalyticsTracker from '../JS/AnalyticsTracker.jsx'
-import { Analytics } from "@vercel/analytics/next"
 import CertificateModal from '../JS/CertificateModal.jsx'
 import LoadingScreen from '../JS/LoadingScreen.jsx'
 
@@ -129,7 +128,7 @@ function App() {
 
   {/* Silent Analytics Tracker */}
   <AnalyticsTracker />
-  <Analytics />
+  {/* Vercel Analytics (non-Next) is loaded via initVercelAnalytics in main.jsx when configured */}
 
         {/* Certificate Modal */}
         <CertificateModal 
