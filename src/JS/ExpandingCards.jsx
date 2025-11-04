@@ -1,25 +1,101 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { db } from '../firebase'
-import { doc, runTransaction } from 'firebase/firestore'
 import '../CSS/ExpandingCards.css'
 import DesignCard from './DesignCard'
 import DesignModal from './DesignModal'
 
-// Import images
-import typography from '../assets/Photoshop/Typography.png'
-import multo from '../assets/Photoshop/Multo.png'
-import lamaw from '../assets/Photoshop/lamaw.png'
-import hereWithMe from '../assets/Photoshop/Here with me.png'
-import cloud9 from '../assets/Photoshop/Cloud 9.png'
-import ketchup from '../assets/Photoshop/Ketchup.png'
+// Import images (use optimized variants where available)
+import typography from '../assets/Photoshop/Typography-800.webp'
+import multo from '../assets/Photoshop/Multo-800.avif'
+import cloud9 from '../assets/Photoshop/Cloud9-800.webp'
+import ketchup from '../assets/Photoshop/Ketchup-800.webp'
+
+// Optimized responsive variants (generated into src/assets/optimized)
+
+import ketchup400 from '../assets/Photoshop/Ketchup-400.webp'
+import ketchup800 from '../assets/Photoshop/Ketchup-800.webp'
+import ketchup1200 from '../assets/Photoshop/Ketchup-1200.webp'
+import ketchup400avif from '../assets/Photoshop/Ketchup-400.avif'
+import ketchup800avif from '../assets/Photoshop/Ketchup-800.avif'
+import ketchup1200avif from '../assets/Photoshop/Ketchup-1200.avif'
+
+import cloud9_400 from '../assets/Photoshop/Cloud9-400.webp'
+import cloud9_800 from '../assets/Photoshop/Cloud9-800.webp'
+import cloud9_1200 from '../assets/Photoshop/Cloud9-1200.webp'
+import cloud9_400_avif from '../assets/Photoshop/Cloud9-400.avif'
+import cloud9_800_avif from '../assets/Photoshop/Cloud9-800.avif'
+import cloud9_1200_avif from '../assets/Photoshop/Cloud9-1200.avif'
+
+import typography400 from '../assets/Photoshop/Typography-400.webp'
+import typography800 from '../assets/Photoshop/Typography-800.webp'
+import typography1200 from '../assets/Photoshop/Typography-1200.webp'
+import typography400avif from '../assets/Photoshop/Typography-400.avif'
+import typography800avif from '../assets/Photoshop/Typography-800.avif'
+import typography1200avif from '../assets/Photoshop/Typography-1200.avif'
+import Multo400 from '../assets/Photoshop/Multo-400.avif'
+import Multo800 from '../assets/Photoshop/Multo-800.avif'
+import Multo1200 from '../assets/Photoshop/Multo-1200.avif'
+import Lamaw400 from '../assets/Photoshop/lamaw-400.avif'
+import Lamaw800 from '../assets/Photoshop/lamaw-800.avif'
+import Lamaw1200 from '../assets/Photoshop/lamaw-1200.avif'
+import Here400 from '../assets/Photoshop/Here-with-me-400.avif'
+import Here800 from '../assets/Photoshop/Here-with-me-800.avif'
+import Here1200 from '../assets/Photoshop/Here-with-me-1200.avif'
 
 const CARDS_DATA = [
-  { id: 1, title: 'Redesigning Old Poster', image: ketchup },
-  { id: 2, title: 'Cloud 9 Music Poster', image: cloud9 },
-  { id: 3, title: 'Multo Music Poster', image: multo },
-  { id: 4, title: 'Here with me Music Poster', image: hereWithMe },
-  { id: 5, title: 'Typography Design', image: typography },
-  { id: 6, title: 'Podcast Thumbnail Design', image: lamaw },
+  {
+    id: 1,
+    title: 'Redesigning Old Poster',
+    image: ketchup,
+  imageSrc: ketchup800,
+  imageSrcSet: `${ketchup400avif} 400w, ${ketchup800avif} 800w, ${ketchup1200avif} 1200w, ${ketchup400} 400w, ${ketchup800} 800w, ${ketchup1200} 1200w`,
+    imageSizes: '(max-width: 600px) 100vw, 33vw',
+    modalSrc: ketchup1200,
+  },
+  {
+    id: 2,
+    title: 'Cloud 9 Music Poster',
+    image: cloud9,
+  imageSrc: cloud9_800,
+  imageSrcSet: `${cloud9_400_avif} 400w, ${cloud9_800_avif} 800w, ${cloud9_1200_avif} 1200w, ${cloud9_400} 400w, ${cloud9_800} 800w, ${cloud9_1200} 1200w`,
+    imageSizes: '(max-width: 600px) 100vw, 33vw',
+    modalSrc: cloud9_1200,
+  },
+  {
+    id: 3,
+    title: 'Multo Music Poster',
+    image: multo,
+  imageSrc: Multo800,
+  imageSrcSet: `${Multo400} 400w, ${Multo800} 800w, ${Multo1200} 1200w`,
+  imageSizes: '(max-width: 600px) 100vw, 33vw',
+  modalSrc: Multo1200,
+  },
+  {
+    id: 4,
+    title: 'Here with me Music Poster',
+  image: Here800,
+  imageSrc: Here800,
+  imageSrcSet: `${Here400} 400w, ${Here800} 800w, ${Here1200} 1200w`,
+  imageSizes: '(max-width: 600px) 100vw, 33vw',
+  modalSrc: Here1200,
+  },
+  {
+    id: 5,
+    title: 'Typography Design',
+    image: typography,
+  imageSrc: typography800,
+  imageSrcSet: `${typography400avif} 400w, ${typography800avif} 800w, ${typography1200avif} 1200w, ${typography400} 400w, ${typography800} 800w, ${typography1200} 1200w`,
+    imageSizes: '(max-width: 600px) 100vw, 33vw',
+    modalSrc: typography1200,
+  },
+  {
+    id: 6,
+    title: 'Podcast Thumbnail Design',
+  image: Lamaw800,
+  imageSrc: Lamaw800,
+  imageSrcSet: `${Lamaw400} 400w, ${Lamaw800} 800w, ${Lamaw1200} 1200w`,
+  imageSizes: '(max-width: 600px) 100vw, 33vw',
+  modalSrc: Lamaw1200,
+  },
 ]
 
 function ExpandingCards() {
@@ -53,37 +129,34 @@ function ExpandingCards() {
     // Optimistic update
     setUserLiked(newUserLiked)
     localStorage.setItem('portfolioUserLiked', JSON.stringify(newUserLiked))
-
+    // Persist a local-only likes count object so counts survive reloads for this browser
     try {
-      const likesDocRef = doc(db, 'stats', 'likes')
-      
-      await runTransaction(db, async (transaction) => {
-        const likesDoc = await transaction.get(likesDocRef)
-        
-        if (!likesDoc.exists()) {
-          const initialLikes = {}
-          CARDS_DATA.forEach((card) => {
-            initialLikes[card.id] = card.id === cardId ? 1 : 0
-          })
-          transaction.set(likesDocRef, initialLikes)
-        } else {
-          const currentLikes = likesDoc.data()
-          const currentCount = currentLikes[cardId] || 0
-          const newCount = isCurrentlyLiked ? Math.max(0, currentCount - 1) : currentCount + 1
-          transaction.update(likesDocRef, { [cardId]: newCount })
-        }
-      })
-    } catch (error) {
-      console.error('Error updating like:', error)
-      // Revert optimistic update on error
-      setUserLiked((prev) => ({ ...prev, [cardId]: isCurrentlyLiked }))
-      localStorage.setItem('portfolioUserLiked', JSON.stringify({ ...userLiked, [cardId]: isCurrentlyLiked }))
+      // Persist local counts for this browser
+      const countsKey = 'portfolioLikesCounts'
+      const raw = localStorage.getItem(countsKey)
+      const counts = raw ? JSON.parse(raw) : {}
+      const currentCount = counts[cardId] || 0
+      const newCount = isCurrentlyLiked ? Math.max(0, currentCount - 1) : currentCount + 1
+      counts[cardId] = newCount
+      localStorage.setItem(countsKey, JSON.stringify(counts))
+
+      // If this is a new like, notify serverless endpoint (Vercel KV) to increment global counter
+      if (!isCurrentlyLiked) {
+        fetch(`/api/likes?id=${encodeURIComponent(cardId)}`, { method: 'POST' }).catch((e) => {
+          // ignore server errors; counts remain local
+          console.warn('Failed to report like to server:', e)
+        })
+      }
+    } catch (err) {
+      // If localStorage is unavailable or fails, silently ignore
+      console.warn('Failed to persist local likes count:', err)
     }
   }, [userLiked])
 
   const handleOpenModal = useCallback((e, card) => {
     e.stopPropagation()
-    setModalImage(card)
+    // use modalSrc if available (optimized large variant), else card object
+    setModalImage({ ...card, image: card.modalSrc || card.image })
     setIsModalOpen(true)
   }, [])
 

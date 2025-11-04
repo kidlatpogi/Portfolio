@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { db } from '../firebase'
-import { doc, getDoc, runTransaction } from 'firebase/firestore'
+// VisitorCounter now uses localStorage-only counts (no Firebase)
 import '../CSS/VisitorCounter.css'
 
 function VisitorCounter() {
@@ -11,47 +10,24 @@ function VisitorCounter() {
   useEffect(() => {
     const trackVisitor = async () => {
       try {
-        // Check if user has visited before (still use localStorage for this)
         const hasVisited = localStorage.getItem('hasVisitedPortfolio')
-        
-        // Reference to the visitor count document
-        const visitorDocRef = doc(db, 'stats', 'visitors')
-        
+        const key = 'portfolioVisitCount'
+        const raw = localStorage.getItem(key) || '0'
+        let current = parseInt(raw, 10)
+
         if (!hasVisited) {
-          // New visitor - increment count in Firestore
-          await runTransaction(db, async (transaction) => {
-            const visitorDoc = await transaction.get(visitorDocRef)
-            
-            if (!visitorDoc.exists()) {
-              // First visitor ever!
-              transaction.set(visitorDocRef, { count: 1 })
-              setVisitCount(1)
-            } else {
-              // Increment existing count
-              const newCount = visitorDoc.data().count + 1
-              transaction.update(visitorDocRef, { count: newCount })
-              setVisitCount(newCount)
-            }
-          })
-          
-          // Mark as visited locally
+          current = current + 1
+          localStorage.setItem(key, String(current))
           localStorage.setItem('hasVisitedPortfolio', 'true')
           setIsNewVisitor(true)
-          
-          // Show welcome animation for 3 seconds
+          setVisitCount(current)
           setTimeout(() => setIsNewVisitor(false), 3000)
         } else {
-          // Returning visitor - just fetch and display count
-          const visitorDoc = await getDoc(visitorDocRef)
-          if (visitorDoc.exists()) {
-            setVisitCount(visitorDoc.data().count)
-          }
+          setVisitCount(current)
         }
       } catch (error) {
-        console.error('Error tracking visitor:', error)
-        // Fallback to localStorage if Firebase fails
-        const storedCount = localStorage.getItem('portfolioVisitCount') || '0'
-        setVisitCount(parseInt(storedCount, 10))
+        console.error('Error tracking visitor (local fallback):', error)
+        setVisitCount(0)
       } finally {
         setIsLoading(false)
       }
