@@ -216,15 +216,54 @@ body.light-mode .reaction-button:hover {
 }
 
 body.light-mode .reaction-icon {
-  fill: rgba(0, 0, 0, 0.5);
+  /* Ensure the heart icon is solid black in light mode for contrast */
+  color: #000 !important;
+  fill: currentColor !important;
 }
 
 body.light-mode .reaction-button.reacted .reaction-icon {
-  fill: #ff4757;
+  /* Reacted state remains red */
+  color: #ff4757 !important;
+  fill: currentColor !important;
 }
 
 body.light-mode .like-count {
   color: #333;
+}
+
+/* Also adapt based on system preference when no body.light-mode class is present */
+@media (prefers-color-scheme: light) {
+  .reaction-button {
+    background: rgba(255, 255, 255, 0.88);
+    border-color: rgba(0, 0, 0, 0.12);
+    color: #111;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  }
+
+  .reaction-button:hover {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: rgba(0,0,0,0.14);
+  }
+
+  .reaction-icon {
+    /* Use pure black for system light-mode as well */
+    color: #000 !important;
+    fill: currentColor !important;
+  }
+
+  .reaction-button.reacted .reaction-icon {
+    color: #ff4757 !important;
+    fill: currentColor !important;
+  }
+
+  .reaction-button.force-visible,
+  .expanding-card.force-show .reaction-button.force-visible {
+    background: rgba(255,255,255,0.95) !important;
+    color: #111 !important;
+    border-color: rgba(0,0,0,0.12) !important;
+  }
+
+  .like-count { color: #333; }
 }
 
 /* View Full Button */
@@ -359,6 +398,34 @@ body.light-mode .view-full-button:hover {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+}
+
+/* Position the reaction button in modal top-right of the image container */
+.design-modal-image-container .reaction-button {
+  position: absolute;
+  top: 40px;
+  right: 25px;
+  z-index: 20; /* above modal controls but below global overlays */
+  background: rgba(0,0,0,0.5);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  color: #fff;
+}
+
+/* Make sure modal close button stays top-left and visible */
+.design-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 30;
+}
+
+@media (max-width: 480px) {
+  .design-modal-image-container .reaction-button {
+    top: 15px;
+    right: 15px;
+    padding: 6px 8px;
+  }
+  .design-modal-close { top: 3px; right: 8px; }
 }
 
 .design-modal-image-container::after {
@@ -578,3 +645,4 @@ body.light-mode .expanding-card-title {
   }
 }
 
+}
