@@ -128,9 +128,7 @@ function App() {
           </div>
         </footer>
 
-  {/* Silent Analytics Tracker */}
-  <AnalyticsTracker />
-  {/* Vercel Analytics (non-Next) is loaded via initVercelAnalytics in main.jsx when configured */}
+  {/* Vercel Analytics is mounted via <Analytics /> above; removed unused AnalyticsTracker to avoid runtime errors */}
 
         {/* Certificate Modal */}
         <CertificateModal 
