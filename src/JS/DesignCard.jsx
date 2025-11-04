@@ -14,13 +14,20 @@ const DesignCard = memo(({ card, index, isActive, userLiked, onCardClick, onLike
   return (
     <div
       className={`expanding-card ${isActive ? 'active' : ''}`}
-      style={{ backgroundImage: `url(${card.image})` }}
       onClick={() => onCardClick(index)}
       onContextMenu={(e) => e.preventDefault()}
       role="button"
       tabIndex={0}
       aria-label={`Design: ${card.title}`}
     >
+      <img
+        src={card.imageSrc || card.image}
+        srcSet={card.imageSrcSet || undefined}
+        sizes={card.imageSizes || undefined}
+        alt={card.title || ''}
+        className="card-bg"
+        loading="lazy"
+      />
       <h3 className="expanding-card-title">{card.title}</h3>
       
       <button
@@ -49,12 +56,13 @@ const DesignCard = memo(({ card, index, isActive, userLiked, onCardClick, onLike
     </div>
   )
 }, (prevProps, nextProps) => {
-  // Custom comparison for memo - return true if props are equal (skip re-render)
-  return (
-    prevProps.isActive === nextProps.isActive &&
-    prevProps.card.id === nextProps.card.id &&
-    prevProps.userLiked[nextProps.card.id] === nextProps.userLiked[nextProps.card.id]
-  )
+  // Custom comparator to avoid unnecessary re-renders
+  const sameActive = prevProps.isActive === nextProps.isActive
+  const sameId = prevProps.card.id === nextProps.card.id
+  const prevLiked = !!prevProps.userLiked[prevProps.card.id]
+  const nextLiked = !!nextProps.userLiked[nextProps.card.id]
+  const sameLiked = prevLiked === nextLiked
+  return sameActive && sameId && sameLiked
 })
 
 DesignCard.displayName = 'DesignCard'

@@ -1,8 +1,8 @@
 import itDatabaseCert from '../assets/certifications/it-specialist-databases-certificate.png'
-import responsiveWebCert from '../assets/certifications/responsive-web-design-certificate.png'
-import gitCert from '../assets/certifications/git-certification.png'
-import cloudCert from '../assets/certifications/cloud-computing-certification.png'
-import devOpsCert from '../assets/certifications/dev-ops-certification.png'
+import responsiveWebCert from '../assets/certifications/responsive-web-design-certificate-1200.avif'
+import gitCert from '../assets/certifications/git-certification-1200.avif'
+import cloudCert from '../assets/certifications/cloud-computing-certification-1200.avif'
+import devOpsCert from '../assets/certifications/dev-ops-certification-1200.avif'
 
 export const CERTIFICATES_DATA = {
   itDatabase: {

@@ -1,6 +1,17 @@
 import React from 'react'
-import roomReservationImg from '../assets/Project Overview/RoomReservationSystem.png'
-import safeLink from '../assets/Project Overview/SafeLink.png'
+import roomReservation400avif from '../assets/Photoshop/RoomReservationSystem-400.avif'
+import roomReservation800avif from '../assets/Photoshop/RoomReservationSystem-800.avif'
+import roomReservation1200avif from '../assets/Photoshop/RoomReservationSystem-1200.avif'
+import roomReservation400 from '../assets/Photoshop/RoomReservationSystem-400.webp'
+import roomReservation800 from '../assets/Photoshop/RoomReservationSystem-800.webp'
+import roomReservation1200 from '../assets/Photoshop/RoomReservationSystem-1200.webp'
+
+import safeLink400avif from '../assets/Project Overview/SafeLink-400.avif'
+import safeLink800avif from '../assets/Project Overview/SafeLink-800.avif'
+import safeLink1200avif from '../assets/Project Overview/SafeLink-1200.avif'
+import safeLink400 from '../assets/Project Overview/SafeLink-400.webp'
+import safeLink800 from '../assets/Project Overview/SafeLink-800.webp'
+import safeLink1200 from '../assets/Project Overview/SafeLink-1200.webp'
 
 function smoothScrollToId(id, duration = 600) {
   const el = document.getElementById(id.replace('#', ''))
@@ -26,6 +37,15 @@ function smoothScrollToId(id, duration = 600) {
   requestAnimationFrame(animate)
 }
 
+function Tooltip({ text, children }) {
+  return (
+    <span className="gh-tooltip-wrapper" tabIndex={0}>
+      {children}
+      <span className="gh-tooltip">{text}</span>
+    </span>
+  )
+}
+
 function ProjectsSection() {
   return (
     <section className='Projects' id='Projects'>
@@ -37,7 +57,15 @@ function ProjectsSection() {
         <div className="projects-grid">
           <article className="project-card">
             <div className="project-media">
-              <img src={safeLink} alt="SafeLink Mobile Screens" className="project-image" />
+              <div className="project-overlay" aria-hidden="true">
+                <div className="project-overlay-inner">
+<p>SafeLink is a feature-rich React Native/Expo app for family safety. It provides emergency status broadcasts, disaster alerts, and evacuation center locations, using Firebase and OpenStreetMap for reliable data.</p>                </div>
+              </div>
+              <picture>
+                <source type="image/avif" srcSet={`${safeLink400avif} 400w, ${safeLink800avif} 800w, ${safeLink1200avif} 1200w`} sizes="(max-width:600px) 100vw, 33vw" />
+                <source type="image/webp" srcSet={`${safeLink400} 400w, ${safeLink800} 800w, ${safeLink1200} 1200w`} sizes="(max-width:600px) 100vw, 33vw" />
+                <img src={safeLink800} alt="SafeLink Mobile Screens" className="project-image" loading="lazy" />
+              </picture>
             </div>
             <div className="project-body">
               <h3>SafeLink Mobile</h3>
@@ -60,7 +88,21 @@ function ProjectsSection() {
 
           <article className="project-card">
             <div className="project-media">
-              <img src={roomReservationImg} alt="Room Reservation System" className="project-image" />
+              <div className="project-overlay" aria-hidden="true">
+                <div className="project-overlay-inner">
+                  <p>A web-based system designed to manage classroom and laboratory reservations efficiently. It allows users to book rooms by date, time, and type, while administrators can oversee, update, and manage all reservations in real time.</p>
+                </div>
+              </div>
+              <picture>
+                <source type="image/avif" srcSet={`${roomReservation400avif} 400w, ${roomReservation800avif} 800w, ${roomReservation1200avif} 1200w`} sizes="(max-width: 600px) 100vw, 50vw" />
+                <source type="image/webp" srcSet={`${roomReservation400} 400w, ${roomReservation800} 800w, ${roomReservation1200} 1200w`} sizes="(max-width: 600px) 100vw, 50vw" />
+                <img 
+                  src={roomReservation800}
+                  alt="Room Reservation System" 
+                  className="project-image" 
+                  loading="lazy"
+                />
+              </picture>
             </div>
             <div className="project-body">
               <h3>Room Reservation System</h3>
@@ -78,6 +120,7 @@ function ProjectsSection() {
                 </span>
                 <a href="https://github.com/kidlatpogi/Room-Reservation-System.git" target='_blank' rel="noopener noreferrer">Code</a>
               </button>
+              
             </div>
           </article>
         </div>
