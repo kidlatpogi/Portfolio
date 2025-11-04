@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import '../CSS/App.css'
 import Nav, { NavItem } from './Navbar'
 import ModeSwitcher from '../JS/ModeSwitcher.jsx'
@@ -10,7 +10,8 @@ import LoadingScreen from '../JS/LoadingScreen.jsx'
 // Section components
 import HeroSection from './HeroSection'
 import ProjectsSection from './ProjectsSection'
-import ExpandingCards from '../JS/ExpandingCards'
+import { lazy, Suspense } from 'react'
+const ExpandingCards = lazy(() => import('../JS/ExpandingCards'))
 import SkillsSection from './SkillsSection'
 import CertificationsSection from './CertificationsSection'
 import ContactSection from './ContactSection'
@@ -29,6 +30,17 @@ function App() {
     setIsLoading(false)
     setTimeout(() => setShowContent(true), 100)
   }
+
+  // Safety fallback: if loading doesn't complete (e.g. blocked on a remote resource),
+  // force hide the loading screen after 8 seconds to avoid a permanent black screen.
+  useEffect(() => {
+    const fallback = setTimeout(() => {
+      setIsLoading(false)
+      setShowContent(true)
+    }, 8000)
+
+    return () => clearTimeout(fallback)
+  }, [])
 
   const openCertificateModal = (certKey) => {
     setSelectedCertificate(CERTIFICATES_DATA[certKey])
@@ -95,7 +107,9 @@ function App() {
           <section className='ExpandingCards' id='ExpandingCards'>
             <div className="container">
               <h2>Graphic Design Portfolio</h2>
-              <ExpandingCards />
+              <Suspense fallback={<div>Loading gallery…</div>}>
+                <ExpandingCards />
+              </Suspense>
             </div>
           </section>
 
@@ -112,8 +126,8 @@ function App() {
           </div>
         </footer>
 
-        {/* Silent Analytics Tracker */}
-        <AnalyticsTracker />
+  {/* Silent Analytics Tracker */}
+  <AnalyticsTracker />
 
         {/* Certificate Modal */}
         <CertificateModal 

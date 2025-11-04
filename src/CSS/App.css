@@ -864,7 +864,7 @@ position: absolute;
 .project-media .project-overlay-inner {
   position: relative;
   z-index: 11;
-  color: var(--light-mode);
+  color: #ffffff !important;
   text-align: left;
   max-width: 95%;
   padding: 0 1rem;
