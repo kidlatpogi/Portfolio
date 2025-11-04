@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 
-// Local-only likes hook. Stores per-project like boolean under `liked:<id>` and
-// a counts map under `portfolioLikesCounts` in localStorage. Uses the storage
+// Local-only reactions hook. Stores per-project reacted boolean under `reacted:<id>` and
+// a counts map under `portfolioReactionsCounts` in localStorage. Uses the storage
 // event to sync between tabs/windows.
 export default function useLikes(projectId) {
   const [count, setCount] = useState(0)
@@ -10,10 +10,10 @@ export default function useLikes(projectId) {
   useEffect(() => {
     if (!projectId) return
 
-    const likedKey = `liked:${projectId}`
-    const countKey = 'portfolioLikesCounts'
+  const likedKey = `reacted:${projectId}`
+  const countKey = 'portfolioReactionsCounts'
 
-    const storedLiked = localStorage.getItem(likedKey) === 'true'
+  const storedLiked = localStorage.getItem(likedKey) === 'true'
     setIsLiked(storedLiked)
 
     try {
@@ -45,8 +45,8 @@ export default function useLikes(projectId) {
 
   const toggle = useCallback(() => {
     if (!projectId) return
-    const likedKey = `liked:${projectId}`
-    const countKey = 'portfolioLikesCounts'
+  const likedKey = `reacted:${projectId}`
+  const countKey = 'portfolioReactionsCounts'
 
     const currentlyLiked = localStorage.getItem(likedKey) === 'true'
     const newLiked = !currentlyLiked
