@@ -108,7 +108,10 @@ body.light-mode .expanding-card {
   position: absolute;
   top: 15px;
   right: 15px;
+  /* Provide a solid background fallback for browsers that don't support backdrop-filter */
+  background-color: rgba(255, 255, 255, 0.95);
   background: rgba(255, 255, 255, 0.15);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 25px;
@@ -117,16 +120,23 @@ body.light-mode .expanding-card {
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
+  transition: all 0.18s ease;
+  z-index: 1000; /* raise above images/overlays */
   opacity: 0;
-  transform: translateY(-10px);
+  transform: translateY(-6px) scale(0.98);
+  pointer-events: auto;
 }
 
-.expanding-card.active .heart-button {
+/* Show the heart when the card is active OR when the user hovers/focuses the card/button.
+   This improves cross-browser reliability (extensions, forced dark-mode, etc.) and accessibility. */
+.expanding-card.active .heart-button,
+.expanding-card:hover .heart-button,
+.expanding-card:focus-within .heart-button,
+.heart-button:focus,
+.heart-button:focus-visible {
   opacity: 1;
-  transform: translateY(0);
-  transition-delay: 0.3s;
+  transform: translateY(0) scale(1);
+  transition-delay: 0;
 }
 
 .heart-button:hover {
