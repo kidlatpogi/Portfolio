@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     }
     // Lazy-import to avoid any top-level initialization issues when env vars are absent
     const { kv } = await import('@vercel/kv')
-    const key = `likes:${id}`
+  const key = `reactions:${id}`
     // Vercel KV doesn't expose an atomic INCR in the same API; emulate with get/set using optimistic approach
     // However, if you have access to the Redis-compatible API, use that instead. Here we'll use a small atomic strategy:
     const cur = await kv.get(key)

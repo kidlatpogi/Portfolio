@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     const ids = ((globalThis.process?.env?.LIKED_IDS) || '').split(',').filter(Boolean)
     const out = {}
     await Promise.all(ids.map(async (id) => {
-      const v = await kv.get(`likes:${id}`)
+      const v = await kv.get(`reactions:${id}`)
       out[id] = Number(v || 0)
     }))
     return res.status(200).json(out)

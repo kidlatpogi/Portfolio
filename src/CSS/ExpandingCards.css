@@ -104,7 +104,7 @@ body.light-mode .expanding-card {
 }
 
 /* Heart button styles */
-.heart-button {
+.reaction-button {
   position: absolute;
   top: 15px;
   right: 15px;
@@ -129,23 +129,49 @@ body.light-mode .expanding-card {
 
 /* Show the heart when the card is active OR when the user hovers/focuses the card/button.
    This improves cross-browser reliability (extensions, forced dark-mode, etc.) and accessibility. */
-.expanding-card.active .heart-button,
-.expanding-card:hover .heart-button,
-.expanding-card:focus-within .heart-button,
-.heart-button:focus,
-.heart-button:focus-visible {
+.expanding-card.active .reaction-button,
+.expanding-card:hover .reaction-button,
+.expanding-card:focus-within .reaction-button,
+.reaction-button:focus,
+.reaction-button:focus-visible {
   transform: translateY(0) scale(1.05);
   transition-delay: 0;
   box-shadow: 0 8px 22px rgba(0,0,0,0.55);
 }
-
-.heart-button:hover {
+.reaction-button:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: scale(1.05);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-.heart-icon {
+/* Strong override to ensure visibility across browsers (Brave shields, forced dark mode, etc.) */
+.reaction-button.force-visible,
+.reaction-button.force-visible:hover,
+.expanding-card.force-show .reaction-button {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) scale(1) !important;
+  background: rgba(0,0,0,0.45) !important;
+  color: #fff !important;
+  border-color: rgba(255,255,255,0.12) !important;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45) !important;
+  z-index: 99999 !important;
+}
+
+/* Ensure the SVG icon follows the button color for max contrast */
+.reaction-button .reaction-icon {
+  fill: currentColor !important;
+}
+
+/* Light mode explicit override when forcing visibility */
+body.light-mode .reaction-button.force-visible,
+body.light-mode .expanding-card.force-show .reaction-button {
+  background: rgba(255,255,255,0.95) !important;
+  color: #222 !important;
+  border-color: rgba(0,0,0,0.12) !important;
+}
+
+.reaction-icon {
   width: 20px;
   height: 20px;
   /* Use currentColor so we can control via color on the button for cross-browser consistency */
@@ -154,7 +180,7 @@ body.light-mode .expanding-card {
   transition: transform 0.28s ease, color 0.18s ease;
 }
 
-.heart-button.liked .heart-icon {
+.reaction-button.reacted .reaction-icon {
   color: #ff4757 !important;
   transform: scale(1.12);
   animation: heartPulse 0.32s ease;
@@ -179,21 +205,21 @@ body.light-mode .expanding-card {
 }
 
 /* Light mode heart button */
-body.light-mode .heart-button {
+body.light-mode .reaction-button {
   background: rgba(255, 255, 255, 0.8);
   border-color: rgba(0, 0, 0, 0.1);
 }
 
-body.light-mode .heart-button:hover {
+body.light-mode .reaction-button:hover {
   background: rgba(255, 255, 255, 0.95);
   border-color: rgba(0, 0, 0, 0.15);
 }
 
-body.light-mode .heart-icon {
+body.light-mode .reaction-icon {
   fill: rgba(0, 0, 0, 0.5);
 }
 
-body.light-mode .heart-button.liked .heart-icon {
+body.light-mode .reaction-button.reacted .reaction-icon {
   fill: #ff4757;
 }
 
@@ -456,22 +482,20 @@ body.light-mode .expanding-card-title {
     left: 12px;
   }
 
-  .heart-button {
-    top: 10px;
-    right: 10px;
-    padding: 6px 10px;
-    border-radius: 20px;
+  .reaction-icon {
+    width: 20px;
+    height: 20px;
+    /* Use currentColor so we can control via color on the button for cross-browser consistency */
+    fill: currentColor !important;
+    color: rgba(255,255,255,0.9);
+    transition: transform 0.28s ease, color 0.18s ease;
   }
 
-  .heart-icon {
-    width: 18px;
-    height: 18px;
+  .reaction-button.reacted .reaction-icon {
+    color: #ff4757 !important;
+    transform: scale(1.12);
+    animation: heartPulse 0.32s ease;
   }
-
-  .like-count {
-    font-size: 0.85rem;
-  }
-}
 
 @media (max-width: 480px) {
   .expanding-cards-container {

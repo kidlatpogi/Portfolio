@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     }
     // Lazy-import to avoid any top-level initialization issues when env vars are absent
     const { kv } = await import('@vercel/kv')
-    const key = `likes:${id}`
+  const key = `reactions:${id}`
     const cur = await kv.get(key)
     const newCount = (parseInt(cur || '0', 10) || 0) + 1
     await kv.set(key, String(newCount))

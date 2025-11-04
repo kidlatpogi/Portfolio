@@ -101,14 +101,14 @@ function ExpandingCards() {
   const [modalImage, setModalImage] = useState(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  // Load user's liked state from localStorage on mount
+  // Load user's reactions state from localStorage on mount
   useEffect(() => {
-    const savedUserLiked = localStorage.getItem('portfolioUserLiked')
-    if (savedUserLiked) {
+    const savedUserReactions = localStorage.getItem('portfolioUserReactions')
+    if (savedUserReactions) {
       try {
-        setUserLiked(JSON.parse(savedUserLiked))
+        setUserLiked(JSON.parse(savedUserReactions))
       } catch (e) {
-        console.error('Error parsing liked state:', e)
+        console.error('Error parsing reactions state:', e)
       }
     }
   }, [])
@@ -125,11 +125,11 @@ function ExpandingCards() {
     
     // Optimistic update
     setUserLiked(newUserLiked)
-    localStorage.setItem('portfolioUserLiked', JSON.stringify(newUserLiked))
-    // Persist a local-only likes count object so counts survive reloads for this browser
+    localStorage.setItem('portfolioUserReactions', JSON.stringify(newUserLiked))
+    // Persist a local-only reactions count object so counts survive reloads for this browser
     try {
       // Persist local counts for this browser
-      const countsKey = 'portfolioLikesCounts'
+      const countsKey = 'portfolioReactionsCounts'
       const raw = localStorage.getItem(countsKey)
       const counts = raw ? JSON.parse(raw) : {}
       const currentCount = counts[cardId] || 0
@@ -147,7 +147,7 @@ function ExpandingCards() {
           }
         } catch (e) {
           // Likely blocked by client (adblock/shields) or network issue — keep local counts
-          console.warn('Failed to report like to server (possibly blocked):', e)
+          console.warn('Failed to report reaction to server (possibly blocked):', e)
         }
       }
     } catch (err) {
