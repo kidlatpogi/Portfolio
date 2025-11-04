@@ -4,7 +4,6 @@ import DesignCard from './DesignCard'
 import DesignModal from './DesignModal'
 
 // Import images (use optimized variants where available)
-import typography from '../assets/Photoshop/Typography-800.webp'
 import multo from '../assets/Photoshop/Multo-800.avif'
 import cloud9 from '../assets/Photoshop/Cloud9-800.webp'
 import ketchup from '../assets/Photoshop/Ketchup-800.webp'
@@ -25,9 +24,6 @@ import cloud9_400_avif from '../assets/Photoshop/Cloud9-400.avif'
 import cloud9_800_avif from '../assets/Photoshop/Cloud9-800.avif'
 import cloud9_1200_avif from '../assets/Photoshop/Cloud9-1200.avif'
 
-import typography400 from '../assets/Photoshop/Typography-400.webp'
-import typography800 from '../assets/Photoshop/Typography-800.webp'
-import typography1200 from '../assets/Photoshop/Typography-1200.webp'
 import typography400avif from '../assets/Photoshop/Typography-400.avif'
 import typography800avif from '../assets/Photoshop/Typography-800.avif'
 import typography1200avif from '../assets/Photoshop/Typography-1200.avif'
@@ -81,11 +77,12 @@ const CARDS_DATA = [
   {
     id: 5,
     title: 'Typography Design',
-    image: typography,
-  imageSrc: typography800,
-  imageSrcSet: `${typography400avif} 400w, ${typography800avif} 800w, ${typography1200avif} 1200w, ${typography400} 400w, ${typography800} 800w, ${typography1200} 1200w`,
+    // Use AVIF optimized variants (webp variants were not present in the assets folder)
+    image: typography800avif,
+    imageSrc: typography800avif,
+    imageSrcSet: `${typography400avif} 400w, ${typography800avif} 800w, ${typography1200avif} 1200w`,
     imageSizes: '(max-width: 600px) 100vw, 33vw',
-    modalSrc: typography1200,
+    modalSrc: typography1200avif,
   },
   {
     id: 6,
