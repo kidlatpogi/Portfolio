@@ -79,7 +79,8 @@ function App() {
 
   return (
     <div>
-      <Analytics />
+      {/* Only mount Vercel Analytics when explicitly enabled or on the deployed site to reduce blocked requests */}
+      {typeof window !== 'undefined' && (import.meta.env.PROD && (import.meta.env.VITE_ENABLE_VERCEL_ANALYTICS === 'true' || window.location.hostname.endsWith('.vercel.app') || window.location.hostname === 'zeusbautista.vercel.app')) && <Analytics />}
 
       {isLoading && <LoadingScreen onLoadComplete={handleLoadComplete} />}
       
