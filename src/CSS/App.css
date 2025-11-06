@@ -400,8 +400,8 @@ body.light-mode .particles-toggle.active {
 }
 
 body.light-mode {
-  --dark-mode: #ffffff;
-  --light-mode: #111111;
+  --dark-mode: #fafafa;
+  --light-mode: #181818;
   background-color: var(--dark-mode);
   color: var(--light-mode);
 }
@@ -799,9 +799,18 @@ body.light-mode .Resume:hover {
 /* Projects grid and glass cards */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  /* Two columns layout for projects on typical desktop widths */
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   margin-top: 1.5rem;
+}
+
+/* Stack to single column on small screens */
+@media (max-width: 680px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
 }
 
 .project-card {
@@ -851,8 +860,6 @@ position: absolute;
   position: absolute;
   top: 0;
   left: 0;
-  /* Remove 'right: 0;' here as well */
-  /* Remove 'height: 100%;' to allow the height to shrink to content size */
   background: rgba(255,255,255,0.04);
   backdrop-filter: blur(8px) saturate(120%);
   -webkit-backdrop-filter: blur(8px) saturate(120%);
@@ -909,13 +916,34 @@ position: absolute;
 
 /* Project media visual area sizing to match screenshot proportions */
 .project-media {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Fixed visual height for the media area (doesn't change card width) */
-  height: 220px; /* desktop default to match screenshot */
+  /* Maintain a consistent visual ratio for images; adjusts with column width */
+  aspect-ratio: 16 / 10;
+  width: 100%;
   overflow: hidden;
+  display: block;
 }
+
+/* Responsive card sizing: card height adapts with viewport, but enforces a sensible min */
+.project-card {
+  min-height: clamp(320px, 28vh, 520px);
+}
+
+/* Scale overlay inner padding and text based on card width/viewport */
+.project-media .project-overlay-inner {
+  /* horizontal padding scales between 0.75rem and 1.5rem */
+  padding: clamp(0.5rem, 1.5vw, 1rem) clamp(0.75rem, 2.2vw, 1.25rem);
+}
+.project-media .project-overlay-inner p {
+  /* font scales smoothly: 0.9rem at small, up to 1.05rem on wide */
+  font-size: clamp(0.85rem, 1.2vw, 1.05rem);
+  line-height: 1.2;
+}
+
+/* Keep overlay header text slightly larger but responsive */
+.project-media .project-overlay h4 {
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+}
+/* end of overlay sizing rules */
 
 .project-media img {
   width: 100%;

@@ -20,8 +20,8 @@ function SkillsSection() {
               aria-label="Toggle between Linear and Thocky switch sounds"
             />
             <span className="toggle-slider"></span>
+            <span className="toggle-label">Thocy</span>
             <span className="toggle-label">Linear</span>
-            <span className="toggle-label">Thocky</span>
           </label>
         </div>
 
