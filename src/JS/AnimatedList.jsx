@@ -1,23 +1,17 @@
 import { useRef, useState, useEffect } from 'react';
-import * as Motion from 'motion/react';
 import '../CSS/AnimatedList.css';
 
-const AnimatedItem = ({ children, delay = 0, index, onMouseEnter, onClick }) => {
-  const ref = useRef(null);
-  const inView = Motion.useInView(ref, { amount: 0.5, once: false });
+const AnimatedItem = ({ children, index, onMouseEnter, onClick, isSelected }) => {
   return (
-    <Motion.motion.div
-      ref={ref}
+    <div
       data-index={index}
       onMouseEnter={onMouseEnter}
       onClick={onClick}
-      initial={{ scale: 0.7, opacity: 0 }}
-      animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.7, opacity: 0 }}
-      transition={{ duration: 0.2, delay }}
+      className={`animated-item ${isSelected ? 'selected' : ''}`}
       style={{ marginBottom: '1rem', cursor: 'pointer' }}
     >
       {children}
-  </Motion.motion.div>
+    </div>
   );
 };
 
