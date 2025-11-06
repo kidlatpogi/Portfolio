@@ -1,12 +1,12 @@
 import { useRef, useState, useEffect } from 'react';
-import * as Motion from 'motion/react';
+import { motion, useInView } from 'motion/react';
 import '../CSS/AnimatedList.css';
 
 const AnimatedItem = ({ children, delay = 0, index, onMouseEnter, onClick }) => {
   const ref = useRef(null);
-  const inView = Motion.useInView(ref, { amount: 0.5, once: false });
+  const inView = useInView(ref, { amount: 0.5, once: false });
   return (
-    <Motion.motion.div
+    <motion.div
       ref={ref}
       data-index={index}
       onMouseEnter={onMouseEnter}
@@ -17,7 +17,7 @@ const AnimatedItem = ({ children, delay = 0, index, onMouseEnter, onClick }) => 
       style={{ marginBottom: '1rem', cursor: 'pointer' }}
     >
       {children}
-  </Motion.motion.div>
+  </motion.div>
   );
 };
 
