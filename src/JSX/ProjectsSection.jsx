@@ -13,6 +13,15 @@ import safeLink400 from '../assets/Project Overview/SafeLink-400.webp'
 import safeLink800 from '../assets/Project Overview/SafeLink-800.webp'
 import safeLink1200 from '../assets/Project Overview/SafeLink-1200.webp'
 
+import calendarWidget400avif from '../assets/Project Overview/CalendarWidget-400.avif'
+import calendarWidget800avif from '../assets/Project Overview/CalendarWidget-800.avif'
+import calendarWidget1200avif from '../assets/Project Overview/CalendarWidget-1200.avif'
+import calendarWidget400 from '../assets/Project Overview/CalendarWidget-400.webp'
+import calendarWidget800 from '../assets/Project Overview/CalendarWidget-800.webp'
+import calendarWidget1200 from '../assets/Project Overview/CalendarWidget-1200.webp'
+
+import InfiniteListWithDetail from '../JS/InfiniteListWithDetail'
+
 function smoothScrollToId(id, duration = 600) {
   const el = document.getElementById(id.replace('#', ''))
   if (!el) return
@@ -53,77 +62,29 @@ function ProjectsSection() {
         <h2>Projects</h2>
         <p>Real-world applications demonstrating front-end development, database management, and problem-solving skills.</p>
         
-        <h3 style={{ marginTop: '3rem', marginBottom: '1rem' }}>Development Projects</h3>
-        <div className="projects-grid">
-          <article className="project-card">
-            <div className="project-media">
-              <div className="project-overlay" aria-hidden="true">
-                <div className="project-overlay-inner">
-<p>SafeLink is a feature-rich React Native/Expo app for family safety. It provides emergency status broadcasts, disaster alerts, and evacuation center locations, using Firebase and OpenStreetMap for reliable data.</p>                </div>
-              </div>
-              <picture>
-                <source type="image/avif" srcSet={`${safeLink400avif} 400w, ${safeLink800avif} 800w, ${safeLink1200avif} 1200w`} sizes="(max-width:600px) 100vw, 33vw" />
-                <source type="image/webp" srcSet={`${safeLink400} 400w, ${safeLink800} 800w, ${safeLink1200} 1200w`} sizes="(max-width:600px) 100vw, 33vw" />
-                <img src={safeLink800} alt="SafeLink Mobile Screens" className="project-image" loading="lazy" />
-              </picture>
-            </div>
-            <div className="project-body">
-              <h3>SafeLink Mobile</h3>
-              <div className="tags">
-                <span className="tag">React Native</span>
-                <span className="tag">JavaScript</span>
-                <span className="tag">Firebase</span>
-                <span className="tag">Mobile</span>
-              </div>
-              <button className="project-cta">
-                <span className="cta-icon" aria-hidden="true" style={{display:'inline-flex',alignItems:'center',marginRight:'0.5em'}}>
-                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style={{display:'block'}}>
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                  </svg>
-                </span>
-                <a href="https://github.com/kidlatpogi/SafeLink" target="_blank" rel="noopener noreferrer">Code</a>
-              </button>
-            </div>
-          </article>
-
-          <article className="project-card">
-            <div className="project-media">
-              <div className="project-overlay" aria-hidden="true">
-                <div className="project-overlay-inner">
-                  <p>A web-based system designed to manage classroom and laboratory reservations efficiently. It allows users to book rooms by date, time, and type, while administrators can oversee, update, and manage all reservations in real time.</p>
-                </div>
-              </div>
-              <picture>
-                <source type="image/avif" srcSet={`${roomReservation400avif} 400w, ${roomReservation800avif} 800w, ${roomReservation1200avif} 1200w`} sizes="(max-width: 600px) 100vw, 50vw" />
-                <source type="image/webp" srcSet={`${roomReservation400} 400w, ${roomReservation800} 800w, ${roomReservation1200} 1200w`} sizes="(max-width: 600px) 100vw, 50vw" />
-                <img 
-                  src={roomReservation800}
-                  alt="Room Reservation System" 
-                  className="project-image" 
-                  loading="lazy"
-                />
-              </picture>
-            </div>
-            <div className="project-body">
-              <h3>Room Reservation System</h3>
-              <div className="tags">
-                <span className="tag">HTML5</span>
-                <span className="tag">CSS3</span>
-                <span className="tag">JavaScript</span>
-                <span className="tag">SQL</span>
-              </div>
-              <button className="project-cta">
-                <span className="cta-icon" aria-hidden="true" style={{display:'inline-flex',alignItems:'center',marginRight:'0.5em'}}>
-                  <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style={{display:'block'}}>
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.22 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-                  </svg>
-                </span>
-                <a href="https://github.com/kidlatpogi/Room-Reservation-System.git" target='_blank' rel="noopener noreferrer">Code</a>
-              </button>
-              
-            </div>
-          </article>
-        </div>
+        <InfiniteListWithDetail projects={[
+          {
+            title: 'SafeLink Mobile',
+            description: 'SafeLink is a React Native/Expo app for family safety with emergency broadcasts and evacuation info using Firebase and OpenStreetMap.',
+            tags: ['React Native','JavaScript','Firebase','Mobile'],
+            repoUrl: 'https://github.com/kidlatpogi/SafeLink',
+            images: { avif400: safeLink400avif, avif800: safeLink800avif, avif1200: safeLink1200avif, webp400: safeLink400, webp800: safeLink800, webp1200: safeLink1200 }
+          },
+          {
+            title: 'Room Reservation System',
+            description: 'A web-based system for classroom and laboratory reservations with admin controls and real-time updates.',
+            tags: ['HTML5','CSS3','JavaScript','SQL'],
+            repoUrl: 'https://github.com/kidlatpogi/Room-Reservation-System',
+            images: { avif400: roomReservation400avif, avif800: roomReservation800avif, avif1200: roomReservation1200avif, webp400: roomReservation400, webp800: roomReservation800, webp1200: roomReservation1200 }
+          },
+          {
+            title: 'Calendar Widget',
+            description: 'A sleek and lightweight Windows Calendar Widget seamlessly connected to Google Calendar — without relying on any external databases or APIs.',
+            tags: ['HTML5','CSS3','JavaScript','Electron'],
+            repoUrl: 'https://github.com/kidlatpogi/Calendar-Widget',
+            images: { avif400: calendarWidget400avif, avif800: calendarWidget800avif, avif1200: calendarWidget1200avif, webp400: calendarWidget400, webp800: calendarWidget800, webp1200: calendarWidget1200 }
+          }
+        ]} />
 
         <div className="project-buttons-grid">
           <button 

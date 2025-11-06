@@ -209,6 +209,16 @@ body.light-mode .switch-toggle input:hover + .toggle-slider {
     }
 }
 
+@media (max-width: 800px) {
+  .keyboard-hint {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    transform: none !important;
+  }
+}
+
 body.light-mode .keyboard-hint {
   color: rgba(0, 0, 0, 0.8);
   font-weight: 700;
