@@ -82,7 +82,7 @@ function ProjectsSection() {
             description: 'A sleek and lightweight Windows Calendar Widget seamlessly connected to Google Calendar — without relying on any external databases or APIs.',
             tags: ['HTML5','CSS3','JavaScript','Electron'],
             repoUrl: 'https://github.com/kidlatpogi/Calendar-Widget',
-            downloadUrl: 'https://github.com/kidlatpogi/Calendar-Widget/releases/tag/v1.2.0',
+            downloadUrl: 'https://github.com/kidlatpogi/Calendar-Widget/releases/latest',
             images: { avif400: calendarWidget400avif, avif800: calendarWidget800avif, avif1200: calendarWidget1200avif, webp400: calendarWidget400, webp800: calendarWidget800, webp1200: calendarWidget1200 }
           }
         ]} />
