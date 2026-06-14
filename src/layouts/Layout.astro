@@ -7,13 +7,13 @@ interface Props {
 }
 
 const { 
-	title = "Zeus Bautista | IT Developer & AI Engineer Portfolio", 
-	description = "Personal portfolio of Zeus Angelo Vargas Bautista, a 4th-year BSIT student specializing in software development, AI solutions, and high-performance cross-platform projects." 
+	title = "Zeus Angelo Vargas Bautista | Portfolio", 
+	description = "Architecting high-fidelity digital experiences. Personal portfolio of Zeus Angelo Vargas Bautista, IT Developer & AI Engineer." 
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth dark">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -35,10 +35,10 @@ const {
 		<meta property="twitter:title" content={title} />
 		<meta property="twitter:description" content={description} />
 
-		<!-- Google Fonts -->
+		<!-- Google Fonts & Icons -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 	</head>
 	<body class="bg-black text-zinc-100 antialiased selection:bg-zinc-800 selection:text-white overflow-x-hidden min-h-screen">
 		<slot />
@@ -47,21 +47,23 @@ const {
 
 <style is:global>
 	:root {
-		font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+		font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	}
 	
 	/* Custom scrollbar to match dark premium theme */
 	::-webkit-scrollbar {
-		width: 10px;
+		width: 8px;
 	}
 	::-webkit-scrollbar-track {
 		background: #000000;
 	}
 	::-webkit-scrollbar-thumb {
-		background: #18181b;
-		border-radius: 5px;
+		background: #1c1b1b;
+		border-radius: 4px;
+		border: 2px solid #000000;
 	}
 	::-webkit-scrollbar-thumb:hover {
-		background: #27272a;
+		background: #353434;
 	}
 </style>
+
