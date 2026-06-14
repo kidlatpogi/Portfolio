@@ -40,7 +40,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="parallax-section bg-black z-10" id="hero">
+    <section className="parallax-section bg-black z-10 py-20 lg:py-0" id="hero">
       {/* Background Ambient Glows */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <motion.div

@@ -53,11 +53,11 @@ export default function ContactForm() {
   };
 
   return (
-    <section className="parallax-section bg-gray-100 z-[60] shadow-[0_-30px_60px_rgba(0,0,0,0.1)] py-24" id="contact">
+    <section className="parallax-section section-scroll bg-gray-100 z-[60] shadow-[0_-30px_60px_rgba(0,0,0,0.1)] py-20" id="contact">
       <div className="w-full px-margin-mobile md:px-margin-desktop max-w-2xl mx-auto flex flex-col justify-center">
         
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h2 className="font-headline-md text-gray-900 text-4xl font-bold">Contact</h2>
           <p className="font-body-md text-gray-600 mt-4 max-w-md mx-auto">
             Secure a connection for high-priority collaborations and internship requests.
@@ -68,7 +68,7 @@ export default function ContactForm() {
         <form
           ref={formRef}
           onSubmit={handleSubmit}
-          className="bg-white/80 backdrop-blur-2xl border border-gray-300 rounded-3xl p-10 md:p-14 flex flex-col gap-8 relative overflow-hidden shadow-2xl text-left"
+          className="bg-white/80 backdrop-blur-2xl border border-gray-300 rounded-3xl p-8 md:p-10 flex flex-col gap-6 relative overflow-hidden shadow-2xl text-left"
         >
           {/* Decorative blur backdrop circle */}
           <div className="absolute -top-10 -right-10 w-40 h-40 bg-gray-200 blur-[60px] rounded-full pointer-events-none" />
@@ -82,7 +82,7 @@ export default function ContactForm() {
               value={formData.name}
               onChange={handleChange}
               placeholder="Name"
-              className="peer w-full bg-transparent border-0 border-b-2 border-gray-300 focus:border-gray-900 focus:ring-0 px-0 py-4 text-gray-900 font-body-md placeholder-transparent transition-all outline-none"
+              className="peer w-full bg-transparent border-0 border-b-2 border-gray-300 focus:border-gray-900 focus:ring-0 px-0 py-3 text-gray-900 font-body-md placeholder-transparent transition-all outline-none"
             />
             <label
               htmlFor="name"
@@ -101,7 +101,7 @@ export default function ContactForm() {
               value={formData.email}
               onChange={handleChange}
               placeholder="Email"
-              className="peer w-full bg-transparent border-0 border-b-2 border-gray-300 focus:border-gray-900 focus:ring-0 px-0 py-4 text-gray-900 font-body-md placeholder-transparent transition-all outline-none"
+              className="peer w-full bg-transparent border-0 border-b-2 border-gray-300 focus:border-gray-900 focus:ring-0 px-0 py-3 text-gray-900 font-body-md placeholder-transparent transition-all outline-none"
             />
             <label
               htmlFor="email"
@@ -119,8 +119,8 @@ export default function ContactForm() {
               value={formData.message}
               onChange={handleChange}
               placeholder="Message"
-              rows={4}
-              className="peer w-full bg-transparent border-0 border-b-2 border-gray-300 focus:border-gray-900 focus:ring-0 px-0 py-4 text-gray-900 font-body-md placeholder-transparent transition-all resize-none outline-none"
+              rows={3}
+              className="peer w-full bg-transparent border-0 border-b-2 border-gray-300 focus:border-gray-900 focus:ring-0 px-0 py-3 text-gray-900 font-body-md placeholder-transparent transition-all resize-none outline-none"
             />
             <label
               htmlFor="message"
@@ -149,7 +149,7 @@ export default function ContactForm() {
           <button
             type="submit"
             disabled={status === 'submitting'}
-            className="btn-silver w-full py-5 rounded-2xl font-label-md text-xs uppercase tracking-[0.3em] font-black mt-6 flex justify-center items-center gap-3 shadow-lg disabled:opacity-50 cursor-pointer"
+            className="btn-silver w-full py-4 rounded-2xl font-label-md text-xs uppercase tracking-[0.3em] font-black mt-4 flex justify-center items-center gap-3 shadow-lg disabled:opacity-50 cursor-pointer"
           >
             {status === 'submitting' ? (
               <>
