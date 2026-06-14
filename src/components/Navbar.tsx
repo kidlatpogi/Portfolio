@@ -42,10 +42,10 @@ export default function Navbar() {
     <>
       {/* Desktop Top Nav Header */}
       <motion.header
-        initial={{ y: -100, x: '-50%', opacity: 0 }}
-        animate={{ y: 0, x: '-50%', opacity: 1 }}
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 120, damping: 20, delay: 0.2 }}
-        className={`fixed top-8 left-1/2 -translate-x-1/2 w-fit px-8 py-3.5 rounded-full border bg-black/40 backdrop-blur-2xl z-[100] items-center gap-stack-lg md:flex hidden transition-all duration-300 ${
+        className={`fixed top-8 inset-x-0 mx-auto w-fit max-w-[calc(100vw-2rem)] px-8 py-3.5 rounded-full border bg-black/40 backdrop-blur-2xl z-[100] items-center gap-stack-lg lg:flex hidden transition-all duration-300 ${
           scrolled ? 'border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.08)]' : 'border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.02)]'
         }`}
       >
@@ -87,10 +87,10 @@ export default function Navbar() {
 
       {/* Mobile Bottom Navigation Dock */}
       <motion.nav
-        initial={{ y: 100, x: '-50%', opacity: 0 }}
-        animate={{ y: 0, x: '-50%', opacity: 1 }}
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 120, damping: 20, delay: 0.2 }}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[400px] bg-black/85 backdrop-blur-2xl border border-white/10 rounded-full flex justify-around items-center py-3.5 px-6 md:hidden z-[100] shadow-2xl"
+        className="fixed bottom-6 inset-x-0 mx-auto w-[90%] max-w-[400px] bg-black/85 backdrop-blur-2xl border border-white/10 rounded-full flex justify-around items-center py-3.5 px-6 lg:hidden z-[100] shadow-2xl"
       >
         <a
           href="#projects"
