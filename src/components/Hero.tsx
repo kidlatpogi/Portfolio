@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { ChevronDown, Sparkles, Terminal } from 'lucide-react';
+import ColorBends from './ColorBends';
 
 export default function Hero() {
   const containerVariants: Variants = {
@@ -43,15 +44,20 @@ export default function Hero() {
     <section className="parallax-section bg-black z-10 py-20 lg:py-0" id="hero">
       {/* Background Ambient Glows */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <motion.div
-          variants={glowVariants}
-          animate="animate"
-          className="absolute -top-[10%] -left-[10%] w-[550px] h-[550px] rounded-full bg-white/5 blur-[120px]"
-        />
-        <motion.div
-          variants={glowVariants}
-          animate="animate"
-          className="absolute -bottom-[10%] -right-[10%] w-[550px] h-[550px] rounded-full bg-zinc-800/20 blur-[130px]"
+        <ColorBends
+          colors={["#ffffff", "#e2e8f0", "#cbd5e1", "#94a3b8", "#475569", "#334155", "#1e293b", "#0f172a"]}
+          rotation={45}
+          speed={0.15}
+          scale={1.3}
+          frequency={1.5}
+          warpStrength={0.7}
+          mouseInfluence={0.6}
+          parallax={0.3}
+          iterations={2}
+          intensity={1.0}
+          bandWidth={5}
+          transparent
+          className="absolute inset-0 w-full h-full opacity-35"
         />
         {/* Specular dots grid overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px] opacity-60" />

@@ -25,9 +25,13 @@
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "tailwindcss": "^4.3.1",
+    "three": "^0.184.0",
     "wrangler": "^4.100.0"
   },
   "overrides": {
     "vite": "^7"
+  },
+  "devDependencies": {
+    "@types/three": "^0.184.1"
   }
 }
