@@ -41,9 +41,9 @@ export interface TargetCursorProps {
 
 const TargetCursor: React.FC<TargetCursorProps> = ({
   targetSelector = '.cursor-target',
-  spinDuration = 2,
-  hideDefaultCursor = true,
-  hoverDuration = 0.2,
+  spinDuration = 5,
+  hideDefaultCursor = false,
+  hoverDuration = 0.25,
   parallaxOn = true
 }) => {
   const cursorRef = useRef<HTMLDivElement>(null);
