@@ -144,22 +144,54 @@ export default function ColorBends({
   bandWidth = 6
 }: ColorBendsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const rafRef = useRef<number | null>(null);
-  const materialRef = useRef<THREE.ShaderMaterial | null>(null);
-  const resizeObserverRef = useRef<ResizeObserver | null>(null);
-  const rotationRef = useRef<number>(rotation);
-  const autoRotateRef = useRef<number>(autoRotate);
   const pointerTargetRef = useRef<THREE.Vector2>(new THREE.Vector2(0, 0));
   const pointerCurrentRef = useRef<THREE.Vector2>(new THREE.Vector2(0, 0));
   const pointerSmoothRef = useRef<number>(8);
+
+  // Keep all props in a ref to access them inside the loop without restarting the effect
+  const propsRef = useRef({
+    colors,
+    transparent,
+    rotation,
+    autoRotate,
+    speed,
+    scale,
+    frequency,
+    warpStrength,
+    mouseInfluence,
+    parallax,
+    noise,
+    iterations,
+    intensity,
+    bandWidth
+  });
+
+  // Update props ref on every render
+  useEffect(() => {
+    propsRef.current = {
+      colors,
+      transparent,
+      rotation,
+      autoRotate,
+      speed,
+      scale,
+      frequency,
+      warpStrength,
+      mouseInfluence,
+      parallax,
+      noise,
+      iterations,
+      intensity,
+      bandWidth
+    };
+  });
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -10, 10);
 
     const geometry = new THREE.PlaneGeometry(2, 2);
     const uColorsArray = Array.from({ length: MAX_COLORS }, () => new THREE.Vector3(0, 0, 0));
@@ -185,10 +217,9 @@ export default function ColorBends({
         uIntensity: { value: intensity },
         uBandWidth: { value: bandWidth }
       },
-      premultipliedAlpha: true,
+      premultipliedAlpha: false,
       transparent: true
     });
-    materialRef.current = material;
 
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
@@ -198,7 +229,6 @@ export default function ColorBends({
       powerPreference: 'high-performance',
       alpha: true
     });
-    rendererRef.current = renderer;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setClearColor(0x000000, transparent ? 0 : 1);
@@ -206,6 +236,8 @@ export default function ColorBends({
     renderer.domElement.style.height = '100%';
     renderer.domElement.style.display = 'block';
     container.appendChild(renderer.domElement);
+
+
 
     const clock = new THREE.Clock();
 
@@ -218,66 +250,13 @@ export default function ColorBends({
 
     handleResize();
 
+    let resizeObserver: ResizeObserver | null = null;
     if ('ResizeObserver' in window) {
-      const ro = new ResizeObserver(handleResize);
-      ro.observe(container);
-      resizeObserverRef.current = ro;
+      resizeObserver = new ResizeObserver(handleResize);
+      resizeObserver.observe(container);
     } else {
       window.addEventListener('resize', handleResize);
     }
-
-    const loop = () => {
-      const dt = clock.getDelta();
-      const elapsed = clock.elapsedTime;
-      material.uniforms.uTime.value = elapsed;
-
-      const deg = (rotationRef.current % 360) + autoRotateRef.current * elapsed;
-      const rad = (deg * Math.PI) / 180;
-      const c = Math.cos(rad);
-      const s = Math.sin(rad);
-      material.uniforms.uRot.value.set(c, s);
-
-      const cur = pointerCurrentRef.current;
-      const tgt = pointerTargetRef.current;
-      const amt = Math.min(1, dt * pointerSmoothRef.current);
-      cur.lerp(tgt, amt);
-      material.uniforms.uPointer.value.copy(cur);
-      renderer.render(scene, camera);
-      rafRef.current = requestAnimationFrame(loop);
-    };
-    rafRef.current = requestAnimationFrame(loop);
-
-    return () => {
-      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
-      if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
-      else window.removeEventListener('resize', handleResize);
-      geometry.dispose();
-      material.dispose();
-      renderer.dispose();
-      renderer.forceContextLoss();
-      if (renderer.domElement && renderer.domElement.parentElement === container) {
-        container.removeChild(renderer.domElement);
-      }
-    };
-  }, [bandWidth, frequency, intensity, iterations, mouseInfluence, noise, parallax, scale, speed, transparent, warpStrength]);
-
-  useEffect(() => {
-    const material = materialRef.current;
-    const renderer = rendererRef.current;
-    if (!material) return;
-
-    rotationRef.current = rotation;
-    autoRotateRef.current = autoRotate;
-    material.uniforms.uSpeed.value = speed;
-    material.uniforms.uScale.value = scale;
-    material.uniforms.uFrequency.value = frequency;
-    material.uniforms.uWarpStrength.value = warpStrength;
-    material.uniforms.uMouseInfluence.value = mouseInfluence;
-    material.uniforms.uParallax.value = parallax;
-    material.uniforms.uNoise.value = noise;
-    material.uniforms.uIterations.value = iterations;
-    material.uniforms.uIntensity.value = intensity;
-    material.uniforms.uBandWidth.value = bandWidth;
 
     const toVec3 = (hex: string) => {
       const h = hex.replace('#', '').trim();
@@ -288,37 +267,54 @@ export default function ColorBends({
       return new THREE.Vector3(v[0] / 255, v[1] / 255, v[2] / 255);
     };
 
-    const arr = (colors || []).filter(Boolean).slice(0, MAX_COLORS).map(toVec3);
-    for (let i = 0; i < MAX_COLORS; i++) {
-      const vec = material.uniforms.uColors.value[i] as THREE.Vector3;
-      if (i < arr.length) vec.copy(arr[i]);
-      else vec.set(0, 0, 0);
-    }
-    material.uniforms.uColorCount.value = arr.length;
+    let rafId: number | null = null;
+    const loop = () => {
+      const dt = clock.getDelta();
+      const elapsed = clock.elapsedTime;
+      material.uniforms.uTime.value = elapsed;
 
-    material.uniforms.uTransparent.value = transparent ? 1 : 0;
-    if (renderer) renderer.setClearColor(0x000000, transparent ? 0 : 1);
-  }, [
-    rotation,
-    autoRotate,
-    speed,
-    scale,
-    frequency,
-    warpStrength,
-    mouseInfluence,
-    parallax,
-    noise,
-    iterations,
-    intensity,
-    bandWidth,
-    colors,
-    transparent
-  ]);
+      // Access latest props
+      const p = propsRef.current;
 
-  useEffect(() => {
-    const material = materialRef.current;
-    const container = containerRef.current;
-    if (!material || !container) return;
+      // Update uniforms
+      material.uniforms.uSpeed.value = p.speed;
+      material.uniforms.uScale.value = p.scale;
+      material.uniforms.uFrequency.value = p.frequency;
+      material.uniforms.uWarpStrength.value = p.warpStrength;
+      material.uniforms.uMouseInfluence.value = p.mouseInfluence;
+      material.uniforms.uParallax.value = p.parallax;
+      material.uniforms.uNoise.value = p.noise;
+      material.uniforms.uIterations.value = p.iterations;
+      material.uniforms.uIntensity.value = p.intensity;
+      material.uniforms.uBandWidth.value = p.bandWidth;
+      material.uniforms.uTransparent.value = p.transparent ? 1 : 0;
+      renderer.setClearColor(0x000000, p.transparent ? 0 : 1);
+
+      // Update rotation
+      const deg = (p.rotation % 360) + p.autoRotate * elapsed;
+      const rad = (deg * Math.PI) / 180;
+      material.uniforms.uRot.value.set(Math.cos(rad), Math.sin(rad));
+
+      // Update colors
+      const arr = (p.colors || []).filter(Boolean).slice(0, MAX_COLORS).map(toVec3);
+      const newColors = Array.from({ length: MAX_COLORS }, (_, i) => {
+        if (i < arr.length) return arr[i];
+        return new THREE.Vector3(0, 0, 0);
+      });
+      material.uniforms.uColors.value = newColors;
+      material.uniforms.uColorCount.value = arr.length;
+
+      // Update pointer
+      const cur = pointerCurrentRef.current;
+      const tgt = pointerTargetRef.current;
+      const amt = Math.min(1, dt * pointerSmoothRef.current);
+      cur.lerp(tgt, amt);
+      material.uniforms.uPointer.value.copy(cur);
+
+      renderer.render(scene, camera);
+      rafId = requestAnimationFrame(loop);
+    };
+    rafId = requestAnimationFrame(loop);
 
     const handlePointerMove = (e: PointerEvent) => {
       const rect = container.getBoundingClientRect();
@@ -326,12 +322,22 @@ export default function ColorBends({
       const y = -(((e.clientY - rect.top) / (rect.height || 1)) * 2 - 1);
       pointerTargetRef.current.set(x, y);
     };
-
     container.addEventListener('pointermove', handlePointerMove);
-    return () => {
-      container.removeEventListener('pointermove', handlePointerMove);
-    };
-  }, []);
 
-  return <div ref={containerRef} className={`relative w-full h-full overflow-hidden ${className}`} style={style} />;
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      if (resizeObserver) resizeObserver.disconnect();
+      else window.removeEventListener('resize', handleResize);
+      container.removeEventListener('pointermove', handlePointerMove);
+      geometry.dispose();
+      material.dispose();
+      renderer.dispose();
+      renderer.forceContextLoss();
+      if (renderer.domElement && renderer.domElement.parentElement === container) {
+        container.removeChild(renderer.domElement);
+      }
+    };
+  }, []); // Only runs once on mount!
+
+  return <div ref={containerRef} className={`w-full h-full overflow-hidden ${className}`} style={style} />;
 }
