@@ -6,7 +6,7 @@ export default function Projects() {
       {/* Anchor targets for sub-navigation scroll links */}
       <div id="designs" className="absolute top-1/2" />
 
-      <h1 className="font-sans text-5xl md:text-7xl font-semibold text-zinc-900 tracking-tight">Projects</h1>
+      <h2 className="font-sans text-5xl md:text-7xl font-semibold text-black tracking-tight">Projects</h2>
     </section>
   );
 }
