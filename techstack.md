@@ -27,13 +27,13 @@
 5. **Typography & Color Design System:** Adhere strictly to the brutalist minimalist styling:
     * **Hero/Giant Titles (H1):** Inter, Extra Bold (800), pure black (`#000000`).
     * **Section Titles (H2):** Inter, Semi-Bold (600), pure black (`#000000`).
-    * **Sub-headings (H3):** Inter, Medium (500), Thundercloud Slate (`#334155`).
-    * **Body Text (p):** Inter, Regular (400), Thundercloud Slate (`#334155`), line-height 1.6 to 1.8.
+    * **Sub-headings (H3):** Inter, Medium (500), Thundercloud Slate (`#C44900`).
+    * **Body Text (p):** Inter, Regular (400), Thundercloud Slate (`#C44900`), line-height 1.6 to 1.8.
     * **Metadata, Tech Tags, Labels:** Roboto Mono, Medium (500), uppercase, small size (e.g., 12px-14px).
     * **Buttons & Navigation Links:** Roboto Mono, Semi-Bold (600).
-    * **Background:** Off-white (e.g., `#FAFAFA`).
-    * **Primary Accent:** Cardinal Red (`#DF2935`) — hero highlight lines, profile name, accent text, selection highlights, and `--color-accent` token.
+    * **Background:** Off-white (e.g., `#F9F9F9`).
+    * **Primary Accent:** Cardinal Red (`#C44900`) — hero highlight lines, profile name, accent text, selection highlights, and `--color-accent` token.
     * **Interactions:** NO box-shadows, text-glows, or outer glows for interactive states. Rely entirely on flat color swaps and crisp borders. (Profile photo glow is an explicit hero exception.)
     * **Buttons:** Solid Black (`#000000`) background, Off-White text, no borders. Hover/Active: No background color swap / remains flat black.
-    * **Input Fields & Textareas:** Off-white background, faint gray border (`#E5E7EB`), black text. Focus: Strip browser outlines/glows, apply sharp solid 2px border of `#334155`.
-    * **Tech Stack Badges:** Transparent or Off-white background. Text and 1px solid border must be `#334155`.
+    * **Input Fields & Textareas:** Off-white background, faint gray border (`#E5E7EB`), black text. Focus: Strip browser outlines/glows, apply sharp solid 2px border of `#C44900`.
+    * **Tech Stack Badges:** Transparent or Off-white background. Text and 1px solid border must be `#C44900`.
