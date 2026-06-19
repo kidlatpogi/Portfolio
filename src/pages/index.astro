@@ -1,11 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CardNav from '../components/CardNav';
-import '../components/CardNav.css';
+import TargetCursor from '../components/TargetCursor';
 import Hero from '../components/Hero';
 import About from '../components/About';
 import Projects from '../components/Projects';
 import Certifications from '../components/Certifications';
+
 
 const navItems = [
   {
@@ -39,6 +40,7 @@ const navItems = [
 ---
 
 <Layout>
+	<TargetCursor client:load targetSelector="a, button, .cursor-target" />
 	<CardNav client:load logoText="Zeus Angelo" items={navItems} />
 	<main class="w-full relative">
 		<Hero />
