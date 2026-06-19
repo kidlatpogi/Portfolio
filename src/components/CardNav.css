@@ -126,6 +126,14 @@
   filter: brightness(1.1);
 }
 
+.card-nav-cta-button svg {
+  transition: transform 0.25s ease;
+}
+
+.card-nav-cta-button:hover svg {
+  transform: translate(1px, -1px);
+}
+
 .card-nav-cta-button:active {
   transform: translateY(0);
 }
