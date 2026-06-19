@@ -180,7 +180,7 @@ const CardNav: React.FC<CardNavProps> = ({
   };
 
   return (
-    <>
+    <div className="contents">
       <div className={`fixed top-6 max-sm:top-4 left-1/2 -translate-x-1/2 w-[90%] max-sm:w-[92%] max-w-[800px] z-[100] box-border ${className}`}>
         <nav
           ref={navRef}
@@ -251,7 +251,7 @@ const CardNav: React.FC<CardNavProps> = ({
         </nav>
       </div>
       <ConnectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-    </>
+    </div>
   );
 };
 
