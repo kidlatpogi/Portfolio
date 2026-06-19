@@ -12,6 +12,7 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    assetsInclude: ['**/*.glb'],
     resolve: {
       dedupe: ['react', 'react-dom']
     },
