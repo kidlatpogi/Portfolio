@@ -343,8 +343,11 @@ function Band({
     return body.lerped;
   };
 
-  const { nodes, materials } = useGLTF(cardGLB) as any;
-  const texture = useTexture(lanyardImage || lanyard);
+  const cardGLBSrc = typeof cardGLB === 'object' && cardGLB !== null ? (cardGLB as any).src || (cardGLB as any).default || cardGLB : cardGLB;
+  const lanyardSrc = typeof lanyard === 'object' && lanyard !== null ? (lanyard as any).src || (lanyard as any).default || lanyard : lanyard;
+
+  const { nodes, materials } = useGLTF(cardGLBSrc) as any;
+  const texture = useTexture(lanyardImage || lanyardSrc);
   // useTexture must be called unconditionally; use a blank pixel when an image
   // isn't supplied for a given face, then skip compositing it below.
   const frontTex = useTexture(frontImage || BLANK_PIXEL);
