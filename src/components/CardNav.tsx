@@ -206,11 +206,12 @@ const CardNav: React.FC<CardNavProps> = ({
 
           <button
             type="button"
-            className="card-nav-cta-button"
+            className="card-nav-cta-button gap-1.5"
             style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
             onClick={handleCtaClick}
           >
             Connect
+            <ArrowUpRight size={16} />
           </button>
         </div>
 
