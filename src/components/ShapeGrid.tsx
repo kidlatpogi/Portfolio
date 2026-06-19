@@ -22,7 +22,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
   direction = 'right',
   speed = 1,
   borderColor = '#999',
-  squareSize = 40,
+  squareSize = 55,
   hoverFillColor = '#222',
   shape = 'square',
   hoverTrailAmount = 0,
@@ -292,7 +292,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
 
     const handleMouseMove = (event: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      
+
       // Bounds check so hover cell calculations only run when cursor is inside the canvas
       if (
         event.clientX < rect.left ||
