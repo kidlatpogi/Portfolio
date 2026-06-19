@@ -193,7 +193,8 @@
   font-family: var(--font-mono);
   font-size: 0.9rem;
   font-weight: 600;
-  color: rgba(20, 19, 19, 0.8);
+  color: inherit;
+  opacity: 0.8;
   cursor: pointer;
   text-decoration: none;
   transition: all 0.25s ease;
@@ -209,7 +210,7 @@
 }
 
 .nav-card-link:hover {
-  color: #141313;
+  opacity: 1;
   transform: translateX(2px);
 }
 
