@@ -7,42 +7,41 @@ export default function Hero() {
 
       <div className="w-full max-w-[1400px] relative z-10 pt-20">
 
-        {/* Profile — floats right on desktop so typography keeps full width */}
-        <div className="flex flex-col items-start mb-10 md:mb-0 md:absolute md:top-20 md:right-0 md:z-20">
-          <p className="font-sans text-sm md:text-base font-medium text-black">Hi! I Am</p>
-          <p className="font-sans text-2xl md:text-3xl font-bold text-accent leading-tight">
-            Zeus Angelo Bautista.
-          </p>
-          <div className="relative mt-6 md:mt-8">
+        {/* Profile — mobile */}
+        <div className="flex md:hidden flex-col items-start mb-10">
+          <p className="font-sans text-sm font-medium text-black">Hi! I Am</p>
+          <p className="font-sans text-2xl font-bold text-accent leading-tight">Zeus.</p>
+          <div className="relative mt-6">
             <svg
-              className="absolute -top-8 left-4 w-16 h-16 text-[#334155]/25 pointer-events-none"
-              viewBox="0 0 64 64"
+              className="absolute -top-3 left-2 w-[4.5rem] h-[5.5rem] text-accent/40 pointer-events-none overflow-visible"
+              viewBox="0 0 72 88"
               fill="none"
               aria-hidden="true"
             >
               <path
-                d="M8 4 C 20 20, 28 36, 32 52"
+                d="M64 2 C 44 10, 50 28, 32 40 C 18 50, 8 62, 36 82"
                 stroke="currentColor"
-                strokeWidth="1.5"
-                strokeDasharray="4 4"
+                strokeWidth="1.25"
+                strokeDasharray="2 5 7 3"
                 strokeLinecap="round"
               />
+              <circle cx="36" cy="82" r="2.5" fill="currentColor" className="text-accent/55" />
             </svg>
             <img
               src="/zeus_profile.png"
-              alt="Zeus Angelo Bautista"
-              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-2 border-accent/30 shadow-[0_0_24px_rgba(223,41,53,0.35)]"
+              alt="Zeus"
+              className="w-24 h-24 rounded-full object-cover border-2 border-accent/30 shadow-[0_0_24px_rgba(223,41,53,0.35)]"
             />
           </div>
         </div>
 
-        {/* Typography — full-width block with right padding for profile */}
-        <div className="flex flex-col items-start gap-5 text-left relative z-10 md:pr-52 lg:pr-60">
+        {/* Typography — full-width block */}
+        <div className="flex flex-col items-start gap-5 text-left relative z-10">
           <span className="font-mono text-xs md:text-sm font-semibold uppercase tracking-wider text-[#334155] border border-[#334155]/20 rounded-full px-4 py-1.5 bg-[#FAFAFA]/40 backdrop-blur-[4px]">
             4th year College Student
           </span>
 
-          <div className="flex flex-col w-max max-w-full">
+          <div className="relative w-max max-w-full">
             <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Zeus Angelo
             </h1>
@@ -52,6 +51,34 @@ export default function Hero() {
             <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Future Developer
             </h1>
+
+            {/* Profile — desktop, anchored beside headline block */}
+            <div className="hidden md:flex flex-col items-start absolute left-[calc(100%+1.25rem)] lg:left-[calc(100%+2rem)] top-[38%] z-20 w-max">
+              <p className="font-sans text-sm lg:text-base font-medium text-black">Hi! I Am</p>
+              <p className="font-sans text-2xl lg:text-3xl font-bold text-accent leading-tight">Zeus.</p>
+              <div className="relative mt-5 lg:mt-6">
+                <svg
+                  className="absolute -top-4 left-1 w-[5rem] h-[6rem] lg:w-[5.5rem] lg:h-[6.5rem] text-accent/40 pointer-events-none overflow-visible"
+                  viewBox="0 0 88 104"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M78 4 C 54 14, 62 36, 40 50 C 22 62, 10 76, 44 98"
+                    stroke="currentColor"
+                    strokeWidth="1.25"
+                    strokeDasharray="2 5 7 3"
+                    strokeLinecap="round"
+                  />
+                  <circle cx="44" cy="98" r="2.5" fill="currentColor" className="text-accent/55" />
+                </svg>
+                <img
+                  src="/zeus_profile.png"
+                  alt="Zeus"
+                  className="w-24 h-24 lg:w-28 lg:h-28 rounded-full object-cover border-2 border-accent/30 shadow-[0_0_24px_rgba(223,41,53,0.35)]"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Social / Resume Links */}
