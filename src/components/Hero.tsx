@@ -52,8 +52,61 @@ export default function Hero() {
               Future Developer
             </h1>
 
-            {/* Profile — desktop, anchored beside headline block */}
-            <div className="hidden md:flex flex-col items-start absolute left-[calc(100%+1.25rem)] lg:left-[calc(100%+2rem)] top-[38%] z-20 w-max">
+            {/* Profile — desktop (moved below into socials row) */}
+          </div>
+
+          {/* Social / Resume Links */}
+          <div className="mt-8 flex items-center justify-between w-full">
+            <div className="flex flex-col gap-4">
+              <span className="font-mono text-sm md:text-base uppercase tracking-wider text-[#334155]/60 font-bold">
+                Socials:
+              </span>
+              <div className="flex flex-wrap items-center gap-8">
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-[#334155] hover:text-black font-mono text-sm md:text-base uppercase tracking-wider transition-colors cursor-pointer group"
+                >
+                  <svg className="w-5 h-5 text-[#334155] group-hover:text-black transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <polyline points="10 9 9 9 8 9" />
+                  </svg>
+                  Resume
+                </a>
+                <a
+                  href="https://linkedin.com/in/zeusbautista"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-[#334155] hover:text-black font-mono text-sm md:text-base uppercase tracking-wider transition-colors cursor-pointer group"
+                >
+                  <svg className="w-5 h-5 text-[#334155] group-hover:text-black transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                    <rect width="4" height="12" x="2" y="9" />
+                    <circle cx="4" cy="4" r="2" />
+                  </svg>
+                  Linkedin
+                </a>
+                <a
+                  href="https://github.com/kidlatpogi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2.5 text-[#334155] hover:text-black font-mono text-sm md:text-base uppercase tracking-wider transition-colors cursor-pointer group"
+                >
+                  <svg className="w-5 h-5 text-[#334155] group-hover:text-black transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                    <path d="M9 18c-4.51 2-5-2-7-2" />
+                  </svg>
+                  Github
+                </a>
+              </div>
+            </div>
+
+            {/* Desktop profile placed inline with socials */}
+            <div className="hidden md:flex flex-col items-start z-20 w-max ml-8" data-cursor-element-id="cursor-el-1">
               <p className="font-sans text-sm lg:text-base font-medium text-black">Hi! I Am</p>
               <p className="font-sans text-2xl lg:text-3xl font-bold text-accent leading-tight">Zeus.</p>
               <div className="relative mt-5 lg:mt-6">
@@ -78,55 +131,6 @@ export default function Hero() {
                   className="w-24 h-24 lg:w-28 lg:h-28 rounded-full object-cover border-2 border-accent/30 shadow-[0_0_24px_rgba(223,41,53,0.35)]"
                 />
               </div>
-            </div>
-          </div>
-
-          {/* Social / Resume Links */}
-          <div className="mt-8 flex flex-col gap-4">
-            <span className="font-mono text-sm md:text-base uppercase tracking-wider text-[#334155]/60 font-bold">
-              Socials:
-            </span>
-            <div className="flex flex-wrap items-center gap-8">
-              <a
-                href="/resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-[#334155] hover:text-black font-mono text-sm md:text-base uppercase tracking-wider transition-colors cursor-pointer group"
-              >
-                <svg className="w-5 h-5 text-[#334155] group-hover:text-black transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                  <line x1="16" y1="13" x2="8" y2="13" />
-                  <line x1="16" y1="17" x2="8" y2="17" />
-                  <polyline points="10 9 9 9 8 9" />
-                </svg>
-                Resume
-              </a>
-              <a
-                href="https://linkedin.com/in/zeusbautista"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-[#334155] hover:text-black font-mono text-sm md:text-base uppercase tracking-wider transition-colors cursor-pointer group"
-              >
-                <svg className="w-5 h-5 text-[#334155] group-hover:text-black transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect width="4" height="12" x="2" y="9" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
-                Linkedin
-              </a>
-              <a
-                href="https://github.com/kidlatpogi"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2.5 text-[#334155] hover:text-black font-mono text-sm md:text-base uppercase tracking-wider transition-colors cursor-pointer group"
-              >
-                <svg className="w-5 h-5 text-[#334155] group-hover:text-black transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                  <path d="M9 18c-4.51 2-5-2-7-2" />
-                </svg>
-                Github
-              </a>
             </div>
           </div>
         </div>
