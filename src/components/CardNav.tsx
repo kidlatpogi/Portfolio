@@ -193,7 +193,7 @@ const CardNav: React.FC<CardNavProps> = ({
         >
           <div className="absolute top-0 left-0 right-0 h-[60px] flex items-center justify-between pl-6 pr-3 py-2 max-sm:px-4 z-10">
             <div
-              className={`h-10 w-10 flex flex-col items-start justify-center cursor-pointer gap-[5px] p-[5px] rounded-full transition-colors duration-300 hover:bg-white/20 max-sm:order-2`}
+              className={`h-10 w-10 flex flex-col items-start justify-center cursor-pointer gap-[5px] p-[5px] rounded-full transition-colors duration-300 hover:bg-white/20 max-sm:order-3`}
               onClick={toggleMenu}
               role="button"
               aria-label={isExpanded ? 'Close menu' : 'Open menu'}
@@ -204,7 +204,7 @@ const CardNav: React.FC<CardNavProps> = ({
               <div className={`w-[22px] h-[2px] bg-current transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${isHamburgerOpen ? '-translate-y-[3.5px] -rotate-45' : ''}`} />
             </div>
 
-            <a href="#home" className="flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 no-underline max-sm:static max-sm:transform-none max-sm:order-1 group cursor-target" onClick={(e) => {
+            <a href="#home" className="flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 no-underline max-sm:static max-sm:translate-none max-sm:order-1 group cursor-target" onClick={(e) => {
               e.preventDefault();
               document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' });
             }}>
@@ -213,7 +213,7 @@ const CardNav: React.FC<CardNavProps> = ({
 
             <button
               type="button"
-              className="font-mono font-semibold border border-white/30 rounded-[1.5rem] px-5 h-10 text-[0.85rem] tracking-[0.05em] uppercase cursor-pointer flex items-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] hover:brightness-110 active:translate-y-0 max-sm:hidden group gap-1.5"
+              className="font-mono font-semibold border border-white/30 rounded-[1.5rem] px-5 h-10 text-[0.85rem] tracking-[0.05em] uppercase cursor-pointer flex items-center shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[1px] hover:shadow-[0_6px_20px_rgba(0,0,0,0.12)] hover:brightness-110 active:translate-y-0 max-sm:order-2 max-sm:ml-auto max-sm:mr-1.5 max-sm:px-3 max-sm:h-9 max-sm:text-[0.75rem] group gap-1.5"
               style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
               onClick={handleCtaClick}
             >
@@ -222,7 +222,7 @@ const CardNav: React.FC<CardNavProps> = ({
             </button>
           </div>
 
-          <div className={`absolute left-0 right-0 top-[60px] bottom-0 p-3 flex items-stretch gap-3 z-10 max-sm:flex-col max-sm:gap-2 max-sm:p-2 max-sm:bottom-0 max-sm:justify-start ${isExpanded ? 'visible pointer-events-auto' : 'invisible pointer-events-none'}`} aria-hidden={!isExpanded}>
+          <div className={`card-nav-content absolute left-0 right-0 top-[60px] bottom-0 p-3 flex items-stretch gap-3 z-10 max-sm:flex-col max-sm:gap-2 max-sm:p-2 max-sm:bottom-auto max-sm:justify-start ${isExpanded ? 'visible pointer-events-auto' : 'invisible pointer-events-none'}`} aria-hidden={!isExpanded}>
             {(items || []).slice(0, 3).map((item, idx) => (
               <div
                 key={`${item.label}-${idx}`}
