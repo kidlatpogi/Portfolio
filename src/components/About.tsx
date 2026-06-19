@@ -8,7 +8,7 @@ export default function About() {
       <div id="skills" className="absolute top-1/3" />
       <div id="experience" className="absolute top-2/3" />
 
-      <h1 className="text-5xl md:text-7xl font-extrabold text-zinc-900 tracking-tight">About</h1>
+      <h1 className="font-sans text-5xl md:text-7xl font-semibold text-zinc-900 tracking-tight">About</h1>
     </section>
   );
 }
