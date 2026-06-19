@@ -193,7 +193,7 @@ const CardNav: React.FC<CardNavProps> = ({
         >
           <div className="absolute top-0 left-0 right-0 h-[60px] flex items-center justify-between pl-6 pr-3 py-2 max-sm:px-4 z-10">
             <div
-              className="h-10 w-10 flex flex-col items-start justify-center cursor-pointer gap-[5px] p-[5px] rounded-full transition-colors duration-300 hover:bg-black/10"
+              className="h-10 w-10 flex flex-col items-start justify-center cursor-pointer gap-[5px] p-[5px] rounded-full"
               onClick={toggleMenu}
               role="button"
               aria-label={isExpanded ? 'Close menu' : 'Open menu'}
