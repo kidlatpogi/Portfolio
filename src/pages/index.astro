@@ -1,21 +1,55 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar';
+import CardNav from '../components/CardNav';
 import Hero from '../components/Hero';
+import About from '../components/About';
+import Skills from '../components/Skills';
+import Experience from '../components/Experience';
 import Projects from '../components/Projects';
 import Designs from '../components/Designs';
-import Skills from '../components/Skills';
 import Certifications from '../components/Certifications';
 import ContactForm from '../components/ContactForm';
+
+const navItems = [
+  {
+    label: "About",
+    bgColor: "rgba(255, 255, 255, 0.4)",
+    textColor: "#141313",
+    links: [
+      { label: "About Me", href: "#about", ariaLabel: "About Me" },
+      { label: "Skills", href: "#skills", ariaLabel: "Skills" },
+      { label: "Experience", href: "#experience", ariaLabel: "Experience" }
+    ]
+  },
+  {
+    label: "Projects",
+    bgColor: "rgba(255, 255, 255, 0.35)",
+    textColor: "#141313",
+    links: [
+      { label: "Projects", href: "#projects", ariaLabel: "Projects" },
+      { label: "Designs", href: "#designs", ariaLabel: "Designs" }
+    ]
+  },
+  {
+    label: "Certifications",
+    bgColor: "rgba(255, 255, 255, 0.3)",
+    textColor: "#141313",
+    links: [
+      { label: "Certifications", href: "#certifications", ariaLabel: "Certifications" }
+    ]
+  }
+];
 ---
 
 <Layout>
-	<Navbar client:load />
+	<CardNav client:load logoText="Zeus Angelo" items={navItems} />
 	<main class="w-full relative">
 		<Hero client:load />
+		<About client:visible />
+		<Skills client:visible />
+		<Experience client:visible />
 		<Projects client:visible />
 		<Designs client:visible />
-		<Skills client:visible />
 		<Certifications client:visible />
 		<ContactForm client:visible />
 	</main>
