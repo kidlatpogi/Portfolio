@@ -71,9 +71,7 @@
 
   /* Fonts & Font Sizes */
   --font-sans: 'Inter', sans-serif;
-  --font-mono: 'VT323', monospace;
-  --font-display: 'Clash Display', sans-serif;
-  --font-vt323: 'VT323', monospace;
+  --font-mono: 'Roboto Mono', monospace;
 
   --font-display-lg: 'Inter', sans-serif;
   --font-headline-lg: 'Inter', sans-serif;
