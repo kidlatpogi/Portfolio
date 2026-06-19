@@ -69,6 +69,9 @@
   --spacing-stack-lg: 32px;
 
   /* Fonts & Font Sizes */
+  --font-sans: 'Inter', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+
   --font-display-lg: 'Inter', sans-serif;
   --font-headline-lg: 'Inter', sans-serif;
   --font-headline-lg-mobile: 'Inter', sans-serif;
@@ -86,10 +89,15 @@
   --text-label-md: 12px;
 }
 
+html,
 body {
-  background-color: #000000;
-  color: var(--color-on-surface);
+  max-width: 100%;
   overflow-x: hidden;
+}
+
+body {
+  background-color: #F2F0EF;
+  color: #141313;
 }
 
 /* Custom classes for design integration */
@@ -103,6 +111,25 @@ body {
   align-items: center;
   overflow: hidden;
   box-shadow: 0 -20px 50px rgba(0,0,0,0.5);
+}
+
+@media (max-width: 1023px) {
+  .parallax-section {
+    position: relative;
+    min-height: 100svh;
+    height: auto;
+    align-items: flex-start;
+    overflow: visible;
+    padding-bottom: max(6rem, env(safe-area-inset-bottom));
+  }
+}
+
+.section-scroll {
+  display: block;
+  min-height: 100vh;
+  height: auto;
+  align-items: initial;
+  overflow-y: auto;
 }
 
 .glass-card {
@@ -187,6 +214,9 @@ body {
   animation-play-state: paused;
 }
 .marquee-mask {
+  max-width: 100%;
+  contain: paint;
+  overflow-x: clip;
   mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
 }

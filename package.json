@@ -21,13 +21,18 @@
     "@types/react-dom": "^19.2.3",
     "astro": "^6.4.6",
     "framer-motion": "^12.40.0",
+    "gsap": "^3.15.0",
     "lucide-react": "^1.18.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "tailwindcss": "^4.3.1",
+    "three": "^0.184.0",
     "wrangler": "^4.100.0"
   },
   "overrides": {
     "vite": "^7"
+  },
+  "devDependencies": {
+    "@types/three": "^0.184.1"
   }
 }
