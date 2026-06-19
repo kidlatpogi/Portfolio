@@ -1,14 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CardNav from '../components/CardNav';
+import '../components/CardNav.css';
 import Hero from '../components/Hero';
 import About from '../components/About';
-import Skills from '../components/Skills';
-import Experience from '../components/Experience';
 import Projects from '../components/Projects';
-import Designs from '../components/Designs';
 import Certifications from '../components/Certifications';
-import ContactForm from '../components/ContactForm';
 
 const navItems = [
   {
@@ -46,11 +43,7 @@ const navItems = [
 	<main class="w-full relative">
 		<Hero client:load />
 		<About client:visible />
-		<Skills client:visible />
-		<Experience client:visible />
 		<Projects client:visible />
-		<Designs client:visible />
 		<Certifications client:visible />
-		<ContactForm client:visible />
 	</main>
 </Layout>

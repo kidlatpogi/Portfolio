@@ -82,8 +82,12 @@ const CardNav: React.FC<CardNavProps> = ({
     const navEl = navRef.current;
     if (!navEl) return null;
 
+    const validCards = cardsRef.current.filter((el) => el !== null && el !== undefined);
+
     gsap.set(navEl, { height: 60, overflow: 'hidden' });
-    gsap.set(cardsRef.current, { y: 50, opacity: 0 });
+    if (validCards.length > 0) {
+      gsap.set(validCards, { y: 50, opacity: 0 });
+    }
 
     const tl = gsap.timeline({ paused: true });
 
@@ -93,7 +97,9 @@ const CardNav: React.FC<CardNavProps> = ({
       ease
     });
 
-    tl.to(cardsRef.current, { y: 0, opacity: 1, duration: 0.4, ease, stagger: 0.08 }, '-=0.1');
+    if (validCards.length > 0) {
+      tl.to(validCards, { y: 0, opacity: 1, duration: 0.4, ease, stagger: 0.08 }, '-=0.1');
+    }
 
     return tl;
   };
@@ -150,7 +156,11 @@ const CardNav: React.FC<CardNavProps> = ({
   };
 
   const setCardRef = (i: number) => (el: HTMLDivElement | null) => {
-    if (el) cardsRef.current[i] = el;
+    if (el) {
+      cardsRef.current[i] = el;
+    } else {
+      cardsRef.current = cardsRef.current.filter((_, idx) => idx !== i);
+    }
   };
 
   const handleCtaClick = () => {
