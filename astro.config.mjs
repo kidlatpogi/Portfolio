@@ -14,10 +14,31 @@ export default defineConfig({
     plugins: [tailwindcss()],
     assetsInclude: ['**/*.glb'],
     resolve: {
-      dedupe: ['react', 'react-dom']
+      dedupe: ['react', 'react-dom', 'three']
     },
     optimizeDeps: {
-      include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime']
+      include: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        'framer-motion',
+        '@react-three/fiber',
+        '@react-three/drei',
+        '@react-three/rapier',
+        'three',
+        'lucide-react'
+      ]
+    },
+    ssr: {
+      optimizeDeps: {
+        include: [
+          'react',
+          'react-dom',
+          'react/jsx-runtime',
+          'react/jsx-dev-runtime'
+        ]
+      }
     }
   },
 
