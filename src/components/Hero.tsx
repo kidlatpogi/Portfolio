@@ -105,13 +105,13 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Desktop profile placed inline with socials */}
-            <div className="hidden md:flex flex-col items-start z-20 w-max ml-8" data-cursor-element-id="cursor-el-1">
+            {/* Desktop profile placed inline with socials (refined to match design) */}
+            <div className="hidden md:flex flex-col items-start z-20 w-max ml-6" data-cursor-element-id="cursor-el-1">
               <p className="font-sans text-sm lg:text-base font-medium text-black">Hi! I Am</p>
               <p className="font-sans text-2xl lg:text-3xl font-bold text-accent leading-tight">Zeus.</p>
-              <div className="relative mt-5 lg:mt-6">
+              <div className="relative mt-3 lg:mt-4">
                 <svg
-                  className="absolute -top-4 left-1 w-[5rem] h-[6rem] lg:w-[5.5rem] lg:h-[6.5rem] text-accent/40 pointer-events-none overflow-visible"
+                  className="absolute -top-5 left-0 w-[5rem] h-[6rem] lg:w-[5.5rem] lg:h-[6.5rem] text-accent/30 pointer-events-none overflow-visible"
                   viewBox="0 0 88 104"
                   fill="none"
                   aria-hidden="true"
@@ -123,13 +123,14 @@ export default function Hero() {
                     strokeDasharray="2 5 7 3"
                     strokeLinecap="round"
                   />
-                  <circle cx="44" cy="98" r="2.5" fill="currentColor" className="text-accent/55" />
                 </svg>
-                <img
-                  src="/zeus_profile.png"
-                  alt="Zeus"
-                  className="w-24 h-24 lg:w-28 lg:h-28 rounded-full object-cover border-2 border-accent/30 shadow-[0_0_24px_rgba(223,41,53,0.35)]"
-                />
+                <div className="rounded-full p-1" style={{boxShadow: '0 0 0 10px rgba(196,73,0,0.08)'}}>
+                  <img
+                    src="/zeus_profile.png"
+                    alt="Zeus"
+                    className="w-24 h-24 lg:w-28 lg:h-28 rounded-full object-cover border-2 border-accent/40"
+                  />
+                </div>
               </div>
             </div>
           </div>
