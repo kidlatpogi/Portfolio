@@ -6,6 +6,8 @@ import Hero from '../components/Hero';
 import About from '../components/About';
 import Projects from '../components/Projects';
 import Certifications from '../components/Certifications';
+import ShapeGrid from '../components/ShapeGrid';
+
 
 
 const navItems = [
@@ -40,9 +42,12 @@ const navItems = [
 ---
 
 <Layout>
+	<div class="fixed inset-0 z-0 pointer-events-none">
+		<ShapeGrid client:load speed={0} squareSize={40} borderColor="rgba(51, 65, 85, 0.05)" hoverFillColor="rgba(51, 65, 85, 0.12)" shape="square" hoverTrailAmount={6} gradientColor="#FAFAFA" />
+	</div>
 	<TargetCursor client:load targetSelector="a, button, .cursor-target" />
 	<CardNav client:load logoText="Zeus Angelo" items={navItems} />
-	<main class="w-full relative">
+	<main class="w-full relative z-10">
 		<Hero />
 		<About />
 		<Projects />
