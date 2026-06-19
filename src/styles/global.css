@@ -2,6 +2,7 @@
 
 @theme {
   /* Colors */
+  --color-accent: #FF4713;
   --color-primary: #ffffff;
   --color-on-error-container: #ffdad6;
   --color-surface-container: #201f1f;
@@ -70,7 +71,9 @@
 
   /* Fonts & Font Sizes */
   --font-sans: 'Inter', sans-serif;
-  --font-mono: 'Roboto Mono', monospace;
+  --font-mono: 'VT323', monospace;
+  --font-display: 'Clash Display', sans-serif;
+  --font-vt323: 'VT323', monospace;
 
   --font-display-lg: 'Inter', sans-serif;
   --font-headline-lg: 'Inter', sans-serif;

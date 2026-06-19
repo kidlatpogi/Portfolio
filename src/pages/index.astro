@@ -8,6 +8,7 @@ import Projects from '../components/Projects';
 import Certifications from '../components/Certifications';
 import ShapeGrid from '../components/ShapeGrid';
 import ChatBot from '../components/ChatBot';
+import Lanyard from '../components/Lanyard/Lanyard';
 
 
 
@@ -47,6 +48,14 @@ const navItems = [
 	<div class="fixed inset-0 z-0 pointer-events-none">
 		<ShapeGrid client:load speed={0} squareSize={55} borderColor="rgba(51, 65, 85, 0.05)" hoverFillColor="rgba(51, 65, 85, 0.12)" shape="square" hoverTrailAmount={6} gradientColor="#FAFAFA" />
 	</div>
+
+	<!-- Desktop absolute lanyard grounded to the very top (0px) of viewport -->
+	<div class="hidden md:block fixed top-0 right-0 w-1/2 h-screen z-20 pointer-events-none">
+		<div class="w-full h-full pointer-events-auto">
+			<Lanyard client:load position={[0, 0, 20]} gravity={[0, -40, 0]} />
+		</div>
+	</div>
+
 	<TargetCursor client:load targetSelector="a, button, .cursor-target" />
 	<CardNav client:load logoText="Zeus Angelo" items={navItems} />
 	<main class="w-full relative z-10">
