@@ -102,7 +102,7 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: 'spring', duration: 0.5, bounce: 0.15 }}
-            className="relative w-full max-w-[540px] bg-[#FAF8F5] border border-zinc-200/50 rounded-3xl p-8 md:p-10 shadow-2xl z-10 overflow-hidden"
+            className="relative w-full max-w-[540px] bg-[#F2F0EF] border border-zinc-200/50 rounded-3xl p-8 md:p-10 shadow-2xl z-10 overflow-hidden"
           >
             {/* Close Button */}
             <button
