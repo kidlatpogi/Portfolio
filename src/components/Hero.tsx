@@ -5,22 +5,51 @@ export default function Hero() {
   return (
     <section className="min-h-screen w-full flex items-center justify-center p-6 md:p-12 relative overflow-hidden" id="home">
 
-      <div className="w-full max-w-[1200px] grid grid-cols-1 md:grid-cols-2 gap-12 items-center z-10 pt-20">
-        
-        {/* Left Side: Typography Content */}
-        <div className="flex flex-col items-start gap-5 text-left order-2 md:order-1 relative z-10">
+      <div className="w-full max-w-[1400px] relative z-10 pt-20">
+
+        {/* Profile — floats right on desktop so typography keeps full width */}
+        <div className="flex flex-col items-start mb-10 md:mb-0 md:absolute md:top-20 md:right-0 md:z-20">
+          <p className="font-sans text-sm md:text-base font-medium text-black">Hi! I Am</p>
+          <p className="font-sans text-2xl md:text-3xl font-bold text-accent leading-tight">
+            Zeus Angelo Bautista.
+          </p>
+          <div className="relative mt-6 md:mt-8">
+            <svg
+              className="absolute -top-8 left-4 w-16 h-16 text-[#334155]/25 pointer-events-none"
+              viewBox="0 0 64 64"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M8 4 C 20 20, 28 36, 32 52"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeDasharray="4 4"
+                strokeLinecap="round"
+              />
+            </svg>
+            <img
+              src="/zeus_profile.png"
+              alt="Zeus Angelo Bautista"
+              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-2 border-accent/30 shadow-[0_0_24px_rgba(223,41,53,0.35)]"
+            />
+          </div>
+        </div>
+
+        {/* Typography — full-width block with right padding for profile */}
+        <div className="flex flex-col items-start gap-5 text-left relative z-10 md:pr-52 lg:pr-60">
           <span className="font-mono text-xs md:text-sm font-semibold uppercase tracking-wider text-[#334155] border border-[#334155]/20 rounded-full px-4 py-1.5 bg-[#FAFAFA]/40 backdrop-blur-[4px]">
             4th year College Student
           </span>
-          
-          <div className="flex flex-col">
-            <h1 className="font-sans text-7xl sm:text-8xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none">
+
+          <div className="flex flex-col w-max max-w-full">
+            <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Zeus Angelo
             </h1>
-            <h1 className="font-sans text-7xl sm:text-8xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none">
+            <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Bautista
             </h1>
-            <h1 className="font-sans text-7xl sm:text-8xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-[#DF2935] tracking-tighter leading-[0.9] select-none">
+            <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Future Developer
             </h1>
           </div>
@@ -75,37 +104,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Right Side: Profile */}
-        <div className="flex flex-col items-start order-1 md:order-2 relative z-10 md:pt-16">
-          <p className="font-sans text-sm md:text-base font-medium text-black">Hi! I Am</p>
-          <p className="font-sans text-2xl md:text-3xl font-bold text-[#DF2935] leading-tight">
-            Zeus Angelo Bautista.
-          </p>
-          <div className="relative mt-6 md:mt-8">
-            <svg
-              className="absolute -top-8 left-4 w-16 h-16 text-[#334155]/25 pointer-events-none"
-              viewBox="0 0 64 64"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M8 4 C 20 20, 28 36, 32 52"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeDasharray="4 4"
-                strokeLinecap="round"
-              />
-            </svg>
-            <img
-              src="/zeus_profile.png"
-              alt="Zeus Angelo Bautista"
-              className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-2 border-[#DF2935]/30 shadow-[0_0_24px_rgba(223,41,53,0.35)]"
-            />
-          </div>
-        </div>
-
       </div>
     </section>
   );
 }
-

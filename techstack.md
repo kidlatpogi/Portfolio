@@ -32,7 +32,8 @@
     * **Metadata, Tech Tags, Labels:** Roboto Mono, Medium (500), uppercase, small size (e.g., 12px-14px).
     * **Buttons & Navigation Links:** Roboto Mono, Semi-Bold (600).
     * **Background:** Off-white (e.g., `#FAFAFA`).
-    * **Interactions:** NO box-shadows, text-glows, or outer glows for interactive states. Rely entirely on flat color swaps and crisp borders.
+    * **Primary Accent:** Cardinal Red (`#DF2935`) — hero highlight lines, profile name, accent text, selection highlights, and `--color-accent` token.
+    * **Interactions:** NO box-shadows, text-glows, or outer glows for interactive states. Rely entirely on flat color swaps and crisp borders. (Profile photo glow is an explicit hero exception.)
     * **Buttons:** Solid Black (`#000000`) background, Off-White text, no borders. Hover/Active: No background color swap / remains flat black.
     * **Input Fields & Textareas:** Off-white background, faint gray border (`#E5E7EB`), black text. Focus: Strip browser outlines/glows, apply sharp solid 2px border of `#334155`.
     * **Tech Stack Badges:** Transparent or Off-white background. Text and 1px solid border must be `#334155`.

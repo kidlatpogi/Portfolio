@@ -2,7 +2,7 @@
 
 @theme {
   /* Colors */
-  --color-accent: #FF4713;
+  --color-accent: #DF2935;
   --color-primary: #ffffff;
   --color-on-error-container: #ffdad6;
   --color-surface-container: #201f1f;
@@ -89,6 +89,7 @@
   --text-body-md: 16px;
   --text-label-md: 12px;
 }
+
 html,
 body {
   max-width: 100%;
@@ -136,27 +137,42 @@ body {
   column-count: 1;
   column-gap: var(--spacing-gutter);
 }
+
 @media (min-width: 768px) {
-  .masonry-grid { column-count: 2; }
+  .masonry-grid {
+    column-count: 2;
+  }
 }
+
 @media (min-width: 1024px) {
-  .masonry-grid { column-count: 3; }
+  .masonry-grid {
+    column-count: 3;
+  }
 }
+
 .masonry-item {
   break-inside: avoid;
   margin-bottom: var(--spacing-gutter);
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
+
 .animate-marquee {
   animation: marquee 25s linear infinite;
 }
+
 .animate-marquee:hover {
   animation-play-state: paused;
 }
+
 .marquee-mask {
   max-width: 100%;
   contain: paint;
