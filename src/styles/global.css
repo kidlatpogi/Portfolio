@@ -2,7 +2,7 @@
 
 @theme {
   /* Colors */
-  --color-accent: #DF2935;
+  --color-accent: #C44900;
   --color-primary: #ffffff;
   --color-on-error-container: #ffdad6;
   --color-surface-container: #201f1f;
@@ -97,7 +97,7 @@ body {
 }
 
 body {
-  background-color: #FAFAFA;
+  background-color: #F9F9F9;
   color: #000000;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }

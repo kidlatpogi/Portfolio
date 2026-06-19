@@ -56,7 +56,7 @@ export default function Hero() {
           </div>
 
           {/* Social / Resume Links */}
-          <div className="mt-8 flex items-center justify-between w-full">
+          <div className="mt-8 flex items-center justify-start w-auto">
             <div className="flex flex-col gap-4">
               <span className="font-mono text-sm md:text-base uppercase tracking-wider text-[#334155]/60 font-bold">
                 Socials:
