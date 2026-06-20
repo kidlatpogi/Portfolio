@@ -52,7 +52,34 @@ export default function Hero() {
               Future Developer
             </h1>
 
-            {/* Profile — desktop (moved below into socials row) */}
+            {/* Desktop profile picture placeholder on the right side */}
+            <div className="hidden md:flex absolute top-[10px] left-[102%] lg:left-[108%] xl:left-[115%] items-center z-20 w-[18rem] lg:w-[24rem]">
+              {/* Playful Dotted Line */}
+              <div className="relative flex-grow h-20 overflow-visible">
+                <svg
+                  className="absolute inset-0 w-full h-full text-accent pointer-events-none overflow-visible"
+                  viewBox="0 0 200 80"
+                  preserveAspectRatio="none"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M 0,20 C 50,-10 120,70 200,40"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeDasharray="4 6"
+                    strokeLinecap="round"
+                  />
+                  <circle cx="200" cy="40" r="4.5" fill="currentColor" />
+                </svg>
+              </div>
+
+              {/* Circular Profile Holder (empty grey circle with accent border) */}
+              <div 
+                className="w-32 h-32 lg:w-40 lg:h-40 rounded-full border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0"
+                style={{ boxShadow: '0 0 0 10px rgba(196,73,0,0.08)' }}
+              />
+            </div>
           </div>
 
           {/* Social / Resume Links */}
