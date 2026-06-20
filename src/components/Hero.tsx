@@ -7,34 +7,6 @@ export default function Hero() {
 
       <div className="w-full max-w-[1400px] relative z-10 pt-20">
 
-        {/* Profile — mobile */}
-        <div className="flex md:hidden flex-col items-start mb-10">
-          <p className="font-sans text-sm font-medium text-black">Hi! I Am</p>
-          <p className="font-sans text-2xl font-bold text-accent leading-tight">Zeus.</p>
-          <div className="relative mt-6">
-            <svg
-              className="absolute -top-3 left-2 w-[4.5rem] h-[5.5rem] text-accent/40 pointer-events-none overflow-visible"
-              viewBox="0 0 72 88"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M64 2 C 44 10, 50 28, 32 40 C 18 50, 8 62, 36 82"
-                stroke="currentColor"
-                strokeWidth="1.25"
-                strokeDasharray="2 5 7 3"
-                strokeLinecap="round"
-              />
-              <circle cx="36" cy="82" r="2.5" fill="currentColor" className="text-accent/55" />
-            </svg>
-            <img
-              src="/zeus_profile.png"
-              alt="Zeus"
-              className="w-24 h-24 rounded-full object-cover border-2 border-accent/30 shadow-[0_0_24px_rgba(223,41,53,0.35)]"
-            />
-          </div>
-        </div>
-
         {/* Typography — full-width block */}
         <div className="flex flex-col items-start gap-5 text-left relative z-10">
           <span className="font-array-semibold text-[1.5rem] md:text-[2rem] font-semibold uppercase tracking-wider text-[#334155]">
@@ -45,10 +17,10 @@ export default function Hero() {
             <h1 className="relative inline-block font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Zeus Angelo
 
-              {/* Desktop profile picture placeholder on the right side */}
-              <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 left-[100%] ml-4 lg:ml-6 items-center z-20 w-[14rem] lg:w-[18rem]">
+              {/* Profile picture placeholder on the right side */}
+              <div className="absolute top-1/2 -translate-y-1/2 left-[100%] ml-2 sm:ml-4 lg:ml-6 flex items-center z-20 w-[7.5rem] sm:w-[10rem] md:w-[14rem] lg:w-[18rem]">
                 {/* Playful Dotted Line */}
-                <div className="relative flex-grow h-20 overflow-visible">
+                <div className="relative flex-grow h-10 sm:h-14 md:h-20 overflow-visible">
                   <svg
                     className="absolute inset-0 w-full h-full text-accent pointer-events-none overflow-visible"
                     viewBox="0 0 160 80"
@@ -76,8 +48,7 @@ export default function Hero() {
 
                 {/* Circular Profile Holder (empty grey circle with accent border) */}
                 <div 
-                  className="w-32 h-32 lg:w-40 lg:h-40 rounded-full border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0"
-                  style={{ boxShadow: '0 0 0 10px rgba(196,73,0,0.08)' }}
+                  className="w-12 h-12 sm:w-16 sm:h-16 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10"
                 />
               </div>
             </h1>
