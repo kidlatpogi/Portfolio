@@ -27,8 +27,8 @@
 5. **Typography & Color Design System:** Adhere strictly to the brutalist minimalist styling:
     * **Hero/Giant Titles (H1):** Inter, Extra Bold (800), pure black (`#000000`).
     * **Section Titles (H2):** Inter, Semi-Bold (600), pure black (`#000000`).
-    * **Sub-headings (H3):** Inter, Medium (500), Thundercloud Slate (`#C44900`).
-    * **Body Text (p):** Inter, Regular (400), Thundercloud Slate (`#C44900`), line-height 1.6 to 1.8.
+    * **Sub-headings (H3):** Inter, Medium (500), Cardinal Red (`#C44900`).
+    * **Body Text (p):** Inter, Regular (400), Cardinal Red (`#C44900`), line-height 1.6 to 1.8.
     * **Metadata, Tech Tags, Labels:** Roboto Mono, Medium (500), uppercase, small size (e.g., 12px-14px).
     * **Buttons & Navigation Links:** Roboto Mono, Semi-Bold (600).
     * **Background:** Off-white (e.g., `#F9F9F9`).
