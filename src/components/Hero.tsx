@@ -37,7 +37,7 @@ export default function Hero() {
 
         {/* Typography — full-width block */}
         <div className="flex flex-col items-start gap-5 text-left relative z-10">
-          <span className="font-array-semibold text-xs md:text-sm font-semibold uppercase tracking-wider text-[#334155]">
+          <span className="font-array-semibold text-2xl font-semibold uppercase tracking-wider text-[#334155]">
             4th year College Student
           </span>
 
