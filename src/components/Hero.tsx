@@ -46,7 +46,7 @@ export default function Hero() {
               Zeus Angelo
 
               {/* Desktop profile picture placeholder on the right side */}
-              <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 left-[100%] ml-4 lg:ml-6 items-center z-20 w-[8rem] lg:w-[10rem]">
+              <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 left-[100%] ml-4 lg:ml-6 items-center z-20 w-[14rem] lg:w-[18rem]">
                 {/* Playful Dotted Line */}
                 <div className="relative flex-grow h-20 overflow-visible">
                   <svg
