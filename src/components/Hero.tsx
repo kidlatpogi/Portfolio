@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
   return (
-    <section className="min-h-screen w-full flex items-center justify-center p-6 md:p-12 relative overflow-hidden" id="home">
+    <section className="min-h-screen w-full flex items-center justify-center px-4 py-12 md:p-12 relative overflow-hidden" id="home">
 
       <div className="w-full max-w-[1400px] relative z-10 pt-20">
 
@@ -18,9 +18,9 @@ export default function Hero() {
               Zeus Angelo
 
               {/* Profile picture placeholder on the right side */}
-              <div className="absolute top-1/2 -translate-y-1/2 left-[100%] ml-2 sm:ml-4 lg:ml-6 flex items-center z-20 w-[7.5rem] sm:w-[10rem] md:w-[14rem] lg:w-[18rem]">
+              <div className="absolute top-1/2 -translate-y-1/2 left-[100%] ml-1 sm:ml-3 md:ml-4 lg:ml-6 flex items-center z-20 w-[5rem] sm:w-[8rem] md:w-[14rem] lg:w-[18rem]">
                 {/* Playful Dotted Line */}
-                <div className="relative flex-grow h-10 sm:h-14 md:h-20 overflow-visible">
+                <div className="relative flex-grow h-8 sm:h-14 md:h-20 overflow-visible">
                   <svg
                     className="absolute inset-0 w-full h-full text-accent pointer-events-none overflow-visible"
                     viewBox="0 0 160 80"
@@ -48,7 +48,7 @@ export default function Hero() {
 
                 {/* Circular Profile Holder (empty grey circle with accent border) */}
                 <div 
-                  className="w-12 h-12 sm:w-16 sm:h-16 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10"
+                  className="w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10"
                 />
               </div>
             </h1>
