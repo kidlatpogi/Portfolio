@@ -53,7 +53,7 @@ export default function Hero() {
             </h1>
 
             {/* Desktop profile picture placeholder on the right side */}
-            <div className="hidden md:flex absolute top-[10px] left-[102%] lg:left-[108%] xl:left-[115%] items-center z-20 w-[18rem] lg:w-[24rem]">
+            <div className="hidden md:flex absolute top-[10px] left-[100%] ml-2 lg:ml-4 items-center z-20 w-[10rem] lg:w-[14rem]">
               {/* Playful Dotted Line */}
               <div className="relative flex-grow h-20 overflow-visible">
                 <svg
@@ -63,14 +63,21 @@ export default function Hero() {
                   fill="none"
                   aria-hidden="true"
                 >
+                  <defs>
+                    <linearGradient id="dotted-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="currentColor" stopOpacity={1} />
+                      <stop offset="70%" stopColor="currentColor" stopOpacity={0.7} />
+                      <stop offset="100%" stopColor="currentColor" stopOpacity={0.1} />
+                    </linearGradient>
+                  </defs>
                   <path
-                    d="M 0,20 C 50,-10 120,70 200,40"
-                    stroke="currentColor"
+                    d="M 0,40 C 40,20 60,20 80,40 C 95,55 110,55 110,40 C 110,25 90,25 90,40 C 90,55 120,70 200,40"
+                    stroke="url(#dotted-fade)"
                     strokeWidth="2.5"
                     strokeDasharray="4 6"
                     strokeLinecap="round"
                   />
-                  <circle cx="200" cy="40" r="4.5" fill="currentColor" />
+                  <circle cx="200" cy="40" r="4.5" fill="currentColor" opacity="0.15" />
                 </svg>
               </div>
 
