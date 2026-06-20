@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "../assets/fonts/array.css";
+@import "../assets/fonts/clash-display.css";
 
 @theme {
   /* Colors */
@@ -72,6 +74,21 @@
   /* Fonts & Font Sizes */
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'Roboto Mono', monospace;
+
+  --font-array-wide: 'Array-Wide', sans-serif;
+  --font-array-regular: 'Array-Regular', sans-serif;
+  --font-array-semibold: 'Array-Semibold', sans-serif;
+  --font-array-semibold-wide: 'Array-SemiboldWide', sans-serif;
+  --font-array-bold-wide: 'Array-BoldWide', sans-serif;
+  --font-array-bold: 'Array-Bold', sans-serif;
+
+  --font-clash-extralight: 'ClashDisplay-Extralight', sans-serif;
+  --font-clash-light: 'ClashDisplay-Light', sans-serif;
+  --font-clash-regular: 'ClashDisplay-Regular', sans-serif;
+  --font-clash-medium: 'ClashDisplay-Medium', sans-serif;
+  --font-clash-semibold: 'ClashDisplay-Semibold', sans-serif;
+  --font-clash-bold: 'ClashDisplay-Bold', sans-serif;
+  --font-clash-variable: 'ClashDisplay-Variable', sans-serif;
 
   --font-display-lg: 'Inter', sans-serif;
   --font-headline-lg: 'Inter', sans-serif;

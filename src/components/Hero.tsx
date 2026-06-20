@@ -37,7 +37,7 @@ export default function Hero() {
 
         {/* Typography — full-width block */}
         <div className="flex flex-col items-start gap-5 text-left relative z-10">
-          <span className="font-mono text-xs md:text-sm font-semibold uppercase tracking-wider text-[#334155] border border-[#334155]/20 rounded-full px-4 py-1.5 bg-[#FAFAFA]/40 backdrop-blur-[4px]">
+          <span className="font-array-semibold text-xs md:text-sm font-semibold uppercase tracking-wider text-[#334155]">
             4th year College Student
           </span>
 
@@ -48,7 +48,7 @@ export default function Hero() {
             <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Bautista
             </h1>
-            <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="font-clash-bold text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-bold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Future Developer
             </h1>
 
