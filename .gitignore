@@ -23,7 +23,5 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-techstack.md
-designs.md
 .wrangler
 .wrangler/
