@@ -42,8 +42,44 @@ export default function Hero() {
           </span>
 
           <div className="relative w-max max-w-full">
-            <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="relative inline-block font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Zeus Angelo
+
+              {/* Desktop profile picture placeholder on the right side */}
+              <div className="hidden md:flex absolute top-1/2 -translate-y-1/2 left-[100%] ml-4 lg:ml-6 items-center z-20 w-[8rem] lg:w-[10rem]">
+                {/* Playful Dotted Line */}
+                <div className="relative flex-grow h-20 overflow-visible">
+                  <svg
+                    className="absolute inset-0 w-full h-full text-accent pointer-events-none overflow-visible"
+                    viewBox="0 0 160 80"
+                    preserveAspectRatio="none"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <defs>
+                      <linearGradient id="dotted-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="currentColor" stopOpacity={1} />
+                        <stop offset="70%" stopColor="currentColor" stopOpacity={0.7} />
+                        <stop offset="100%" stopColor="currentColor" stopOpacity={0.1} />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M 0,40 C 30,15 50,15 70,35 C 85,50 100,50 100,35 C 100,15 80,15 80,35 C 80,55 110,65 160,40"
+                      stroke="url(#dotted-fade)"
+                      strokeWidth="2.5"
+                      strokeDasharray="4 6"
+                      strokeLinecap="round"
+                    />
+                    <circle cx="160" cy="40" r="4.5" fill="currentColor" opacity="0.15" />
+                  </svg>
+                </div>
+
+                {/* Circular Profile Holder (empty grey circle with accent border) */}
+                <div 
+                  className="w-32 h-32 lg:w-40 lg:h-40 rounded-full border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0"
+                  style={{ boxShadow: '0 0 0 10px rgba(196,73,0,0.08)' }}
+                />
+              </div>
             </h1>
             <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Bautista
@@ -51,42 +87,6 @@ export default function Hero() {
             <h1 className="font-clash-semibold text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Future Developer
             </h1>
-
-            {/* Desktop profile picture placeholder on the right side */}
-            <div className="hidden md:flex absolute top-[10px] left-[100%] ml-2 lg:ml-4 items-center z-20 w-[10rem] lg:w-[14rem]">
-              {/* Playful Dotted Line */}
-              <div className="relative flex-grow h-20 overflow-visible">
-                <svg
-                  className="absolute inset-0 w-full h-full text-accent pointer-events-none overflow-visible"
-                  viewBox="0 0 200 80"
-                  preserveAspectRatio="none"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <defs>
-                    <linearGradient id="dotted-fade" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="currentColor" stopOpacity={1} />
-                      <stop offset="70%" stopColor="currentColor" stopOpacity={0.7} />
-                      <stop offset="100%" stopColor="currentColor" stopOpacity={0.1} />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    d="M 0,40 C 40,20 60,20 80,40 C 95,55 110,55 110,40 C 110,25 90,25 90,40 C 90,55 120,70 200,40"
-                    stroke="url(#dotted-fade)"
-                    strokeWidth="2.5"
-                    strokeDasharray="4 6"
-                    strokeLinecap="round"
-                  />
-                  <circle cx="200" cy="40" r="4.5" fill="currentColor" opacity="0.15" />
-                </svg>
-              </div>
-
-              {/* Circular Profile Holder (empty grey circle with accent border) */}
-              <div 
-                className="w-32 h-32 lg:w-40 lg:h-40 rounded-full border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0"
-                style={{ boxShadow: '0 0 0 10px rgba(196,73,0,0.08)' }}
-              />
-            </div>
           </div>
 
           {/* Social / Resume Links */}
