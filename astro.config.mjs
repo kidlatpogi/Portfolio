@@ -18,10 +18,6 @@ export default defineConfig({
     },
     optimizeDeps: {
       include: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        'react/jsx-dev-runtime',
         'framer-motion',
         '@react-three/fiber',
         '@react-three/drei',
@@ -29,16 +25,6 @@ export default defineConfig({
         'three',
         'lucide-react'
       ]
-    },
-    ssr: {
-      optimizeDeps: {
-        include: [
-          'react',
-          'react-dom',
-          'react/jsx-runtime',
-          'react/jsx-dev-runtime'
-        ]
-      }
     }
   },
 
