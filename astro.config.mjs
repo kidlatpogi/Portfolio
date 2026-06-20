@@ -12,8 +12,19 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    assetsInclude: ['**/*.glb'],
     resolve: {
-      dedupe: ['react', 'react-dom']
+      dedupe: ['react', 'react-dom', 'three']
+    },
+    optimizeDeps: {
+      include: [
+        'framer-motion',
+        '@react-three/fiber',
+        '@react-three/drei',
+        '@react-three/rapier',
+        'three',
+        'lucide-react'
+      ]
     }
   },
 

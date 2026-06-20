@@ -7,7 +7,7 @@ interface Props {
 }
 
 const { 
-	title = "Zeus Angelo Vargas Bautista | Portfolio", 
+	title = "Zeus Angelo Bautista", 
 	description = "Architecting high-fidelity digital experiences. Personal portfolio of Zeus Angelo Vargas Bautista, IT Developer & AI Engineer." 
 } = Astro.props;
 ---
@@ -17,30 +17,31 @@ const {
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/svg+xml" href="/Logo Black.svg" media="(prefers-color-scheme: light)" />
+		<link rel="icon" type="image/svg+xml" href="/Logo White.svg" media="(prefers-color-scheme: dark)" />
 		<meta name="generator" content={Astro.generator} />
 		
 		<!-- Primary SEO Meta Tags -->
 		<title>{title}</title>
 		<meta name="title" content={title} />
 		<meta name="description" content={description} />
-
+ 
 		<!-- Open Graph / Facebook -->
 		<meta property="og:type" content="website" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-
+ 
 		<!-- Twitter -->
 		<meta property="twitter:card" content="summary_large_image" />
 		<meta property="twitter:title" content={title} />
 		<meta property="twitter:description" content={description} />
-
+ 
 		<!-- Google Fonts & Icons -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 	</head>
-	<body class="bg-[#F2F0EF] text-zinc-900 antialiased selection:bg-zinc-300 selection:text-zinc-900 overflow-x-hidden min-h-screen">
+	<body class="bg-[#FAFAFA] text-black antialiased selection:bg-[#DF2935]/20 selection:text-black overflow-x-hidden min-h-screen">
 		<slot />
 	</body>
 </html>
@@ -50,20 +51,19 @@ const {
 		font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	}
 	
-	/* Custom scrollbar to match dark premium theme */
+	/* Custom scrollbar to match brutalist minimalist theme */
 	::-webkit-scrollbar {
 		width: 8px;
 	}
 	::-webkit-scrollbar-track {
-		background: #000000;
+		background: #FAFAFA;
 	}
 	::-webkit-scrollbar-thumb {
-		background: #1c1b1b;
+		background: #C44900;
 		border-radius: 4px;
-		border: 2px solid #000000;
 	}
 	::-webkit-scrollbar-thumb:hover {
-		background: #353434;
+		background: #000000;
 	}
 </style>
 
