@@ -22,14 +22,14 @@ export default function About() {
           About
         </h2>
 
-        {/* ScrollReveal text block - 80% width, centered alignment */}
-        <div className="w-[90%] md:w-[80%] max-w-[1400px] flex justify-center mx-auto">
+        {/* ScrollReveal text block - 90% - 95% width, centered alignment */}
+        <div className="w-[95%] md:w-[90%] max-w-[2000px] flex justify-center mx-auto">
           <ScrollReveal
             baseOpacity={0.08}
             enableBlur={true}
             baseRotation={2}
             blurStrength={12}
-            textClassName="text-black font-sans text-center tracking-normal leading-relaxed"
+            textClassName="text-black font-sans text-justify tracking-normal leading-relaxed"
           >
             Hi, I’m{' '}
             <span className="inline-flex items-center gap-2 align-middle">
@@ -52,9 +52,8 @@ export default function About() {
             </span>{' '}
             things that solve actual problems—or honestly,{' '}
             <span className="inline-flex items-center text-accent/80 font-mono text-[0.8em] border border-accent/20 px-3 py-1 rounded-full bg-accent/5 align-middle select-none">
-              <i>tools that make my own life easier</i>
+              <i>tools that make my own life easier</i>.
             </span>
-            .
           </ScrollReveal>
         </div>
 
