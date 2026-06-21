@@ -38,7 +38,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       if (node === null || node === undefined) return node;
 
       if (typeof node === 'string' || typeof node === 'number') {
-        return String(node).split(/(\s+)/).map((word, idx) => {
+        return String(node).split(/(\s+)/).filter(word => word !== '').map((word, idx) => {
           if (word.match(/^\s+$/)) return word;
           indexRef.current += 1;
           return (
@@ -62,9 +62,13 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
         // If it's a leaf node element (like img, svg, or small icon) or a simple text container
         const isLeaf = !children || (typeof children === 'string' && children.trim() === '');
         const hasSingleTextChild = typeof children === 'string' || typeof children === 'number';
+        const isInlineFlex = props.className?.includes('inline-flex');
 
-        if (isLeaf || hasSingleTextChild) {
-          const className = [props.className, 'word inline-block'].filter(Boolean).join(' ');
+        if (isLeaf || hasSingleTextChild || isInlineFlex) {
+          const needsInlineBlock = !props.className?.split(/\s+/).some(cls => 
+            cls === 'inline-block' || cls === 'inline-flex' || cls === 'flex' || cls === 'block'
+          );
+          const className = [props.className, 'word', needsInlineBlock ? 'inline-block' : ''].filter(Boolean).join(' ');
           indexRef.current += 1;
           return React.cloneElement(node, {
             ...props,
