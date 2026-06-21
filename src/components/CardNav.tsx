@@ -34,7 +34,7 @@ const CardNav: React.FC<CardNavProps> = ({
   ease = 'power3.out',
   baseColor = 'rgba(250, 250, 250, 0.85)',
   menuColor = '#000000',
-  buttonBgColor = '#000000',
+  buttonBgColor = '#C44900 ',
   buttonTextColor = '#FAFAFA'
 }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
@@ -184,11 +184,10 @@ const CardNav: React.FC<CardNavProps> = ({
       <div className={`fixed top-6 max-sm:top-4 left-1/2 -translate-x-1/2 w-[90%] max-sm:w-[92%] max-w-[800px] z-[100] box-border ${className}`}>
         <nav
           ref={navRef}
-          className={`block h-[60px] p-0 border border-[#334155]/20 backdrop-blur-[24px] relative overflow-hidden will-change-[height] transition-[border-radius,border-color] duration-400 ease-in-out ${
-            isExpanded
+          className={`block h-[60px] p-0 border border-[#334155]/20 backdrop-blur-[24px] relative overflow-hidden will-change-[height] transition-[border-radius,border-color] duration-400 ease-in-out ${isExpanded
               ? 'rounded-[1.5rem] max-sm:rounded-[1.25rem] border-[#334155]/40'
               : 'rounded-[2rem] max-sm:rounded-[1.75rem] border-[#334155]/20'
-          }`}
+            }`}
           style={{ backgroundColor: baseColor }}
         >
           <div className="absolute top-0 left-0 right-0 h-[60px] flex items-center justify-between pl-6 pr-3 py-2 max-sm:px-4 z-10">
