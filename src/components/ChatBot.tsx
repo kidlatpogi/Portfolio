@@ -68,12 +68,17 @@ export const ChatBot: React.FC = () => {
 
   const topics = [
     {
-      label: '🎭 About Zeus',
+      label: 'About Zeus',
       query: 'Tell me about Zeus',
       response: 'Zeus Angelo is an IT Developer & AI Engineer specializing in high-fidelity digital experiences. He is currently a 4th-year BSIT student focused on building high-performance, animation-rich web and mobile applications.'
     },
     {
-      label: '⚙️ Tech Stack & Tools',
+      label: 'Work Experience',
+      query: 'Tell me about your work experience?',
+      response: 'Yes, I do have work experience. I have worked as a Freelance Web Developer and as a UI/UX Design Intern at Sabiya Cloud Technology.'
+    },
+    {
+      label: 'Tech Stack & Tools',
       query: 'What technologies do you use?',
       response: 'The core stack includes Astro, React, TypeScript, Tailwind CSS, Framer Motion, and Cloudflare Pages/R2. This portfolio is built strictly following a brutalist minimalist typography and color design system.'
     }
@@ -116,9 +121,8 @@ export const ChatBot: React.FC = () => {
               {messages.map((msg) => (
                 <div
                   key={msg.id}
-                  className={`flex gap-2.5 max-w-[85%] ${
-                    msg.sender === 'user' ? 'self-end flex-row-reverse' : 'self-start'
-                  }`}
+                  className={`flex gap-2.5 max-w-[85%] ${msg.sender === 'user' ? 'self-end flex-row-reverse' : 'self-start'
+                    }`}
                 >
                   {msg.sender === 'bot' && (
                     <div className="w-7 h-7 rounded-full bg-[#334155]/10 flex items-center justify-center text-[#334155] shrink-0 border border-[#334155]/20">
@@ -126,11 +130,10 @@ export const ChatBot: React.FC = () => {
                     </div>
                   )}
                   <div
-                    className={`px-3.5 py-2.5 rounded-[1.25rem] text-xs leading-relaxed border ${
-                      msg.sender === 'user'
-                        ? 'bg-black text-[#FAFAFA] border-black rounded-tr-none'
-                        : 'bg-[#FAFAFA] text-[#334155] border-[#E5E7EB] rounded-tl-none font-sans'
-                    }`}
+                    className={`px-3.5 py-2.5 rounded-[1.25rem] text-xs leading-relaxed border ${msg.sender === 'user'
+                      ? 'bg-black text-[#FAFAFA] border-black rounded-tr-none'
+                      : 'bg-[#FAFAFA] text-[#334155] border-[#E5E7EB] rounded-tl-none font-sans'
+                      }`}
                   >
                     {msg.text}
                   </div>
@@ -190,10 +193,10 @@ export const ChatBot: React.FC = () => {
           isOpen
             ? { duration: 0.2 }
             : {
-                repeat: Infinity,
-                duration: 2.5,
-                ease: 'easeInOut'
-              }
+              repeat: Infinity,
+              duration: 2.5,
+              ease: 'easeInOut'
+            }
         }
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
