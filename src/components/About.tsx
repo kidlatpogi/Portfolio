@@ -41,13 +41,13 @@ export default function About() {
               <span className="text-accent font-bold">Zeus</span>
             </span>
             . Most of my problem-solving comes from a natural knack for spotting{' '}
-            <span className="inline-flex items-center text-accent font-bold align-middle">
+            <span className="inline-flex items-center gap-1.5 text-accent font-bold align-middle">
               patterns
-              <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 ml-1 text-accent" />
+              <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 text-accent" />
             </span>
             , which makes it easy for me to pick up new tech stacks on the fly. I’m just a highly curious developer{' '}
-            <span className="inline-flex items-center text-accent align-middle font-bold">
-              <Cpu className="w-6 h-6 sm:w-7 sm:h-7 mx-1 text-accent animate-pulse" />
+            <span className="inline-flex items-center gap-2 text-accent align-middle font-bold">
+              <Cpu className="w-6 h-6 sm:w-7 sm:h-7 text-accent animate-pulse" />
               who loves building
             </span>{' '}
             things that solve actual problems—or honestly,{' '}
