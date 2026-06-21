@@ -185,8 +185,8 @@ const CardNav: React.FC<CardNavProps> = ({
         <nav
           ref={navRef}
           className={`block h-[60px] p-0 border border-[#334155]/20 backdrop-blur-[24px] relative overflow-hidden will-change-[height] transition-[border-radius,border-color] duration-400 ease-in-out ${isExpanded
-              ? 'rounded-[1.5rem] max-sm:rounded-[1.25rem] border-[#334155]/40'
-              : 'rounded-[2rem] max-sm:rounded-[1.75rem] border-[#334155]/20'
+            ? 'rounded-[1.5rem] max-sm:rounded-[1.25rem] border-[#334155]/40'
+            : 'rounded-[2rem] max-sm:rounded-[1.75rem] border-[#334155]/20'
             }`}
           style={{ backgroundColor: baseColor }}
         >

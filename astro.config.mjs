@@ -32,3 +32,4 @@ export default defineConfig({
     prerenderEnvironment: 'node'
   })
 });
+// Force restart dev server
