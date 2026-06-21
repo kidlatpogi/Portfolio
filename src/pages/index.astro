@@ -4,10 +4,12 @@ import CardNav from '../components/CardNav';
 import TargetCursor from '../components/TargetCursor';
 import Hero from '../components/Hero';
 import About from '../components/About';
+import Skills from '../components/Skills';
 import Projects from '../components/Projects';
 import Certifications from '../components/Certifications';
 import ShapeGrid from '../components/ShapeGrid';
 import ChatBot from '../components/ChatBot';
+
 
 
 
@@ -55,6 +57,7 @@ const navItems = [
 	<main class="w-full relative z-10">
 		<Hero client:load />
 		<About client:visible />
+		<Skills client:visible />
 		<Projects />
 		<Certifications />
 	</main>

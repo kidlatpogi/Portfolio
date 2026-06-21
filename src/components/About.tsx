@@ -7,7 +7,6 @@ export default function About() {
     <section className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-20 md:p-24 relative overflow-hidden" id="about">
       {/* Anchor targets for sub-navigation scroll links */}
       <div id="about-me" className="absolute top-0" />
-      <div id="skills" className="absolute top-1/3" />
       <div id="experience" className="absolute top-2/3" />
 
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
