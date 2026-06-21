@@ -10,7 +10,7 @@ export default function About() {
       <div id="skills" className="absolute top-1/3" />
       <div id="experience" className="absolute top-2/3" />
 
-      <div className="w-full max-w-[1100px] flex flex-col items-center z-10">
+      <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
         {/* "Who am I" Subheading - styled like Hero's subheader, centered */}
         <span className="font-array-semibold text-[1.5rem] md:text-[2rem] font-semibold uppercase tracking-wider text-[#334155] text-center mb-4">
@@ -23,7 +23,7 @@ export default function About() {
         </h2>
 
         {/* ScrollReveal text block - 90% - 95% width, centered alignment */}
-        <div className="w-[95%] md:w-[90%] max-w-[2000px] flex justify-center mx-auto">
+        <div className="w-[95%] md:w-[95%] max-w-[2000px] flex justify-center mx-auto">
           <ScrollReveal
             baseOpacity={0.08}
             enableBlur={true}
