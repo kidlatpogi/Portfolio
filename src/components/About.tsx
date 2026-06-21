@@ -27,7 +27,8 @@ export default function About() {
             enableBlur={true}
             baseRotation={2}
             blurStrength={12}
-            textClassName="text-black font-sans text-justify tracking-normal leading-relaxed"
+            textClassName="text-black font-sans text-left md:text-justify tracking-normal leading-relaxed"
+            wordAnimationEnd="bottom center"
           >
             Hi, I’m{' '}
             <span className="inline-flex items-center gap-2 align-middle">
