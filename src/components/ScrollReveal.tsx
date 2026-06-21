@@ -16,6 +16,7 @@ interface ScrollRevealProps {
   textClassName?: string;
   rotationEnd?: string;
   wordAnimationEnd?: string;
+  as?: 'div' | 'p' | 'h2' | 'span' | 'section';
 }
 
 const ScrollReveal: React.FC<ScrollRevealProps> = ({
@@ -28,9 +29,10 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   containerClassName = '',
   textClassName = '',
   rotationEnd = 'bottom bottom',
-  wordAnimationEnd = 'bottom bottom'
+  wordAnimationEnd = 'bottom bottom',
+  as
 }) => {
-  const containerRef = useRef<HTMLHeadingElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   const splitText = useMemo(() => {
     const indexRef = { current: 0 };
@@ -63,8 +65,9 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
         const isLeaf = !children || (typeof children === 'string' && children.trim() === '');
         const hasSingleTextChild = typeof children === 'string' || typeof children === 'number';
         const isInlineFlex = props.className?.includes('inline-flex');
+        const isRevealLeaf = props.className?.split(/\s+/).some(cls => cls === 'reveal-item' || cls === 'scroll-reveal-leaf');
 
-        if (isLeaf || hasSingleTextChild || isInlineFlex) {
+        if (isLeaf || hasSingleTextChild || isInlineFlex || isRevealLeaf) {
           const needsInlineBlock = !props.className?.split(/\s+/).some(cls => 
             cls === 'inline-block' || cls === 'inline-flex' || cls === 'flex' || cls === 'block'
           );
@@ -153,10 +156,20 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
     };
   }, [scrollContainerRef, enableBlur, baseRotation, baseOpacity, rotationEnd, wordAnimationEnd, blurStrength]);
 
+  const Component = as || 'div';
+
+  if (!as) {
+    return (
+      <h2 ref={containerRef} className={`my-5 ${containerClassName}`}>
+        <p className={`text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] font-semibold ${textClassName}`}>{splitText}</p>
+      </h2>
+    );
+  }
+
   return (
-    <h2 ref={containerRef} className={`my-5 ${containerClassName}`}>
-      <p className={`text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] font-semibold ${textClassName}`}>{splitText}</p>
-    </h2>
+    <Component ref={containerRef} className={`${containerClassName} ${textClassName}`}>
+      {splitText}
+    </Component>
   );
 };
 

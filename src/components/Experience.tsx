@@ -1,5 +1,6 @@
 import React from 'react';
 import { Briefcase, Calendar, MapPin } from 'lucide-react';
+import ScrollReveal from './ScrollReveal';
 
 interface ExperienceItem {
   role: string;
@@ -31,30 +32,46 @@ export default function Experience() {
     <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-20 relative overflow-hidden" id="experience">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
         
-        {/* "Work" Subheading - styled like Hero's subheader, centered */}
-        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
-          Work
-        </span>
+        {/* Headings inside ScrollReveal */}
+        <ScrollReveal
+          baseOpacity={0.08}
+          enableBlur={true}
+          baseRotation={2}
+          blurStrength={12}
+          as="div"
+          containerClassName="flex flex-col items-center w-full"
+        >
+          {/* "Work" Subheading - styled like Hero's subheader, centered */}
+          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
+            Work
+          </span>
 
-        {/* "Experience" Heading - styled like "Developer" from Hero, centered */}
-        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-16">
-          Experience
-        </h2>
+          {/* "Experience" Heading - styled like "Developer" from Hero, centered */}
+          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-16">
+            Experience
+          </h2>
+        </ScrollReveal>
 
-        {/* Experience Cards container */}
-        <div className="w-[90%] md:w-[70%] max-w-[1000px] flex flex-col gap-8 mx-auto relative">
-          
+        {/* Experience Cards container inside ScrollReveal */}
+        <ScrollReveal
+          baseOpacity={0.08}
+          enableBlur={true}
+          baseRotation={2}
+          blurStrength={12}
+          as="div"
+          containerClassName="w-[90%] md:w-[70%] max-w-[1000px] flex flex-col gap-8 mx-auto relative"
+        >
           {/* Vertical timeline line for larger screens */}
           <div className="absolute left-8 top-4 bottom-4 w-[2px] bg-slate-200 hidden md:block" />
 
           {experiences.map((exp, index) => (
-            <div key={index} className="flex flex-col md:flex-row gap-6 md:gap-12 items-start relative group">
+            <div key={index} className="flex flex-col md:flex-row gap-6 md:gap-12 items-start relative group reveal-item">
               
               {/* Timeline marker */}
               <div className="absolute left-[26px] top-8 w-3 h-3 rounded-full bg-slate-300 border-2 border-white group-hover:bg-accent group-hover:scale-125 transition-all duration-300 hidden md:block z-10" />
 
               {/* Experience Card */}
-              <div className="w-full border-2 border-slate-200/80 bg-white p-6 md:p-8 rounded-2xl flex flex-col md:flex-row md:items-start justify-between gap-6 transition-all duration-300 hover:border-accent hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.08)]">
+              <div className="w-full border-2 border-slate-200/80 bg-white p-6 md:p-8 rounded-2xl flex flex-col md:flex-row md:items-start justify-between gap-6 transition-all duration-300 hover:border-accent hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.08)] cursor-target">
                 
                 <div className="flex-grow max-w-2xl">
                   {/* Role Title */}
@@ -92,8 +109,7 @@ export default function Experience() {
               </div>
             </div>
           ))}
-
-        </div>
+        </ScrollReveal>
 
       </div>
     </section>

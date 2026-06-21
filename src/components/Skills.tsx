@@ -1,4 +1,5 @@
 import React from 'react';
+import ScrollReveal from './ScrollReveal';
 
 interface Skill {
   name: string;
@@ -77,22 +78,39 @@ export default function Skills() {
     <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-20 relative overflow-hidden" id="skills">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
         
-        {/* "Technical" Subheading - styled like Hero's subheader, centered */}
-        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
-          Technical
-        </span>
+        {/* Headings inside ScrollReveal */}
+        <ScrollReveal
+          baseOpacity={0.08}
+          enableBlur={true}
+          baseRotation={2}
+          blurStrength={12}
+          as="div"
+          containerClassName="flex flex-col items-center w-full"
+        >
+          {/* "Technical" Subheading - styled like Hero's subheader, centered */}
+          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
+            Technical
+          </span>
 
-        {/* "Skills" Heading - styled like "Developer" from Hero, centered */}
-        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-12">
-          Skills
-        </h2>
+          {/* "Skills" Heading - styled like "Developer" from Hero, centered */}
+          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-12">
+            Skills
+          </h2>
+        </ScrollReveal>
 
-        {/* Interactive Badges Grid */}
-        <div className="w-[90%] md:w-[80%] max-w-[1200px] flex flex-wrap items-center justify-center gap-6 sm:gap-8 mx-auto">
+        {/* Interactive Badges Grid inside ScrollReveal */}
+        <ScrollReveal
+          baseOpacity={0.08}
+          enableBlur={true}
+          baseRotation={2}
+          blurStrength={12}
+          as="div"
+          containerClassName="w-[90%] md:w-[80%] max-w-[1200px] flex flex-wrap items-center justify-center gap-6 sm:gap-8 mx-auto"
+        >
           {skillsList.map((skill) => (
             <div 
               key={skill.name} 
-              className="group relative flex flex-col items-center cursor-pointer"
+              className="group relative flex flex-col items-center cursor-pointer reveal-item cursor-target"
             >
               {/* Tooltip */}
               <div className="absolute bottom-[120%] left-1/2 -translate-x-1/2 bg-black text-white text-xs md:text-sm font-mono uppercase tracking-wider py-1.5 px-3.5 rounded-md shadow-md whitespace-nowrap pointer-events-none opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-30">
@@ -111,7 +129,7 @@ export default function Skills() {
               </div>
             </div>
           ))}
-        </div>
+        </ScrollReveal>
 
       </div>
     </section>
