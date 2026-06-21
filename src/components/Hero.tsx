@@ -56,10 +56,10 @@ export default function Hero() {
               Bautista
             </h1>
             <h1 className="font-clash-semibold text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
-              <span className="relative inline-block italic">
+              <span className="relative inline-block italic mr-[0.25em]">
                 <span>Future</span>
                 <span className="absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[6px] lg:h-[8px] bg-black rounded-full pointer-events-none" />
-              </span>{" "}
+              </span>
               Developer
             </h1>
           </div>
