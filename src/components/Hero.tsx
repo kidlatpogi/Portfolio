@@ -5,15 +5,15 @@ export default function Hero() {
   return (
     <section className="min-h-screen w-full flex items-center justify-center px-4 py-12 md:p-12 relative overflow-hidden" id="home">
 
-      <div className="w-full max-w-[1400px] relative z-10 pt-20">
+      <div className="w-full max-w-[1400px] relative z-10 pt-20 flex justify-center">
 
         {/* Typography — full-width block */}
-        <div className="flex flex-col items-center gap-5 text-center relative z-10 w-full">
+        <div className="flex flex-col items-start gap-5 text-left relative z-10 w-max max-w-full">
           <span className="font-array-semibold text-[1.5rem] md:text-[2rem] font-semibold uppercase tracking-wider text-[#334155]">
             4th year College Student
           </span>
 
-          <div className="relative flex flex-col items-center w-full">
+          <div className="relative w-max max-w-full">
             <h1 className="relative inline-block font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Zeus Angelo
 
@@ -61,12 +61,12 @@ export default function Hero() {
           </div>
 
           {/* Social / Resume Links */}
-          <div className="mt-8 flex items-center justify-center w-full">
-            <div className="flex flex-col gap-4 items-center">
-              <span className="font-mono text-sm md:text-base uppercase tracking-wider text-[#334155]/60 font-bold text-center">
+          <div className="mt-8 flex items-center justify-start w-auto">
+            <div className="flex flex-col gap-4">
+              <span className="font-mono text-sm md:text-base uppercase tracking-wider text-[#334155]/60 font-bold">
                 Socials:
               </span>
-              <div className="flex flex-wrap items-center justify-center gap-8">
+              <div className="flex flex-wrap items-center gap-8">
                 <a
                   href="/resume.pdf"
                   target="_blank"
