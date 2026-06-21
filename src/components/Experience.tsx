@@ -61,14 +61,14 @@ export default function Experience() {
           as="div"
           containerClassName="w-[90%] md:w-[70%] max-w-[1000px] flex flex-col gap-8 mx-auto relative"
         >
-          {/* Vertical timeline line for larger screens */}
-          <div className="absolute left-8 top-4 bottom-4 w-[2px] bg-slate-200 hidden md:block" />
+          {/* Connected dashed timeline line for larger screens */}
+          <div className="absolute left-8 top-4 bottom-4 w-0 border-l-2 border-dashed border-slate-300 hidden md:block" />
 
           {experiences.map((exp, index) => (
-            <div key={index} className="flex flex-col md:flex-row gap-6 md:gap-12 items-start relative group reveal-item">
+            <div key={index} className="flex flex-col md:flex-row gap-6 items-start relative group reveal-item md:pl-16">
               
-              {/* Timeline marker */}
-              <div className="absolute left-[26px] top-8 w-3 h-3 rounded-full bg-slate-300 border-2 border-white group-hover:bg-accent group-hover:scale-125 transition-all duration-300 hidden md:block z-10" />
+              {/* Timeline marker - centered on the vertical line */}
+              <div className="absolute left-[25px] top-8 w-3.5 h-3.5 rounded-full bg-slate-300 border-2 border-white group-hover:bg-accent group-hover:scale-125 transition-all duration-300 hidden md:block z-10" />
 
               {/* Experience Card */}
               <div className="w-full border-2 border-slate-200/80 bg-white p-6 md:p-8 rounded-2xl flex flex-col md:flex-row md:items-start justify-between gap-6 transition-all duration-300 hover:border-accent hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.08)] cursor-target">
