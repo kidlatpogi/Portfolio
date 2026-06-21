@@ -22,14 +22,14 @@ export default function About() {
           About
         </h2>
 
-        {/* ScrollReveal text block - 80% width, justified alignment */}
-        <div className="w-[80%] max-w-[1200px] flex justify-center">
+        {/* ScrollReveal text block - 80% width, centered alignment */}
+        <div className="w-[90%] md:w-[80%] max-w-[1400px] flex justify-center mx-auto">
           <ScrollReveal
             baseOpacity={0.08}
             enableBlur={true}
             baseRotation={2}
             blurStrength={12}
-            textClassName="text-black font-sans text-justify tracking-tight"
+            textClassName="text-black font-sans text-center tracking-normal leading-relaxed"
           >
             Hi, I’m{' '}
             <span className="inline-flex items-center gap-2 align-middle">
@@ -39,7 +39,6 @@ export default function About() {
                 className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-[2.5px] border-accent object-cover shadow-sm"
               />
               <span className="text-accent font-bold">Zeus</span>
-              <span className="text-accent text-[1.2em]">⚡</span>
             </span>
             . Most of my problem-solving comes from a natural knack for spotting{' '}
             <span className="inline-flex items-center text-accent font-bold align-middle">
