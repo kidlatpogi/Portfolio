@@ -22,14 +22,14 @@ export default function About() {
           About
         </h2>
 
-        {/* ScrollReveal text block - Centered wrapper with left-aligned-style inline components */}
-        <div className="w-full max-w-[950px] text-center">
+        {/* ScrollReveal text block - 80% width, justified alignment */}
+        <div className="w-[80%] max-w-[1200px] flex justify-center">
           <ScrollReveal
             baseOpacity={0.08}
             enableBlur={true}
             baseRotation={2}
             blurStrength={12}
-            textClassName="text-black font-sans text-center tracking-tight"
+            textClassName="text-black font-sans text-justify tracking-tight"
           >
             Hi, I’m{' '}
             <span className="inline-flex items-center gap-2 align-middle">
@@ -41,22 +41,21 @@ export default function About() {
               <span className="text-accent font-bold">Zeus</span>
               <span className="text-accent text-[1.2em]">⚡</span>
             </span>
-            . I’m driven by a deep curiosity about how things work{' '}
+            . Most of my problem-solving comes from a natural knack for spotting{' '}
+            <span className="inline-flex items-center text-accent font-bold align-middle">
+              patterns
+              <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 ml-1 text-accent" />
+            </span>
+            , which makes it easy for me to pick up new tech stacks on the fly. I’m just a highly curious developer{' '}
             <span className="inline-flex items-center text-accent align-middle font-bold">
               <Cpu className="w-6 h-6 sm:w-7 sm:h-7 mx-1 text-accent animate-pulse" />
-              under the hood
-            </span>
-            . For me, {"development isn't just about writing syntax—it's about spotting underlying patterns and translating them into logical systems."}
-            I build software to solve actual, real-world problems{' '}
-            <span className="inline-flex items-center text-accent/80 font-mono text-[0.8em] border border-accent/20 px-3 py-1 rounded-full bg-accent/5 align-middle select-none">
-              <i>(or honestly, just to automate tasks that make my own life easier)</i>
-            </span>
-            . {"I thrive on diving into the unfamiliar, picking up new stacks on the fly, and treating every technical challenge as a new "}
-            <span className="inline-flex items-center text-accent font-bold align-middle">
-              pattern
-              <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 ml-1 text-accent" />
+              who loves building
             </span>{' '}
-            to break down.
+            things that solve actual problems—or honestly,{' '}
+            <span className="inline-flex items-center text-accent/80 font-mono text-[0.8em] border border-accent/20 px-3 py-1 rounded-full bg-accent/5 align-middle select-none">
+              <i>tools that make my own life easier</i>
+            </span>
+            .
           </ScrollReveal>
         </div>
 
