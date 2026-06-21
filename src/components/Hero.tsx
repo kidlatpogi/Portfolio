@@ -14,9 +14,9 @@ export default function Hero() {
           </span>
 
           <div className="relative w-max max-w-full">
-            <h1 className="relative inline-block font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="relative inline-block font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Zeus Angelo
-
+ 
               {/* Profile picture placeholder on the right side */}
               <div className="absolute top-1/2 -translate-y-1/2 left-[100%] ml-1 sm:ml-3 md:ml-4 lg:ml-6 flex items-center z-20 w-[5rem] sm:w-[8rem] md:w-[14rem] lg:w-[18rem]">
                 {/* Playful Dotted Line */}
@@ -45,17 +45,17 @@ export default function Hero() {
                     <circle cx="160" cy="40" r="4.5" fill="currentColor" opacity="0.15" />
                   </svg>
                 </div>
-
+ 
                 {/* Circular Profile Holder (empty grey circle with accent border) */}
                 <div
                   className="w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10"
                 />
               </div>
             </h1>
-            <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Bautista
             </h1>
-            <h1 className="font-clash-semibold text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="font-clash-semibold text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               <span className="relative inline-block italic mr-[0.25em]">
                 <span>Future</span>
                 <span className="absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[6px] lg:h-[8px] bg-black rounded-full pointer-events-none" />
