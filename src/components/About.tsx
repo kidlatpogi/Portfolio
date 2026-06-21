@@ -4,20 +4,19 @@ import { Cpu, Sparkles } from 'lucide-react';
 
 export default function About() {
   return (
-    <section className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-20 md:p-24 relative overflow-hidden" id="about">
+    <section className="h-auto w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="about">
       {/* Anchor targets for sub-navigation scroll links */}
       <div id="about-me" className="absolute top-0" />
-      <div id="experience" className="absolute top-2/3" />
 
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
         {/* "Who am I" Subheading - styled like Hero's subheader, centered */}
-        <span className="font-array-semibold text-[1.5rem] md:text-[2rem] font-semibold uppercase tracking-wider text-[#334155] text-center mb-4">
+        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
           Who am I
         </span>
 
         {/* "About" Heading - styled like "Developer" from Hero, centered */}
-        <h2 className="font-clash-semibold text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-12">
+        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-10">
           About
         </h2>
 
