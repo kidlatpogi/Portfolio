@@ -74,16 +74,16 @@ const skillsList: Skill[] = [
 
 export default function Skills() {
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-20 md:py-28 relative overflow-hidden" id="skills">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-20 relative overflow-hidden" id="skills">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
         
         {/* "Technical" Subheading - styled like Hero's subheader, centered */}
-        <span className="font-array-semibold text-[1.5rem] md:text-[2rem] font-semibold uppercase tracking-wider text-[#334155] text-center mb-4">
+        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
           Technical
         </span>
 
         {/* "Skills" Heading - styled like "Developer" from Hero, centered */}
-        <h2 className="font-clash-semibold text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-16">
+        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-12">
           Skills
         </h2>
 
