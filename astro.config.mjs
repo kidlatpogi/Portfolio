@@ -18,6 +18,8 @@ export default defineConfig({
     },
     optimizeDeps: {
       include: [
+        'react',
+        'react-dom',
         'framer-motion',
         '@react-three/fiber',
         '@react-three/drei',
@@ -32,3 +34,4 @@ export default defineConfig({
     prerenderEnvironment: 'node'
   })
 });
+// Force restart dev server
