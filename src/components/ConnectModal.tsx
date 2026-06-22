@@ -190,7 +190,7 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="mt-4 mx-auto flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-black text-[#FAFAFA] font-mono font-semibold tracking-wider transition-colors duration-250 cursor-pointer text-sm"
+                      className="mt-4 mx-auto flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-accent text-[#FAFAFA] font-mono font-semibold tracking-wider transition-colors duration-250 cursor-pointer text-sm"
                     >
                       <span className="w-2.5 h-2.5 bg-[#FAFAFA] rounded-full" />
                       Submit Inquiry
