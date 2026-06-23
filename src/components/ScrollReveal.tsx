@@ -32,7 +32,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   wordAnimationEnd = 'bottom bottom',
   as
 }) => {
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<any>(null);
 
   const splitText = useMemo(() => {
     const indexRef = { current: 0 };
@@ -73,7 +73,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
           );
           const className = [props.className, 'word', needsInlineBlock ? 'inline-block' : ''].filter(Boolean).join(' ');
           indexRef.current += 1;
-          return React.cloneElement(node, {
+          return React.cloneElement(node as React.ReactElement<any>, {
             ...props,
             className,
             key: `el-${indexRef.current}`
@@ -82,7 +82,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
         // Otherwise, process container children recursively
         const processedChildren = React.Children.map(children, child => processNode(child));
-        return React.cloneElement(node, { ...props, key: `container-${indexRef.current}` }, processedChildren);
+        return React.cloneElement(node as React.ReactElement<any>, { ...props, key: `container-${indexRef.current}` }, processedChildren);
       }
 
       return node;
@@ -92,7 +92,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   }, [children]);
 
   useEffect(() => {
-    const el = containerRef.current;
+    const el = containerRef.current as HTMLElement;
     if (!el) return;
 
     const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window;
