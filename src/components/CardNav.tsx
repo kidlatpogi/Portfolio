@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ArrowUpRight } from 'lucide-react';
-import ConnectModal from './ConnectModal';
+import ConnectModal from './ConnectModal.tsx';
 
 type CardNavLink = {
   label: string;

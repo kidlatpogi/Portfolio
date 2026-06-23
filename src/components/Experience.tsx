@@ -1,6 +1,6 @@
 import React from 'react';
 import { Briefcase, Calendar, MapPin } from 'lucide-react';
-import ScrollReveal from './ScrollReveal';
+import ScrollReveal from './ScrollReveal.tsx';
 
 interface ExperienceItem {
   role: string;
