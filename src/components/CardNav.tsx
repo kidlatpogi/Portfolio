@@ -173,7 +173,7 @@ const CardNav: React.FC<CardNavProps> = ({
     const id = href.replace('#', '');
     const targetSection = document.getElementById(id);
     if (targetSection) {
-      targetSection.scrollIntoView({ behavior: 'smooth' });
+      targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
       // Close the menu after clicking a link
       toggleMenu();
     }
