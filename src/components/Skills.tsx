@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ScrollReveal from './ScrollReveal';
+import ScrollReveal from './ScrollReveal.tsx';
 
 interface Skill {
   name: string;

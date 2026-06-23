@@ -1,5 +1,5 @@
 import React from 'react';
-import ScrollReveal from './ScrollReveal';
+import ScrollReveal from './ScrollReveal.tsx';
 
 export default function Certifications() {
   return (

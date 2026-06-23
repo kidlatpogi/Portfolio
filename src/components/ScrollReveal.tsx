@@ -60,7 +60,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       if (React.isValidElement(node)) {
         const props = node.props as { className?: string; children?: ReactNode };
         const children = props.children;
-        
+
         // If it's a leaf node element (like img, svg, or small icon) or a simple text container
         const isLeaf = !children || (typeof children === 'string' && children.trim() === '');
         const hasSingleTextChild = typeof children === 'string' || typeof children === 'number';
@@ -68,7 +68,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
         const isRevealLeaf = props.className?.split(/\s+/).some(cls => cls === 'reveal-item' || cls === 'scroll-reveal-leaf');
 
         if (isLeaf || hasSingleTextChild || isInlineFlex || isRevealLeaf) {
-          const needsInlineBlock = !props.className?.split(/\s+/).some(cls => 
+          const needsInlineBlock = !props.className?.split(/\s+/).some(cls =>
             cls === 'inline-block' || cls === 'inline-flex' || cls === 'flex' || cls === 'block'
           );
           const className = [props.className, 'word', needsInlineBlock ? 'inline-block' : ''].filter(Boolean).join(' ');
