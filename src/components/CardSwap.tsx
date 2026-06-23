@@ -126,7 +126,6 @@ const CardSwap: React.FC<CardSwapProps> = ({
       const tl = gsap.timeline();
       tlRef.current = tl;
 
-      // Notify parent of the upcoming active card index
       if (onActiveCardChange) {
         onActiveCardChange(rest[0]);
       }
@@ -183,6 +182,7 @@ const CardSwap: React.FC<CardSwapProps> = ({
       });
     };
 
+    swap();
     intervalRef.current = window.setInterval(swap, delay);
 
     if (pauseOnHover) {
@@ -225,7 +225,7 @@ const CardSwap: React.FC<CardSwapProps> = ({
   return (
     <div
       ref={container}
-      className="relative perspective-[900px] overflow-visible"
+      className="absolute bottom-0 right-0 transform translate-x-[5%] translate-y-[20%] origin-bottom-right perspective-[900px] overflow-visible max-[768px]:translate-x-[25%] max-[768px]:translate-y-[25%] max-[768px]:scale-[0.75] max-[480px]:translate-x-[25%] max-[480px]:translate-y-[25%] max-[480px]:scale-[0.55]"
       style={{ width, height }}
     >
       {rendered}
