@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ScrollReveal from './ScrollReveal.tsx';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Skill {
   name: string;
@@ -130,6 +134,52 @@ export default function Skills() {
     };
   }, []);
 
+  useEffect(() => {
+    // Parallax effect for category rows
+    const rows = document.querySelectorAll('.skills-parallax-row');
+    const ctx = gsap.context(() => {
+      rows.forEach((row) => {
+        const title = row.querySelector('.skills-title-col');
+        const badges = row.querySelector('.skills-badges-col');
+        
+        if (title && badges) {
+          // Category Title shifts slightly up (slower scroll)
+          gsap.fromTo(
+            title,
+            { y: 15 },
+            {
+              y: -15,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: row,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          );
+          
+          // Badges column shifts slightly down
+          gsap.fromTo(
+            badges,
+            { y: -10 },
+            {
+              y: 10,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: row,
+                start: 'top bottom',
+                end: 'bottom top',
+                scrub: true
+              }
+            }
+          );
+        }
+      });
+    });
+    return () => ctx.revert();
+  }, []);
+
   const handleSkillTap = (name: string) => {
     setActiveSkill(prev => (prev === name ? null : name));
   };
@@ -168,18 +218,18 @@ export default function Skills() {
               baseRotation={1}
               blurStrength={8}
               as="div"
-              containerClassName="flex flex-col md:flex-row items-start justify-between gap-6 md:gap-12 pb-4 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full"
+              containerClassName="flex flex-col md:flex-row items-start justify-between gap-6 md:gap-12 pb-4 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full skills-parallax-row"
               wordAnimationEnd="top 65%"
             >
               {/* Category Name Column */}
-              <div className="w-full md:w-[240px] flex-shrink-0 md:pt-1.5 reveal-item">
+              <div className="w-full md:w-[240px] flex-shrink-0 md:pt-1.5 reveal-item skills-title-col">
                 <h3 className="font-clash-semibold text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight text-slate-800 select-none">
                   {category.title}
                 </h3>
               </div>
 
               {/* Skills Badges Column */}
-              <div className="flex-grow flex flex-wrap items-center justify-start gap-4 sm:gap-6 reveal-item">
+              <div className="flex-grow flex flex-wrap items-center justify-start gap-4 sm:gap-6 reveal-item skills-badges-col">
                 {category.skills.map((skill) => {
                   const isActive = activeSkill === skill.name;
                   return (
@@ -211,9 +261,7 @@ export default function Skills() {
                         <img 
                           src={skill.logo} 
                           alt={`${skill.name} logo`} 
-                          className={`w-8 h-8 sm:w-9 sm:h-9 object-contain filter transition-all duration-500 ease-out ${
-                            isActive ? 'grayscale-0' : 'grayscale md:group-hover:grayscale-0'
-                          }`}
+                          className="w-8 h-8 sm:w-9 sm:h-9 object-contain transition-all duration-500 ease-out"
                           loading="lazy"
                         />
                       </div>
