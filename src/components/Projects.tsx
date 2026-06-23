@@ -226,17 +226,14 @@ export default function Projects() {
       <div id="designs" className="absolute top-1/2" />
 
       {/* Main Section Header */}
-      <ScrollReveal
-        baseOpacity={0.08}
-        enableBlur={true}
-        baseRotation={2}
-        blurStrength={12}
-        as="div"
-      >
-        <h2 className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-16">
+      <div className="w-full max-w-[1600px] flex flex-col items-center z-10 mb-16">
+        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
+          Feature Works
+        </span>
+        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center">
           Projects
         </h2>
-      </ScrollReveal>
+      </div>
 
       {/* Responsive Two-Column Grid */}
       <div className="w-[95%] md:w-[90%] max-w-[1100px] flex flex-col md:flex-row items-center justify-between gap-10 md:gap-14 mx-auto relative min-h-[520px]">
@@ -306,27 +303,27 @@ export default function Projects() {
         </div>
 
         {/* Right Column - CardSwap Stack */}
-        <div className="w-full md:w-[48%] flex items-center justify-center overflow-visible select-none" style={{ minHeight: '420px' }}>
+        <div className="w-full md:w-[48%] relative flex items-center justify-center overflow-visible select-none min-h-[420px]">
           <CardSwap
             width={360}
             height={260}
-            cardDistance={35}
-            verticalDistance={0}
+            cardDistance={40}
+            verticalDistance={25}
             delay={5000}
             pauseOnHover={true}
             skewAmount={3}
             onActiveCardChange={setActiveIndex}
           >
             {projectsList.map((project, idx) => (
-              <Card key={idx} className="border-2 border-black bg-white overflow-hidden flex flex-col w-full h-full shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                {/* Brutalist Window Title Bar */}
-                <div className="bg-[#E5E7EB] border-b-2 border-black px-3.5 py-1.5 flex items-center justify-between font-mono text-[10px] text-black">
+              <Card key={idx} className="border border-slate-200/80 bg-white/95 overflow-hidden flex flex-col w-full h-full shadow-[0_15px_35px_-5px_rgba(196,73,0,0.08),_0_5px_15px_-3px_rgba(196,73,0,0.03)] backdrop-blur-sm transition-all duration-300 hover:border-accent/30">
+                {/* Sleek macOS Window Title Bar */}
+                <div className="bg-slate-50 border-b border-slate-100/80 px-4 py-2.5 flex items-center justify-between font-mono text-[10px] text-slate-500">
                   <div className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#EF4444] border border-black" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#F59E0B] border border-black" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] border border-black" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
                   </div>
-                  <span className="font-semibold">{project.title.toLowerCase().replace(/\s+/g, '-')}.exe</span>
+                  <span className="font-semibold text-slate-500">{project.title.toLowerCase().replace(/\s+/g, '-')}.tsx</span>
                 </div>
 
                 {/* Main Visual Frame - always use mockup for dummy projects */}
