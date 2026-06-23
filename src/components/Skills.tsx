@@ -125,7 +125,7 @@ export default function Skills() {
           blurStrength={12}
           as="div"
           containerClassName="w-[95%] md:w-[95%] max-w-[2000px] flex flex-wrap items-center justify-center gap-6 sm:gap-8 mx-auto"
-          wordAnimationEnd="bottom center"
+          wordAnimationEnd="top 55%"
         >
           {skillsList.map((skill) => {
             const isActive = activeSkill === skill.name;

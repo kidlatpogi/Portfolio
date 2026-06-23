@@ -29,7 +29,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   containerClassName = '',
   textClassName = '',
   rotationEnd = 'bottom bottom',
-  wordAnimationEnd = 'bottom bottom',
+  wordAnimationEnd = 'top 55%',
   as
 }) => {
   const containerRef = useRef<HTMLElement>(null);
@@ -124,7 +124,8 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
         {
           ease: 'none',
           opacity: 1,
-          stagger: 0.05,
+          duration: 0.1,
+          stagger: 0.02,
           scrollTrigger: {
             trigger: el,
             scroller,
@@ -143,7 +144,8 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
           {
             ease: 'none',
             filter: 'blur(0px)',
-            stagger: 0.05,
+            duration: 0.1,
+            stagger: 0.02,
             scrollTrigger: {
               trigger: el,
               scroller,
@@ -156,7 +158,20 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       }
     }, el);
 
+    // Call ScrollTrigger.refresh() after hydration layout shifts settle
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 500);
+
+    // Also refresh on window load to handle slower resource loads (fonts, styles, images)
+    const handleLoad = () => {
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener('load', handleLoad);
+
     return () => {
+      clearTimeout(refreshTimer);
+      window.removeEventListener('load', handleLoad);
       ctx.revert();
     };
   }, [scrollContainerRef, enableBlur, baseRotation, baseOpacity, rotationEnd, wordAnimationEnd, blurStrength]);
