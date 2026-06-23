@@ -35,7 +35,7 @@ export default function About() {
               <img
                 src="/zeus_avatar.png"
                 alt="Zeus Avatar"
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-[2.5px] border-accent object-cover shadow-sm"
+                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-[2.5px] border-accent object-cover shadow-sm"
               />
               <span className="text-accent font-bold">Zeus</span>
             </span>
