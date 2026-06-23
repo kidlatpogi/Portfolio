@@ -37,6 +37,8 @@
     "vite": "^7"
   },
   "devDependencies": {
-    "@types/three": "^0.184.1"
+    "@astrojs/check": "^0.9.9",
+    "@types/three": "^0.184.1",
+    "typescript": "^6.0.3"
   }
 }

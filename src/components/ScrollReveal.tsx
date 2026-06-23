@@ -32,7 +32,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   wordAnimationEnd = 'bottom bottom',
   as
 }) => {
-  const containerRef = useRef<any>(null);
+  const containerRef = useRef<HTMLElement>(null);
 
   const splitText = useMemo(() => {
     const indexRef = { current: 0 };
@@ -92,53 +92,38 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   }, [children]);
 
   useEffect(() => {
-    const el = containerRef.current as HTMLElement;
+    const el = containerRef.current;
     if (!el) return;
 
     const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window;
 
-    gsap.fromTo(
-      el,
-      { transformOrigin: '0% 50%', rotate: baseRotation },
-      {
-        ease: 'none',
-        rotate: 0,
-        scrollTrigger: {
-          trigger: el,
-          scroller,
-          start: 'top bottom',
-          end: rotationEnd,
-          scrub: true
-        }
-      }
-    );
-
-    const wordElements = el.querySelectorAll<HTMLElement>('.word');
-
-    gsap.fromTo(
-      wordElements,
-      { opacity: baseOpacity, willChange: 'opacity' },
-      {
-        ease: 'none',
-        opacity: 1,
-        stagger: 0.05,
-        scrollTrigger: {
-          trigger: el,
-          scroller,
-          start: 'top bottom-=20%',
-          end: wordAnimationEnd,
-          scrub: true
-        }
-      }
-    );
-
-    if (enableBlur) {
+    const ctx = gsap.context(() => {
+      // Rotation effect
       gsap.fromTo(
-        wordElements,
-        { filter: `blur(${blurStrength}px)` },
+        el,
+        { transformOrigin: '0% 50%', rotate: baseRotation },
         {
           ease: 'none',
-          filter: 'blur(0px)',
+          rotate: 0,
+          scrollTrigger: {
+            trigger: el,
+            scroller,
+            start: 'top bottom',
+            end: rotationEnd,
+            scrub: true
+          }
+        }
+      );
+
+      const wordElements = el.querySelectorAll<HTMLElement>('.word');
+
+      // Opacity reveal effect
+      gsap.fromTo(
+        wordElements,
+        { opacity: baseOpacity, willChange: 'opacity' },
+        {
+          ease: 'none',
+          opacity: 1,
           stagger: 0.05,
           scrollTrigger: {
             trigger: el,
@@ -149,10 +134,30 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
           }
         }
       );
-    }
+
+      // Blur reveal effect
+      if (enableBlur) {
+        gsap.fromTo(
+          wordElements,
+          { filter: `blur(${blurStrength}px)` },
+          {
+            ease: 'none',
+            filter: 'blur(0px)',
+            stagger: 0.05,
+            scrollTrigger: {
+              trigger: el,
+              scroller,
+              start: 'top bottom-=20%',
+              end: wordAnimationEnd,
+              scrub: true
+            }
+          }
+        );
+      }
+    }, el);
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ctx.revert();
     };
   }, [scrollContainerRef, enableBlur, baseRotation, baseOpacity, rotationEnd, wordAnimationEnd, blurStrength]);
 
@@ -160,14 +165,14 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
   if (!as) {
     return (
-      <h2 ref={containerRef} className={`my-5 ${containerClassName}`}>
+      <h2 ref={containerRef as React.RefObject<HTMLHeadingElement | null>} className={`my-5 ${containerClassName}`}>
         <p className={`text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] font-semibold ${textClassName}`}>{splitText}</p>
       </h2>
     );
   }
 
   return (
-    <Component ref={containerRef} className={`${containerClassName} ${textClassName}`}>
+    <Component ref={containerRef as React.RefObject<any>} className={`${containerClassName} ${textClassName}`}>
       {splitText}
     </Component>
   );
