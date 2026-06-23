@@ -28,10 +28,6 @@ const categorizedSkills: SkillCategory[] = [
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg' 
       },
       { 
-        name: 'Next.js', 
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg' 
-      },
-      { 
         name: 'Tailwind CSS', 
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg' 
       },
@@ -57,10 +53,6 @@ const categorizedSkills: SkillCategory[] = [
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg' 
       },
       { 
-        name: 'Laravel', 
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laravel/laravel-original.svg' 
-      },
-      { 
         name: 'PHP', 
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-original.svg' 
       },
@@ -76,14 +68,6 @@ const categorizedSkills: SkillCategory[] = [
       { 
         name: 'MySQL', 
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg' 
-      },
-      { 
-        name: 'PostgreSQL', 
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg' 
-      },
-      { 
-        name: 'MongoDB', 
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg' 
       },
       { 
         name: 'Firebase', 
@@ -175,35 +159,33 @@ export default function Skills() {
         </ScrollReveal>
 
         {/* Categorized Skills Section */}
-        <div className="w-[95%] md:w-[90%] max-w-[1200px] flex flex-col gap-10 md:gap-14 mx-auto relative z-10">
+        <div className="w-[95%] md:w-[90%] max-w-[1200px] flex flex-col gap-4 mx-auto relative z-10">
           {categorizedSkills.map((category) => (
-            <div 
-              key={category.title} 
-              className="flex flex-col md:flex-row items-start justify-between gap-6 md:gap-12 pb-8 md:pb-10 border-b border-slate-300/20 last:border-b-0 last:pb-0"
+            <ScrollReveal
+              key={category.title}
+              baseOpacity={0.08}
+              enableBlur={true}
+              baseRotation={1}
+              blurStrength={8}
+              as="div"
+              containerClassName="flex flex-col md:flex-row items-start justify-between gap-6 md:gap-12 pb-4 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full"
+              wordAnimationEnd="top 65%"
             >
               {/* Category Name Column */}
-              <div className="w-full md:w-[240px] flex-shrink-0 md:pt-1.5">
-                <h3 className="font-clash-semibold text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight text-[#334155]/60 select-none">
+              <div className="w-full md:w-[240px] flex-shrink-0 md:pt-1.5 reveal-item">
+                <h3 className="font-clash-semibold text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight text-slate-800 select-none">
                   {category.title}
                 </h3>
               </div>
 
-              {/* Skills Badges Column - Grouped inside ScrollReveal */}
-              <ScrollReveal
-                baseOpacity={0.08}
-                enableBlur={true}
-                baseRotation={2}
-                blurStrength={12}
-                as="div"
-                containerClassName="flex-1 flex flex-wrap items-center justify-start gap-4 sm:gap-6"
-                wordAnimationEnd="top 55%"
-              >
+              {/* Skills Badges Column */}
+              <div className="flex-grow flex flex-wrap items-center justify-start gap-4 sm:gap-6 reveal-item">
                 {category.skills.map((skill) => {
                   const isActive = activeSkill === skill.name;
                   return (
                     <div 
                       key={skill.name} 
-                      className="group relative flex flex-col items-center cursor-pointer reveal-item cursor-target"
+                      className="group relative flex flex-col items-center cursor-pointer cursor-target"
                       onClick={() => handleSkillTap(skill.name)}
                       onMouseEnter={() => setActiveSkill(skill.name)}
                       onMouseLeave={() => setActiveSkill(null)}
@@ -238,8 +220,8 @@ export default function Skills() {
                     </div>
                   );
                 })}
-              </ScrollReveal>
-            </div>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
 
