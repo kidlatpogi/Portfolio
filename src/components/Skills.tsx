@@ -139,26 +139,9 @@ export default function Skills() {
     const rows = document.querySelectorAll('.skills-parallax-row');
     const ctx = gsap.context(() => {
       rows.forEach((row) => {
-        const title = row.querySelector('.skills-title-col');
         const badges = row.querySelector('.skills-badges-col');
         
-        if (title && badges) {
-          // Category Title shifts slightly up (slower scroll)
-          gsap.fromTo(
-            title,
-            { y: 15 },
-            {
-              y: -15,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: row,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: true
-              }
-            }
-          );
-          
+        if (badges) {
           // Badges column shifts slightly down
           gsap.fromTo(
             badges,
@@ -209,7 +192,7 @@ export default function Skills() {
         </ScrollReveal>
 
         {/* Categorized Skills Section */}
-        <div className="w-[95%] md:w-[90%] max-w-[1200px] flex flex-col gap-4 mx-auto relative z-10">
+        <div className="w-[95%] md:w-[90%] max-w-[1200px] flex flex-col gap-8 mx-auto relative z-10">
           {categorizedSkills.map((category) => (
             <ScrollReveal
               key={category.title}
@@ -218,18 +201,11 @@ export default function Skills() {
               baseRotation={1}
               blurStrength={8}
               as="div"
-              containerClassName="flex flex-col items-center justify-center gap-6 pb-8 md:pb-12 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full skills-parallax-row"
+              containerClassName="flex flex-col items-center justify-center pb-8 md:pb-12 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full skills-parallax-row"
               wordAnimationEnd="top 65%"
             >
-              {/* Category Name Column */}
-              <div className="w-full flex justify-center reveal-item skills-title-col text-center">
-                <h3 className="font-clash-semibold text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight text-slate-800 select-none text-center">
-                  {category.title}
-                </h3>
-              </div>
-
               {/* Skills Badges Column */}
-              <div className="w-full flex flex-wrap items-center justify-center gap-4 sm:gap-6 reveal-item skills-badges-col">
+              <div className="w-full flex flex-wrap items-center justify-center gap-6 sm:gap-8 reveal-item skills-badges-col">
                 {category.skills.map((skill) => {
                   const isActive = activeSkill === skill.name;
                   return (
@@ -252,7 +228,7 @@ export default function Skills() {
 
                       {/* Badge Circular Container */}
                       <div 
-                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 bg-white flex items-center justify-center shadow-sm transition-all duration-500 ease-out ${
+                        className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 bg-white flex items-center justify-center shadow-sm transition-all duration-500 ease-out ${
                           isActive 
                             ? 'scale-110 border-accent shadow-[0_12px_24px_-8px_rgba(196,73,0,0.2)] rotate-3' 
                             : 'border-slate-200/80 md:group-hover:scale-110 md:group-hover:border-accent md:group-hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.2)] md:group-hover:rotate-3'
@@ -261,7 +237,7 @@ export default function Skills() {
                         <img 
                           src={skill.logo} 
                           alt={`${skill.name} logo`} 
-                          className="w-8 h-8 sm:w-9 sm:h-9 object-contain transition-all duration-500 ease-out"
+                          className="w-9 h-9 sm:w-12 sm:h-12 object-contain transition-all duration-500 ease-out"
                           loading="lazy"
                         />
                       </div>
