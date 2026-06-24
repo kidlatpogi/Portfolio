@@ -31,7 +31,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   // Track scroll position of this element in viewport
   const { scrollYProgress } = useScroll({
     target: containerRef as any,
-    offset: ["start end", "end center"]
+    offset: ["start end", "start 75%"]
   });
 
 
