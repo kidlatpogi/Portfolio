@@ -47,28 +47,6 @@ export default function SocialsSidebar() {
       ariaLabel: 'LinkedIn profile'
     },
     {
-      name: 'X',
-      icon: (
-        <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-        </svg>
-      ),
-      href: 'https://x.com/',
-      ariaLabel: 'X (formerly Twitter) profile'
-    },
-    {
-      name: 'Instagram',
-      icon: (
-        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-          <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-        </svg>
-      ),
-      href: 'https://instagram.com/',
-      ariaLabel: 'Instagram profile'
-    },
-    {
       name: 'Email',
       icon: (
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -78,6 +56,19 @@ export default function SocialsSidebar() {
       ),
       href: 'mailto:dzeref4000@gmail.com',
       ariaLabel: 'Send email'
+    },
+    {
+      name: 'Resume',
+      icon: (
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+      ),
+      href: '/resume.pdf',
+      ariaLabel: 'View resume'
     }
   ];
 
@@ -96,7 +87,7 @@ export default function SocialsSidebar() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={social.ariaLabel}
-          className="w-11 h-11 rounded-full border border-slate-200/80 bg-white/95 backdrop-blur-sm flex items-center justify-center text-slate-700 hover:text-accent hover:border-accent hover:shadow-[0_8px_16px_-6px_rgba(196,73,0,0.15)] hover:scale-110 active:scale-95 transition-all duration-300 ease-out cursor-target"
+          className="w-11 h-11 rounded-full bg-black flex items-center justify-center text-white hover:bg-accent hover:scale-110 active:scale-95 transition-all duration-300 ease-out cursor-target"
         >
           {social.icon}
         </a>

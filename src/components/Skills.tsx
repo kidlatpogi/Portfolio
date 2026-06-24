@@ -71,7 +71,7 @@ const categorizedSkills: SkillCategory[] = [
       },
       { 
         name: 'Supabase', 
-        logo: 'https://cdn.simpleicons.org/supabase/3FCF8E' 
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg' 
       }
     ]
   },
