@@ -120,7 +120,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       // Opacity reveal effect
       gsap.fromTo(
         wordElements,
-        { opacity: baseOpacity, willChange: 'opacity' },
+        { opacity: baseOpacity, willChange: 'opacity, filter' },
         {
           ease: 'none',
           opacity: 1,
@@ -140,7 +140,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       if (enableBlur) {
         gsap.fromTo(
           wordElements,
-          { filter: `blur(${blurStrength}px)` },
+          { filter: `blur(${blurStrength}px)`, willChange: 'opacity, filter' },
           {
             ease: 'none',
             filter: 'blur(0px)',
