@@ -50,7 +50,7 @@ const categorizedSkills: SkillCategory[] = [
     ]
   },
   {
-    title: 'Backend',
+    title: 'Backend & Database',
     skills: [
       { 
         name: 'Node.js', 
@@ -63,12 +63,7 @@ const categorizedSkills: SkillCategory[] = [
       { 
         name: 'Python', 
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg' 
-      }
-    ]
-  },
-  {
-    title: 'Database',
-    skills: [
+      },
       { 
         name: 'MySQL', 
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg' 
@@ -192,7 +187,7 @@ export default function Skills() {
         </ScrollReveal>
 
         {/* Categorized Skills Section */}
-        <div className="w-[95%] md:w-[90%] max-w-[1200px] flex flex-col gap-8 mx-auto relative z-10">
+        <div className="w-[95%] md:w-[90%] max-w-[1200px] flex flex-col gap-4 sm:gap-6 mx-auto relative z-10">
           {categorizedSkills.map((category) => (
             <ScrollReveal
               key={category.title}
@@ -201,11 +196,11 @@ export default function Skills() {
               baseRotation={1}
               blurStrength={8}
               as="div"
-              containerClassName="flex flex-col items-center justify-center pb-8 md:pb-12 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full skills-parallax-row"
+              containerClassName="flex flex-col items-center justify-center pb-5 md:pb-6 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full skills-parallax-row"
               wordAnimationEnd="top 65%"
             >
               {/* Skills Badges Column */}
-              <div className="w-full flex flex-wrap items-center justify-center gap-6 sm:gap-8 reveal-item skills-badges-col">
+              <div className="w-full flex flex-wrap items-center justify-center gap-3 sm:gap-4 reveal-item skills-badges-col">
                 {category.skills.map((skill) => {
                   const isActive = activeSkill === skill.name;
                   return (
