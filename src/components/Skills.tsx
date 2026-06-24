@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ScrollReveal from './ScrollReveal.tsx';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-gsap.registerPlugin(ScrollTrigger);
 
 interface Skill {
   name: string;
@@ -129,34 +126,7 @@ export default function Skills() {
     };
   }, []);
 
-  useEffect(() => {
-    // Parallax effect for category rows
-    const rows = document.querySelectorAll('.skills-parallax-row');
-    const ctx = gsap.context(() => {
-      rows.forEach((row) => {
-        const badges = row.querySelector('.skills-badges-col');
-        
-        if (badges) {
-          // Badges column shifts slightly down
-          gsap.fromTo(
-            badges,
-            { y: -10 },
-            {
-              y: 10,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: row,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: true
-              }
-            }
-          );
-        }
-      });
-    });
-    return () => ctx.revert();
-  }, []);
+
 
   const handleSkillTap = (name: string) => {
     setActiveSkill(prev => (prev === name ? null : name));
@@ -200,7 +170,7 @@ export default function Skills() {
               wordAnimationEnd="top 80%"
             >
               {/* Skills Badges Column */}
-              <div className="w-full flex flex-wrap items-center justify-center gap-3 sm:gap-4 reveal-item skills-badges-col">
+              <div className="w-full flex flex-wrap items-center justify-center gap-3 sm:gap-4 reveal-item skills-badges-col parallax-y">
                 {category.skills.map((skill) => {
                   const isActive = activeSkill === skill.name;
                   return (

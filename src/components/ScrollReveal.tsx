@@ -34,6 +34,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
     offset: ["start end", "end center"]
   });
 
+
   // Transform rotation from baseRotation to 0 based on scroll
   const rotate = useTransform(scrollYProgress, [0, 0.45], [baseRotation, 0]);
 
@@ -200,6 +201,16 @@ const Word: React.FC<WordProps> = ({
   const blurVal = useTransform(scrollYProgress, [start, end], [blurStrength, 0]);
   const filter = useTransform(blurVal, (v) => enableBlur ? `blur(${v}px)` : 'none');
 
+  // Check if the className already defines a layout display style (including responsive prefixes)
+  const hasDisplayClass = className.split(/\s+/).some(cls => {
+    const baseClass = cls.split(':').pop() || '';
+    return ['block', 'inline-block', 'flex', 'inline-flex', 'grid', 'inline-grid'].includes(baseClass);
+  });
+
+  // Apply parallax translation if requested via class name
+  const hasParallax = className.includes('parallax-y');
+  const y = useTransform(scrollYProgress, [0, 1], [-15, 15]);
+
   const MotionComp = motion(Component);
 
   return (
@@ -209,8 +220,9 @@ const Word: React.FC<WordProps> = ({
         ...props.style,
         opacity,
         filter,
-        display: className.includes('block') ? undefined : 'inline-block',
-        willChange: 'opacity, filter'
+        y: hasParallax ? y : undefined,
+        display: hasDisplayClass ? undefined : 'inline-block',
+        willChange: hasParallax ? 'opacity, filter, transform' : 'opacity, filter'
       }}
       className={`${className} word`}
     >
