@@ -14,7 +14,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
     assetsInclude: ['**/*.glb'],
     resolve: {
-      dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react-dom/client', 'three']
+      dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react-dom/client', 'three', 'lenis']
     },
     optimizeDeps: {
       include: [
@@ -27,7 +27,8 @@ export default defineConfig({
         '@react-three/drei',
         '@react-three/rapier',
         'three',
-        'lucide-react'
+        'lucide-react',
+        'lenis'
       ]
     }
   },
