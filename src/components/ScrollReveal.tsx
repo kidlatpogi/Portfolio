@@ -1,13 +1,10 @@
-import React, { useEffect, useRef, useMemo } from 'react';
-import type { ReactNode, RefObject } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import React, { useRef, useMemo } from 'react';
+import type { ReactNode } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface ScrollRevealProps {
   children: ReactNode;
-  scrollContainerRef?: RefObject<HTMLElement | null>;
+  scrollContainerRef?: React.RefObject<HTMLElement | null>;
   enableBlur?: boolean;
   baseOpacity?: number;
   baseRotation?: number;
@@ -21,47 +18,87 @@ interface ScrollRevealProps {
 
 const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
-  scrollContainerRef,
   enableBlur = true,
   baseOpacity = 0.1,
   baseRotation = 3,
   blurStrength = 4,
   containerClassName = '',
   textClassName = '',
-  rotationEnd = 'bottom bottom',
-  wordAnimationEnd = 'top 55%',
   as
 }) => {
   const containerRef = useRef<HTMLElement>(null);
+  
+  // Track scroll position of this element in viewport
+  const { scrollYProgress } = useScroll({
+    target: containerRef as any,
+    offset: ["start end", "end center"]
+  });
 
+  // Transform rotation from baseRotation to 0 based on scroll
+  const rotate = useTransform(scrollYProgress, [0, 0.45], [baseRotation, 0]);
+
+  // Process child nodes recursively, counting words and mapping progress
   const splitText = useMemo(() => {
-    const indexRef = { current: 0 };
-    const processNode = (node: ReactNode): ReactNode => {
+    let wordCount = 0;
+    
+    // Pass 1: count total words
+    const countWords = (node: ReactNode): number => {
+      if (node === null || node === undefined) return 0;
+      if (typeof node === 'string' || typeof node === 'number') {
+        return String(node).split(/\s+/).filter(word => word !== '').length;
+      }
+      if (Array.isArray(node)) {
+        return node.reduce((acc, child) => acc + countWords(child), 0);
+      }
+      if (React.isValidElement(node)) {
+        return countWords(node.props.children);
+      }
+      return 0;
+    };
+
+    const totalWords = countWords(children) || 1;
+
+    // Pass 2: render words as motion spans with mapped stagger range
+    const renderNode = (node: ReactNode): ReactNode => {
       if (node === null || node === undefined) return node;
 
       if (typeof node === 'string' || typeof node === 'number') {
         return String(node).split(/(\s+)/).filter(word => word !== '').map((word, idx) => {
           if (word.match(/^\s+$/)) return word;
-          indexRef.current += 1;
+          
+          const currentWordIndex = wordCount;
+          wordCount += 1;
+
+          // Align scroll trigger offsets to stagger the reveal smoothly
+          const startProgress = 0.05 + (currentWordIndex / totalWords) * 0.25;
+          const endProgress = Math.min(0.85, startProgress + 0.15);
+
           return (
-            <span className="inline-block word" key={`word-${indexRef.current}-${idx}`}>
+            <Word
+              key={`word-${currentWordIndex}-${idx}`}
+              scrollYProgress={scrollYProgress}
+              start={startProgress}
+              end={endProgress}
+              baseOpacity={baseOpacity}
+              blurStrength={blurStrength}
+              enableBlur={enableBlur}
+            >
               {word}
-            </span>
+            </Word>
           );
         });
       }
 
       if (Array.isArray(node)) {
         return node.map((child, idx) => (
-          <React.Fragment key={`frag-${idx}`}>{processNode(child)}</React.Fragment>
+          <React.Fragment key={`frag-${idx}`}>{renderNode(child)}</React.Fragment>
         ));
       }
 
       if (React.isValidElement(node)) {
         const props = node.props as { className?: string; children?: ReactNode };
         const children = props.children;
-
-        // If it's a leaf node element (like img, svg, or small icon) or a simple text container
+        
         const isLeaf = !children || (typeof children === 'string' && children.trim() === '');
         const hasSingleTextChild = typeof children === 'string' || typeof children === 'number';
         const isInlineFlex = props.className?.includes('inline-flex');
@@ -72,124 +109,113 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
             cls === 'inline-block' || cls === 'inline-flex' || cls === 'flex' || cls === 'block'
           );
           const className = [props.className, 'word', needsInlineBlock ? 'inline-block' : ''].filter(Boolean).join(' ');
-          indexRef.current += 1;
-          return React.cloneElement(node as React.ReactElement<any>, {
-            ...props,
-            className,
-            key: `el-${indexRef.current}`
-          });
+          
+          const currentWordIndex = wordCount;
+          wordCount += 1;
+          const startProgress = 0.05 + (currentWordIndex / totalWords) * 0.25;
+          const endProgress = Math.min(0.85, startProgress + 0.15);
+
+          return (
+            <Word
+              key={`el-${currentWordIndex}`}
+              scrollYProgress={scrollYProgress}
+              start={startProgress}
+              end={endProgress}
+              baseOpacity={baseOpacity}
+              blurStrength={blurStrength}
+              enableBlur={enableBlur}
+              as={node.type as any}
+              props={props}
+              className={className}
+            />
+          );
         }
 
-        // Otherwise, process container children recursively
-        const processedChildren = React.Children.map(children, child => processNode(child));
-        return React.cloneElement(node as React.ReactElement<any>, { ...props, key: `container-${indexRef.current}` }, processedChildren);
+        const processedChildren = React.Children.map(children, child => renderNode(child));
+        return React.cloneElement(node as React.ReactElement<any>, { ...props, key: `container-${wordCount}` }, processedChildren);
       }
 
       return node;
     };
 
-    return React.Children.map(children, child => processNode(child));
-  }, [children]);
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const scroller = scrollContainerRef && scrollContainerRef.current ? scrollContainerRef.current : window;
-
-    const ctx = gsap.context(() => {
-      // Rotation effect
-      gsap.fromTo(
-        el,
-        { transformOrigin: '0% 50%', rotate: baseRotation },
-        {
-          ease: 'none',
-          rotate: 0,
-          scrollTrigger: {
-            trigger: el,
-            scroller,
-            start: 'top bottom',
-            end: rotationEnd,
-            scrub: true
-          }
-        }
-      );
-
-      const wordElements = el.querySelectorAll<HTMLElement>('.word');
-
-      // Opacity reveal effect
-      gsap.fromTo(
-        wordElements,
-        { opacity: baseOpacity, willChange: 'opacity, filter' },
-        {
-          ease: 'none',
-          opacity: 1,
-          duration: 0.1,
-          stagger: 0.02,
-          scrollTrigger: {
-            trigger: el,
-            scroller,
-            start: 'top bottom-=20%',
-            end: wordAnimationEnd,
-            scrub: true
-          }
-        }
-      );
-
-      // Blur reveal effect
-      if (enableBlur) {
-        gsap.fromTo(
-          wordElements,
-          { filter: `blur(${blurStrength}px)`, willChange: 'opacity, filter' },
-          {
-            ease: 'none',
-            filter: 'blur(0px)',
-            duration: 0.1,
-            stagger: 0.02,
-            scrollTrigger: {
-              trigger: el,
-              scroller,
-              start: 'top bottom-=20%',
-              end: wordAnimationEnd,
-              scrub: true
-            }
-          }
-        );
-      }
-    }, el);
-
-    // Call ScrollTrigger.refresh() after hydration layout shifts settle
-    const refreshTimer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 500);
-
-    // Also refresh on window load to handle slower resource loads (fonts, styles, images)
-    const handleLoad = () => {
-      ScrollTrigger.refresh();
-    };
-    window.addEventListener('load', handleLoad);
-
-    return () => {
-      clearTimeout(refreshTimer);
-      window.removeEventListener('load', handleLoad);
-      ctx.revert();
-    };
-  }, [scrollContainerRef, enableBlur, baseRotation, baseOpacity, rotationEnd, wordAnimationEnd, blurStrength]);
+    return renderNode(children);
+  }, [children, scrollYProgress, baseOpacity, blurStrength, enableBlur]);
 
   const Component = as || 'div';
+  const MotionComponent = motion(Component as any);
 
   if (!as) {
     return (
-      <h2 ref={containerRef as React.RefObject<HTMLHeadingElement | null>} className={`my-5 ${containerClassName}`}>
-        <p className={`text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] font-semibold ${textClassName}`}>{splitText}</p>
+      <h2 
+        ref={containerRef as any} 
+        className={`my-5 ${containerClassName}`}
+      >
+        <motion.p 
+          style={{ rotate, transformOrigin: '0% 50%' }}
+          className={`text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] font-semibold ${textClassName}`}
+        >
+          {splitText}
+        </motion.p>
       </h2>
     );
   }
 
   return (
-    <Component ref={containerRef as React.RefObject<any>} className={`${containerClassName} ${textClassName}`}>
+    <MotionComponent 
+      ref={containerRef as any} 
+      style={{ rotate, transformOrigin: '0% 50%' }}
+      className={`${containerClassName} ${textClassName}`}
+    >
       {splitText}
-    </Component>
+    </MotionComponent>
+  );
+};
+
+interface WordProps {
+  children?: ReactNode;
+  scrollYProgress: any;
+  start: number;
+  end: number;
+  baseOpacity: number;
+  blurStrength: number;
+  enableBlur: boolean;
+  as?: any;
+  props?: any;
+  className?: string;
+}
+
+const Word: React.FC<WordProps> = ({
+  children,
+  scrollYProgress,
+  start,
+  end,
+  baseOpacity,
+  blurStrength,
+  enableBlur,
+  as: Component = 'span',
+  props = {},
+  className = ''
+}) => {
+  const opacity = useTransform(scrollYProgress, [start, end], [baseOpacity, 1]);
+  const blurVal = useTransform(scrollYProgress, [start, end], [blurStrength, 0]);
+  const filter = useTransform(blurVal, (v) => enableBlur ? `blur(${v}px)` : 'none');
+
+  const MotionComp = motion(Component);
+
+  return (
+    <MotionComp
+      {...props}
+      style={{
+        ...props.style,
+        opacity,
+        filter,
+        display: className.includes('block') ? undefined : 'inline-block',
+        willChange: 'opacity, filter'
+      }}
+      className={`${className} word`}
+    >
+      {children || props.children}
+    </MotionComp>
   );
 };
 
