@@ -218,18 +218,18 @@ export default function Skills() {
               baseRotation={1}
               blurStrength={8}
               as="div"
-              containerClassName="flex flex-col md:flex-row items-start justify-between gap-6 md:gap-12 pb-4 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full skills-parallax-row"
+              containerClassName="flex flex-col items-center justify-center gap-6 pb-8 md:pb-12 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full skills-parallax-row"
               wordAnimationEnd="top 65%"
             >
               {/* Category Name Column */}
-              <div className="w-full md:w-[240px] flex-shrink-0 md:pt-1.5 reveal-item skills-title-col">
-                <h3 className="font-clash-semibold text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight text-slate-800 select-none">
+              <div className="w-full flex justify-center reveal-item skills-title-col text-center">
+                <h3 className="font-clash-semibold text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tight text-slate-800 select-none text-center">
                   {category.title}
                 </h3>
               </div>
 
               {/* Skills Badges Column */}
-              <div className="flex-grow flex flex-wrap items-center justify-start gap-4 sm:gap-6 reveal-item skills-badges-col">
+              <div className="w-full flex flex-wrap items-center justify-center gap-4 sm:gap-6 reveal-item skills-badges-col">
                 {category.skills.map((skill) => {
                   const isActive = activeSkill === skill.name;
                   return (
