@@ -24,19 +24,40 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   blurStrength = 4,
   containerClassName = '',
   textClassName = '',
+  wordAnimationEnd,
+  rotationEnd,
+  scrollContainerRef,
   as
 }) => {
   const containerRef = useRef<HTMLElement>(null);
   
+  // Map GSAP-style "top 80%" to Framer Motion "start 80%"
+  const endOffset = useMemo(() => {
+    if (!wordAnimationEnd) return "start 75%";
+    const parts = wordAnimationEnd.split(/\s+/);
+    if (parts.length === 2) {
+      const target = parts[0] === 'top' ? 'start' : parts[0] === 'bottom' ? 'end' : parts[0];
+      const container = parts[1];
+      return `${target} ${container}`;
+    }
+    return wordAnimationEnd;
+  }, [wordAnimationEnd]);
+
   // Track scroll position of this element in viewport
   const { scrollYProgress } = useScroll({
     target: containerRef as any,
-    offset: ["start end", "start 75%"]
+    container: scrollContainerRef || undefined,
+    offset: ["start end", endOffset]
   });
 
+  const rotationEndVal = useMemo(() => {
+    if (!rotationEnd) return 0.45;
+    const parsed = parseFloat(rotationEnd);
+    return isNaN(parsed) ? 0.45 : parsed;
+  }, [rotationEnd]);
 
   // Transform rotation from baseRotation to 0 based on scroll
-  const rotate = useTransform(scrollYProgress, [0, 0.45], [baseRotation, 0]);
+  const rotate = useTransform(scrollYProgress, [0, rotationEndVal], [baseRotation, 0], { clamp: true });
 
   // Process child nodes recursively, counting words and mapping progress
   const splitText = useMemo(() => {
@@ -197,8 +218,8 @@ const Word: React.FC<WordProps> = ({
   props = {},
   className = ''
 }) => {
-  const opacity = useTransform(scrollYProgress, [start, end], [baseOpacity, 1]);
-  const blurVal = useTransform(scrollYProgress, [start, end], [blurStrength, 0]);
+  const opacity = useTransform(scrollYProgress, [start, end], [baseOpacity, 1], { clamp: true });
+  const blurVal = useTransform(scrollYProgress, [start, end], [blurStrength, 0], { clamp: true });
   const filter = useTransform(blurVal, (v) => enableBlur ? `blur(${v}px)` : 'none');
 
   // Check if the className already defines a layout display style (including responsive prefixes)
