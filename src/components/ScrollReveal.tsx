@@ -143,7 +143,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   }, [children, scrollYProgress, baseOpacity, blurStrength, enableBlur]);
 
   const Component = as || 'div';
-  const MotionComponent = motion(Component as any);
+  const MotionComponent = motion.create(Component as any);
 
   if (!as) {
     return (
@@ -211,7 +211,7 @@ const Word: React.FC<WordProps> = ({
   const hasParallax = className.includes('parallax-y');
   const y = useTransform(scrollYProgress, [0, 1], [-15, 15]);
 
-  const MotionComp = motion(Component);
+  const MotionComp = motion.create(Component);
 
   return (
     <MotionComp
