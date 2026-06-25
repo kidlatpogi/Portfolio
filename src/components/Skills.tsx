@@ -164,6 +164,7 @@ export default function Skills() {
               as="div"
               containerClassName="flex flex-col items-center justify-center pb-5 md:pb-6 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full skills-parallax-row"
               wordAnimationEnd="top 50%"
+              simpleReveal={true}
             >
               {/* Skills Badges Column */}
               <div className="w-full flex flex-wrap items-center justify-center gap-3 sm:gap-4 reveal-item skills-badges-col parallax-y">

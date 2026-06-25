@@ -11,6 +11,7 @@ export default function Certifications() {
         blurStrength={12}
         as="div"
         containerClassName="flex flex-col items-center w-full mb-8"
+        simpleReveal={true}
       >
         <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
           Milestones

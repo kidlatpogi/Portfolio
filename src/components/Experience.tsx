@@ -67,6 +67,7 @@ export default function Experience() {
               as="div"
               containerClassName="flex flex-col md:flex-row gap-6 items-start relative group reveal-item md:pl-16 w-full"
               wordAnimationEnd="top 50%"
+              simpleReveal={true}
             >
               {/* Timeline marker - centered on the vertical line */}
               <div className="absolute left-[25px] top-8 w-3.5 h-3.5 rounded-full bg-slate-300 border-2 border-white group-hover:bg-accent group-hover:scale-125 transition-all duration-300 hidden md:block z-10" />
