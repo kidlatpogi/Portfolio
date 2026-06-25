@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useRef } from 'react';
 import ScrollStack, { ScrollStackItem } from './ScrollStack.tsx';
 import ScrollReveal from './ScrollReveal.tsx';
 import { ExternalLink, ArrowUpRight } from 'lucide-react';
@@ -37,8 +37,25 @@ const projectsData = [
 ];
 
 export default function Projects() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const island = sectionRef.current?.parentElement;
+    if (island?.tagName !== 'ASTRO-ISLAND') return;
+
+    const previousDisplay = island.style.display;
+    const previousWidth = island.style.width;
+    island.style.display = 'block';
+    island.style.width = '100%';
+
+    return () => {
+      island.style.display = previousDisplay;
+      island.style.width = previousWidth;
+    };
+  }, []);
+
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden" id="projects">
+    <section ref={sectionRef} className="w-full flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-visible" id="projects">
       {/* Anchor targets for sub-navigation scroll links */}
       <div id="designs" className="absolute top-1/2" />
 
