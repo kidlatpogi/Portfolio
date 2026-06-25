@@ -18,7 +18,7 @@ export default function ParallaxTextSection() {
   return (
     <div
       ref={containerRef}
-      className="w-full relative overflow-hidden bg-[#f8f8f8] py-20 md:py-32 flex flex-col justify-center border-y border-slate-200/40"
+      className="w-full relative overflow-hidden bg-transparent py-20 md:py-32 flex flex-col justify-center border-y border-slate-200/40"
     >
       {/* Desktop Layout */}
       <div className="hidden md:flex flex-col gap-12 lg:gap-16 w-full">

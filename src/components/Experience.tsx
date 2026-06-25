@@ -29,7 +29,7 @@ const experiences: ExperienceItem[] = [
 
 export default function Experience() {
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-10 md:py-14 relative overflow-hidden" id="experience">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden" id="experience">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
         {/* Headings inside ScrollReveal */}
@@ -66,7 +66,7 @@ export default function Experience() {
               blurStrength={12}
               as="div"
               containerClassName="flex flex-col md:flex-row gap-6 items-start relative group reveal-item md:pl-16 w-full"
-              wordAnimationEnd="top 80%"
+              wordAnimationEnd="top 50%"
             >
               {/* Timeline marker - centered on the vertical line */}
               <div className="absolute left-[25px] top-8 w-3.5 h-3.5 rounded-full bg-slate-300 border-2 border-white group-hover:bg-accent group-hover:scale-125 transition-all duration-300 hidden md:block z-10" />
