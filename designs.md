@@ -26,6 +26,3 @@ This document outlines the potential friction points in the Astro + React + Clou
 * **Strict Separation of Concerns:** Enforce a hard rule in AI prompts:
     * `.astro` files are strictly for routing, page layouts, static SEO metadata, and server-side data fetching.
     * `.tsx` files are strictly for interactive UI components, animations, and client-side state management.
-
-
-# Use Black and Silver for the colors
