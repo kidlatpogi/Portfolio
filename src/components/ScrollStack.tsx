@@ -97,11 +97,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const getElementOffset = useCallback(
     (element: HTMLElement) => {
       if (useWindowScroll) {
-        const scroller = scrollerRef.current;
-        if (!scroller) return element.offsetTop;
-        const containerRect = scroller.getBoundingClientRect();
-        const containerTop = containerRect.top + window.scrollY;
-        return containerTop + element.offsetTop;
+        const rect = element.getBoundingClientRect();
+        return rect.top + window.scrollY;
       } else {
         return element.offsetTop;
       }
@@ -114,7 +111,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
     isUpdatingRef.current = true;
 
-    const { scrollTop, containerHeight, scrollContainer } = getScrollData();
+    const { scrollTop, containerHeight } = getScrollData();
     const stackPositionPx = parsePercentage(stackPosition, containerHeight);
     const scaleEndPositionPx = parsePercentage(scaleEndPosition, containerHeight);
 
@@ -129,8 +126,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
       const cardTop = getElementOffset(card);
       const triggerStart = cardTop - stackPositionPx - itemStackDistance * i;
+      
       let triggerEnd = cardTop - scaleEndPositionPx;
-
       if (i < cardsRef.current.length - 1) {
         const nextCard = cardsRef.current[i + 1];
         if (nextCard) {
@@ -146,6 +143,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
       const scaleProgress = calculateProgress(scrollTop, triggerStart, triggerEnd);
       const targetScale = baseScale + i * itemScale;
+      
+      // First card (index 0) remains at scale 1 to prevent horizontal shifting
       const scale = i === 0 ? 1 : 1 - scaleProgress * (1 - targetScale);
       const rotation = rotationAmount ? i * rotationAmount * scaleProgress : 0;
 
@@ -243,6 +242,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
   const setupLenis = useCallback(() => {
     if (useWindowScroll) {
+      // Re-use external window Lenis if active, otherwise bind handlers directly
       window.addEventListener('scroll', handleScroll, { passive: true });
       window.addEventListener('resize', handleScroll, { passive: true });
       return null;
