@@ -4,7 +4,7 @@
 
 @theme {
   /* Colors */
-  --color-accent: #9a0002;
+  --color-accent: #C44900;
   --color-primary: #ffffff;
   --color-on-error-container: #ffdad6;
   --color-surface-container: #201f1f;
@@ -121,7 +121,7 @@ body::-webkit-scrollbar {
 }
 
 body {
-  background-color: #efe6dd;
+  background-color: #f8f8f8;
   color: #000000;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
