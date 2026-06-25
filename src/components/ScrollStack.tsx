@@ -2,6 +2,7 @@ import React, { Children, isValidElement, useCallback, useEffect, useLayoutEffec
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
 export interface ScrollStackItemProps {
+  itemId?: string;
   itemClassName?: string;
   children: ReactNode;
 }
@@ -9,13 +10,14 @@ export interface ScrollStackItemProps {
 const hasHeightClass = (className: string) =>
   /\bh-(?:\[|full\b|screen\b|svh\b|dvh\b)|\bmin-h-/.test(className);
 
-export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({ children, itemClassName = '' }) => {
+export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({ children, itemId, itemClassName = '' }) => {
   const defaultHeightClass = hasHeightClass(itemClassName)
     ? ''
     : 'h-[72dvh] min-h-[350px] lg:h-[min(72vh,760px)] lg:min-h-[500px] xl:h-[min(72vh,820px)]';
 
   return (
     <div
+      id={itemId}
       className={`scroll-stack-card relative w-full ${defaultHeightClass} p-8 md:p-12 rounded-[40px] shadow-[0_0_30px_rgba(0,0,0,0.1)] box-border origin-top will-change-transform ${itemClassName}`.trim()}
       style={{
         backfaceVisibility: 'hidden',
@@ -41,6 +43,7 @@ interface ScrollStackProps {
   rotationAmount?: number;
   blurAmount?: number;
   useWindowScroll?: boolean;
+  onActiveIndexChange?: (index: number) => void;
   onStackComplete?: () => void;
 }
 
@@ -79,6 +82,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   rotationAmount = 0,
   blurAmount = 0,
   useWindowScroll = true,
+  onActiveIndexChange,
   onStackComplete
 }) => {
   const stackRef = useRef<HTMLDivElement>(null);
@@ -87,6 +91,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const naturalTopsRef = useRef<number[]>([]);
   const frameRef = useRef<number | null>(null);
   const stackCompletedRef = useRef(false);
+  const activeIndexRef = useRef(-1);
   const lastTransformsRef = useRef(new Map<number, CardTransform>());
   const [stickyTop, setStickyTop] = useState(0);
   const [scaleEndTop, setScaleEndTop] = useState(0);
@@ -164,6 +169,11 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       return scrollTop >= triggerStart ? index : activeIndex;
     }, 0);
 
+    if (activeIndexRef.current !== topCardIndex) {
+      activeIndexRef.current = topCardIndex;
+      onActiveIndexChange?.(topCardIndex);
+    }
+
     wrappersRef.current.forEach((wrapper, index) => {
       const card = cardsRef.current[index];
       if (!card) return;
@@ -221,6 +231,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     itemDistance,
     itemScale,
     itemStackDistance,
+    onActiveIndexChange,
     onStackComplete,
     rotationAmount,
     scaleDuration,
@@ -274,6 +285,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
         frameRef.current = null;
       }
       stackCompletedRef.current = false;
+      activeIndexRef.current = -1;
       lastTransformsRef.current.clear();
       naturalTopsRef.current = [];
       wrappersRef.current = [];

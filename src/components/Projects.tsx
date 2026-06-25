@@ -1,7 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ScrollStack, { ScrollStackItem } from './ScrollStack.tsx';
 import ScrollReveal from './ScrollReveal.tsx';
 import { ExternalLink, ArrowUpRight } from 'lucide-react';
+
+const STACK_POSITION_RATIO = 0.15;
+const ITEM_STACK_DISTANCE = 30;
+const DESKTOP_QUERY = '(min-width: 1024px)';
 
 const projectsData = [
   {
@@ -36,8 +40,15 @@ const projectsData = [
   }
 ];
 
+const getDocumentTop = (element: HTMLElement) =>
+  element.getBoundingClientRect().top + (window.scrollY || document.documentElement.scrollTop || 0);
+
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
+  const sidebarRailRef = useRef<HTMLDivElement>(null);
+  const sidebarPanelRef = useRef<HTMLDivElement>(null);
+  const stackColumnRef = useRef<HTMLDivElement>(null);
+  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
 
   useEffect(() => {
     const island = sectionRef.current?.parentElement;
@@ -54,6 +65,94 @@ export default function Projects() {
     };
   }, []);
 
+  const scrollToProject = useCallback((index: number) => {
+    const stackColumn = stackColumnRef.current;
+    if (!stackColumn) return;
+
+    const shells = stackColumn.querySelectorAll<HTMLElement>('.scroll-stack-card-shell');
+    const targetShell = shells[index];
+    if (!targetShell) return;
+
+    const stickyTop = window.innerHeight * STACK_POSITION_RATIO;
+    const targetTop = getDocumentTop(targetShell) - stickyTop - ITEM_STACK_DISTANCE * index + 1;
+
+    window.scrollTo({
+      top: Math.max(0, targetTop),
+      behavior: 'smooth'
+    });
+  }, []);
+
+  useEffect(() => {
+    const rail = sidebarRailRef.current;
+    const panel = sidebarPanelRef.current;
+    const stackColumn = stackColumnRef.current;
+    if (!rail || !panel || !stackColumn) return;
+
+    const mediaQuery = window.matchMedia(DESKTOP_QUERY);
+    let frameId: number | null = null;
+
+    const resetPanel = () => {
+      rail.style.minHeight = '';
+      panel.style.position = '';
+      panel.style.top = '';
+      panel.style.width = '';
+    };
+
+    const applyPanelPosition = () => {
+      frameId = null;
+
+      if (!mediaQuery.matches) {
+        resetPanel();
+        return;
+      }
+
+      const shells = stackColumn.querySelectorAll<HTMLElement>('.scroll-stack-card-shell');
+      const lastIndex = shells.length - 1;
+      const lastShell = shells[lastIndex];
+      if (!lastShell) {
+        resetPanel();
+        return;
+      }
+
+      const stickyTop = Math.round(window.innerHeight * STACK_POSITION_RATIO);
+      const railTop = getDocumentTop(rail);
+      const lastShellTop = getDocumentTop(lastShell);
+      const releaseScrollTop = lastShellTop - stickyTop - ITEM_STACK_DISTANCE * lastIndex;
+      const releasedPanelTop = Math.max(0, lastShellTop - ITEM_STACK_DISTANCE * lastIndex - railTop);
+
+      rail.style.minHeight = `${panel.offsetHeight}px`;
+      panel.style.width = `${rail.getBoundingClientRect().width}px`;
+
+      if ((window.scrollY || document.documentElement.scrollTop || 0) >= releaseScrollTop) {
+        panel.style.position = 'absolute';
+        panel.style.top = `${releasedPanelTop}px`;
+      } else {
+        panel.style.position = 'sticky';
+        panel.style.top = `${stickyTop}px`;
+      }
+    };
+
+    const requestPanelPosition = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(applyPanelPosition);
+    };
+
+    requestPanelPosition();
+    window.addEventListener('scroll', requestPanelPosition, { passive: true });
+    window.addEventListener('resize', requestPanelPosition, { passive: true });
+    mediaQuery.addEventListener('change', requestPanelPosition);
+
+    return () => {
+      window.removeEventListener('scroll', requestPanelPosition);
+      window.removeEventListener('resize', requestPanelPosition);
+      mediaQuery.removeEventListener('change', requestPanelPosition);
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+      resetPanel();
+    };
+  }, []);
+
   return (
     <section ref={sectionRef} className="w-full flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-visible" id="projects">
       {/* Anchor targets for sub-navigation scroll links */}
@@ -64,7 +163,8 @@ export default function Projects() {
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
 
           {/* LEFT COLUMN — Sticky Info Panel */}
-          <div className="lg:w-[320px] xl:w-[380px] flex-shrink-0 lg:sticky lg:top-[15vh] lg:self-start">
+          <div ref={sidebarRailRef} className="lg:w-[320px] xl:w-[380px] flex-shrink-0 relative">
+            <div ref={sidebarPanelRef} className="w-full">
             {/* ScrollReveal Header */}
             <ScrollReveal
               baseOpacity={0.08}
@@ -88,16 +188,27 @@ export default function Projects() {
 
             {/* Project Thumbnails Navigation */}
             <div className="flex flex-row lg:flex-col gap-3 mb-8">
-              {projectsData.map((project, index) => (
-                <div key={index} className="flex items-center gap-3 group cursor-target">
-                  <div className={`w-[72px] h-[48px] md:w-[88px] md:h-[56px] rounded-lg overflow-hidden ${project.bgGradient} flex items-center justify-center border border-white/10 transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg`}>
+              {projectsData.map((project, index) => {
+                const isActive = activeProjectIndex === index;
+
+                return (
+                <button
+                  key={index}
+                  type="button"
+                  aria-controls={`project-card-${index + 1}`}
+                  aria-current={isActive ? 'true' : undefined}
+                  onClick={() => scrollToProject(index)}
+                  className={`flex items-center gap-3 group cursor-target text-left transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
+                >
+                  <div className={`w-[72px] h-[48px] md:w-[88px] md:h-[56px] rounded-lg overflow-hidden ${project.bgGradient} flex items-center justify-center border transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg ${isActive ? 'border-accent/80 shadow-[0_12px_24px_-12px_rgba(196,73,0,0.6)]' : 'border-white/10'}`}>
                     <span className="font-mono text-[10px] text-white/60 font-bold tracking-wider">
                       {String(index + 1).padStart(2, '0')}
                     </span>
                   </div>
-                  <div className="w-1.5 h-1.5 rounded-full bg-slate-300 transition-colors group-hover:bg-accent" />
-                </div>
-              ))}
+                  <div className={`h-1.5 rounded-full transition-all duration-300 group-hover:bg-accent ${isActive ? 'w-6 bg-accent' : 'w-1.5 bg-slate-300'}`} />
+                </button>
+                );
+              })}
             </div>
 
             {/* View All Button */}
@@ -108,21 +219,24 @@ export default function Projects() {
               View All
               <ArrowUpRight className="w-4 h-4" />
             </a>
+            </div>
           </div>
 
           {/* RIGHT COLUMN — ScrollStack Cards */}
-          <div className="flex-grow min-w-0">
+          <div ref={stackColumnRef} className="flex-grow min-w-0">
             <ScrollStack
               useWindowScroll={true}
               itemDistance={100}
-              itemStackDistance={30}
+              itemStackDistance={ITEM_STACK_DISTANCE}
               baseScale={0.92}
               itemScale={0.02}
               stackPosition="15%"
+              onActiveIndexChange={setActiveProjectIndex}
             >
               {projectsData.map((project, index) => (
                 <ScrollStackItem
                   key={index}
+                  itemId={`project-card-${index + 1}`}
                   itemClassName={`${project.bgGradient} text-white flex flex-col justify-between cursor-target overflow-hidden`}
                 >
                   {/* Decorative gradient overlay */}
