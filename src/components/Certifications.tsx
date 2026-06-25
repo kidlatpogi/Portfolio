@@ -3,7 +3,7 @@ import ScrollReveal from './ScrollReveal.tsx';
 
 export default function Certifications() {
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="certifications">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden" id="certifications">
       <ScrollReveal
         baseOpacity={0.08}
         enableBlur={true}

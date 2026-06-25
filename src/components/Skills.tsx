@@ -129,7 +129,7 @@ export default function Skills() {
   };
 
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-10 md:py-14 relative overflow-hidden" id="skills">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden" id="skills">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
         {/* Headings inside ScrollReveal */}
@@ -163,7 +163,7 @@ export default function Skills() {
               blurStrength={8}
               as="div"
               containerClassName="flex flex-col items-center justify-center pb-5 md:pb-6 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full skills-parallax-row"
-              wordAnimationEnd="top 80%"
+              wordAnimationEnd="top 50%"
             >
               {/* Skills Badges Column */}
               <div className="w-full flex flex-wrap items-center justify-center gap-3 sm:gap-4 reveal-item skills-badges-col parallax-y">
