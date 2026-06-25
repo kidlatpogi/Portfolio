@@ -33,7 +33,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   
   // Map GSAP-style "top 80%" to Framer Motion "start 80%"
   const endOffset = useMemo(() => {
-    if (!wordAnimationEnd) return "start 75%";
+    if (!wordAnimationEnd) return "start 50%";
     const parts = wordAnimationEnd.split(/\s+/);
     if (parts.length === 2) {
       const target = parts[0] === 'top' ? 'start' : parts[0] === 'bottom' ? 'end' : parts[0];
@@ -47,7 +47,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   const { scrollYProgress } = useScroll({
     target: containerRef as any,
     container: scrollContainerRef || undefined,
-    offset: ["start end", endOffset]
+    offset: ["start 90%", endOffset]
   });
 
   const rotationEndVal = useMemo(() => {
@@ -92,8 +92,8 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
           wordCount += 1;
 
           // Align scroll trigger offsets to stagger the reveal smoothly
-          const startProgress = 0.05 + (currentWordIndex / totalWords) * 0.25;
-          const endProgress = Math.min(0.85, startProgress + 0.15);
+          const startProgress = 0.05 + (currentWordIndex / totalWords) * 0.65;
+          const endProgress = Math.min(0.95, startProgress + 0.25);
 
           return (
             <Word
@@ -134,8 +134,8 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
           
           const currentWordIndex = wordCount;
           wordCount += 1;
-          const startProgress = 0.05 + (currentWordIndex / totalWords) * 0.25;
-          const endProgress = Math.min(0.85, startProgress + 0.15);
+          const startProgress = 0.05 + (currentWordIndex / totalWords) * 0.65;
+          const endProgress = Math.min(0.95, startProgress + 0.25);
 
           return (
             <Word
