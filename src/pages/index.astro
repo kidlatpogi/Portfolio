@@ -11,6 +11,7 @@ import Certifications from '../components/Certifications.tsx';
 import ShapeGrid from '../components/ShapeGrid.tsx';
 import ChatBot from '../components/ChatBot.tsx';
 import SocialsSidebar from '../components/SocialsSidebar.tsx';
+import ParallaxTextSection from '../components/ParallaxTextSection.tsx';
 
 
 
@@ -58,6 +59,7 @@ const navItems = [
 	<CardNav client:load logoText="Zeus Angelo" items={navItems} />
 	<main class="w-full relative z-10">
 		<Hero client:load />
+		<ParallaxTextSection client:visible />
 		<About client:visible />
 		<Skills client:visible />
 		<Experience client:visible />
