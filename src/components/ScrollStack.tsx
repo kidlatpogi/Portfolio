@@ -62,6 +62,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const cardsRef = useRef<HTMLElement[]>([]);
   const lastTransformsRef = useRef(new Map<number, any>());
   const isUpdatingRef = useRef(false);
+  const windowRafIdRef = useRef<number | null>(null);
 
   const calculateProgress = useCallback((scrollTop: number, start: number, end: number) => {
     if (scrollTop < start) return 0;
@@ -128,7 +129,18 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
       const cardTop = getElementOffset(card);
       const triggerStart = cardTop - stackPositionPx - itemStackDistance * i;
-      const triggerEnd = cardTop - scaleEndPositionPx;
+      let triggerEnd = cardTop - scaleEndPositionPx;
+
+      if (i < cardsRef.current.length - 1) {
+        const nextCard = cardsRef.current[i + 1];
+        if (nextCard) {
+          const nextCardTop = getElementOffset(nextCard);
+          triggerEnd = nextCardTop - stackPositionPx - itemStackDistance * (i + 1);
+        }
+      } else {
+        triggerEnd = triggerStart + 150;
+      }
+
       const pinStart = cardTop - stackPositionPx - itemStackDistance * i;
       const pinEnd = endElementTop - containerHeight / 2;
 
@@ -217,12 +229,22 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   ]);
 
   const handleScroll = useCallback(() => {
-    updateCardTransforms();
-  }, [updateCardTransforms]);
+    if (useWindowScroll) {
+      if (windowRafIdRef.current === null) {
+        windowRafIdRef.current = requestAnimationFrame(() => {
+          updateCardTransforms();
+          windowRafIdRef.current = null;
+        });
+      }
+    } else {
+      updateCardTransforms();
+    }
+  }, [updateCardTransforms, useWindowScroll]);
 
   const setupLenis = useCallback(() => {
     if (useWindowScroll) {
       window.addEventListener('scroll', handleScroll, { passive: true });
+      window.addEventListener('resize', handleScroll, { passive: true });
       return null;
     } else {
       const scroller = scrollerRef.current;
@@ -288,8 +310,13 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      if (windowRafIdRef.current !== null) {
+        cancelAnimationFrame(windowRafIdRef.current);
+        windowRafIdRef.current = null;
+      }
       if (useWindowScroll) {
         window.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('resize', handleScroll);
       } else if (lenisRef.current) {
         lenisRef.current.destroy();
       }
