@@ -14,6 +14,16 @@ interface ScrollRevealProps {
   rotationEnd?: string;
   wordAnimationEnd?: string;
   as?: 'div' | 'p' | 'h2' | 'span' | 'section';
+  simpleReveal?: boolean;
+}
+
+const motionCache = new Map<any, any>();
+
+function getMotionComponent(Component: any) {
+  if (!motionCache.has(Component)) {
+    motionCache.set(Component, motion.create(Component));
+  }
+  return motionCache.get(Component);
 }
 
 const ScrollReveal: React.FC<ScrollRevealProps> = ({
@@ -27,7 +37,8 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   wordAnimationEnd,
   rotationEnd,
   scrollContainerRef,
-  as
+  as,
+  simpleReveal = false
 }) => {
   const containerRef = useRef<HTMLElement>(null);
   
@@ -58,6 +69,12 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
   // Transform rotation from baseRotation to 0 based on scroll
   const rotate = useTransform(scrollYProgress, [0, rotationEndVal], [baseRotation, 0], { clamp: true });
+
+  // Simple reveal animations
+  const opacity = useTransform(scrollYProgress, [0.05, 0.3], [baseOpacity, 1], { clamp: true });
+  const blurVal = useTransform(scrollYProgress, [0.05, 0.3], [blurStrength, 0], { clamp: true });
+  const filter = useTransform(blurVal, (v) => enableBlur ? `blur(${v}px)` : 'none');
+  const y = useTransform(scrollYProgress, [0, 1], [-15, 15]);
 
   // Process child nodes recursively, counting words and mapping progress
   const splitText = useMemo(() => {
@@ -128,7 +145,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
         if (isLeaf || hasSingleTextChild || isInlineFlex || isRevealLeaf) {
           const needsInlineBlock = !props.className?.split(/\s+/).some(cls =>
-            cls === 'inline-block' || cls === 'inline-flex' || cls === 'flex' || cls === 'block'
+             cls === 'inline-block' || cls === 'inline-flex' || cls === 'flex' || cls === 'block'
           );
           const className = [props.className, 'word', needsInlineBlock ? 'inline-block' : ''].filter(Boolean).join(' ');
           
@@ -164,7 +181,44 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   }, [children, scrollYProgress, baseOpacity, blurStrength, enableBlur]);
 
   const Component = as || 'div';
-  const MotionComponent = motion.create(Component as any);
+  const MotionComponent = getMotionComponent(Component as any);
+
+  if (simpleReveal) {
+    const hasParallax = containerClassName.includes('parallax-y') || containerClassName.includes('reveal-item');
+    const style = {
+      rotate,
+      transformOrigin: '0% 50%',
+      opacity,
+      filter,
+      y: hasParallax ? y : undefined,
+    };
+
+    if (!as) {
+      return (
+        <h2 
+          ref={containerRef as any} 
+          className={`my-5 ${containerClassName}`}
+        >
+          <motion.p 
+            style={style}
+            className={`text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] font-semibold ${textClassName}`}
+          >
+            {children}
+          </motion.p>
+        </h2>
+      );
+    }
+
+    return (
+      <MotionComponent 
+        ref={containerRef as any} 
+        style={style}
+        className={`${containerClassName} ${textClassName}`}
+      >
+        {children}
+      </MotionComponent>
+    );
+  }
 
   if (!as) {
     return (
@@ -232,7 +286,7 @@ const Word: React.FC<WordProps> = ({
   const hasParallax = className.includes('parallax-y');
   const y = useTransform(scrollYProgress, [0, 1], [-15, 15]);
 
-  const MotionComp = motion.create(Component);
+  const MotionComp = getMotionComponent(Component);
 
   return (
     <MotionComp
