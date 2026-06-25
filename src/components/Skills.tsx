@@ -129,7 +129,7 @@ export default function Skills() {
   };
 
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="skills">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-10 md:py-14 relative overflow-hidden" id="skills">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
         {/* Headings inside ScrollReveal */}
@@ -139,7 +139,7 @@ export default function Skills() {
           baseRotation={2}
           blurStrength={12}
           as="div"
-          containerClassName="flex flex-col items-center w-full mb-16"
+          containerClassName="flex flex-col items-center w-full mb-10"
         >
           {/* "Technical" Subheading - styled like Hero's subheader, centered */}
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
@@ -153,7 +153,7 @@ export default function Skills() {
         </ScrollReveal>
 
         {/* Categorized Skills Section */}
-        <div className="w-[95%] md:w-[90%] max-w-[1200px] flex flex-col gap-4 sm:gap-6 mx-auto relative z-10">
+        <div className="w-[95%] md:w-[95%] max-w-[1600px] flex flex-col gap-4 sm:gap-6 mx-auto relative z-10">
           {categorizedSkills.map((category) => (
             <ScrollReveal
               key={category.title}
