@@ -7,17 +7,22 @@ export interface ScrollStackItemProps {
   children: ReactNode;
 }
 
-export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({ children, itemClassName = '' }) => (
-  <div
-    className={`scroll-stack-card relative w-full h-[400px] md:h-[460px] my-8 p-8 md:p-12 rounded-[40px] shadow-[0_0_30px_rgba(0,0,0,0.1)] box-border origin-top will-change-transform ${itemClassName}`.trim()}
-    style={{
-      backfaceVisibility: 'hidden',
-      transformStyle: 'preserve-3d'
-    }}
-  >
-    {children}
-  </div>
-);
+export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({ children, itemClassName = '' }) => {
+  const hasHeightClass = /\bh-\[/.test(itemClassName) || /\bh-full\b/.test(itemClassName) || /\bh-screen\b/.test(itemClassName);
+  const defaultHeightClass = hasHeightClass ? '' : 'h-[72dvh] min-h-[350px] lg:h-[min(95vh,900px)] lg:min-h-[500px] xl:h-[min(95vh,1050px)]';
+
+  return (
+    <div
+      className={`scroll-stack-card relative w-full ${defaultHeightClass} p-8 md:p-12 rounded-[40px] shadow-[0_0_30px_rgba(0,0,0,0.1)] box-border origin-top will-change-transform ${itemClassName}`.trim()}
+      style={{
+        backfaceVisibility: 'hidden',
+        transformStyle: 'preserve-3d'
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 interface ScrollStackProps {
   className?: string;
