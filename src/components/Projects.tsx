@@ -61,7 +61,7 @@ export default function Projects() {
           {projectsData.map((project, index) => (
             <ScrollStackItem 
               key={index}
-              itemClassName={`${project.bgColor} ${project.textColor} flex flex-col justify-between`}
+              itemClassName={`${project.bgColor} ${project.textColor} flex flex-col justify-between cursor-target`}
             >
               <div className="flex flex-col gap-4">
                 {/* Header info */}
