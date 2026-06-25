@@ -42,31 +42,28 @@ export default function Projects() {
       {/* Anchor targets for sub-navigation scroll links */}
       <div id="designs" className="absolute top-1/2" />
 
-      {/* Unified Centered Header */}
-      <div className="w-full max-w-[1600px] flex flex-col items-center z-10 mb-12">
-        <ScrollReveal
-          baseOpacity={0.08}
-          enableBlur={true}
-          baseRotation={2}
-          blurStrength={12}
-          as="div"
-          containerClassName="flex flex-col items-center w-full"
-        >
-          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
-            Selected Projects
-          </span>
-          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center">
-            Featured Work
-          </h2>
-        </ScrollReveal>
-      </div>
-
       {/* Split Layout: Sticky Left Info + Scrolling Right Cards */}
       <div className="w-[95%] md:w-[95%] max-w-[1600px] mx-auto relative z-10">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
 
           {/* LEFT COLUMN — Sticky Info Panel */}
           <div className="lg:w-[320px] xl:w-[380px] flex-shrink-0 lg:sticky lg:top-[15vh] lg:self-start">
+            {/* ScrollReveal Header */}
+            <ScrollReveal
+              baseOpacity={0.08}
+              enableBlur={true}
+              baseRotation={2}
+              blurStrength={12}
+              as="div"
+              containerClassName="flex flex-col items-start w-full mb-6"
+            >
+              <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-3">
+                Selected Projects
+              </span>
+              <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none mb-6">
+                Featured<br />Work
+              </h2>
+            </ScrollReveal>
             {/* Description */}
             <p className="font-sans text-sm md:text-base text-slate-500 leading-relaxed max-w-[300px] mb-8">
               Applications where performance, design, and user experience come together. The details most skip are the details I care about most.
