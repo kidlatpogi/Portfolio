@@ -170,12 +170,24 @@ const CardNav: React.FC<CardNavProps> = ({
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
+    if (href === '#project-card-1' || href === '#projects') { // Target the first project card explicitly
+      const targetSection = document.getElementById('project-card-1');
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Close the menu after clicking a link
+      toggleMenu();
+        return;
+    }
+    }
+    // General fallback for other links or if the explicit target isn't found in structure
     const id = href.replace('#', '');
     const targetSection = document.getElementById(id);
     if (targetSection) {
       targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
       // Close the menu after clicking a link
       toggleMenu();
+    } else if (href !== '#') {
+      console.warn(`Could not find target section for href: ${href}`);
     }
   };
 
