@@ -89,6 +89,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   const wrappersRef = useRef<HTMLElement[]>([]);
   const cardsRef = useRef<HTMLElement[]>([]);
   const naturalTopsRef = useRef<number[]>([]);
+  const wrapperHeightsRef = useRef<number[]>([]);
   const frameRef = useRef<number | null>(null);
   const stackCompletedRef = useRef(false);
   const activeIndexRef = useRef(-1);
@@ -142,6 +143,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
     naturalTopsRef.current = wrappers.map(wrapper =>
       useWindowScroll ? getDocumentTop(wrapper) : wrapper.offsetTop
     );
+
+    wrapperHeightsRef.current = wrappers.map(wrapper => wrapper.offsetHeight);
 
     wrappers.forEach((wrapper, index) => {
       wrapper.style.position = previousStyles[index].position;
@@ -215,7 +218,8 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
 
     const lastIndex = wrappersRef.current.length - 1;
     const lastStart = getWrapperTop(lastWrapper, lastIndex) - stickyTop - itemStackDistance * lastIndex;
-    const stackEnd = getWrapperTop(lastWrapper, lastIndex) + lastWrapper.offsetHeight - containerHeight * 0.5;
+    const lastWrapperHeight = wrapperHeightsRef.current[lastIndex] ?? lastWrapper.offsetHeight;
+    const stackEnd = getWrapperTop(lastWrapper, lastIndex) + lastWrapperHeight - containerHeight * 0.5;
     const isComplete = scrollTop >= lastStart && scrollTop <= stackEnd;
     if (isComplete && !stackCompletedRef.current) {
       stackCompletedRef.current = true;
@@ -288,6 +292,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       activeIndexRef.current = -1;
       lastTransformsRef.current.clear();
       naturalTopsRef.current = [];
+      wrapperHeightsRef.current = [];
       wrappersRef.current = [];
       cardsRef.current = [];
     };

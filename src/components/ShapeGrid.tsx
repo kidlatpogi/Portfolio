@@ -47,14 +47,22 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     const hexHoriz = squareSize * 1.5;
     const hexVert = squareSize * Math.sqrt(3);
 
+    let rect = canvas.getBoundingClientRect();
+
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
       numSquaresX.current = Math.ceil(canvas.width / squareSize) + 1;
       numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
+      rect = canvas.getBoundingClientRect();
+    };
+
+    const updateRect = () => {
+      rect = canvas.getBoundingClientRect();
     };
 
     window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('scroll', updateRect, { passive: true });
     resizeCanvas();
 
     const drawHex = (cx: number, cy: number, size: number) => {
@@ -291,8 +299,6 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-
       // Bounds check so hover cell calculations only run when cursor is inside the canvas
       if (
         event.clientX < rect.left ||
@@ -410,6 +416,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('scroll', updateRect);
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
