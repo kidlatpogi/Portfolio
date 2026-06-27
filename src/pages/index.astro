@@ -51,7 +51,7 @@ const navItems = [
 
 <Layout>
 	<div class="fixed inset-0 z-0 pointer-events-none">
-		<ShapeGrid client:load speed={0} squareSize={55} borderColor="rgba(51, 65, 85, 0.05)" hoverFillColor="rgba(51, 65, 85, 0.12)" shape="square" hoverTrailAmount={6} gradientColor="#f8f8f8" />
+		<ShapeGrid client:idle speed={0} squareSize={55} borderColor="rgba(51, 65, 85, 0.05)" hoverFillColor="rgba(51, 65, 85, 0.12)" shape="square" hoverTrailAmount={6} gradientColor="#f8f8f8" />
 	</div>
 
 
@@ -66,6 +66,6 @@ const navItems = [
 		<Projects client:visible />
 		<Certifications client:visible />
 	</main>
-	<ChatBot client:load />
-	<SocialsSidebar client:load />
+	<ChatBot client:idle />
+	<SocialsSidebar client:idle />
 </Layout>

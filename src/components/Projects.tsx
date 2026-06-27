@@ -91,6 +91,12 @@ export default function Projects() {
     const mediaQuery = window.matchMedia(DESKTOP_QUERY);
     let frameId: number | null = null;
 
+    let railTop = 0;
+    let lastShellTop = 0;
+    let panelHeight = 0;
+    let railWidth = 0;
+    let lastIndex = 0;
+
     const resetPanel = () => {
       rail.style.minHeight = '';
       panel.style.position = '';
@@ -106,22 +112,17 @@ export default function Projects() {
         return;
       }
 
-      const shells = stackColumn.querySelectorAll<HTMLElement>('.scroll-stack-card-shell');
-      const lastIndex = shells.length - 1;
-      const lastShell = shells[lastIndex];
-      if (!lastShell) {
+      if (lastIndex < 0 || lastShellTop === 0) {
         resetPanel();
         return;
       }
 
       const stickyTop = Math.round(window.innerHeight * STACK_POSITION_RATIO);
-      const railTop = getDocumentTop(rail);
-      const lastShellTop = getDocumentTop(lastShell);
       const releaseScrollTop = lastShellTop - stickyTop - ITEM_STACK_DISTANCE * lastIndex;
       const releasedPanelTop = Math.max(0, lastShellTop - ITEM_STACK_DISTANCE * lastIndex - railTop);
 
-      rail.style.minHeight = `${panel.offsetHeight}px`;
-      panel.style.width = `${rail.getBoundingClientRect().width}px`;
+      rail.style.minHeight = `${panelHeight}px`;
+      panel.style.width = `${railWidth}px`;
 
       if ((window.scrollY || document.documentElement.scrollTop || 0) >= releaseScrollTop) {
         panel.style.position = 'absolute';
@@ -137,15 +138,42 @@ export default function Projects() {
       frameId = window.requestAnimationFrame(applyPanelPosition);
     };
 
-    requestPanelPosition();
+    const measureLayout = () => {
+      // Temporarily clear inline styling so we can measure natural values
+      rail.style.minHeight = '';
+      panel.style.width = '';
+      panel.style.position = '';
+      panel.style.top = '';
+
+      const shells = stackColumn.querySelectorAll<HTMLElement>('.scroll-stack-card-shell');
+      lastIndex = shells.length - 1;
+      const lastShell = shells[lastIndex];
+
+      railTop = getDocumentTop(rail);
+      if (lastShell) {
+        lastShellTop = getDocumentTop(lastShell);
+      } else {
+        lastShellTop = 0;
+      }
+      panelHeight = panel.offsetHeight;
+      railWidth = rail.getBoundingClientRect().width;
+
+      applyPanelPosition();
+    };
+
+    const handleResize = () => {
+      measureLayout();
+    };
+
+    measureLayout();
     window.addEventListener('scroll', requestPanelPosition, { passive: true });
-    window.addEventListener('resize', requestPanelPosition, { passive: true });
-    mediaQuery.addEventListener('change', requestPanelPosition);
+    window.addEventListener('resize', handleResize, { passive: true });
+    mediaQuery.addEventListener('change', handleResize);
 
     return () => {
       window.removeEventListener('scroll', requestPanelPosition);
-      window.removeEventListener('resize', requestPanelPosition);
-      mediaQuery.removeEventListener('change', requestPanelPosition);
+      window.removeEventListener('resize', handleResize);
+      mediaQuery.removeEventListener('change', handleResize);
       if (frameId !== null) {
         window.cancelAnimationFrame(frameId);
       }

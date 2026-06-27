@@ -51,6 +51,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   const spinTl = useRef<gsap.core.Timeline | null>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const containingBlockRef = useRef<HTMLElement | null>(null);
+  const containingBlockOffsetRef = useRef({ x: 0, y: 0 });
 
   const isActiveRef = useRef(false);
   const targetCornerPositionsRef = useRef<{ x: number; y: number }[] | null>(null);
@@ -80,7 +81,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
 
   const moveCursor = useCallback((x: number, y: number) => {
     if (!cursorRef.current) return;
-    const { x: offsetX, y: offsetY } = getContainingBlockOffset(containingBlockRef.current);
+    const { x: offsetX, y: offsetY } = containingBlockOffsetRef.current;
     gsap.to(cursorRef.current, { x: x - offsetX, y: y - offsetY, duration: 0.1, ease: 'power3.out' });
   }, []);
 
@@ -96,9 +97,19 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     cornersRef.current = cursor.querySelectorAll<HTMLDivElement>('.target-cursor-corner');
 
     containingBlockRef.current = getContainingBlock(cursor);
-    const getOffset = () => getContainingBlockOffset(containingBlockRef.current);
+    const updateOffset = () => {
+      containingBlockOffsetRef.current = getContainingBlockOffset(containingBlockRef.current);
+    };
+    updateOffset();
 
+    const getOffset = () => containingBlockOffsetRef.current;
     let activeTarget: Element | null = null;
+    let targetRect: DOMRect | null = null;
+    const updateTargetRect = () => {
+      if (activeTarget) {
+        targetRect = activeTarget.getBoundingClientRect();
+      }
+    };
     let currentLeaveHandler: (() => void) | null = null;
     let resumeTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -129,13 +140,13 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     createSpinTimeline();
 
     const tickerFn = () => {
-      if (!activeTarget || !cursorRef.current || !cornersRef.current) {
+      if (!activeTarget || !cursorRef.current || !cornersRef.current || !targetRect) {
         return;
       }
       const strength = activeStrengthRef.current.current;
       if (strength === 0) return;
 
-      const rect = activeTarget.getBoundingClientRect();
+      const rect = targetRect;
       const { borderWidth, cornerSize } = constants;
       const { x: offsetX, y: offsetY } = getOffset();
 
@@ -173,6 +184,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     window.addEventListener('mousemove', moveHandler);
 
     const scrollHandler = () => {
+      updateTargetRect();
       if (!activeTarget || !cursorRef.current) return;
       const { x: offsetX, y: offsetY } = getOffset();
       const mouseX = (gsap.getProperty(cursorRef.current, 'x') as number) + offsetX;
@@ -224,13 +236,14 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
       }
 
       activeTarget = target;
+      targetRect = target.getBoundingClientRect();
       const corners = Array.from(cornersRef.current);
       corners.forEach(corner => gsap.killTweensOf(corner));
       gsap.killTweensOf(cursorRef.current, 'rotation');
       spinTl.current?.pause();
       gsap.set(cursorRef.current, { rotation: 0 });
 
-      const rect = target.getBoundingClientRect();
+      const rect = targetRect;
       const { borderWidth, cornerSize } = constants;
       const { x: offsetX, y: offsetY } = getOffset();
       const cursorX = gsap.getProperty(cursorRef.current, 'x') as number;
@@ -261,6 +274,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
         gsap.ticker.remove(tickerFnRef.current!);
         isActiveRef.current = false;
         targetCornerPositionsRef.current = null;
+        targetRect = null;
         gsap.set(activeStrengthRef.current, { current: 0, overwrite: true });
         activeTarget = null;
         if (cornersRef.current) {
@@ -307,6 +321,8 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
 
     const resizeHandler = () => {
       containingBlockRef.current = getContainingBlock(cursor);
+      updateOffset();
+      updateTargetRect();
     };
     window.addEventListener('resize', resizeHandler);
 

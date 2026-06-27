@@ -1,63 +1,15 @@
 /**
 * @license
 *
-* Font Family: Array (CDN Version)
+* Font Family: Array (Local Offline Version)
 * Designed by: Frode Helland
 * URL: https://www.fontshare.com/fonts/array
-* © 2026 Indian Type Foundry
 *
 */
 @font-face {
-  font-family: 'Array-Wide';
-  src: url('https://cdn.fontshare.com/wf/4QBZHM3FOPYBI67YBLLWZV6ZYIUQTKEE/RXSUFPNEA6YXGQDMHMP3OODY6UWXRJBM/C6VM2RT4EU2NNT5XZWVYHR7WOIOGM4EU.woff2') format('woff2'),
-       url('https://cdn.fontshare.com/wf/4QBZHM3FOPYBI67YBLLWZV6ZYIUQTKEE/RXSUFPNEA6YXGQDMHMP3OODY6UWXRJBM/C6VM2RT4EU2NNT5XZWVYHR7WOIOGM4EU.woff') format('woff'),
-       url('https://cdn.fontshare.com/wf/4QBZHM3FOPYBI67YBLLWZV6ZYIUQTKEE/RXSUFPNEA6YXGQDMHMP3OODY6UWXRJBM/C6VM2RT4EU2NNT5XZWVYHR7WOIOGM4EU.ttf') format('truetype');
-  font-weight: 400;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Array-Regular';
-  src: url('https://cdn.fontshare.com/wf/4QBZHM3FOPYBI67YBLLWZV6ZYIUQTKEE/RXSUFPNEA6YXGQDMHMP3OODY6UWXRJBM/C6VM2RT4EU2NNT5XZWVYHR7WOIOGM4EU.woff2') format('woff2'),
-       url('https://cdn.fontshare.com/wf/4QBZHM3FOPYBI67YBLLWZV6ZYIUQTKEE/RXSUFPNEA6YXGQDMHMP3OODY6UWXRJBM/C6VM2RT4EU2NNT5XZWVYHR7WOIOGM4EU.woff') format('woff'),
-       url('https://cdn.fontshare.com/wf/4QBZHM3FOPYBI67YBLLWZV6ZYIUQTKEE/RXSUFPNEA6YXGQDMHMP3OODY6UWXRJBM/C6VM2RT4EU2NNT5XZWVYHR7WOIOGM4EU.ttf') format('truetype');
-  font-weight: 400;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
   font-family: 'Array-Semibold';
-  src: url('https://cdn.fontshare.com/wf/CASMZPM4VVUC7LKMFQX5SR6SI2NXI6WK/JAJOL32XMCA7KL72O3CN6EMCO3THGWPV/N2P4YTB27O7OQQY6FVFUL232EUHLL7SR.woff2') format('woff2'),
-       url('https://cdn.fontshare.com/wf/CASMZPM4VVUC7LKMFQX5SR6SI2NXI6WK/JAJOL32XMCA7KL72O3CN6EMCO3THGWPV/N2P4YTB27O7OQQY6FVFUL232EUHLL7SR.woff') format('woff'),
-       url('https://cdn.fontshare.com/wf/CASMZPM4VVUC7LKMFQX5SR6SI2NXI6WK/JAJOL32XMCA7KL72O3CN6EMCO3THGWPV/N2P4YTB27O7OQQY6FVFUL232EUHLL7SR.ttf') format('truetype');
+  src: url('./Array-Semibold.woff2') format('woff2');
   font-weight: 600;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Array-SemiboldWide';
-  src: url('https://cdn.fontshare.com/wf/CASMZPM4VVUC7LKMFQX5SR6SI2NXI6WK/JAJOL32XMCA7KL72O3CN6EMCO3THGWPV/N2P4YTB27O7OQQY6FVFUL232EUHLL7SR.woff2') format('woff2'),
-       url('https://cdn.fontshare.com/wf/CASMZPM4VVUC7LKMFQX5SR6SI2NXI6WK/JAJOL32XMCA7KL72O3CN6EMCO3THGWPV/N2P4YTB27O7OQQY6FVFUL232EUHLL7SR.woff') format('woff'),
-       url('https://cdn.fontshare.com/wf/CASMZPM4VVUC7LKMFQX5SR6SI2NXI6WK/JAJOL32XMCA7KL72O3CN6EMCO3THGWPV/N2P4YTB27O7OQQY6FVFUL232EUHLL7SR.ttf') format('truetype');
-  font-weight: 600;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Array-BoldWide';
-  src: url('https://cdn.fontshare.com/wf/UPIFVAOR6LZHAYRMF2C77WE3FN5BLNEC/INIDOMS2AGMFQXDWKOC6LOTPXKPZEIHL/2RWR7WKM4ZCDU656OKUXMQXLJH4H3EJD.woff2') format('woff2'),
-       url('https://cdn.fontshare.com/wf/UPIFVAOR6LZHAYRMF2C77WE3FN5BLNEC/INIDOMS2AGMFQXDWKOC6LOTPXKPZEIHL/2RWR7WKM4ZCDU656OKUXMQXLJH4H3EJD.woff') format('woff'),
-       url('https://cdn.fontshare.com/wf/UPIFVAOR6LZHAYRMF2C77WE3FN5BLNEC/INIDOMS2AGMFQXDWKOC6LOTPXKPZEIHL/2RWR7WKM4ZCDU656OKUXMQXLJH4H3EJD.ttf') format('truetype');
-  font-weight: 700;
-  font-display: swap;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Array-Bold';
-  src: url('https://cdn.fontshare.com/wf/UPIFVAOR6LZHAYRMF2C77WE3FN5BLNEC/INIDOMS2AGMFQXDWKOC6LOTPXKPZEIHL/2RWR7WKM4ZCDU656OKUXMQXLJH4H3EJD.woff2') format('woff2'),
-       url('https://cdn.fontshare.com/wf/UPIFVAOR6LZHAYRMF2C77WE3FN5BLNEC/INIDOMS2AGMFQXDWKOC6LOTPXKPZEIHL/2RWR7WKM4ZCDU656OKUXMQXLJH4H3EJD.woff') format('woff'),
-       url('https://cdn.fontshare.com/wf/UPIFVAOR6LZHAYRMF2C77WE3FN5BLNEC/INIDOMS2AGMFQXDWKOC6LOTPXKPZEIHL/2RWR7WKM4ZCDU656OKUXMQXLJH4H3EJD.ttf') format('truetype');
-  font-weight: 700;
   font-display: swap;
   font-style: normal;
 }
