@@ -13,7 +13,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth preloading">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -42,6 +42,113 @@ const {
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 	</head>
 	<body class="bg-[#f8f8f8] text-black antialiased selection:bg-[#DF2935]/20 selection:text-black overflow-x-hidden min-h-screen">
+		<!-- Preloader Overlay (good-fella.com style) -->
+		<div id="preloader" class="fixed inset-0 bg-black z-[99999] flex items-center justify-center pointer-events-auto">
+			<div class="relative font-mono font-bold text-[6vw] sm:text-[4vw] md:text-[3vw] lg:text-[2.2vw] xl:text-[1.8vw] tracking-[0.25em] uppercase select-none">
+				<!-- Glitch shadow using the website's burnt orange accent color (#C44900) -->
+				<div class="absolute inset-0 text-[#C44900] opacity-35 blur-[2.5px] pointer-events-none select-none glitch-text translate-x-[2px] translate-y-[1px]"></div>
+				<!-- Main white text -->
+				<div id="preloader-text" class="relative text-white z-10"></div>
+			</div>
+		</div>
+
+		<script is:inline>
+			(function() {
+				const chars = '!<>-_\\/[]{}—=+*^?#________';
+				const targetText = 'LOADING';
+				const textEl = document.getElementById('preloader-text');
+				const shadowEl = document.querySelector('.glitch-text');
+
+				if (!textEl) return;
+
+				class Scrambler {
+					constructor(el, shadowEl) {
+						this.el = el;
+						this.shadowEl = shadowEl;
+						this.frame = 0;
+						this.queue = [];
+						this.resolve = null;
+					}
+					scramble(text) {
+						const promise = new Promise((r) => this.resolve = r);
+						this.queue = [];
+						for (let i = 0; i < text.length; i++) {
+							const to = text[i];
+							const start = Math.floor(Math.random() * 20);
+							const end = start + Math.floor(Math.random() * 25) + 10;
+							this.queue.push({ to, start, end, char: '' });
+						}
+						this.frame = 0;
+						this.tick();
+						return promise;
+					}
+					tick() {
+						let output = '';
+						let complete = 0;
+						for (let i = 0; i < this.queue.length; i++) {
+							let { to, start, end, char } = this.queue[i];
+							if (this.frame >= end) {
+								complete++;
+								output += to;
+							} else if (this.frame >= start) {
+								if (!char || Math.random() < 0.28) {
+									char = chars[Math.floor(Math.random() * chars.length)];
+									this.queue[i].char = char;
+								}
+								// Our burnt orange color for the scramble character
+								output += `<span style="color: #C44900;">${char}</span>`;
+							} else {
+								output += '';
+							}
+						}
+						this.el.innerHTML = output;
+						if (this.shadowEl) {
+							this.shadowEl.innerHTML = output;
+						}
+
+						if (complete === this.queue.length) {
+							if (this.resolve) this.resolve();
+						} else {
+							this.frame++;
+							requestAnimationFrame(() => this.tick());
+						}
+					}
+				}
+
+				const scrambler = new Scrambler(textEl, shadowEl);
+				scrambler.scramble(targetText);
+
+				let isLoaded = false;
+				let isMinTimeElapsed = false;
+
+				window.addEventListener('load', () => {
+					isLoaded = true;
+					checkRemoval();
+				});
+
+				setTimeout(() => {
+					isMinTimeElapsed = true;
+					checkRemoval();
+				}, 2500);
+
+				function checkRemoval() {
+					if (isLoaded && isMinTimeElapsed) {
+						const preloader = document.getElementById('preloader');
+						if (preloader) {
+							preloader.style.transition = 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.7s';
+							preloader.style.opacity = '0';
+							preloader.style.visibility = 'hidden';
+							document.documentElement.classList.remove('preloading');
+							window.dispatchEvent(new CustomEvent('preloaderFinished'));
+							setTimeout(() => {
+								preloader.remove();
+							}, 700);
+						}
+					}
+				}
+			})();
+		</script>
+
 		<slot />
 	</body>
 </html>
@@ -56,6 +163,12 @@ const {
 	html::-webkit-scrollbar,
 	body::-webkit-scrollbar {
 		display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+	}
+
+	html.preloading,
+	html.preloading body {
+		overflow: hidden !important;
+		height: 100% !important;
 	}
 </style>
 
@@ -81,5 +194,27 @@ const {
 	});
 
 	gsap.ticker.lagSmoothing(0);
-</script>
 
+	// Stop scroll initially while preloader is active
+	lenis.stop();
+
+	// Animate reveal of navigation and main sections once preloader is finished
+	window.addEventListener('preloaderFinished', () => {
+		lenis.start();
+
+		const tl = gsap.timeline();
+		
+		// Reveal Hero content
+		tl.fromTo('main > #home', 
+			{ opacity: 0, y: 35 },
+			{ opacity: 1, y: 0, duration: 1.4, ease: 'power4.out' }
+		);
+
+		// Reveal Navbar
+		tl.fromTo('.fixed.top-6', 
+			{ opacity: 0, y: -40 },
+			{ opacity: 1, y: 0, duration: 1.1, ease: 'power3.out' },
+			'-=0.9'
+		);
+	});
+</script>
