@@ -226,6 +226,19 @@ const {
 	window.addEventListener('preloaderFinished', () => {
 		lenis.start();
 
+		// Sync scroll position instantly behind the preloader curtain if there is a hash
+		if (window.location.hash) {
+			const targetEl = document.querySelector(window.location.hash);
+			if (targetEl) {
+				lenis.scrollTo(targetEl as HTMLElement, { immediate: true });
+				
+				// Fallback native scroll to be 100% robust
+				const rect = targetEl.getBoundingClientRect();
+				const absoluteTop = rect.top + window.pageYOffset;
+				window.scrollTo(0, absoluteTop);
+			}
+		}
+
 		const tl = gsap.timeline({
 			onComplete: () => {
 				document.getElementById('preloader')?.remove();
