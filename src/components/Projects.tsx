@@ -113,6 +113,11 @@ export default function Projects() {
       }
 
       if (lastIndex < 0 || lastShellTop === 0) {
+        const shells = stackColumn.querySelectorAll<HTMLElement>('.scroll-stack-card-shell');
+        if (shells.length > 0) {
+          measureLayout();
+          return;
+        }
         resetPanel();
         return;
       }
@@ -166,11 +171,14 @@ export default function Projects() {
     };
 
     measureLayout();
+    const timerId = setTimeout(measureLayout, 200);
+
     window.addEventListener('scroll', requestPanelPosition, { passive: true });
     window.addEventListener('resize', handleResize, { passive: true });
     mediaQuery.addEventListener('change', handleResize);
 
     return () => {
+      clearTimeout(timerId);
       window.removeEventListener('scroll', requestPanelPosition);
       window.removeEventListener('resize', handleResize);
       mediaQuery.removeEventListener('change', handleResize);
