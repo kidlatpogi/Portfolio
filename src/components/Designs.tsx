@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import ShapeGrid from './ShapeGrid.tsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -8,32 +9,32 @@ const designsData = [
   {
     title: "AI Agent Platform Dashboard",
     category: "Product Design",
-    image: "/design_1.png"
+    color: "#0f172a" // Dark slate
   },
   {
     title: "Smart Home Controller UI",
     category: "Mobile Design",
-    image: "/design_2.png"
+    color: "#1e293b" // Charcoal
   },
   {
     title: "Cyberpunk Portfolio Concept",
     category: "Creative Direction",
-    image: "/design_3.png"
+    color: "#C44900" // Accent Orange
   },
   {
     title: "Fintech Mobile Wallet",
     category: "Financial App",
-    image: "/design_4.png"
+    color: "#111827" // Very dark gray
   },
   {
     title: "Crypto Trading Terminal",
     category: "Data Visualization",
-    image: "/design_5.png"
+    color: "#1f2937" // Dark gray
   },
   {
     title: "Developer Workspace Theme",
     category: "IDE Experience",
-    image: "/design_6.png"
+    color: "#090d16" // Deep navy
   }
 ];
 
@@ -82,8 +83,34 @@ export default function Designs() {
 
   return (
     <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8]">
-      {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
-      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-16 md:py-0 z-30">
+      {/* Scrollbar hiding styles scoped to Designs section */}
+      <style>{`
+        #designs,
+        #designs * {
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+        }
+        #designs::-webkit-scrollbar,
+        #designs *::-webkit-scrollbar {
+          display: none !important;
+        }
+      `}</style>
+
+      {/* Interactive Background ShapeGrid */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <ShapeGrid 
+          speed={0} 
+          squareSize={55} 
+          borderColor="rgba(51, 65, 85, 0.05)" 
+          hoverFillColor="rgba(51, 65, 85, 0.12)" 
+          shape="square" 
+          hoverTrailAmount={6} 
+          gradientColor="#f8f8f8" 
+        />
+      </div>
+
+      {/* On Desktop: Sticky full-screen view starting at top. On Mobile: static relative view */}
+      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-start pt-16 md:pt-24 pb-12 z-30">
         
         {/* Section Header */}
         <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-10 md:mb-14 flex flex-col items-start z-10 flex-shrink-0">
@@ -95,23 +122,27 @@ export default function Designs() {
           </h2>
         </div>
 
-        {/* Cards flex container */}
+        {/* Cards flex container. md:pl-[480px] offsets the first card below the 's' in 'Designs' */}
         <div 
           ref={scrollSectionRef} 
-          className="flex flex-col md:flex-row gap-8 md:gap-16 px-6 md:px-24 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0"
+          className="flex flex-col md:flex-row gap-8 md:gap-16 px-6 md:pl-[480px] md:pr-24 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
         >
           {designsData.map((design, index) => (
             <div 
               key={index} 
-              className="w-full sm:w-[500px] md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+              className="w-full sm:w-[500px] md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
             >
-              {/* Design Image */}
-              <img 
-                src={design.image} 
-                alt={design.title} 
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              {/* Gradient Overlay */}
+              {/* Solid Color Background with Subtle Index Number */}
+              <div 
+                style={{ backgroundColor: design.color }} 
+                className="w-full h-full group-hover:scale-105 transition-transform duration-500 flex items-center justify-center select-none"
+              >
+                <span className="text-white/10 font-sans text-8xl md:text-9xl font-black tracking-tighter">
+                  0{index + 1}
+                </span>
+              </div>
+              
+              {/* Gradient Hover Info Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 md:p-8">
                 <span className="text-accent font-mono text-xs md:text-sm uppercase tracking-wider font-bold mb-1">
                   {design.category}
@@ -125,7 +156,7 @@ export default function Designs() {
         </div>
 
         {/* Progress Bar (Desktop only) */}
-        <div className="hidden md:block absolute bottom-12 left-24 right-24 h-[2px] bg-slate-200 rounded-full overflow-hidden">
+        <div className="hidden md:block absolute bottom-12 left-24 right-24 h-[2px] bg-slate-200 rounded-full overflow-hidden z-10">
           <div 
             id="designs-progress-bar"
             className="h-full bg-accent w-0 transition-all duration-100 ease-out"

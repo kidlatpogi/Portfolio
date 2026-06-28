@@ -304,7 +304,7 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
   }, [measureNaturalTops, requestUpdate, stickyTop, scaleEndTop]);
 
   const items = Children.toArray(children).filter(isValidElement) as ReactElement[];
-  const bottomPadding = `max(${Math.round(stickyTop + itemStackDistance * items.length + 160)}px, 28vh)`;
+  const bottomPadding = `max(${Math.round(itemStackDistance * items.length + 100)}px, 12vh)`;
 
   return (
     <div
