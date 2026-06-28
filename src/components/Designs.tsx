@@ -65,13 +65,7 @@ export default function Designs() {
               scrub: 1,
               start: 'top top',
               end: () => `+=${scrollWidth - window.innerWidth}`,
-              invalidateOnRefresh: true,
-              onUpdate: (self) => {
-                const progressEl = document.getElementById('designs-progress-bar');
-                if (progressEl) {
-                  progressEl.style.width = `${self.progress * 100}%`;
-                }
-              }
+              invalidateOnRefresh: true
             },
           }
         );
@@ -83,8 +77,22 @@ export default function Designs() {
 
   return (
     <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8]">
-      {/* Scrollbar hiding styles scoped to Designs section */}
+      {/* Centering calculations, adaptive widths, and scrollbar hiding scoped to Designs section */}
       <style>{`
+        #designs {
+          --card-width: 420px; /* default xl card width */
+        }
+        @media (min-width: 768px) and (max-width: 1023px) {
+          #designs {
+            --card-width: 320px; /* md card width */
+          }
+        }
+        @media (min-width: 1024px) and (max-width: 1279px) {
+          #designs {
+            --card-width: 360px; /* lg card width */
+          }
+        }
+
         #designs,
         #designs * {
           scrollbar-width: none !important;
@@ -93,6 +101,18 @@ export default function Designs() {
         #designs::-webkit-scrollbar,
         #designs *::-webkit-scrollbar {
           display: none !important;
+        }
+
+        #designs .designs-track {
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+        }
+        @media (min-width: 768px) {
+          #designs .designs-track {
+            /* Calculates left/right padding so Card 01 starts centered and Card 06 ends centered */
+            padding-left: calc(50vw - (var(--card-width) / 2)) !important;
+            padding-right: calc(50vw - (var(--card-width) / 2)) !important;
+          }
         }
       `}</style>
 
@@ -109,7 +129,7 @@ export default function Designs() {
         />
       </div>
 
-      {/* On Desktop: Sticky full-screen view starting at top. On Mobile: static relative view */}
+      {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
       <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-start pt-16 md:pt-24 pb-12 z-30">
         
         {/* Section Header */}
@@ -122,17 +142,17 @@ export default function Designs() {
           </h2>
         </div>
 
-        {/* Cards flex container. md:pl-[480px] offsets the first card below the 's' in 'Designs' */}
+        {/* Cards flex container. uses .designs-track for viewport-relative centering offsets */}
         <div 
           ref={scrollSectionRef} 
-          className="flex flex-col md:flex-row gap-8 md:gap-16 px-6 md:pl-[480px] md:pr-24 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
+          className="designs-track flex flex-col md:flex-row gap-8 md:gap-16 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
         >
           {designsData.map((design, index) => (
             <div 
               key={index} 
               className="w-full sm:w-[500px] md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
             >
-              {/* Solid Color Background with Subtle Index Number */}
+              {/* Solid Color Background with Large Translucent Index Number */}
               <div 
                 style={{ backgroundColor: design.color }} 
                 className="w-full h-full group-hover:scale-105 transition-transform duration-500 flex items-center justify-center select-none"
@@ -153,14 +173,6 @@ export default function Designs() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Progress Bar (Desktop only) */}
-        <div className="hidden md:block absolute bottom-12 left-24 right-24 h-[2px] bg-slate-200 rounded-full overflow-hidden z-10">
-          <div 
-            id="designs-progress-bar"
-            className="h-full bg-accent w-0 transition-all duration-100 ease-out"
-          />
         </div>
 
       </div>
