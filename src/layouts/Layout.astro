@@ -43,12 +43,20 @@ const {
 	</head>
 	<body class="bg-[#f8f8f8] text-black antialiased selection:bg-[#DF2935]/20 selection:text-black overflow-x-hidden min-h-screen">
 		<!-- Preloader Overlay (good-fella.com style) -->
-		<div id="preloader" class="fixed inset-0 bg-black z-[99999] flex items-center justify-center pointer-events-auto">
-			<div class="relative font-mono font-bold text-[6vw] sm:text-[4vw] md:text-[3vw] lg:text-[2.2vw] xl:text-[1.8vw] tracking-[0.25em] uppercase select-none">
-				<!-- Glitch shadow using the website's burnt orange accent color (#C44900) -->
-				<div class="absolute inset-0 text-[#C44900] opacity-35 blur-[2.5px] pointer-events-none select-none glitch-text translate-x-[2px] translate-y-[1px]"></div>
-				<!-- Main white text -->
-				<div id="preloader-text" class="relative text-white z-10"></div>
+		<div id="preloader" class="fixed inset-0 z-[99999] overflow-hidden pointer-events-none">
+			<!-- Orange sweep layer using the website's burnt orange accent color (#C44900) -->
+			<div id="preloader-orange" class="fixed top-[-50vh] left-[-50vw] w-[200vw] h-[200vh] bg-[#C44900] z-[99997] pointer-events-auto" style="transform: rotate(-30deg) translateY(0%); transform-origin: center center; will-change: transform;"></div>
+			<!-- Black sweep layer -->
+			<div id="preloader-black" class="fixed top-[-50vh] left-[-50vw] w-[200vw] h-[200vh] bg-black z-[99998] pointer-events-auto" style="transform: rotate(-30deg) translateY(0%); transform-origin: center center; will-change: transform;"></div>
+			
+			<!-- Centered text container (remains horizontal and centered) -->
+			<div id="preloader-text-container" class="fixed inset-0 flex items-center justify-center z-[99999] pointer-events-auto">
+				<div class="relative font-mono font-bold text-[6vw] sm:text-[4vw] md:text-[3vw] lg:text-[2.2vw] xl:text-[1.8vw] tracking-[0.25em] uppercase select-none">
+					<!-- Glitch shadow in burnt orange -->
+					<div class="absolute inset-0 text-[#C44900] opacity-35 blur-[2.5px] pointer-events-none select-none glitch-text translate-x-[2px] translate-y-[1px]"></div>
+					<!-- Main white text -->
+					<div id="preloader-text" class="relative text-white z-10"></div>
+				</div>
 			</div>
 		</div>
 
@@ -133,16 +141,18 @@ const {
 
 				function checkRemoval() {
 					if (isLoaded && isMinTimeElapsed) {
-						const preloader = document.getElementById('preloader');
-						if (preloader) {
-							preloader.style.transition = 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.7s';
-							preloader.style.opacity = '0';
-							preloader.style.visibility = 'hidden';
+						const textContainer = document.getElementById('preloader-text-container');
+						if (textContainer) {
+							textContainer.style.transition = 'opacity 0.4s ease';
+							textContainer.style.opacity = '0';
 							document.documentElement.classList.remove('preloading');
+							
+							// Dispatch finish event right when text starts fading so background sweep overlays nicely
 							window.dispatchEvent(new CustomEvent('preloaderFinished'));
+							
 							setTimeout(() => {
-								preloader.remove();
-							}, 700);
+								textContainer.remove();
+							}, 400);
 						}
 					}
 				}
@@ -202,12 +212,31 @@ const {
 	window.addEventListener('preloaderFinished', () => {
 		lenis.start();
 
-		const tl = gsap.timeline();
-		
-		// Reveal Hero content
+		const tl = gsap.timeline({
+			onComplete: () => {
+				document.getElementById('preloader')?.remove();
+			}
+		});
+
+		// Sweep black layer (to local translateY 120% which is off-screen down-right)
+		tl.to('#preloader-black', {
+			yPercent: 120,
+			duration: 1.5,
+			ease: 'power3.inOut'
+		});
+
+		// Sweep orange layer with slight delay and slightly longer/offset timeline
+		tl.to('#preloader-orange', {
+			yPercent: 120,
+			duration: 1.7,
+			ease: 'power3.inOut'
+		}, 0.12); // starts 120ms after the black layer starts
+
+		// Reveal Hero content (overlaps with the sweep animation for smooth reveal)
 		tl.fromTo('main > #home', 
 			{ opacity: 0, y: 35 },
-			{ opacity: 1, y: 0, duration: 1.4, ease: 'power4.out' }
+			{ opacity: 1, y: 0, duration: 1.4, ease: 'power4.out' },
+			'-=1.1'
 		);
 
 		// Reveal Navbar
