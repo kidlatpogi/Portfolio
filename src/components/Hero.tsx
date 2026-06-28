@@ -9,12 +9,12 @@ export default function Hero() {
 
         {/* Typography — full-width block */}
         <div className="flex flex-col items-start gap-5 text-left relative z-10 w-max max-w-full">
-          <span className="font-array-semibold text-[1.5rem] md:text-[2rem] font-semibold uppercase tracking-wider text-[#334155]">
+          <span className="hero-subtitle font-array-semibold text-[1.5rem] md:text-[2rem] font-semibold uppercase tracking-wider text-[#334155]">
             4th year College Student
           </span>
 
           <div className="relative w-max max-w-full">
-            <h1 className="relative inline-block font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="hero-title-1 relative inline-block font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Zeus Angelo
  
               {/* Profile picture placeholder on the right side */}
@@ -52,10 +52,10 @@ export default function Hero() {
                 />
               </div>
             </h1>
-            <h1 className="font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="hero-title-2 font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Bautista
             </h1>
-            <h1 className="font-clash-semibold text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="hero-title-3 font-clash-semibold text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               <span className="relative inline-block italic mr-[0.25em]">
                 <span>Future</span>
                 <span className="absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[6px] lg:h-[8px] bg-black rounded-full pointer-events-none" />
@@ -65,7 +65,7 @@ export default function Hero() {
           </div>
 
           {/* Social / Resume Links */}
-          <div className="mt-8 flex items-center justify-start w-auto">
+          <div className="hero-socials mt-8 flex items-center justify-start w-auto">
             <div className="flex flex-col gap-4">
               <span className="font-mono text-sm md:text-base uppercase tracking-wider text-[#334155]/60 font-bold">
                 Socials:

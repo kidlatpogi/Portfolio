@@ -180,6 +180,14 @@ const {
 		overflow: hidden !important;
 		height: 100% !important;
 	}
+
+	.hero-subtitle,
+	.hero-title-1,
+	.hero-title-2,
+	.hero-title-3,
+	.hero-socials {
+		opacity: 0;
+	}
 </style>
 
 <script>
@@ -232,10 +240,17 @@ const {
 			ease: 'power3.inOut'
 		}, 0.12); // starts 120ms after the black layer starts
 
-		// Reveal Hero content (overlaps with the sweep animation for smooth reveal)
-		tl.fromTo('main > #home', 
-			{ opacity: 0, y: 35 },
-			{ opacity: 1, y: 0, duration: 1.4, ease: 'power4.out' },
+		// Reveal Hero content container itself (sets visibility)
+		tl.fromTo('#home', 
+			{ opacity: 0 },
+			{ opacity: 1, duration: 0.1 },
+			'-=1.1'
+		);
+
+		// Staggered reveal of hero text lines & socials
+		tl.fromTo(['.hero-subtitle', '.hero-title-1', '.hero-title-2', '.hero-title-3', '.hero-socials'],
+			{ opacity: 0, y: 40 },
+			{ opacity: 1, y: 0, duration: 1.4, ease: 'power4.out', stagger: 0.12 },
 			'-=1.1'
 		);
 
