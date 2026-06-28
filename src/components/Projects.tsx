@@ -238,7 +238,7 @@ export default function Projects() {
 
             {/* View All Button */}
             <a
-              href="#projects"
+              href="/projects"
               className="inline-flex items-center gap-2 font-mono text-xs md:text-sm uppercase tracking-[0.15em] font-bold text-black bg-transparent border-2 border-black px-5 py-3 rounded-full hover:bg-black hover:text-white transition-all duration-300 cursor-target"
             >
               View All
