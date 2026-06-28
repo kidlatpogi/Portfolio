@@ -28,7 +28,7 @@ function getMotionComponent(Component: any) {
 
 const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
-  enableBlur = true,
+  enableBlur = false,
   baseOpacity = 0.1,
   baseRotation = 3,
   blurStrength = 4,
@@ -294,10 +294,10 @@ const Word: React.FC<WordProps> = ({
       style={{
         ...props.style,
         opacity,
-        filter,
+        filter: enableBlur ? filter : undefined,
         y: hasParallax ? y : undefined,
         display: hasDisplayClass ? undefined : 'inline-block',
-        willChange: hasParallax ? 'opacity, filter, transform' : 'opacity, filter'
+        willChange: hasParallax ? 'opacity, filter, transform' : (enableBlur ? 'opacity, filter' : 'opacity')
       }}
       className={`${className} word`}
     >

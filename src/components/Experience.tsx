@@ -35,7 +35,7 @@ export default function Experience() {
         {/* Headings inside ScrollReveal */}
         <ScrollReveal
           baseOpacity={0.08}
-          enableBlur={true}
+          enableBlur={false}
           baseRotation={2}
           blurStrength={12}
           as="div"
@@ -61,7 +61,7 @@ export default function Experience() {
             <ScrollReveal
               key={index}
               baseOpacity={0.08}
-              enableBlur={true}
+              enableBlur={false}
               baseRotation={2}
               blurStrength={12}
               as="div"

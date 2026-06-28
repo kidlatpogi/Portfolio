@@ -135,7 +135,7 @@ export default function Skills() {
         {/* Headings inside ScrollReveal */}
         <ScrollReveal
           baseOpacity={0.08}
-          enableBlur={true}
+          enableBlur={false}
           baseRotation={2}
           blurStrength={12}
           as="div"
@@ -158,7 +158,7 @@ export default function Skills() {
             <ScrollReveal
               key={category.title}
               baseOpacity={0.08}
-              enableBlur={true}
+              enableBlur={false}
               baseRotation={1}
               blurStrength={8}
               as="div"

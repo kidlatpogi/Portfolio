@@ -6,7 +6,7 @@ export default function Certifications() {
     <section className="w-full flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden" id="certifications">
       <ScrollReveal
         baseOpacity={0.08}
-        enableBlur={true}
+        enableBlur={false}
         baseRotation={2}
         blurStrength={12}
         as="div"
