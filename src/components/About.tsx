@@ -24,7 +24,7 @@ export default function About() {
         <div className="w-[95%] md:w-[95%] max-w-[2000px] flex justify-center mx-auto">
           <ScrollReveal
             baseOpacity={0.08}
-            enableBlur={true}
+            enableBlur={false}
             baseRotation={2}
             blurStrength={12}
             textClassName="text-black font-sans text-left md:text-justify tracking-normal leading-relaxed"
