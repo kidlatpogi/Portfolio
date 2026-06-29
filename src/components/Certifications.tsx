@@ -137,6 +137,81 @@ const badgesData = [
   }
 ];
 
+// Helper Component: Renders a miniature high-fidelity mockup document for Certificates
+const CertificateMock: React.FC<{ color: string; title: string; issuer: string; id: string }> = ({ color, title, issuer, id }) => {
+  return (
+    <div className="w-full aspect-[1.6/1] bg-slate-50 border-2 border-slate-200 rounded-xl relative overflow-hidden flex flex-col justify-between p-4 shadow-inner select-none">
+      {/* Elegant Border Inset */}
+      <div className="absolute inset-1.5 border border-slate-200 pointer-events-none rounded-lg" />
+      
+      {/* Certificate Header Accent */}
+      <div className="flex justify-between items-start z-10">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[6px] font-mono tracking-widest text-slate-400 uppercase">CERTIFICATE OF ACHIEVEMENT</span>
+          <span className="text-[5px] font-sans font-bold text-slate-500">{issuer}</span>
+        </div>
+        <div style={{ backgroundColor: color }} className="w-2 h-2 rounded-full opacity-80" />
+      </div>
+
+      {/* Certificate Body Lines */}
+      <div className="flex flex-col items-center justify-center my-auto z-10 gap-0.5 text-center">
+        <span className="text-[4px] font-sans text-slate-400 italic">This is to certify that</span>
+        <span className="text-[8px] font-clash-semibold font-bold text-slate-800 tracking-wide uppercase leading-none my-0.5">ZEUS ANGELO BAUTISTA</span>
+        <span className="text-[4px] font-sans text-slate-400 leading-none">has successfully met all requirements for</span>
+        <span style={{ color: color }} className="text-[6px] font-sans font-bold tracking-tight px-1 text-center line-clamp-1 mt-0.5">{title}</span>
+      </div>
+
+      {/* Certificate Footer with Seal & Signatures */}
+      <div className="flex justify-between items-end z-10 text-[4px] font-mono text-slate-400 leading-none">
+        <div className="flex flex-col">
+          <div className="w-5 h-[0.5px] bg-slate-300 mb-0.5" />
+          <span>SIGNATURE</span>
+        </div>
+        
+        {/* Golden/Accent Seal */}
+        <div style={{ backgroundColor: color }} className="w-5 h-5 rounded-full flex items-center justify-center border border-white/50 shadow-sm relative rotate-12">
+          {/* Ribbons */}
+          <div style={{ borderLeftColor: color, borderRightColor: color }} className="absolute bottom-[-3px] w-3 h-2 border-l-3 border-r-3 border-t-3 border-t-transparent opacity-60" />
+          <span className="text-white text-[3.5px] font-bold">SEAL</span>
+        </div>
+
+        <div className="flex flex-col items-end">
+          <div className="w-5 h-[0.5px] bg-slate-300 mb-0.5" />
+          <span>CREDENTIAL</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Helper Component: Renders a miniature high-fidelity mockup shield/badge for Badges
+const BadgeMock: React.FC<{ color: string; initials: string }> = ({ color, initials }) => {
+  return (
+    <div className="w-full aspect-[1.4/1] bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden flex items-center justify-center p-2 shadow-inner select-none">
+      {/* Decorative Dashed Ring */}
+      <div className="absolute inset-1.5 border border-dashed border-slate-300 rounded-full" />
+      
+      {/* Center Shield/Emblem */}
+      <div 
+        style={{ 
+          background: `radial-gradient(circle, ${color} 0%, ${color}dd 70%, ${color}aa 100%)`,
+          boxShadow: `0 4px 8px -2px ${color}40`
+        }} 
+        className="w-14 h-14 rounded-full flex flex-col items-center justify-center border-2 border-white text-white relative z-10 shadow-sm transition-transform duration-500 group-hover:scale-105"
+      >
+        <span className="font-mono text-xs font-black tracking-wider leading-none drop-shadow-sm">{initials}</span>
+        <span className="text-[4px] tracking-widest text-white/80 uppercase font-bold mt-0.5">VERIFIED</span>
+      </div>
+
+      {/* Decorative Corner Dots */}
+      <div className="absolute top-1 left-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
+      <div className="absolute top-1 right-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
+      <div className="absolute bottom-1 left-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
+      <div className="absolute bottom-1 right-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
+    </div>
+  );
+};
+
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
   const track1Ref = useRef<HTMLDivElement>(null);
@@ -193,13 +268,13 @@ export default function Certifications() {
   }, []);
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-16 md:py-0">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-12 md:py-0">
       
       {/* Centering layout styles, viewport offsets, and scrollbar removal */}
       <style>{`
         #certifications {
           --card-width-cert: 420px;
-          --card-width-badge: 220px;
+          --card-width-badge: 240px;
         }
         @media (min-width: 768px) and (max-width: 1023px) {
           #certifications {
@@ -254,65 +329,59 @@ export default function Certifications() {
       </div>
 
       {/* Desktop layout: sticky full-height screen. Mobile: natural vertical stack */}
-      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-between pt-12 md:pt-20 pb-12 md:pb-16 z-30 w-full">
+      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-16 md:py-24 z-30 w-full">
         
-        {/* Section Header */}
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-start z-10 flex-shrink-0 mb-8 md:mb-0">
-          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
+        {/* Section Header - Centered */}
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center z-10 flex-shrink-0 mb-10 md:mb-14">
+          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
           </span>
-          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none">
+          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none text-center">
             Certification and Badges
           </h2>
         </div>
 
         {/* Double Track Container */}
-        <div className="flex flex-col gap-10 md:gap-12 w-full justify-center flex-grow md:flex-grow-0 my-auto">
+        <div className="flex flex-col gap-10 md:gap-14 w-full justify-center">
           
           {/* Row 1: Certifications (Translates Left on Desktop, Swipeable on Mobile) */}
           <div className="w-full overflow-x-auto md:overflow-x-visible">
             <div 
               ref={track1Ref} 
-              className="track-container track-container-1 flex flex-row gap-6 md:gap-10 items-center w-max will-change-transform z-10"
+              className="track-container track-container-1 flex flex-row gap-6 md:gap-10 items-start w-max will-change-transform z-10"
             >
               {certificationsData.map((cert, index) => (
                 <div 
                   key={index} 
-                  className="w-[280px] md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 h-[150px] md:h-[170px] lg:h-[190px] relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col justify-between p-6 cursor-pointer"
+                  className="w-[280px] md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
                 >
-                  {/* Decorative Subtle Left Accent Bar */}
-                  <div 
-                    style={{ backgroundColor: cert.color }} 
-                    className="absolute left-0 top-0 bottom-0 w-1.5"
-                  />
-                  
-                  {/* Translucent Index Number */}
-                  <span className="absolute right-6 top-3 text-slate-100 font-sans text-6xl md:text-7xl font-black tracking-tighter select-none pointer-events-none transition-transform duration-500 group-hover:scale-105 group-hover:text-slate-200/50">
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
+                  {/* Miniature Mock Image of the Certificate */}
+                  <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                    <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
+                  </div>
 
-                  {/* Issuer + Title Info */}
-                  <div className="flex flex-col gap-1.5 z-10 pr-12">
+                  {/* Metadata Row below the Image */}
+                  <div className="flex justify-between items-center mb-1.5 pt-1">
                     <span 
                       style={{ color: cert.color }} 
                       className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
                     >
                       {cert.issuer}
                     </span>
-                    <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 pr-4">
-                      {cert.title}
-                    </h3>
-                  </div>
-
-                  {/* ID + Date Footer */}
-                  <div className="flex justify-between items-center z-10 border-t border-slate-100 pt-3 mt-2">
-                    <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-semibold tracking-wider">
-                      ID: {cert.id}
-                    </span>
                     <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
                       {cert.date}
                     </span>
                   </div>
+
+                  {/* Title of the Certificate */}
+                  <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px]">
+                    {cert.title}
+                  </h3>
+
+                  {/* Verifiable ID */}
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-semibold tracking-wider text-left border-t border-slate-100 pt-3 mt-3">
+                    ID: {cert.id}
+                  </span>
                 </div>
               ))}
             </div>
@@ -322,50 +391,38 @@ export default function Certifications() {
           <div className="w-full overflow-x-auto md:overflow-x-visible">
             <div 
               ref={track2Ref} 
-              className="track-container track-container-2 flex flex-row gap-6 md:gap-10 items-center w-max will-change-transform z-10"
+              className="track-container track-container-2 flex flex-row gap-6 md:gap-10 items-start w-max will-change-transform z-10"
             >
               {badgesData.map((badge, index) => (
                 <div 
                   key={index} 
-                  className="w-[180px] md:w-[200px] lg:w-[220px] flex-shrink-0 h-[150px] md:h-[170px] lg:h-[190px] relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col justify-between p-5 cursor-pointer text-center items-center justify-center"
+                  className="w-[180px] md:w-[200px] lg:w-[220px] xl:w-[240px] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer text-center items-center"
                 >
-                  {/* Badge Shield Background Emblem */}
-                  <div 
-                    style={{ borderColor: `${badge.color}20`, backgroundColor: `${badge.color}08` }} 
-                    className="absolute inset-0 m-4 border border-dashed rounded-xl pointer-events-none group-hover:scale-[1.03] transition-transform duration-500"
-                  />
-
-                  {/* Translucent Index Number */}
-                  <span className="absolute right-4 top-2 text-slate-100 font-sans text-5xl font-black tracking-tighter select-none pointer-events-none group-hover:text-slate-200/50">
-                    B{index + 1}
-                  </span>
-
-                  {/* Badge Icon Emblem */}
-                  <div 
-                    style={{ backgroundColor: badge.color }} 
-                    className="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center text-white font-mono text-xs md:text-sm font-bold tracking-wider shadow-sm group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 z-10"
-                  >
-                    {badge.initials}
+                  {/* Miniature Mock Image of the Badge */}
+                  <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02] flex items-center justify-center bg-slate-50">
+                    <BadgeMock color={badge.color} initials={badge.initials} />
                   </div>
 
-                  {/* Badge Info */}
-                  <div className="flex flex-col gap-1 z-10 mt-3">
-                    <h3 className="font-sans text-xs md:text-sm font-bold text-slate-800 tracking-tight leading-tight group-hover:text-accent transition-colors duration-300 px-2 line-clamp-2">
-                      {badge.name}
-                    </h3>
-                    <span className="font-mono text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                  {/* Metadata Row below the Image */}
+                  <div className="flex flex-col gap-1 items-center justify-center mb-1.5 w-full pt-1">
+                    <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">
                       {badge.issuer}
                     </span>
+                    <span className="font-mono text-[8px] md:text-[9px] text-slate-500 font-bold bg-slate-100/80 px-2 py-0.5 rounded-full uppercase">
+                      {badge.date}
+                    </span>
                   </div>
+
+                  {/* Title/Name of the Badge */}
+                  <h3 className="font-sans text-xs md:text-sm font-bold text-slate-800 tracking-tight leading-tight group-hover:text-accent transition-colors duration-300 px-1 line-clamp-2 min-h-[30px] md:min-h-[36px]">
+                    {badge.name}
+                  </h3>
                 </div>
               ))}
             </div>
           </div>
 
         </div>
-
-        {/* Spacer / Bottom Alignment Helper */}
-        <div className="w-full flex-shrink-0 md:h-8" />
         
       </div>
 
