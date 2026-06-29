@@ -6,8 +6,9 @@ export default function SocialsSidebar() {
   useEffect(() => {
     const handleScroll = () => {
       const footerEl = document.getElementById('contact');
-      let isFooterVisible = false;
-      if (footerEl) {
+      const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+      let isFooterVisible = isNearBottom;
+      if (!isFooterVisible && footerEl) {
         const rect = footerEl.getBoundingClientRect();
         // Hide if top of footer is in viewport
         isFooterVisible = rect.top < window.innerHeight - 80;

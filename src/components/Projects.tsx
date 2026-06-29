@@ -199,7 +199,7 @@ export default function Projects() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="w-full flex flex-col items-center justify-center px-4 py-12 relative overflow-visible" id="projects">
+    <section ref={sectionRef} className="w-full flex flex-col items-center justify-center px-4 pt-12 pb-4 md:pb-0 relative overflow-visible" id="projects">
       {/* Split Layout: Sticky Left Info + Scrolling Right Cards */}
       <div className="w-[95%] md:w-[95%] max-w-[1600px] mx-auto relative z-10">
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
@@ -268,7 +268,7 @@ export default function Projects() {
           <div ref={stackColumnRef} className="flex-grow min-w-0">
             <ScrollStack
               useWindowScroll={true}
-              itemDistance={100}
+              itemDistance={40}
               itemStackDistance={ITEM_STACK_DISTANCE}
               baseScale={0.92}
               itemScale={0.02}

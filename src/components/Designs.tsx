@@ -76,7 +76,7 @@ export default function Designs() {
   }, []);
 
   return (
-    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8] py-12">
+    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8] pt-4 pb-12 md:pt-0">
       {/* Centering calculations, adaptive widths, and scrollbar hiding scoped to Designs section */}
       <style>{`
         #designs {
