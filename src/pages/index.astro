@@ -13,6 +13,7 @@ import ShapeGrid from '../components/ShapeGrid.tsx';
 import ChatBot from '../components/ChatBot.tsx';
 import SocialsSidebar from '../components/SocialsSidebar.tsx';
 import ParallaxTextSection from '../components/ParallaxTextSection.tsx';
+import Footer from '../components/Footer.tsx';
 
 
 
@@ -68,6 +69,7 @@ const navItems = [
 		<Designs client:load />
 		<Certifications client:visible />
 	</main>
+	<Footer client:visible />
 	<ChatBot client:idle />
 	<SocialsSidebar client:idle />
 </Layout>
