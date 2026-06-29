@@ -140,6 +140,9 @@ export default function Designs() {
           <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none">
             Designs
           </h2>
+          <p className="font-sans text-sm md:text-base text-slate-500 leading-relaxed max-w-[360px] mt-3">
+            Multi-media graphic design posters crafted using Adobe Photoshop.
+          </p>
         </div>
 
         {/* Cards flex container. uses .designs-track for viewport-relative centering offsets */}
