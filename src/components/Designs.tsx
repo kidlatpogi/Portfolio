@@ -76,7 +76,7 @@ export default function Designs() {
   }, []);
 
   return (
-    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8]">
+    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8] py-12 md:py-0">
       {/* Centering calculations, adaptive widths, and scrollbar hiding scoped to Designs section */}
       <style>{`
         #designs {
@@ -130,10 +130,10 @@ export default function Designs() {
       </div>
 
       {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
-      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-start pt-16 md:pt-24 pb-12 z-30">
+      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-16 md:py-24 z-30">
         
         {/* Section Header */}
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-10 md:mb-14 flex flex-col items-start z-10 flex-shrink-0">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-12 md:mb-16 flex flex-col items-start z-10 flex-shrink-0">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
             Creative Showcase
           </span>
