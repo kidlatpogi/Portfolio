@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ArrowUpRight } from 'lucide-react';
 import ConnectModal from './ConnectModal.tsx';
@@ -43,6 +43,26 @@ const CardNav: React.FC<CardNavProps> = ({
   const navRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const footerEl = document.getElementById('contact');
+      if (footerEl) {
+        const rect = footerEl.getBoundingClientRect();
+        setIsFooterVisible(rect.top < window.innerHeight - 80);
+      } else {
+        setIsFooterVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const calculateHeight = () => {
     const navEl = navRef.current;
@@ -193,7 +213,13 @@ const CardNav: React.FC<CardNavProps> = ({
 
   return (
     <div className="contents">
-      <div className={`fixed top-6 max-sm:top-4 left-1/2 -translate-x-1/2 w-[90%] max-sm:w-[92%] max-w-[800px] z-[100] box-border ${className}`}>
+      <div 
+        className={`fixed top-6 max-sm:top-4 left-1/2 w-[90%] max-sm:w-[92%] max-w-[800px] z-[100] box-border transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isFooterVisible 
+            ? 'opacity-0 -translate-y-12 -translate-x-1/2 pointer-events-none' 
+            : 'opacity-100 translate-y-0 -translate-x-1/2 pointer-events-auto'
+        } ${className}`}
+      >
         <nav
           ref={navRef}
           className={`block h-[60px] p-0 border border-[#334155]/20 backdrop-blur-[24px] relative overflow-hidden will-change-[height] transition-[border-radius,border-color] duration-400 ease-in-out ${isExpanded

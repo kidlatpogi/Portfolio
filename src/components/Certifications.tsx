@@ -268,7 +268,7 @@ export default function Certifications() {
   }, []);
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-12 md:py-0">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-12">
       
       {/* Centering layout styles, viewport offsets, and scrollbar removal */}
       <style>{`
@@ -329,10 +329,10 @@ export default function Certifications() {
       </div>
 
       {/* Desktop layout: sticky full-height screen. Mobile: natural vertical stack */}
-      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-16 md:py-24 z-30 w-full">
+      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30 w-full">
         
         {/* Section Header - Centered */}
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center z-10 flex-shrink-0 mb-10 md:mb-14">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center z-10 flex-shrink-0 mb-12">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
           </span>
@@ -342,7 +342,7 @@ export default function Certifications() {
         </div>
 
         {/* Double Track Container */}
-        <div className="flex flex-col gap-10 md:gap-14 w-full justify-center">
+        <div className="flex flex-col gap-12 w-full justify-center">
           
           {/* Row 1: Certifications (Translates Left on Desktop, Swipeable on Mobile) */}
           <div className="w-full overflow-x-auto md:overflow-x-visible">

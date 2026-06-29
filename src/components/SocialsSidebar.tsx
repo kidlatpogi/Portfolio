@@ -5,15 +5,23 @@ export default function SocialsSidebar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show sidebar when scrolled down more than 150px
-      if (window.scrollY > 150) {
+      const footerEl = document.getElementById('contact');
+      let isFooterVisible = false;
+      if (footerEl) {
+        const rect = footerEl.getBoundingClientRect();
+        // Hide if top of footer is in viewport
+        isFooterVisible = rect.top < window.innerHeight - 80;
+      }
+
+      // Show sidebar when scrolled down more than 150px AND footer is not visible
+      if (window.scrollY > 150 && !isFooterVisible) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     // Initial check in case page starts scrolled
     handleScroll();
 

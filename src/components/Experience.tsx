@@ -29,7 +29,7 @@ const experiences: ExperienceItem[] = [
 
 export default function Experience() {
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden" id="experience">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden" id="experience">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
         {/* Headings inside ScrollReveal */}
@@ -39,7 +39,7 @@ export default function Experience() {
           baseRotation={2}
           blurStrength={12}
           as="div"
-          containerClassName="flex flex-col items-center w-full"
+          containerClassName="flex flex-col items-center w-full mb-12"
         >
           {/* "Work" Subheading - styled like Hero's subheader, centered */}
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
