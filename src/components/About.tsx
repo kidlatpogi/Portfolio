@@ -4,7 +4,7 @@ import { Cpu, Sparkles } from 'lucide-react';
 
 export default function About() {
   return (
-    <section className="h-auto w-full flex flex-col items-center justify-center px-4 py-12 md:py-16 relative overflow-hidden" id="about">
+    <section className="h-auto w-full flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden" id="about">
       {/* Anchor targets for sub-navigation scroll links */}
       <div id="about-me" className="absolute top-0" />
 
@@ -16,7 +16,7 @@ export default function About() {
         </span>
 
         {/* "About" Heading - styled like "Developer" from Hero, centered */}
-        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-10">
+        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-12">
           About
         </h2>
 
