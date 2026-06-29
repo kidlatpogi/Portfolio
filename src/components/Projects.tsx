@@ -155,7 +155,10 @@ export default function Projects() {
       const lastShell = shells[lastIndex];
 
       railTop = getDocumentTop(rail);
-      if (lastShell) {
+      const stackInner = stackColumn.querySelector<HTMLElement>('.scroll-stack-inner');
+      if (lastShell && stackInner) {
+        lastShellTop = getDocumentTop(stackInner) + lastShell.offsetTop;
+      } else if (lastShell) {
         lastShellTop = getDocumentTop(lastShell);
       } else {
         lastShellTop = 0;
@@ -170,17 +173,23 @@ export default function Projects() {
       measureLayout();
     };
 
+    const handlePreloaderFinished = () => {
+      setTimeout(measureLayout, 100);
+    };
+
     measureLayout();
     const timerId = setTimeout(measureLayout, 200);
 
     window.addEventListener('scroll', requestPanelPosition, { passive: true });
     window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('preloaderFinished', handlePreloaderFinished);
     mediaQuery.addEventListener('change', handleResize);
 
     return () => {
       clearTimeout(timerId);
       window.removeEventListener('scroll', requestPanelPosition);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('preloaderFinished', handlePreloaderFinished);
       mediaQuery.removeEventListener('change', handleResize);
       if (frameId !== null) {
         window.cancelAnimationFrame(frameId);

@@ -278,12 +278,21 @@ const ScrollStack: React.FC<ScrollStackProps> = ({
       requestUpdate();
     };
 
+    const handlePreloaderFinished = () => {
+      setTimeout(() => {
+        measureNaturalTops();
+        requestUpdate();
+      }, 100);
+    };
+
     scrollTarget.addEventListener('scroll', requestUpdate, { passive: true });
     window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('preloaderFinished', handlePreloaderFinished);
 
     return () => {
       scrollTarget.removeEventListener('scroll', requestUpdate);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('preloaderFinished', handlePreloaderFinished);
       if (frameRef.current !== null) {
         window.cancelAnimationFrame(frameRef.current);
         frameRef.current = null;
