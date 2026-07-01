@@ -48,6 +48,11 @@ const CardNav: React.FC<CardNavProps> = ({
   useEffect(() => {
     const handleScroll = () => {
       const footerEl = document.getElementById('contact');
+      // If we are at the top of the page, the navigation bar must be visible
+      if (window.scrollY < 50) {
+        setIsFooterVisible(false);
+        return;
+      }
       const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
       if (isNearBottom) {
         setIsFooterVisible(true);
