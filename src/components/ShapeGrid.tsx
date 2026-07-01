@@ -42,6 +42,9 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
+    let isVisible = false;
+    let isLoopRunning = false;
+
     const isHex = shape === 'hexagon';
     const isTri = shape === 'triangle';
     const hexHoriz = squareSize * 1.5;
@@ -233,6 +236,11 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     };
 
     const updateAnimation = () => {
+      if (!isVisible) {
+        isLoopRunning = false;
+        return;
+      }
+
       if (speed > 0) {
         const wrapX = isHex ? hexHoriz * 2 : squareSize;
         const wrapY = isHex ? hexVert : isTri ? squareSize * 2 : squareSize;
@@ -412,9 +420,21 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
 
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
-    requestRef.current = requestAnimationFrame(updateAnimation);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !isLoopRunning) {
+          isLoopRunning = true;
+          requestRef.current = requestAnimationFrame(updateAnimation);
+        }
+      });
+    }, { threshold: 0.01 });
+
+    observer.observe(canvas);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
       window.removeEventListener('scroll', updateRect);
       if (requestRef.current) cancelAnimationFrame(requestRef.current);

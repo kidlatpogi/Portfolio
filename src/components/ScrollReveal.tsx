@@ -26,7 +26,14 @@ function getMotionComponent(Component: any) {
   return motionCache.get(Component);
 }
 
-const ScrollReveal: React.FC<ScrollRevealProps> = ({
+const ScrollReveal: React.FC<ScrollRevealProps> = (props) => {
+  if (props.simpleReveal) {
+    return <SimpleScrollReveal {...props} />;
+  }
+  return <WordScrollReveal {...props} />;
+};
+
+const SimpleScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
   enableBlur = false,
   baseOpacity = 0.1,
@@ -38,11 +45,9 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   rotationEnd,
   scrollContainerRef,
   as,
-  simpleReveal = false
 }) => {
   const containerRef = useRef<HTMLElement>(null);
   
-  // Map GSAP-style "top 80%" to Framer Motion "start 80%"
   const endOffset = useMemo(() => {
     if (!wordAnimationEnd) return "start 50%";
     const parts = wordAnimationEnd.split(/\s+/);
@@ -54,7 +59,6 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
     return wordAnimationEnd;
   }, [wordAnimationEnd]);
 
-  // Track scroll position of this element in viewport
   const { scrollYProgress } = useScroll({
     target: containerRef as any,
     container: scrollContainerRef || undefined,
@@ -67,20 +71,94 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
     return isNaN(parsed) ? 0.45 : parsed;
   }, [rotationEnd]);
 
-  // Transform rotation from baseRotation to 0 based on scroll
   const rotate = useTransform(scrollYProgress, [0, rotationEndVal], [baseRotation, 0], { clamp: true });
-
-  // Simple reveal animations
   const opacity = useTransform(scrollYProgress, [0.05, 0.3], [baseOpacity, 1], { clamp: true });
   const blurVal = useTransform(scrollYProgress, [0.05, 0.3], [blurStrength, 0], { clamp: true });
   const filter = useTransform(blurVal, (v) => enableBlur ? `blur(${v}px)` : 'none');
   const y = useTransform(scrollYProgress, [0, 1], [-15, 15]);
 
-  // Process child nodes recursively, counting words and mapping progress
+  const Component = as || 'div';
+  const MotionComponent = getMotionComponent(Component as any);
+
+  const hasParallax = containerClassName.includes('parallax-y') || containerClassName.includes('reveal-item');
+  const style = {
+    rotate,
+    transformOrigin: '0% 50%',
+    opacity,
+    filter: enableBlur ? filter : undefined,
+    y: hasParallax ? y : undefined,
+  };
+
+  if (!as) {
+    return (
+      <h2 
+        ref={containerRef as any} 
+        className={`my-5 ${containerClassName}`}
+      >
+        <motion.p 
+          style={style}
+          className={`text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] font-semibold ${textClassName}`}
+        >
+          {children}
+        </motion.p>
+      </h2>
+    );
+  }
+
+  return (
+    <MotionComponent 
+      ref={containerRef as any} 
+      style={style}
+      className={`${containerClassName} ${textClassName}`}
+    >
+      {children}
+    </MotionComponent>
+  );
+};
+
+const WordScrollReveal: React.FC<ScrollRevealProps> = ({
+  children,
+  enableBlur = false,
+  baseOpacity = 0.1,
+  baseRotation = 3,
+  blurStrength = 4,
+  containerClassName = '',
+  textClassName = '',
+  wordAnimationEnd,
+  rotationEnd,
+  scrollContainerRef,
+  as,
+}) => {
+  const containerRef = useRef<HTMLElement>(null);
+  
+  const endOffset = useMemo(() => {
+    if (!wordAnimationEnd) return "start 50%";
+    const parts = wordAnimationEnd.split(/\s+/);
+    if (parts.length === 2) {
+      const target = parts[0] === 'top' ? 'start' : parts[0] === 'bottom' ? 'end' : parts[0];
+      const container = parts[1];
+      return `${target} ${container}`;
+    }
+    return wordAnimationEnd;
+  }, [wordAnimationEnd]);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef as any,
+    container: scrollContainerRef || undefined,
+    offset: ["start 90%", endOffset]
+  });
+
+  const rotationEndVal = useMemo(() => {
+    if (!rotationEnd) return 0.45;
+    const parsed = parseFloat(rotationEnd);
+    return isNaN(parsed) ? 0.45 : parsed;
+  }, [rotationEnd]);
+
+  const rotate = useTransform(scrollYProgress, [0, rotationEndVal], [baseRotation, 0], { clamp: true });
+
   const splitText = useMemo(() => {
     let wordCount = 0;
     
-    // Pass 1: count total words
     const countWords = (node: ReactNode): number => {
       if (node === null || node === undefined) return 0;
       if (typeof node === 'string' || typeof node === 'number') {
@@ -97,7 +175,6 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
     const totalWords = countWords(children) || 1;
 
-    // Pass 2: render words as motion spans with mapped stagger range
     const renderNode = (node: ReactNode): ReactNode => {
       if (node === null || node === undefined) return node;
 
@@ -108,7 +185,6 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
           const currentWordIndex = wordCount;
           wordCount += 1;
 
-          // Align scroll trigger offsets to stagger the reveal smoothly
           const startProgress = 0.05 + (currentWordIndex / totalWords) * 0.65;
           const endProgress = Math.min(0.95, startProgress + 0.25);
 
@@ -183,43 +259,6 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   const Component = as || 'div';
   const MotionComponent = getMotionComponent(Component as any);
 
-  if (simpleReveal) {
-    const hasParallax = containerClassName.includes('parallax-y') || containerClassName.includes('reveal-item');
-    const style = {
-      rotate,
-      transformOrigin: '0% 50%',
-      opacity,
-      filter,
-      y: hasParallax ? y : undefined,
-    };
-
-    if (!as) {
-      return (
-        <h2 
-          ref={containerRef as any} 
-          className={`my-5 ${containerClassName}`}
-        >
-          <motion.p 
-            style={style}
-            className={`text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] font-semibold ${textClassName}`}
-          >
-            {children}
-          </motion.p>
-        </h2>
-      );
-    }
-
-    return (
-      <MotionComponent 
-        ref={containerRef as any} 
-        style={style}
-        className={`${containerClassName} ${textClassName}`}
-      >
-        {children}
-      </MotionComponent>
-    );
-  }
-
   if (!as) {
     return (
       <h2 
@@ -260,29 +299,30 @@ interface WordProps {
   className?: string;
 }
 
-const Word: React.FC<WordProps> = ({
+const Word: React.FC<WordProps> = (props) => {
+  if (props.enableBlur) {
+    return <BlurWord {...props} />;
+  }
+  return <OpacityWord {...props} />;
+};
+
+const OpacityWord: React.FC<WordProps> = ({
   children,
   scrollYProgress,
   start,
   end,
   baseOpacity,
-  blurStrength,
-  enableBlur,
   as: Component = 'span',
   props = {},
   className = ''
 }) => {
   const opacity = useTransform(scrollYProgress, [start, end], [baseOpacity, 1], { clamp: true });
-  const blurVal = useTransform(scrollYProgress, [start, end], [blurStrength, 0], { clamp: true });
-  const filter = useTransform(blurVal, (v) => enableBlur ? `blur(${v}px)` : 'none');
 
-  // Check if the className already defines a layout display style (including responsive prefixes)
   const hasDisplayClass = className.split(/\s+/).some(cls => {
     const baseClass = cls.split(':').pop() || '';
     return ['block', 'inline-block', 'flex', 'inline-flex', 'grid', 'inline-grid'].includes(baseClass);
   });
 
-  // Apply parallax translation if requested via class name
   const hasParallax = className.includes('parallax-y');
   const y = useTransform(scrollYProgress, [0, 1], [-15, 15]);
 
@@ -294,10 +334,52 @@ const Word: React.FC<WordProps> = ({
       style={{
         ...props.style,
         opacity,
-        filter: enableBlur ? filter : undefined,
         y: hasParallax ? y : undefined,
         display: hasDisplayClass ? undefined : 'inline-block',
-        willChange: hasParallax ? 'opacity, filter, transform' : (enableBlur ? 'opacity, filter' : 'opacity')
+        willChange: hasParallax ? 'opacity, transform' : 'opacity'
+      }}
+      className={`${className} word`}
+    >
+      {children || props.children}
+    </MotionComp>
+  );
+};
+
+const BlurWord: React.FC<WordProps> = ({
+  children,
+  scrollYProgress,
+  start,
+  end,
+  baseOpacity,
+  blurStrength,
+  as: Component = 'span',
+  props = {},
+  className = ''
+}) => {
+  const opacity = useTransform(scrollYProgress, [start, end], [baseOpacity, 1], { clamp: true });
+  const blurVal = useTransform(scrollYProgress, [start, end], [blurStrength, 0], { clamp: true });
+  const filter = useTransform(blurVal, (v) => `blur(${v}px)`);
+
+  const hasDisplayClass = className.split(/\s+/).some(cls => {
+    const baseClass = cls.split(':').pop() || '';
+    return ['block', 'inline-block', 'flex', 'inline-flex', 'grid', 'inline-grid'].includes(baseClass);
+  });
+
+  const hasParallax = className.includes('parallax-y');
+  const y = useTransform(scrollYProgress, [0, 1], [-15, 15]);
+
+  const MotionComp = getMotionComponent(Component);
+
+  return (
+    <MotionComp
+      {...props}
+      style={{
+        ...props.style,
+        opacity,
+        filter,
+        y: hasParallax ? y : undefined,
+        display: hasDisplayClass ? undefined : 'inline-block',
+        willChange: hasParallax ? 'opacity, filter, transform' : 'opacity, filter'
       }}
       className={`${className} word`}
     >
