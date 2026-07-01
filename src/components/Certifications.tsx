@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ShapeGrid from './ShapeGrid.tsx';
-import CircularGallery from './CircularGallery.tsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -138,22 +137,6 @@ const badgesData = [
   }
 ];
 
-// Generates a self-contained SVG mockup of each badge as a Data URL for CircularGallery WebGL texturing
-const generateBadgeSvgUrl = (color: string, initials: string) => {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" width="280" height="200">
-      <rect width="280" height="200" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
-      <rect x="12" y="12" width="256" height="176" rx="12" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,3"/>
-      <circle cx="140" cy="100" r="54" fill="none" stroke="${color}20" stroke-width="6" />
-      <circle cx="140" cy="100" r="48" fill="${color}"/>
-      <circle cx="140" cy="100" r="44" fill="none" stroke="#ffffff" stroke-width="2"/>
-      <text x="140" y="98" font-family="monospace" font-size="20" font-weight="900" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">${initials}</text>
-      <text x="140" y="118" font-family="sans-serif" font-size="6" font-weight="bold" fill="rgba(255,255,255,0.8)" text-anchor="middle" letter-spacing="1">VERIFIED</text>
-    </svg>
-  `;
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg.trim())}`;
-};
-
 // Helper Component: Renders a miniature high-fidelity mockup document for Certificates
 const CertificateMock: React.FC<{ color: string; title: string; issuer: string; id: string }> = ({ color, title, issuer, id }) => {
   return (
@@ -201,76 +184,83 @@ const CertificateMock: React.FC<{ color: string; title: string; issuer: string; 
   );
 };
 
+// Helper Component: Renders a miniature high-fidelity mockup shield/badge for Badges
+const BadgeMock: React.FC<{ color: string; initials: string }> = ({ color, initials }) => {
+  return (
+    <div className="w-full aspect-[1.4/1] bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden flex items-center justify-center p-2 shadow-inner select-none">
+      {/* Decorative Dashed Ring */}
+      <div className="absolute inset-1.5 border border-dashed border-slate-300 rounded-full" />
+      
+      {/* Center Shield/Emblem */}
+      <div 
+        style={{ 
+          background: `radial-gradient(circle, ${color} 0%, ${color}dd 70%, ${color}aa 100%)`,
+          boxShadow: `0 4px 8px -2px ${color}40`
+        }} 
+        className="w-14 h-14 rounded-full flex flex-col items-center justify-center border-2 border-white text-white relative z-10 shadow-sm transition-transform duration-500 group-hover:scale-105"
+      >
+        <span className="font-mono text-xs font-black tracking-wider leading-none drop-shadow-sm">{initials}</span>
+        <span className="text-[4px] tracking-widest text-white/80 uppercase font-bold mt-0.5">VERIFIED</span>
+      </div>
+
+      {/* Decorative Corner Dots */}
+      <div className="absolute top-1 left-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
+      <div className="absolute top-1 right-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
+      <div className="absolute bottom-1 left-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
+      <div className="absolute bottom-1 right-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
+    </div>
+  );
+};
+
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
-
-  // Map badgesData to items array compatible with CircularGallery
-  const galleryItems = badgesData.map(badge => ({
-    text: badge.name,
-    image: generateBadgeSvgUrl(badge.color, badge.initials)
-  }));
+  const track1Ref = useRef<HTMLDivElement>(null);
+  const track2Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // Alternate left/right entry slide-in + stack zoom/fade out on scroll
-      certificationsData.forEach((cert, index) => {
-        const cardEl = cardsRef.current[index];
-        if (!cardEl) return;
+      let mm = gsap.matchMedia();
 
-        const isEven = index % 2 === 0;
-        const xStart = isEven ? -500 : 500; // Even cards from left, odd from right
-        const rotateStart = isEven ? -6 : 6;
+      // Pinned dual track animation on screens >= 768px (Desktop/Tablet)
+      mm.add("(min-width: 768px)", () => {
+        if (!track1Ref.current || !track2Ref.current || !containerRef.current) return;
 
-        const parentShell = cardEl.closest('.cert-card-shell');
-        if (!parentShell) return;
+        const scrollWidth1 = track1Ref.current.scrollWidth;
+        const scrollWidth2 = track2Ref.current.scrollWidth;
 
-        // Entry timeline: slide-in from side and rotate/scale up
+        // Translation offset calculation
+        const trans1 = -(scrollWidth1 - window.innerWidth);
+        const trans2 = -(scrollWidth2 - window.innerWidth);
+
+        // Maximum scroll distance based on the longer track
+        const scrollDuration = Math.max(scrollWidth1, scrollWidth2) - window.innerWidth;
+
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: parentShell,
-            start: 'top bottom', // Start animating when the shell's top hits the bottom of the viewport
-            end: 'top 15%',     // Settle when it reaches its sticky top
+            trigger: containerRef.current,
+            pin: true,
             scrub: 1,
+            start: 'top top',
+            end: () => `+=${scrollDuration}`,
             invalidateOnRefresh: true
           }
         });
 
-        tl.fromTo(cardEl,
-          { 
-            x: xStart, 
-            opacity: 0,
-            scale: 0.85,
-            rotate: rotateStart
-          },
-          { 
-            x: 0, 
-            opacity: 1, 
-            scale: 1,
-            rotate: 0,
-            ease: 'power1.out'
-          }
+        // Row 1 (Certifications) scrolls left
+        tl.fromTo(
+          track1Ref.current,
+          { x: 0 },
+          { x: trans1, ease: 'none' },
+          0
         );
 
-        // Exit timeline: scale down, fade, and blur when the NEXT card scrolls up
-        if (index < certificationsData.length - 1) {
-          const nextShell = parentShell.nextElementSibling;
-          if (nextShell && nextShell.classList.contains('cert-card-shell')) {
-            gsap.to(cardEl, {
-              scale: 0.9,
-              opacity: 0.5,
-              y: -25, // vertical stack offset
-              filter: 'blur(2px)',
-              ease: 'none',
-              scrollTrigger: {
-                trigger: nextShell,
-                start: 'top 85%',
-                end: 'top 15%',
-                scrub: 1
-              }
-            });
-          }
-        }
+        // Row 2 (Badges) scrolls right (starts offset left and moves back to 0)
+        tl.fromTo(
+          track2Ref.current,
+          { x: trans2 },
+          { x: 0, ease: 'none' },
+          0
+        );
       });
     }, containerRef);
 
@@ -278,14 +268,27 @@ export default function Certifications() {
   }, []);
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 md:py-32">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-12">
       
-      {/* Scoped scrollbar and clip rules */}
+      {/* Centering layout styles, viewport offsets, and scrollbar removal */}
       <style>{`
         #certifications {
-          overflow-x: clip;
-          overflow-y: visible;
+          --card-width-cert: 420px;
+          --card-width-badge: 240px;
         }
+        @media (min-width: 768px) and (max-width: 1023px) {
+          #certifications {
+            --card-width-cert: 320px;
+            --card-width-badge: 180px;
+          }
+        }
+        @media (min-width: 1024px) and (max-width: 1279px) {
+          #certifications {
+            --card-width-cert: 360px;
+            --card-width-badge: 200px;
+          }
+        }
+
         #certifications,
         #certifications * {
           scrollbar-width: none !important;
@@ -294,6 +297,21 @@ export default function Certifications() {
         #certifications::-webkit-scrollbar,
         #certifications *::-webkit-scrollbar {
           display: none !important;
+        }
+
+        #certifications .track-container {
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+        }
+        @media (min-width: 768px) {
+          #certifications .track-container-1 {
+            padding-left: calc(50vw - (var(--card-width-cert) / 2)) !important;
+            padding-right: calc(50vw - (var(--card-width-cert) / 2)) !important;
+          }
+          #certifications .track-container-2 {
+            padding-left: calc(50vw - (var(--card-width-badge) / 2)) !important;
+            padding-right: calc(50vw - (var(--card-width-badge) / 2)) !important;
+          }
         }
       `}</style>
 
@@ -310,11 +328,11 @@ export default function Certifications() {
         />
       </div>
 
-      {/* Section Content Container */}
-      <div className="relative z-30 w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col justify-start">
+      {/* Desktop layout: sticky full-height screen. Mobile: natural vertical stack */}
+      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30 w-full">
         
         {/* Section Header - Centered */}
-        <div className="w-full flex flex-col items-center text-center mb-16">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center z-10 flex-shrink-0 mb-12">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
           </span>
@@ -323,26 +341,19 @@ export default function Certifications() {
           </h2>
         </div>
 
-        {/* Certificates Stack Container (Alternate Left/Right Entry, Sticky Stacking) */}
-        <div className="relative w-full flex flex-col items-center mt-12 gap-[30vh]">
-          {certificationsData.map((cert, index) => {
-            const shellStyle = {
-              position: 'sticky' as const,
-              top: `calc(15vh + ${index * 12}px)`, // Stacks on top of previous cards with minor staggered top offsets
-              zIndex: index + 1,
-              width: '100%',
-              maxWidth: '600px',
-            };
-
-            return (
-              <div 
-                key={index} 
-                className="cert-card-shell w-full flex justify-center py-4"
-                style={shellStyle}
-              >
+        {/* Double Track Container */}
+        <div className="flex flex-col gap-12 w-full justify-center">
+          
+          {/* Row 1: Certifications (Translates Left on Desktop, Swipeable on Mobile) */}
+          <div className="w-full overflow-x-auto md:overflow-x-visible">
+            <div 
+              ref={track1Ref} 
+              className="track-container track-container-1 flex flex-row gap-6 md:gap-10 items-start w-max will-change-transform z-10"
+            >
+              {certificationsData.map((cert, index) => (
                 <div 
-                  ref={el => { cardsRef.current[index] = el; }}
-                  className="w-full relative group overflow-hidden border border-slate-200 bg-white/95 backdrop-blur-md rounded-3xl shadow-[0_15px_45px_-5px_rgba(0,0,0,0.08)] hover:shadow-2xl hover:border-slate-300 transition-all duration-300 flex flex-col p-6 cursor-pointer"
+                  key={index} 
+                  className="w-[280px] md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
                 >
                   {/* Miniature Mock Image of the Certificate */}
                   <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
@@ -372,22 +383,45 @@ export default function Certifications() {
                     ID: {cert.id}
                   </span>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              ))}
+            </div>
+          </div>
 
-        {/* Circular Gallery for Verified Badges: Borderless, full viewport width */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-[350px] sm:h-[450px] md:h-[500px] mt-[25vh] overflow-hidden bg-transparent z-20">
-          <CircularGallery
-            items={galleryItems}
-            bend={2}
-            textColor="#334155"
-            borderRadius={0.06}
-            scrollSpeed={1.2}
-            scrollEase={0.03}
-            font="bold 12px monospace"
-          />
+          {/* Row 2: Badges (Translates Right on Desktop, Swipeable on Mobile) */}
+          <div className="w-full overflow-x-auto md:overflow-x-visible">
+            <div 
+              ref={track2Ref} 
+              className="track-container track-container-2 flex flex-row gap-6 md:gap-10 items-start w-max will-change-transform z-10"
+            >
+              {badgesData.map((badge, index) => (
+                <div 
+                  key={index} 
+                  className="w-[180px] md:w-[200px] lg:w-[220px] xl:w-[240px] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer text-center items-center"
+                >
+                  {/* Miniature Mock Image of the Badge */}
+                  <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02] flex items-center justify-center bg-slate-50">
+                    <BadgeMock color={badge.color} initials={badge.initials} />
+                  </div>
+
+                  {/* Metadata Row below the Image */}
+                  <div className="flex flex-col gap-1 items-center justify-center mb-1.5 w-full pt-1">
+                    <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                      {badge.issuer}
+                    </span>
+                    <span className="font-mono text-[8px] md:text-[9px] text-slate-500 font-bold bg-slate-100/80 px-2 py-0.5 rounded-full uppercase">
+                      {badge.date}
+                    </span>
+                  </div>
+
+                  {/* Title/Name of the Badge */}
+                  <h3 className="font-sans text-xs md:text-sm font-bold text-slate-800 tracking-tight leading-tight group-hover:text-accent transition-colors duration-300 px-1 line-clamp-2 min-h-[30px] md:min-h-[36px]">
+                    {badge.name}
+                  </h3>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
         
       </div>
