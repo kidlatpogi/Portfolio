@@ -144,12 +144,9 @@ const generateBadgeSvgUrl = (color: string, initials: string) => {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" width="280" height="200">
       <rect width="280" height="200" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
       <rect x="12" y="12" width="256" height="176" rx="12" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,3"/>
-      <!-- Decorative outer ring -->
       <circle cx="140" cy="100" r="54" fill="none" stroke="${color}20" stroke-width="6" />
-      <!-- Circular Emblem -->
       <circle cx="140" cy="100" r="48" fill="${color}"/>
       <circle cx="140" cy="100" r="44" fill="none" stroke="#ffffff" stroke-width="2"/>
-      <!-- Text initials -->
       <text x="140" y="98" font-family="monospace" font-size="20" font-weight="900" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">${initials}</text>
       <text x="140" y="118" font-family="sans-serif" font-size="6" font-weight="bold" fill="rgba(255,255,255,0.8)" text-anchor="middle" letter-spacing="1">VERIFIED</text>
     </svg>
@@ -206,12 +203,7 @@ const CertificateMock: React.FC<{ color: string; title: string; issuer: string; 
 
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const col1Ref = useRef<HTMLDivElement>(null);
-  const col2Ref = useRef<HTMLDivElement>(null);
-
-  // Divide the 10 certifications into 2 equal columns (5 each)
-  const col1Certs = certificationsData.filter((_, idx) => idx % 2 === 0);
-  const col2Certs = certificationsData.filter((_, idx) => idx % 2 !== 0);
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   // Map badgesData to items array compatible with CircularGallery
   const galleryItems = badgesData.map(badge => ({
@@ -221,45 +213,64 @@ export default function Certifications() {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      let mm = gsap.matchMedia();
+      // Alternate left/right entry slide-in + stack zoom/fade out on scroll
+      certificationsData.forEach((cert, index) => {
+        const cardEl = cardsRef.current[index];
+        if (!cardEl) return;
 
-      // Vertical columns parallax effect on screens >= 768px (Desktop/Tablet)
-      mm.add("(min-width: 768px)", () => {
-        if (!col1Ref.current || !col2Ref.current || !containerRef.current) return;
+        const isEven = index % 2 === 0;
+        const xStart = isEven ? -500 : 500; // Even cards from left, odd from right
+        const rotateStart = isEven ? -6 : 6;
 
-        // Column 1 slides up slightly
-        gsap.fromTo(
-          col1Ref.current,
-          { y: 80 },
-          {
-            y: -80,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 1,
-              invalidateOnRefresh: true
-            }
+        const parentShell = cardEl.closest('.cert-card-shell');
+        if (!parentShell) return;
+
+        // Entry timeline: slide-in from side and rotate/scale up
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: parentShell,
+            start: 'top bottom', // Start animating when the shell's top hits the bottom of the viewport
+            end: 'top 15%',     // Settle when it reaches its sticky top
+            scrub: 1,
+            invalidateOnRefresh: true
+          }
+        });
+
+        tl.fromTo(cardEl,
+          { 
+            x: xStart, 
+            opacity: 0,
+            scale: 0.85,
+            rotate: rotateStart
+          },
+          { 
+            x: 0, 
+            opacity: 1, 
+            scale: 1,
+            rotate: 0,
+            ease: 'power1.out'
           }
         );
 
-        // Column 2 slides down slightly (offset starting position)
-        gsap.fromTo(
-          col2Ref.current,
-          { y: -80 },
-          {
-            y: 80,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 1,
-              invalidateOnRefresh: true
-            }
+        // Exit timeline: scale down, fade, and blur when the NEXT card scrolls up
+        if (index < certificationsData.length - 1) {
+          const nextShell = parentShell.nextElementSibling;
+          if (nextShell && nextShell.classList.contains('cert-card-shell')) {
+            gsap.to(cardEl, {
+              scale: 0.9,
+              opacity: 0.5,
+              y: -25, // vertical stack offset
+              filter: 'blur(2px)',
+              ease: 'none',
+              scrollTrigger: {
+                trigger: nextShell,
+                start: 'top 85%',
+                end: 'top 15%',
+                scrub: 1
+              }
+            });
           }
-        );
+        }
       });
     }, containerRef);
 
@@ -269,8 +280,12 @@ export default function Certifications() {
   return (
     <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 md:py-32">
       
-      {/* Scoped scrollbar rules */}
+      {/* Scoped scrollbar and clip rules */}
       <style>{`
+        #certifications {
+          overflow-x: clip;
+          overflow-y: visible;
+        }
         #certifications,
         #certifications * {
           scrollbar-width: none !important;
@@ -308,114 +323,71 @@ export default function Certifications() {
           </h2>
         </div>
 
-        {/* Certificates staggered vertical parallax layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12 items-start w-full">
-          
-          {/* Column 1: Certifications (Odd indices, 5 cards) */}
-          <div ref={col1Ref} className="flex flex-col gap-6 md:gap-8 w-full">
-            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-slate-400 font-bold mb-1 max-md:text-center">
-              Certificates (Group A)
-            </h3>
-            {col1Certs.map((cert, index) => (
+        {/* Certificates Stack Container (Alternate Left/Right Entry, Sticky Stacking) */}
+        <div className="relative w-full flex flex-col items-center mt-12 gap-[30vh]">
+          {certificationsData.map((cert, index) => {
+            const shellStyle = {
+              position: 'sticky' as const,
+              top: `calc(15vh + ${index * 12}px)`, // Stacks on top of previous cards with minor staggered top offsets
+              zIndex: index + 1,
+              width: '100%',
+              maxWidth: '600px',
+            };
+
+            return (
               <div 
                 key={index} 
-                className="w-full relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
+                className="cert-card-shell w-full flex justify-center py-4"
+                style={shellStyle}
               >
-                {/* Miniature Mock Image of the Certificate */}
-                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
-                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
-                </div>
+                <div 
+                  ref={el => { cardsRef.current[index] = el; }}
+                  className="w-full relative group overflow-hidden border border-slate-200 bg-white/95 backdrop-blur-md rounded-3xl shadow-[0_15px_45px_-5px_rgba(0,0,0,0.08)] hover:shadow-2xl hover:border-slate-300 transition-all duration-300 flex flex-col p-6 cursor-pointer"
+                >
+                  {/* Miniature Mock Image of the Certificate */}
+                  <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                    <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
+                  </div>
 
-                {/* Metadata Row below the Image */}
-                <div className="flex justify-between items-center mb-1.5 pt-1">
-                  <span 
-                    style={{ color: cert.color }} 
-                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
-                  >
-                    {cert.issuer}
+                  {/* Metadata Row below the Image */}
+                  <div className="flex justify-between items-center mb-1.5 pt-1">
+                    <span 
+                      style={{ color: cert.color }} 
+                      className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
+                    >
+                      {cert.issuer}
+                    </span>
+                    <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
+                      {cert.date}
+                    </span>
+                  </div>
+
+                  {/* Title of the Certificate */}
+                  <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px]">
+                    {cert.title}
+                  </h3>
+
+                  {/* Verifiable ID */}
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-semibold tracking-wider text-left border-t border-slate-100 pt-3 mt-3">
+                    ID: {cert.id}
                   </span>
-                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
-                    {cert.date}
-                  </span>
                 </div>
-
-                {/* Title of the Certificate */}
-                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px]">
-                  {cert.title}
-                </h3>
-
-                {/* Verifiable ID */}
-                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-semibold tracking-wider text-left border-t border-slate-100 pt-3 mt-3">
-                  ID: {cert.id}
-                </span>
               </div>
-            ))}
-          </div>
-
-          {/* Column 2: Certifications (Even indices, 5 cards) */}
-          <div ref={col2Ref} className="flex flex-col gap-6 md:gap-8 w-full md:mt-16">
-            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-slate-400 font-bold mb-1 max-md:text-center">
-              Certificates (Group B)
-            </h3>
-            {col2Certs.map((cert, index) => (
-              <div 
-                key={index} 
-                className="w-full relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
-              >
-                {/* Miniature Mock Image of the Certificate */}
-                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
-                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
-                </div>
-
-                {/* Metadata Row below the Image */}
-                <div className="flex justify-between items-center mb-1.5 pt-1">
-                  <span 
-                    style={{ color: cert.color }} 
-                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
-                  >
-                    {cert.issuer}
-                  </span>
-                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
-                    {cert.date}
-                  </span>
-                </div>
-
-                {/* Title of the Certificate */}
-                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px]">
-                  {cert.title}
-                </h3>
-
-                {/* Verifiable ID */}
-                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-semibold tracking-wider text-left border-t border-slate-100 pt-3 mt-3">
-                  ID: {cert.id}
-                </span>
-              </div>
-            ))}
-          </div>
-
+            );
+          })}
         </div>
 
-        {/* Circular Gallery for Verified Badges */}
-        <div className="w-full relative z-10 flex flex-col items-center mt-24">
-          <div className="w-full flex flex-col items-center text-center mb-8">
-            <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
-              Verified Badges
-            </span>
-            <p className="font-sans text-sm md:text-base text-slate-500 max-w-[420px] text-center">
-              A 3D auto-scrolling WebGL gallery showcasing digital credentials. Drag or scroll to navigate.
-            </p>
-          </div>
-          <div className="w-full max-w-[1200px] h-[350px] sm:h-[450px] md:h-[500px] relative overflow-hidden bg-white/40 border border-slate-200/50 rounded-3xl backdrop-blur-md shadow-sm">
-            <CircularGallery
-              items={galleryItems}
-              bend={1.5}
-              textColor="#334155"
-              borderRadius={0.06}
-              scrollSpeed={2}
-              scrollEase={0.03}
-              font="bold 12px monospace"
-            />
-          </div>
+        {/* Circular Gallery for Verified Badges: Borderless, full viewport width */}
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-[350px] sm:h-[450px] md:h-[500px] mt-[25vh] overflow-hidden bg-transparent z-20">
+          <CircularGallery
+            items={galleryItems}
+            bend={2}
+            textColor="#334155"
+            borderRadius={0.06}
+            scrollSpeed={1.2}
+            scrollEase={0.03}
+            font="bold 12px monospace"
+          />
         </div>
         
       </div>

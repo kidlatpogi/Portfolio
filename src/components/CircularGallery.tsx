@@ -664,7 +664,7 @@ class App {
 
     // Continuous movement when user is not actively dragging or wheeling
     if (!this.isDown) {
-      this.scroll.target += 0.08; // smooth auto-scroll speed
+      this.scroll.target += 0.03; // smooth auto-scroll speed
     }
 
     this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
