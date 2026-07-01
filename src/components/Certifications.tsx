@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ShapeGrid from './ShapeGrid.tsx';
+import CircularGallery from './CircularGallery.tsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -137,6 +138,25 @@ const badgesData = [
   }
 ];
 
+// Generates a self-contained SVG mockup of each badge as a Data URL for CircularGallery WebGL texturing
+const generateBadgeSvgUrl = (color: string, initials: string) => {
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 200" width="280" height="200">
+      <rect width="280" height="200" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+      <rect x="12" y="12" width="256" height="176" rx="12" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <!-- Decorative outer ring -->
+      <circle cx="140" cy="100" r="54" fill="none" stroke="${color}20" stroke-width="6" />
+      <!-- Circular Emblem -->
+      <circle cx="140" cy="100" r="48" fill="${color}"/>
+      <circle cx="140" cy="100" r="44" fill="none" stroke="#ffffff" stroke-width="2"/>
+      <!-- Text initials -->
+      <text x="140" y="98" font-family="monospace" font-size="20" font-weight="900" fill="#ffffff" text-anchor="middle" dominant-baseline="middle">${initials}</text>
+      <text x="140" y="118" font-family="sans-serif" font-size="6" font-weight="bold" fill="rgba(255,255,255,0.8)" text-anchor="middle" letter-spacing="1">VERIFIED</text>
+    </svg>
+  `;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg.trim())}`;
+};
+
 // Helper Component: Renders a miniature high-fidelity mockup document for Certificates
 const CertificateMock: React.FC<{ color: string; title: string; issuer: string; id: string }> = ({ color, title, issuer, id }) => {
   return (
@@ -184,43 +204,20 @@ const CertificateMock: React.FC<{ color: string; title: string; issuer: string; 
   );
 };
 
-// Helper Component: Renders a miniature high-fidelity mockup shield/badge for Badges
-const BadgeMock: React.FC<{ color: string; initials: string }> = ({ color, initials }) => {
-  return (
-    <div className="w-full aspect-[1.4/1] bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden flex items-center justify-center p-2 shadow-inner select-none">
-      {/* Decorative Dashed Ring */}
-      <div className="absolute inset-1.5 border border-dashed border-slate-300 rounded-full" />
-      
-      {/* Center Shield/Emblem */}
-      <div 
-        style={{ 
-          background: `radial-gradient(circle, ${color} 0%, ${color}dd 70%, ${color}aa 100%)`,
-          boxShadow: `0 4px 8px -2px ${color}40`
-        }} 
-        className="w-14 h-14 rounded-full flex flex-col items-center justify-center border-2 border-white text-white relative z-10 shadow-sm transition-transform duration-500 group-hover:scale-105"
-      >
-        <span className="font-mono text-xs font-black tracking-wider leading-none drop-shadow-sm">{initials}</span>
-        <span className="text-[4px] tracking-widest text-white/80 uppercase font-bold mt-0.5">VERIFIED</span>
-      </div>
-
-      {/* Decorative Corner Dots */}
-      <div className="absolute top-1 left-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
-      <div className="absolute top-1 right-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
-      <div className="absolute bottom-1 left-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
-      <div className="absolute bottom-1 right-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
-    </div>
-  );
-};
-
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
   const col1Ref = useRef<HTMLDivElement>(null);
   const col2Ref = useRef<HTMLDivElement>(null);
-  const col3Ref = useRef<HTMLDivElement>(null);
 
   // Divide the 10 certifications into 2 equal columns (5 each)
   const col1Certs = certificationsData.filter((_, idx) => idx % 2 === 0);
   const col2Certs = certificationsData.filter((_, idx) => idx % 2 !== 0);
+
+  // Map badgesData to items array compatible with CircularGallery
+  const galleryItems = badgesData.map(badge => ({
+    text: badge.name,
+    image: generateBadgeSvgUrl(badge.color, badge.initials)
+  }));
 
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -228,9 +225,9 @@ export default function Certifications() {
 
       // Vertical columns parallax effect on screens >= 768px (Desktop/Tablet)
       mm.add("(min-width: 768px)", () => {
-        if (!col1Ref.current || !col2Ref.current || !col3Ref.current || !containerRef.current) return;
+        if (!col1Ref.current || !col2Ref.current || !containerRef.current) return;
 
-        // Column 1 slides up slightly slower
+        // Column 1 slides up slightly
         gsap.fromTo(
           col1Ref.current,
           { y: 80 },
@@ -250,26 +247,9 @@ export default function Certifications() {
         // Column 2 slides down slightly (offset starting position)
         gsap.fromTo(
           col2Ref.current,
-          { y: -45 },
+          { y: -80 },
           {
-            y: 45,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 1,
-              invalidateOnRefresh: true
-            }
-          }
-        );
-
-        // Column 3 slides up slightly faster
-        gsap.fromTo(
-          col3Ref.current,
-          { y: 100 },
-          {
-            y: -100,
+            y: 80,
             ease: 'none',
             scrollTrigger: {
               trigger: containerRef.current,
@@ -289,7 +269,7 @@ export default function Certifications() {
   return (
     <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 md:py-32">
       
-      {/* Scoped scrollbar and grid spacing rules */}
+      {/* Scoped scrollbar rules */}
       <style>{`
         #certifications,
         #certifications * {
@@ -328,8 +308,8 @@ export default function Certifications() {
           </h2>
         </div>
 
-        {/* 3-Column staggered vertical parallax layout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 lg:gap-12 items-start w-full">
+        {/* Certificates staggered vertical parallax layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-12 items-start w-full">
           
           {/* Column 1: Certifications (Odd indices, 5 cards) */}
           <div ref={col1Ref} className="flex flex-col gap-6 md:gap-8 w-full">
@@ -413,39 +393,29 @@ export default function Certifications() {
             ))}
           </div>
 
-          {/* Column 3: Badges (8 cards) */}
-          <div ref={col3Ref} className="flex flex-col gap-6 md:gap-8 w-full sm:col-span-2 md:col-span-1 sm:grid sm:grid-cols-2 md:flex md:flex-col">
-            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-slate-400 font-bold mb-1 max-md:text-center sm:col-span-2 md:col-span-1">
+        </div>
+
+        {/* Circular Gallery for Verified Badges */}
+        <div className="w-full relative z-10 flex flex-col items-center mt-24">
+          <div className="w-full flex flex-col items-center text-center mb-8">
+            <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
               Verified Badges
-            </h3>
-            {badgesData.map((badge, index) => (
-              <div 
-                key={index} 
-                className="w-full relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer text-center items-center"
-              >
-                {/* Miniature Mock Image of the Badge */}
-                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02] flex items-center justify-center bg-slate-50">
-                  <BadgeMock color={badge.color} initials={badge.initials} />
-                </div>
-
-                {/* Metadata Row below the Image */}
-                <div className="flex flex-col gap-1 items-center justify-center mb-1.5 w-full pt-1">
-                  <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                    {badge.issuer}
-                  </span>
-                  <span className="font-mono text-[8px] md:text-[9px] text-slate-500 font-bold bg-slate-100/80 px-2 py-0.5 rounded-full uppercase">
-                    {badge.date}
-                  </span>
-                </div>
-
-                {/* Title/Name of the Badge */}
-                <h3 className="font-sans text-xs md:text-sm font-bold text-slate-800 tracking-tight leading-tight group-hover:text-accent transition-colors duration-300 px-1 line-clamp-2 min-h-[30px] md:min-h-[36px]">
-                  {badge.name}
-                </h3>
-              </div>
-            ))}
+            </span>
+            <p className="font-sans text-sm md:text-base text-slate-500 max-w-[420px] text-center">
+              A 3D auto-scrolling WebGL gallery showcasing digital credentials. Drag or scroll to navigate.
+            </p>
           </div>
-
+          <div className="w-full max-w-[1200px] h-[350px] sm:h-[450px] md:h-[500px] relative overflow-hidden bg-white/40 border border-slate-200/50 rounded-3xl backdrop-blur-md shadow-sm">
+            <CircularGallery
+              items={galleryItems}
+              bend={1.5}
+              textColor="#334155"
+              borderRadius={0.06}
+              scrollSpeed={2}
+              scrollEase={0.03}
+              font="bold 12px monospace"
+            />
+          </div>
         </div>
         
       </div>
