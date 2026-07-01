@@ -145,15 +145,15 @@ export default function Designs() {
           </p>
         </div>
 
-        {/* Cards flex container. uses .designs-track for viewport-relative centering offsets */}
+        {/* Cards container: 3x2 grid on mobile viewports, horizontal flex on desktop */}
         <div 
           ref={scrollSectionRef} 
-          className="designs-track flex flex-col md:flex-row gap-8 md:gap-16 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
+          className="designs-track grid grid-cols-2 grid-rows-3 gap-4 max-sm:gap-3 md:flex md:flex-row md:gap-16 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
         >
           {designsData.map((design, index) => (
             <div 
               key={index} 
-              className="w-full sm:w-[500px] md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+              className="w-full md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
             >
               {/* Solid Color Background with Large Translucent Index Number */}
               <div 
