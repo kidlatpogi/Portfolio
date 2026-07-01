@@ -214,52 +214,71 @@ const BadgeMock: React.FC<{ color: string; initials: string }> = ({ color, initi
 
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const track1Ref = useRef<HTMLDivElement>(null);
-  const track2Ref = useRef<HTMLDivElement>(null);
+  const col1Ref = useRef<HTMLDivElement>(null);
+  const col2Ref = useRef<HTMLDivElement>(null);
+  const col3Ref = useRef<HTMLDivElement>(null);
+
+  // Divide the 10 certifications into 2 equal columns (5 each)
+  const col1Certs = certificationsData.filter((_, idx) => idx % 2 === 0);
+  const col2Certs = certificationsData.filter((_, idx) => idx % 2 !== 0);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
       let mm = gsap.matchMedia();
 
-      // Pinned dual track animation on screens >= 768px (Desktop/Tablet)
+      // Vertical columns parallax effect on screens >= 768px (Desktop/Tablet)
       mm.add("(min-width: 768px)", () => {
-        if (!track1Ref.current || !track2Ref.current || !containerRef.current) return;
+        if (!col1Ref.current || !col2Ref.current || !col3Ref.current || !containerRef.current) return;
 
-        const scrollWidth1 = track1Ref.current.scrollWidth;
-        const scrollWidth2 = track2Ref.current.scrollWidth;
-
-        // Translation offset calculation
-        const trans1 = -(scrollWidth1 - window.innerWidth);
-        const trans2 = -(scrollWidth2 - window.innerWidth);
-
-        // Maximum scroll distance based on the longer track
-        const scrollDuration = Math.max(scrollWidth1, scrollWidth2) - window.innerWidth;
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: containerRef.current,
-            pin: true,
-            scrub: 1,
-            start: 'top top',
-            end: () => `+=${scrollDuration}`,
-            invalidateOnRefresh: true
+        // Column 1 slides up slightly slower
+        gsap.fromTo(
+          col1Ref.current,
+          { y: 80 },
+          {
+            y: -80,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1,
+              invalidateOnRefresh: true
+            }
           }
-        });
-
-        // Row 1 (Certifications) scrolls left
-        tl.fromTo(
-          track1Ref.current,
-          { x: 0 },
-          { x: trans1, ease: 'none' },
-          0
         );
 
-        // Row 2 (Badges) scrolls right (starts offset left and moves back to 0)
-        tl.fromTo(
-          track2Ref.current,
-          { x: trans2 },
-          { x: 0, ease: 'none' },
-          0
+        // Column 2 slides down slightly (offset starting position)
+        gsap.fromTo(
+          col2Ref.current,
+          { y: -45 },
+          {
+            y: 45,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1,
+              invalidateOnRefresh: true
+            }
+          }
+        );
+
+        // Column 3 slides up slightly faster
+        gsap.fromTo(
+          col3Ref.current,
+          { y: 100 },
+          {
+            y: -100,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1,
+              invalidateOnRefresh: true
+            }
+          }
         );
       });
     }, containerRef);
@@ -268,27 +287,10 @@ export default function Certifications() {
   }, []);
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-12">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 md:py-32">
       
-      {/* Centering layout styles, viewport offsets, and scrollbar removal */}
+      {/* Scoped scrollbar and grid spacing rules */}
       <style>{`
-        #certifications {
-          --card-width-cert: 420px;
-          --card-width-badge: 240px;
-        }
-        @media (min-width: 768px) and (max-width: 1023px) {
-          #certifications {
-            --card-width-cert: 320px;
-            --card-width-badge: 180px;
-          }
-        }
-        @media (min-width: 1024px) and (max-width: 1279px) {
-          #certifications {
-            --card-width-cert: 360px;
-            --card-width-badge: 200px;
-          }
-        }
-
         #certifications,
         #certifications * {
           scrollbar-width: none !important;
@@ -297,21 +299,6 @@ export default function Certifications() {
         #certifications::-webkit-scrollbar,
         #certifications *::-webkit-scrollbar {
           display: none !important;
-        }
-
-        #certifications .track-container {
-          padding-left: 1.5rem;
-          padding-right: 1.5rem;
-        }
-        @media (min-width: 768px) {
-          #certifications .track-container-1 {
-            padding-left: calc(50vw - (var(--card-width-cert) / 2)) !important;
-            padding-right: calc(50vw - (var(--card-width-cert) / 2)) !important;
-          }
-          #certifications .track-container-2 {
-            padding-left: calc(50vw - (var(--card-width-badge) / 2)) !important;
-            padding-right: calc(50vw - (var(--card-width-badge) / 2)) !important;
-          }
         }
       `}</style>
 
@@ -328,11 +315,11 @@ export default function Certifications() {
         />
       </div>
 
-      {/* Desktop layout: sticky full-height screen. Mobile: natural vertical stack */}
-      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30 w-full">
+      {/* Section Content Container */}
+      <div className="relative z-30 w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col justify-start">
         
         {/* Section Header - Centered */}
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center z-10 flex-shrink-0 mb-12">
+        <div className="w-full flex flex-col items-center text-center mb-16">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
           </span>
@@ -341,85 +328,122 @@ export default function Certifications() {
           </h2>
         </div>
 
-        {/* Double Track Container */}
-        <div className="flex flex-col gap-12 w-full justify-center">
+        {/* 3-Column staggered vertical parallax layout */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 lg:gap-12 items-start w-full">
           
-          {/* Row 1: Certifications (Translates Left on Desktop, Swipeable on Mobile) */}
-          <div className="w-full overflow-x-auto md:overflow-x-visible">
-            <div 
-              ref={track1Ref} 
-              className="track-container track-container-1 flex flex-row gap-6 md:gap-10 items-start w-max will-change-transform z-10"
-            >
-              {certificationsData.map((cert, index) => (
-                <div 
-                  key={index} 
-                  className="w-[280px] md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
-                >
-                  {/* Miniature Mock Image of the Certificate */}
-                  <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
-                    <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
-                  </div>
+          {/* Column 1: Certifications (Odd indices, 5 cards) */}
+          <div ref={col1Ref} className="flex flex-col gap-6 md:gap-8 w-full">
+            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-slate-400 font-bold mb-1 max-md:text-center">
+              Certificates (Group A)
+            </h3>
+            {col1Certs.map((cert, index) => (
+              <div 
+                key={index} 
+                className="w-full relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
+              >
+                {/* Miniature Mock Image of the Certificate */}
+                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
+                </div>
 
-                  {/* Metadata Row below the Image */}
-                  <div className="flex justify-between items-center mb-1.5 pt-1">
-                    <span 
-                      style={{ color: cert.color }} 
-                      className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
-                    >
-                      {cert.issuer}
-                    </span>
-                    <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
-                      {cert.date}
-                    </span>
-                  </div>
-
-                  {/* Title of the Certificate */}
-                  <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px]">
-                    {cert.title}
-                  </h3>
-
-                  {/* Verifiable ID */}
-                  <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-semibold tracking-wider text-left border-t border-slate-100 pt-3 mt-3">
-                    ID: {cert.id}
+                {/* Metadata Row below the Image */}
+                <div className="flex justify-between items-center mb-1.5 pt-1">
+                  <span 
+                    style={{ color: cert.color }} 
+                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
+                  >
+                    {cert.issuer}
+                  </span>
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
+                    {cert.date}
                   </span>
                 </div>
-              ))}
-            </div>
+
+                {/* Title of the Certificate */}
+                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px]">
+                  {cert.title}
+                </h3>
+
+                {/* Verifiable ID */}
+                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-semibold tracking-wider text-left border-t border-slate-100 pt-3 mt-3">
+                  ID: {cert.id}
+                </span>
+              </div>
+            ))}
           </div>
 
-          {/* Row 2: Badges (Translates Right on Desktop, Swipeable on Mobile) */}
-          <div className="w-full overflow-x-auto md:overflow-x-visible">
-            <div 
-              ref={track2Ref} 
-              className="track-container track-container-2 flex flex-row gap-6 md:gap-10 items-start w-max will-change-transform z-10"
-            >
-              {badgesData.map((badge, index) => (
-                <div 
-                  key={index} 
-                  className="w-[180px] md:w-[200px] lg:w-[220px] xl:w-[240px] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer text-center items-center"
-                >
-                  {/* Miniature Mock Image of the Badge */}
-                  <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02] flex items-center justify-center bg-slate-50">
-                    <BadgeMock color={badge.color} initials={badge.initials} />
-                  </div>
-
-                  {/* Metadata Row below the Image */}
-                  <div className="flex flex-col gap-1 items-center justify-center mb-1.5 w-full pt-1">
-                    <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                      {badge.issuer}
-                    </span>
-                    <span className="font-mono text-[8px] md:text-[9px] text-slate-500 font-bold bg-slate-100/80 px-2 py-0.5 rounded-full uppercase">
-                      {badge.date}
-                    </span>
-                  </div>
-
-                  {/* Title/Name of the Badge */}
-                  <h3 className="font-sans text-xs md:text-sm font-bold text-slate-800 tracking-tight leading-tight group-hover:text-accent transition-colors duration-300 px-1 line-clamp-2 min-h-[30px] md:min-h-[36px]">
-                    {badge.name}
-                  </h3>
+          {/* Column 2: Certifications (Even indices, 5 cards) */}
+          <div ref={col2Ref} className="flex flex-col gap-6 md:gap-8 w-full md:mt-16">
+            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-slate-400 font-bold mb-1 max-md:text-center">
+              Certificates (Group B)
+            </h3>
+            {col2Certs.map((cert, index) => (
+              <div 
+                key={index} 
+                className="w-full relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
+              >
+                {/* Miniature Mock Image of the Certificate */}
+                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
                 </div>
-              ))}
-            </div>
+
+                {/* Metadata Row below the Image */}
+                <div className="flex justify-between items-center mb-1.5 pt-1">
+                  <span 
+                    style={{ color: cert.color }} 
+                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
+                  >
+                    {cert.issuer}
+                  </span>
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
+                    {cert.date}
+                  </span>
+                </div>
+
+                {/* Title of the Certificate */}
+                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px]">
+                  {cert.title}
+                </h3>
+
+                {/* Verifiable ID */}
+                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-semibold tracking-wider text-left border-t border-slate-100 pt-3 mt-3">
+                  ID: {cert.id}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Column 3: Badges (8 cards) */}
+          <div ref={col3Ref} className="flex flex-col gap-6 md:gap-8 w-full sm:col-span-2 md:col-span-1 sm:grid sm:grid-cols-2 md:flex md:flex-col">
+            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-slate-400 font-bold mb-1 max-md:text-center sm:col-span-2 md:col-span-1">
+              Verified Badges
+            </h3>
+            {badgesData.map((badge, index) => (
+              <div 
+                key={index} 
+                className="w-full relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer text-center items-center"
+              >
+                {/* Miniature Mock Image of the Badge */}
+                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02] flex items-center justify-center bg-slate-50">
+                  <BadgeMock color={badge.color} initials={badge.initials} />
+                </div>
+
+                {/* Metadata Row below the Image */}
+                <div className="flex flex-col gap-1 items-center justify-center mb-1.5 w-full pt-1">
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                    {badge.issuer}
+                  </span>
+                  <span className="font-mono text-[8px] md:text-[9px] text-slate-500 font-bold bg-slate-100/80 px-2 py-0.5 rounded-full uppercase">
+                    {badge.date}
+                  </span>
+                </div>
+
+                {/* Title/Name of the Badge */}
+                <h3 className="font-sans text-xs md:text-sm font-bold text-slate-800 tracking-tight leading-tight group-hover:text-accent transition-colors duration-300 px-1 line-clamp-2 min-h-[30px] md:min-h-[36px]">
+                  {badge.name}
+                </h3>
+              </div>
+            ))}
           </div>
 
         </div>
