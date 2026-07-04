@@ -240,6 +240,10 @@ export default function Certifications() {
   const col2Ref = useRef<HTMLDivElement>(null);
   const col3Ref = useRef<HTMLDivElement>(null);
   const col4Ref = useRef<HTMLDivElement>(null);
+  const certCol1Ref = useRef<HTMLDivElement>(null);
+  const certCol2Ref = useRef<HTMLDivElement>(null);
+  const certCol3Ref = useRef<HTMLDivElement>(null);
+  const certCol4Ref = useRef<HTMLDivElement>(null);
 
   // Modal State
   const [selectedItem, setSelectedItem] = useState<{
@@ -380,6 +384,12 @@ export default function Certifications() {
     return () => ctx.revert();
   }, []);
 
+  // Split certifications into 4 columns
+  const certCol1 = [certificationsData[0], certificationsData[4], certificationsData[8]];
+  const certCol2 = [certificationsData[1], certificationsData[5], certificationsData[9]];
+  const certCol3 = [certificationsData[2], certificationsData[6]];
+  const certCol4 = [certificationsData[3], certificationsData[7]];
+
   // Split badges into 4 columns
   const col1Badges = [badgesData[0], badgesData[4]];
   const col2Badges = [badgesData[1], badgesData[5]];
@@ -414,53 +424,199 @@ export default function Certifications() {
           </h2>
         </div>
 
-        {/* Certifications Grid */}
+        {/* Certifications Grid (4 vertical columns on desktop, 1-2 columns on mobile/tablet) */}
         <div 
           ref={gridRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-6 md:px-24"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-6 md:px-24 justify-center items-start"
         >
-          {certificationsData.map((cert, index) => (
-            <div 
-              key={`cert-${index}`} 
-              onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-              className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
-            >
-              {/* Miniature Mock Image of the Certificate */}
-              <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
-                <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
-              </div>
-
-              {/* Metadata Row below the Image */}
-              <div className="flex justify-between items-center mb-1.5 pt-1">
-                <span 
-                  style={{ color: cert.color }} 
-                  className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
-                >
-                  {cert.issuer}
-                </span>
-                <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
-                  {cert.date}
-                </span>
-              </div>
-
-              {/* Title of the Certificate */}
-              <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
-                {cert.title}
-              </h3>
-
-              {/* Verify Button */}
-              <a 
-                href={cert.verifyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+          {/* Column 1 */}
+          <div ref={certCol1Ref} className="flex flex-col gap-6 md:gap-8">
+            {certCol1.map((cert, index) => (
+              <div 
+                key={`cert-1-${index}`} 
+                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
+                className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
               >
-                <span>Verify Credential</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          ))}
+                {/* Miniature Mock Image of the Certificate */}
+                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
+                </div>
+
+                {/* Metadata Row below the Image */}
+                <div className="flex justify-between items-center mb-1.5 pt-1">
+                  <span 
+                    style={{ color: cert.color }} 
+                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
+                  >
+                    {cert.issuer}
+                  </span>
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
+                    {cert.date}
+                  </span>
+                </div>
+
+                {/* Title of the Certificate */}
+                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
+                  {cert.title}
+                </h3>
+
+                {/* Verify Button */}
+                <a 
+                  href={cert.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label={`Verify Credential for ${cert.title}`}
+                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                >
+                  <span>Verify Credential</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Column 2 */}
+          <div ref={certCol2Ref} className="flex flex-col gap-6 md:gap-8">
+            {certCol2.map((cert, index) => (
+              <div 
+                key={`cert-2-${index}`} 
+                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
+                className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
+              >
+                {/* Miniature Mock Image of the Certificate */}
+                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
+                </div>
+
+                {/* Metadata Row below the Image */}
+                <div className="flex justify-between items-center mb-1.5 pt-1">
+                  <span 
+                    style={{ color: cert.color }} 
+                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
+                  >
+                    {cert.issuer}
+                  </span>
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
+                    {cert.date}
+                  </span>
+                </div>
+
+                {/* Title of the Certificate */}
+                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
+                  {cert.title}
+                </h3>
+
+                {/* Verify Button */}
+                <a 
+                  href={cert.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label={`Verify Credential for ${cert.title}`}
+                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                >
+                  <span>Verify Credential</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Column 3 */}
+          <div ref={certCol3Ref} className="flex flex-col gap-6 md:gap-8">
+            {certCol3.map((cert, index) => (
+              <div 
+                key={`cert-3-${index}`} 
+                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
+                className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
+              >
+                {/* Miniature Mock Image of the Certificate */}
+                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
+                </div>
+
+                {/* Metadata Row below the Image */}
+                <div className="flex justify-between items-center mb-1.5 pt-1">
+                  <span 
+                    style={{ color: cert.color }} 
+                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
+                  >
+                    {cert.issuer}
+                  </span>
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
+                    {cert.date}
+                  </span>
+                </div>
+
+                {/* Title of the Certificate */}
+                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
+                  {cert.title}
+                </h3>
+
+                {/* Verify Button */}
+                <a 
+                  href={cert.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label={`Verify Credential for ${cert.title}`}
+                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                >
+                  <span>Verify Credential</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Column 4 */}
+          <div ref={certCol4Ref} className="flex flex-col gap-6 md:gap-8">
+            {certCol4.map((cert, index) => (
+              <div 
+                key={`cert-4-${index}`} 
+                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
+                className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
+              >
+                {/* Miniature Mock Image of the Certificate */}
+                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
+                </div>
+
+                {/* Metadata Row below the Image */}
+                <div className="flex justify-between items-center mb-1.5 pt-1">
+                  <span 
+                    style={{ color: cert.color }} 
+                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
+                  >
+                    {cert.issuer}
+                  </span>
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
+                    {cert.date}
+                  </span>
+                </div>
+
+                {/* Title of the Certificate */}
+                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
+                  {cert.title}
+                </h3>
+
+                {/* Verify Button */}
+                <a 
+                  href={cert.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label={`Verify Credential for ${cert.title}`}
+                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                >
+                  <span>Verify Credential</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
 
@@ -503,6 +659,7 @@ export default function Certifications() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
+                  aria-label={`Verify ${badge.name} badge`}
                   className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
                   title="Verify Badge"
                 >
@@ -536,6 +693,7 @@ export default function Certifications() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
+                  aria-label={`Verify ${badge.name} badge`}
                   className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
                   title="Verify Badge"
                 >
@@ -569,6 +727,7 @@ export default function Certifications() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
+                  aria-label={`Verify ${badge.name} badge`}
                   className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
                   title="Verify Badge"
                 >
@@ -602,6 +761,7 @@ export default function Certifications() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
+                  aria-label={`Verify ${badge.name} badge`}
                   className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
                   title="Verify Badge"
                 >
