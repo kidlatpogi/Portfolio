@@ -38,7 +38,7 @@ export default function ParallaxTextSection() {
           </span>
 
           <div className="ml-16 pr-32 flex flex-col gap-1 text-left border-l border-slate-200/80 pl-10">
-            <span className="text-xs text-slate-400 font-mono uppercase tracking-[0.25em]">Competency</span>
+            <span className="text-xs text-slate-500 font-mono uppercase tracking-[0.25em]">Competency</span>
             <div className="h-[1.5px] w-6 bg-accent mb-1.5" />
             <span className="text-lg text-slate-700 font-mono uppercase tracking-tight font-bold">Web Applications</span>
             <span className="text-lg text-slate-700 font-mono uppercase tracking-tight font-bold">Backend Systems</span>
@@ -62,7 +62,7 @@ export default function ParallaxTextSection() {
           </span>
 
           <div className="ml-16 pr-32 flex flex-col gap-1 text-left border-l border-slate-200/80 pl-10">
-            <span className="text-xs text-slate-400 font-mono uppercase tracking-[0.25em]">Focus</span>
+            <span className="text-xs text-slate-500 font-mono uppercase tracking-[0.25em]">Focus</span>
             <div className="h-[1.5px] w-6 bg-accent mb-1.5" />
             <span className="text-lg text-slate-700 font-mono uppercase tracking-tight font-bold">Performance</span>
             <span className="text-lg text-slate-700 font-mono uppercase tracking-tight font-bold">Scalability</span>
@@ -89,13 +89,13 @@ export default function ParallaxTextSection() {
 
         <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-200/60">
           <div className="flex flex-col gap-2">
-            <span className="text-[9px] text-slate-400 font-mono uppercase tracking-[0.2em] mb-1">Competency</span>
+            <span className="text-[9px] text-slate-500 font-mono uppercase tracking-[0.2em] mb-1">Competency</span>
             <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">Web Apps</span>
             <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">Backend API</span>
             <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">AI Agents</span>
           </div>
           <div className="flex flex-col gap-2">
-            <span className="text-[9px] text-slate-400 font-mono uppercase tracking-[0.2em] mb-1">Focus</span>
+            <span className="text-[9px] text-slate-500 font-mono uppercase tracking-[0.2em] mb-1">Focus</span>
             <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">Performance</span>
             <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">Scalability</span>
             <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">Smart UX</span>
