@@ -235,9 +235,11 @@ const BadgeMock: React.FC<{ color: string; initials: string }> = ({ color, initi
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-
-  // Active Tab State
-  const [activeTab, setActiveTab] = useState<'all' | 'certs' | 'badges'>('all');
+  const badgesContainerRef = useRef<HTMLDivElement>(null);
+  const col1Ref = useRef<HTMLDivElement>(null);
+  const col2Ref = useRef<HTMLDivElement>(null);
+  const col3Ref = useRef<HTMLDivElement>(null);
+  const col4Ref = useRef<HTMLDivElement>(null);
 
   // Modal State
   const [selectedItem, setSelectedItem] = useState<{
@@ -269,16 +271,17 @@ export default function Certifications() {
     };
   }, [selectedItem]);
 
-  // GSAP Scroll Reveal Stagger for Grid Items
+  // GSAP Scroll Reveal Stagger and Vertical Parallax
   useEffect(() => {
     let ctx = gsap.context(() => {
+      // Stagger reveal for certifications grid cards
       gsap.fromTo(
         ".cert-grid-item",
         { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.5,
+          duration: 0.6,
           stagger: 0.05,
           ease: 'power3.out',
           scrollTrigger: {
@@ -288,23 +291,103 @@ export default function Certifications() {
           }
         }
       );
-    }, gridRef);
+
+      // Stagger reveal for badge cards
+      gsap.fromTo(
+        ".badge-emblem-card",
+        { opacity: 0, scale: 0.8 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          stagger: 0.06,
+          ease: 'back.out(1.2)',
+          scrollTrigger: {
+            trigger: badgesContainerRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
+          }
+        }
+      );
+
+      // Column vertical parallax (only on desktop/tablet md and above)
+      let mm = gsap.matchMedia();
+      mm.add("(min-width: 768px)", () => {
+        if (!badgesContainerRef.current) return;
+        
+        gsap.fromTo(
+          col1Ref.current,
+          { y: 0 },
+          {
+            y: -15,
+            ease: "none",
+            scrollTrigger: {
+              trigger: badgesContainerRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true
+            }
+          }
+        );
+
+        gsap.fromTo(
+          col2Ref.current,
+          { y: 25 },
+          {
+            y: -30,
+            ease: "none",
+            scrollTrigger: {
+              trigger: badgesContainerRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true
+            }
+          }
+        );
+
+        gsap.fromTo(
+          col3Ref.current,
+          { y: -25 },
+          {
+            y: 30,
+            ease: "none",
+            scrollTrigger: {
+              trigger: badgesContainerRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true
+            }
+          }
+        );
+
+        gsap.fromTo(
+          col4Ref.current,
+          { y: 10 },
+          {
+            y: -15,
+            ease: "none",
+            scrollTrigger: {
+              trigger: badgesContainerRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true
+            }
+          }
+        );
+      });
+    }, containerRef);
 
     return () => ctx.revert();
-  }, [activeTab]);
+  }, []);
 
-  // Dynamically filter items
-  const filteredItems = [
-    ...(activeTab === 'all' || activeTab === 'certs'
-      ? certificationsData.map(c => ({ ...c, type: 'cert' as const }))
-      : []),
-    ...(activeTab === 'all' || activeTab === 'badges'
-      ? badgesData.map(b => ({ ...b, title: b.name, type: 'badge' as const }))
-      : [])
-  ];
+  // Split badges into 4 columns
+  const col1Badges = [badgesData[0], badgesData[4]];
+  const col2Badges = [badgesData[1], badgesData[5]];
+  const col3Badges = [badgesData[2], badgesData[6]];
+  const col4Badges = [badgesData[3], badgesData[7]];
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 z-30">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 z-30 flex flex-col gap-24">
       
       {/* Interactive Background ShapeGrid */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -319,122 +402,216 @@ export default function Certifications() {
         />
       </div>
 
+      {/* SUBSECTION 1: CERTIFICATIONS */}
       <div className="relative z-10 w-full flex flex-col items-center">
-        
         {/* Section Header - Centered */}
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-12">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
           </span>
           <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
-            Certification and Badges
+            Certifications
           </h2>
         </div>
 
-        {/* Tab Filter Switcher */}
-        <div className="flex justify-center gap-2 md:gap-4 mb-16 px-4">
-          {(['all', 'certs', 'badges'] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`font-mono text-[10px] md:text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full border transition-all duration-300 cursor-pointer ${
-                activeTab === tab
-                  ? 'bg-black text-[#FAFAFA] border-black shadow-md scale-105'
-                  : 'bg-white/50 text-[#334155] border-[#334155]/20 hover:border-[#334155]/40 hover:bg-white'
-              }`}
-            >
-              {tab === 'all' ? 'All' : tab === 'certs' ? 'Certifications' : 'Badges'}
-            </button>
-          ))}
-        </div>
-
-        {/* Bento/Modern Grid */}
+        {/* Certifications Grid */}
         <div 
           ref={gridRef}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-6 md:px-24"
         >
-          {filteredItems.map((item, index) => (
+          {certificationsData.map((cert, index) => (
             <div 
-              key={`${item.type}-${index}-${item.title}`} 
-              onClick={() => setSelectedItem(item.type === 'cert' ? { type: 'cert', ...item } : { type: 'badge', ...item, name: item.title })}
+              key={`cert-${index}`} 
+              onClick={() => setSelectedItem({ type: 'cert', ...cert })}
               className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
             >
-              {item.type === 'cert' ? (
-                <>
-                  {/* Miniature Mock Image of the Certificate */}
-                  <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
-                    <CertificateMock color={item.color} title={item.title} issuer={item.issuer} id={item.id!} />
-                  </div>
+              {/* Miniature Mock Image of the Certificate */}
+              <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
+              </div>
 
-                  {/* Metadata Row below the Image */}
-                  <div className="flex justify-between items-center mb-1.5 pt-1">
-                    <span 
-                      style={{ color: item.color }} 
-                      className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
-                    >
-                      {item.issuer}
-                    </span>
-                    <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
-                      {item.date}
-                    </span>
-                  </div>
+              {/* Metadata Row below the Image */}
+              <div className="flex justify-between items-center mb-1.5 pt-1">
+                <span 
+                  style={{ color: cert.color }} 
+                  className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
+                >
+                  {cert.issuer}
+                </span>
+                <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
+                  {cert.date}
+                </span>
+              </div>
 
-                  {/* Title of the Certificate */}
-                  <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
-                    {item.title}
-                  </h3>
+              {/* Title of the Certificate */}
+              <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
+                {cert.title}
+              </h3>
 
-                  {/* Verify Button */}
-                  <a 
-                    href={item.verifyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
-                  >
-                    <span>Verify Credential</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </>
-              ) : (
-                <>
-                  {/* Miniature Mock Image of the Badge */}
-                  <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02] flex items-center justify-center bg-slate-50">
-                    <BadgeMock color={item.color} initials={item.initials!} />
-                  </div>
-
-                  {/* Metadata Row below the Image */}
-                  <div className="flex justify-between items-center mb-1.5 pt-1 w-full">
-                    <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                      {item.issuer}
-                    </span>
-                    <span className="font-mono text-[8px] md:text-[9px] text-slate-500 font-bold bg-slate-100/80 px-2 py-0.5 rounded-full uppercase">
-                      {item.date}
-                    </span>
-                  </div>
-
-                  {/* Title/Name of the Badge */}
-                  <h3 className="font-sans text-sm md:text-base font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
-                    {item.title}
-                  </h3>
-
-                  {/* Verify Button */}
-                  <a 
-                    href={item.verifyUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="mt-auto w-full flex items-center justify-center gap-1.5 py-1.5 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
-                  >
-                    <span>Verify</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </>
-              )}
+              {/* Verify Button */}
+              <a 
+                href={cert.verifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+              >
+                <span>Verify Credential</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
             </div>
           ))}
         </div>
-        
+      </div>
+
+      {/* SUBSECTION 2: BADGES */}
+      <div ref={badgesContainerRef} className="relative z-10 w-full flex flex-col items-center pt-12">
+        {/* Section Header - Centered */}
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16">
+          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
+            Skill Endorsements
+          </span>
+          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
+            Badges
+          </h2>
+        </div>
+
+        {/* Badges Parallax Grid Columns */}
+        <div className="grid grid-cols-2 gap-6 md:flex md:flex-row md:gap-8 justify-center items-start w-full max-w-[1600px] mx-auto px-6 md:px-24">
+          
+          {/* Column 1 */}
+          <div ref={col1Ref} className="flex flex-col gap-6 md:gap-8 items-center">
+            {col1Badges.map((badge, idx) => (
+              <div 
+                key={`badge-1-${idx}`} 
+                onClick={() => setSelectedItem({ type: 'badge', ...badge })}
+                className="badge-emblem-card relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
+              >
+                <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
+                <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
+                <span className="font-mono text-2xl md:text-3xl font-black tracking-wider leading-none drop-shadow-sm select-none" style={{ color: badge.color }}>
+                  {badge.initials}
+                </span>
+                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2.5">
+                  {badge.issuer}
+                </span>
+                <span className="font-sans text-[10px] md:text-xs font-bold text-slate-700 mt-1 truncate max-w-full px-2">
+                  {badge.name}
+                </span>
+                <a 
+                  href={badge.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
+                  title="Verify Badge"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Column 2 */}
+          <div ref={col2Ref} className="flex flex-col gap-6 md:gap-8 items-center">
+            {col2Badges.map((badge, idx) => (
+              <div 
+                key={`badge-2-${idx}`} 
+                onClick={() => setSelectedItem({ type: 'badge', ...badge })}
+                className="badge-emblem-card relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
+              >
+                <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
+                <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
+                <span className="font-mono text-2xl md:text-3xl font-black tracking-wider leading-none drop-shadow-sm select-none" style={{ color: badge.color }}>
+                  {badge.initials}
+                </span>
+                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2.5">
+                  {badge.issuer}
+                </span>
+                <span className="font-sans text-[10px] md:text-xs font-bold text-slate-700 mt-1 truncate max-w-full px-2">
+                  {badge.name}
+                </span>
+                <a 
+                  href={badge.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
+                  title="Verify Badge"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Column 3 */}
+          <div ref={col3Ref} className="flex flex-col gap-6 md:gap-8 items-center">
+            {col3Badges.map((badge, idx) => (
+              <div 
+                key={`badge-3-${idx}`} 
+                onClick={() => setSelectedItem({ type: 'badge', ...badge })}
+                className="badge-emblem-card relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
+              >
+                <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
+                <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
+                <span className="font-mono text-2xl md:text-3xl font-black tracking-wider leading-none drop-shadow-sm select-none" style={{ color: badge.color }}>
+                  {badge.initials}
+                </span>
+                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2.5">
+                  {badge.issuer}
+                </span>
+                <span className="font-sans text-[10px] md:text-xs font-bold text-slate-700 mt-1 truncate max-w-full px-2">
+                  {badge.name}
+                </span>
+                <a 
+                  href={badge.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
+                  title="Verify Badge"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Column 4 */}
+          <div ref={col4Ref} className="flex flex-col gap-6 md:gap-8 items-center">
+            {col4Badges.map((badge, idx) => (
+              <div 
+                key={`badge-4-${idx}`} 
+                onClick={() => setSelectedItem({ type: 'badge', ...badge })}
+                className="badge-emblem-card relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
+              >
+                <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
+                <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
+                <span className="font-mono text-2xl md:text-3xl font-black tracking-wider leading-none drop-shadow-sm select-none" style={{ color: badge.color }}>
+                  {badge.initials}
+                </span>
+                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2.5">
+                  {badge.issuer}
+                </span>
+                <span className="font-sans text-[10px] md:text-xs font-bold text-slate-700 mt-1 truncate max-w-full px-2">
+                  {badge.name}
+                </span>
+                <a 
+                  href={badge.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
+                  title="Verify Badge"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </div>
+
+        </div>
       </div>
 
       {/* Fullscreen Overlay Modal */}
