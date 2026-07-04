@@ -221,7 +221,7 @@ const CardNav: React.FC<CardNavProps> = ({
 
   return (
     <div className="contents">
-      <div className={`fixed top-6 max-sm:top-4 left-1/2 -translate-x-1/2 transform w-[90%] max-sm:w-[92%] max-w-[800px] z-[100] box-border ${className}`}>
+      <div id="card-nav-container" className={`fixed top-6 max-sm:top-4 left-1/2 -translate-x-1/2 transform w-[90%] max-sm:w-[92%] max-w-[800px] z-[100] box-border ${className}`}>
         <nav
           ref={navRef}
           className={`block h-[60px] p-0 border border-[#334155]/20 backdrop-blur-[24px] relative overflow-hidden will-change-[height] transition-[border-radius,border-color,opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isExpanded
