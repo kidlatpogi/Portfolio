@@ -194,17 +194,6 @@ const {
 	.hero-socials {
 		opacity: 0;
 	}
-
-	/* Hide CardNav, SocialsSidebar, and ChatBot when in modal-scrim */
-	body.modal-open #card-nav-container,
-	body.modal-open #socials-sidebar-container,
-	body.modal-open #chatbot-container {
-		opacity: 0 !important;
-		pointer-events: none !important;
-		visibility: hidden !important;
-		transform: translateY(15px) !important;
-		transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease !important;
-	}
 </style>
 
 <script>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, X } from 'lucide-react';
@@ -249,22 +250,19 @@ export default function Certifications() {
     verifyUrl: string;
   } | null>(null);
 
-  // Close modal on Escape key & toggle body overflow / navigation visibility classes
+  // Close modal on Escape key & toggle body scroll overflow
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setSelectedItem(null);
     };
     if (selectedItem) {
       document.body.style.overflow = 'hidden';
-      document.body.classList.add('modal-open');
       window.addEventListener('keydown', handleKeyDown);
     } else {
       document.body.style.overflow = '';
-      document.body.classList.remove('modal-open');
     }
     return () => {
       document.body.style.overflow = '';
-      document.body.classList.remove('modal-open');
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [selectedItem]);
@@ -506,9 +504,9 @@ export default function Certifications() {
       </div>
 
       {/* Fullscreen Overlay Modal */}
-      {selectedItem && (
+      {selectedItem && typeof document !== 'undefined' && createPortal(
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/40 backdrop-blur-md transition-all duration-300"
+          className="fixed inset-0 z-[9995] flex items-center justify-center p-4 md:p-8 bg-black/40 backdrop-blur-md transition-all duration-300"
           onClick={() => setSelectedItem(null)}
         >
           {/* Brand glow behind the modal */}
@@ -536,8 +534,10 @@ export default function Certifications() {
             <div className="w-full md:w-1/2 flex items-center justify-center">
               {selectedItem.type === 'cert' ? (
                 // Elegant large-format Certificate view
-                <div className="w-full aspect-[1.6/1] bg-slate-50 border-8 border-double border-slate-200 rounded-2xl relative overflow-hidden flex flex-col justify-between p-6 md:p-10 shadow-lg select-none text-slate-800">
-                  <div className="absolute inset-2 border border-slate-200 pointer-events-none rounded-lg" />
+                <div className="w-full aspect-[1.6/1] bg-slate-50 rounded-2xl relative overflow-hidden flex flex-col justify-between p-6 md:p-10 shadow-lg select-none text-slate-800">
+                  {/* Elegant Double Border Inset to prevent overflow border clipping */}
+                  <div className="absolute inset-2 border-8 border-double border-slate-200 pointer-events-none rounded-xl" />
+                  <div className="absolute inset-4 border border-slate-200 pointer-events-none rounded-lg" />
                   
                   <div className="flex justify-between items-start z-10">
                     <div className="flex flex-col gap-1">
@@ -638,7 +638,8 @@ export default function Certifications() {
             </div>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Anchor target for CTA Connect button */}
