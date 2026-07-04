@@ -85,7 +85,7 @@ export const ChatBot: React.FC = () => {
   ];
 
   return (
-    <div className="fixed bottom-6 left-6 z-[9990] flex flex-col items-start font-sans">
+    <div id="chatbot-container" className="fixed bottom-6 left-6 z-[9990] flex flex-col items-start font-sans">
       {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (

@@ -249,14 +249,25 @@ export default function Certifications() {
     verifyUrl: string;
   } | null>(null);
 
-  // Close modal on Escape key
+  // Close modal on Escape key & toggle body overflow / navigation visibility classes
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setSelectedItem(null);
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+    if (selectedItem) {
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('modal-open');
+      window.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedItem]);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
@@ -497,28 +508,28 @@ export default function Certifications() {
       {/* Fullscreen Overlay Modal */}
       {selectedItem && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-slate-950/80 backdrop-blur-md transition-all duration-300"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/40 backdrop-blur-md transition-all duration-300"
           onClick={() => setSelectedItem(null)}
         >
           {/* Brand glow behind the modal */}
           <div 
             style={{ 
-              background: `radial-gradient(circle, ${selectedItem.color}33 0%, transparent 70%)` 
+              background: `radial-gradient(circle, ${selectedItem.color}15 0%, transparent 70%)` 
             }}
             className="absolute inset-0 pointer-events-none opacity-80 blur-3xl"
           />
 
           <div 
-            className="relative w-full max-w-4xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-10 text-slate-800 dark:text-white shadow-2xl flex flex-col md:flex-row items-center gap-8 md:gap-12 animate-in fade-in zoom-in-95 duration-200"
+            className="relative w-full max-w-4xl bg-[#FAFAFA] border border-[#334155]/20 rounded-3xl p-6 md:p-10 text-slate-800 shadow-2xl flex flex-col md:flex-row items-center gap-8 md:gap-12 animate-in fade-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close Button */}
             <button 
               onClick={() => setSelectedItem(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-full transition-all duration-200 cursor-pointer"
+              className="absolute top-5 right-5 text-zinc-400 hover:text-black transition-colors p-1.5 rounded-full hover:bg-zinc-100 cursor-pointer z-20"
               aria-label="Close modal"
             >
-              <X className="w-6 h-6" />
+              <X size={20} />
             </button>
 
             {/* Credential Image View (Left / Top) */}
@@ -564,10 +575,10 @@ export default function Certifications() {
                 </div>
               ) : (
                 // Elegant large-format Badge view
-                <div className="relative p-6 bg-slate-50 dark:bg-slate-800/40 rounded-3xl border border-slate-200 dark:border-slate-800 w-full max-w-[280px] aspect-square flex items-center justify-center shadow-lg">
+                <div className="relative p-6 bg-white rounded-3xl border border-[#E5E7EB] w-full max-w-[280px] aspect-square flex items-center justify-center shadow-lg">
                   {/* Outer animated rings */}
-                  <div className="absolute inset-4 border border-dashed border-slate-300 dark:border-slate-700 rounded-full animate-[spin_40s_linear_infinite]" />
-                  <div className="absolute inset-8 border border-slate-200 dark:border-slate-800 rounded-full" />
+                  <div className="absolute inset-4 border border-dashed border-slate-300 rounded-full animate-[spin_40s_linear_infinite]" />
+                  <div className="absolute inset-8 border border-slate-200 rounded-full" />
                   
                   {/* Glowing center badge */}
                   <div 
@@ -575,7 +586,7 @@ export default function Certifications() {
                       background: `radial-gradient(circle, ${selectedItem.color} 0%, ${selectedItem.color}dd 70%, ${selectedItem.color}aa 100%)`,
                       boxShadow: `0 10px 30px -5px ${selectedItem.color}80`
                     }} 
-                    className="w-40 h-40 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center border-4 border-white dark:border-slate-900 text-white relative z-10 select-none"
+                    className="w-40 h-40 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center border-4 border-white text-white relative z-10 select-none"
                   >
                     <span className="font-mono text-4xl font-black tracking-wider leading-none drop-shadow-md">{selectedItem.initials}</span>
                     <span className="text-[8px] tracking-[0.2em] text-white/90 uppercase font-extrabold mt-2 border-t border-white/20 pt-1.5">VERIFIED BADGE</span>
@@ -593,24 +604,24 @@ export default function Certifications() {
                 {selectedItem.issuer}
               </span>
               
-              <h3 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-slate-800 dark:text-white tracking-tight leading-tight mb-4">
+              <h3 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-black tracking-tight leading-tight mb-4">
                 {selectedItem.title || selectedItem.name}
               </h3>
 
               <div className="flex gap-4 mb-6">
-                <div className="flex flex-col bg-slate-50 dark:bg-slate-800/50 px-4 py-2 rounded-xl border border-slate-100 dark:border-slate-800">
-                  <span className="text-[10px] text-slate-400 font-bold uppercase">Issued Date</span>
-                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{selectedItem.date}</span>
+                <div className="flex flex-col bg-white border border-[#E5E7EB] px-4 py-2 rounded-xl">
+                  <span className="text-[9px] text-[#334155]/60 font-bold font-mono uppercase tracking-wider">Issued Date</span>
+                  <span className="text-sm font-semibold text-slate-700">{selectedItem.date}</span>
                 </div>
                 {selectedItem.id && (
-                  <div className="flex flex-col bg-slate-50 dark:bg-slate-800/50 px-4 py-2 rounded-xl border border-slate-100 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 font-bold uppercase">Credential ID</span>
-                    <span className="text-sm font-mono font-semibold text-slate-700 dark:text-slate-300">{selectedItem.id}</span>
+                  <div className="flex flex-col bg-white border border-[#E5E7EB] px-4 py-2 rounded-xl">
+                    <span className="text-[9px] text-[#334155]/60 font-bold font-mono uppercase tracking-wider">Credential ID</span>
+                    <span className="text-sm font-mono font-semibold text-slate-700">{selectedItem.id}</span>
                   </div>
                 )}
               </div>
 
-              <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
+              <p className="text-sm md:text-base text-[#334155] leading-relaxed mb-8">
                 This verified credential confirms the completion of professional training requirements and validation of expertise in standard technologies and frameworks.
               </p>
 
@@ -618,10 +629,11 @@ export default function Certifications() {
                 href={selectedItem.verifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 py-3.5 px-6 bg-slate-900 hover:bg-accent text-white font-bold rounded-2xl transition-all duration-300 text-sm shadow-md hover:shadow-lg w-full md:w-fit cursor-pointer"
+                className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-accent text-[#FAFAFA] font-mono font-semibold tracking-wider transition-colors duration-250 cursor-pointer text-sm hover:opacity-90 w-full md:w-auto"
               >
+                <span className="w-2 h-2 bg-[#FAFAFA] rounded-full" />
                 <span>Verify Credential</span>
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className="w-4 h-4 text-[#FAFAFA]" />
               </a>
             </div>
 
