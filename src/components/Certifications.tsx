@@ -438,7 +438,7 @@ export default function Certifications() {
                 className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
               >
                 {/* Miniature Mock Image of the Certificate */}
-                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                <div className="cursor-target w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
                   <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
                 </div>
 
@@ -485,7 +485,7 @@ export default function Certifications() {
                 className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
               >
                 {/* Miniature Mock Image of the Certificate */}
-                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                <div className="cursor-target w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
                   <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
                 </div>
 
@@ -532,7 +532,7 @@ export default function Certifications() {
                 className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
               >
                 {/* Miniature Mock Image of the Certificate */}
-                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                <div className="cursor-target w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
                   <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
                 </div>
 
@@ -579,7 +579,7 @@ export default function Certifications() {
                 className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
               >
                 {/* Miniature Mock Image of the Certificate */}
-                <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
+                <div className="cursor-target w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
                   <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
                 </div>
 
@@ -641,7 +641,7 @@ export default function Certifications() {
               <div 
                 key={`badge-1-${idx}`} 
                 onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-                className="badge-emblem-card relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
+                className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
               >
                 <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
                 <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
@@ -675,7 +675,7 @@ export default function Certifications() {
               <div 
                 key={`badge-2-${idx}`} 
                 onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-                className="badge-emblem-card relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
+                className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
               >
                 <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
                 <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
@@ -709,7 +709,7 @@ export default function Certifications() {
               <div 
                 key={`badge-3-${idx}`} 
                 onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-                className="badge-emblem-card relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
+                className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
               >
                 <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
                 <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
@@ -743,7 +743,7 @@ export default function Certifications() {
               <div 
                 key={`badge-4-${idx}`} 
                 onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-                className="badge-emblem-card relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
+                className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
               >
                 <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
                 <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
