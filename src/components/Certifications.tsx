@@ -234,8 +234,10 @@ const BadgeMock: React.FC<{ color: string; initials: string }> = ({ color, initi
 
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const track1Ref = useRef<HTMLDivElement>(null);
-  const track2Ref = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  // Active Tab State
+  const [activeTab, setActiveTab] = useState<'all' | 'certs' | 'badges'>('all');
 
   // Modal State
   const [selectedItem, setSelectedItem] = useState<{
@@ -267,110 +269,43 @@ export default function Certifications() {
     };
   }, [selectedItem]);
 
+  // GSAP Scroll Reveal Stagger for Grid Items
   useEffect(() => {
     let ctx = gsap.context(() => {
-      let mm = gsap.matchMedia();
-
-      // Pinned dual track animation on screens >= 768px (Desktop/Tablet)
-      mm.add("(min-width: 768px)", () => {
-        if (!track1Ref.current || !track2Ref.current || !containerRef.current) return;
-
-        const scrollWidth1 = track1Ref.current.scrollWidth;
-        const scrollWidth2 = track2Ref.current.scrollWidth;
-
-        // Translation offset calculation
-        const trans1 = -(scrollWidth1 - window.innerWidth);
-        const trans2 = -(scrollWidth2 - window.innerWidth);
-
-        // Maximum scroll distance based on the longer track
-        const duration1 = Math.abs(trans1);
-        const duration2 = Math.abs(trans2);
-        const scrollDuration = Math.max(duration1, duration2);
-
-        const tl = gsap.timeline({
+      gsap.fromTo(
+        ".cert-grid-item",
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          stagger: 0.05,
+          ease: 'power3.out',
           scrollTrigger: {
-            trigger: containerRef.current,
-            pin: true,
-            scrub: 1,
-            start: 'top top',
-            end: () => `+=${scrollDuration}`,
-            invalidateOnRefresh: true
+            trigger: gridRef.current,
+            start: 'top 85%',
+            toggleActions: 'play none none none'
           }
-        });
-
-        // Calculate start times to center the shorter track's animation
-        const startTime1 = duration1 < scrollDuration ? (scrollDuration - duration1) / 2 : 0;
-        const startTime2 = duration2 < scrollDuration ? (scrollDuration - duration2) / 2 : 0;
-
-        // Row 1 (Certifications) scrolls left
-        tl.fromTo(
-          track1Ref.current,
-          { x: 0 },
-          { x: trans1, ease: 'none', duration: duration1 },
-          startTime1
-        );
-
-        // Row 2 (Badges) scrolls right (starts offset left and moves back to 0)
-        tl.fromTo(
-          track2Ref.current,
-          { x: trans2 },
-          { x: 0, ease: 'none', duration: duration2 },
-          startTime2
-        );
-      });
-    }, containerRef);
+        }
+      );
+    }, gridRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [activeTab]);
+
+  // Dynamically filter items
+  const filteredItems = [
+    ...(activeTab === 'all' || activeTab === 'certs'
+      ? certificationsData.map(c => ({ ...c, type: 'cert' as const }))
+      : []),
+    ...(activeTab === 'all' || activeTab === 'badges'
+      ? badgesData.map(b => ({ ...b, title: b.name, type: 'badge' as const }))
+      : [])
+  ];
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-12">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 z-30">
       
-      {/* Centering layout styles, viewport offsets, and scrollbar removal */}
-      <style>{`
-        #certifications {
-          --card-width-cert: 420px;
-          --card-width-badge: 240px;
-        }
-        @media (min-width: 768px) and (max-width: 1023px) {
-          #certifications {
-            --card-width-cert: 320px;
-            --card-width-badge: 180px;
-          }
-        }
-        @media (min-width: 1024px) and (max-width: 1279px) {
-          #certifications {
-            --card-width-cert: 360px;
-            --card-width-badge: 200px;
-          }
-        }
-
-        #certifications,
-        #certifications * {
-          scrollbar-width: none !important;
-          -ms-overflow-style: none !important;
-        }
-        #certifications::-webkit-scrollbar,
-        #certifications *::-webkit-scrollbar {
-          display: none !important;
-        }
-
-        #certifications .track-container {
-          padding-left: 1.5rem;
-          padding-right: 1.5rem;
-        }
-        @media (min-width: 768px) {
-          #certifications .track-container-1 {
-            padding-left: calc(50vw - (var(--card-width-cert) / 2)) !important;
-            padding-right: calc(50vw - (var(--card-width-cert) / 2)) !important;
-          }
-          #certifications .track-container-2 {
-            padding-left: calc(50vw - (var(--card-width-badge) / 2)) !important;
-            padding-right: calc(50vw - (var(--card-width-badge) / 2)) !important;
-          }
-        }
-      `}</style>
-
       {/* Interactive Background ShapeGrid */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <ShapeGrid 
@@ -384,11 +319,10 @@ export default function Certifications() {
         />
       </div>
 
-      {/* Desktop layout: sticky full-height screen. Mobile: natural vertical stack */}
-      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30 w-full">
+      <div className="relative z-10 w-full flex flex-col items-center">
         
         {/* Section Header - Centered */}
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center z-10 flex-shrink-0 mb-12">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-12">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
           </span>
@@ -397,108 +331,108 @@ export default function Certifications() {
           </h2>
         </div>
 
-        {/* Double Track Container */}
-        <div className="flex flex-col gap-12 w-full justify-center">
-          
-          {/* Row 1: Certifications (Translates Left on Desktop, Swipeable on Mobile) */}
-          <div className="w-full overflow-x-auto md:overflow-x-visible">
-            <div 
-              ref={track1Ref} 
-              className="track-container track-container-1 flex flex-row gap-6 md:gap-10 items-start w-max will-change-transform z-10"
+        {/* Tab Filter Switcher */}
+        <div className="flex justify-center gap-2 md:gap-4 mb-16 px-4">
+          {(['all', 'certs', 'badges'] as const).map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`font-mono text-[10px] md:text-xs font-bold uppercase tracking-widest px-5 py-2.5 rounded-full border transition-all duration-300 cursor-pointer ${
+                activeTab === tab
+                  ? 'bg-black text-[#FAFAFA] border-black shadow-md scale-105'
+                  : 'bg-white/50 text-[#334155] border-[#334155]/20 hover:border-[#334155]/40 hover:bg-white'
+              }`}
             >
-              {certificationsData.map((cert, index) => (
-                <div 
-                  key={index} 
-                  onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-                  className="w-[280px] md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
-                >
+              {tab === 'all' ? 'All' : tab === 'certs' ? 'Certifications' : 'Badges'}
+            </button>
+          ))}
+        </div>
+
+        {/* Bento/Modern Grid */}
+        <div 
+          ref={gridRef}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-6 md:px-24"
+        >
+          {filteredItems.map((item, index) => (
+            <div 
+              key={`${item.type}-${index}-${item.title}`} 
+              onClick={() => setSelectedItem(item.type === 'cert' ? { type: 'cert', ...item } : { type: 'badge', ...item, name: item.title })}
+              className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
+            >
+              {item.type === 'cert' ? (
+                <>
                   {/* Miniature Mock Image of the Certificate */}
                   <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
-                    <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
+                    <CertificateMock color={item.color} title={item.title} issuer={item.issuer} id={item.id!} />
                   </div>
 
                   {/* Metadata Row below the Image */}
                   <div className="flex justify-between items-center mb-1.5 pt-1">
                     <span 
-                      style={{ color: cert.color }} 
+                      style={{ color: item.color }} 
                       className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
                     >
-                      {cert.issuer}
+                      {item.issuer}
                     </span>
                     <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
-                      {cert.date}
+                      {item.date}
                     </span>
                   </div>
 
                   {/* Title of the Certificate */}
-                  <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px]">
-                    {cert.title}
+                  <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
+                    {item.title}
                   </h3>
 
                   {/* Verify Button */}
                   <a 
-                    href={cert.verifyUrl}
+                    href={item.verifyUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="mt-4 w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                    className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
                   >
                     <span>Verify Credential</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Row 2: Badges (Translates Right on Desktop, Swipeable on Mobile) */}
-          <div className="w-full overflow-x-auto md:overflow-x-visible">
-            <div 
-              ref={track2Ref} 
-              className="track-container track-container-2 flex flex-row gap-6 md:gap-10 items-start w-max will-change-transform z-10"
-            >
-              {badgesData.map((badge, index) => (
-                <div 
-                  key={index} 
-                  onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-                  className="w-[180px] md:w-[200px] lg:w-[220px] xl:w-[240px] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer text-center items-center"
-                >
+                </>
+              ) : (
+                <>
                   {/* Miniature Mock Image of the Badge */}
                   <div className="w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02] flex items-center justify-center bg-slate-50">
-                    <BadgeMock color={badge.color} initials={badge.initials} />
+                    <BadgeMock color={item.color} initials={item.initials!} />
                   </div>
 
                   {/* Metadata Row below the Image */}
-                  <div className="flex flex-col gap-1 items-center justify-center mb-1.5 w-full pt-1">
+                  <div className="flex justify-between items-center mb-1.5 pt-1 w-full">
                     <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                      {badge.issuer}
+                      {item.issuer}
                     </span>
                     <span className="font-mono text-[8px] md:text-[9px] text-slate-500 font-bold bg-slate-100/80 px-2 py-0.5 rounded-full uppercase">
-                      {badge.date}
+                      {item.date}
                     </span>
                   </div>
 
                   {/* Title/Name of the Badge */}
-                  <h3 className="font-sans text-xs md:text-sm font-bold text-slate-800 tracking-tight leading-tight group-hover:text-accent transition-colors duration-300 px-1 line-clamp-2 min-h-[30px] md:min-h-[36px]">
-                    {badge.name}
+                  <h3 className="font-sans text-sm md:text-base font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
+                    {item.title}
                   </h3>
 
                   {/* Verify Button */}
                   <a 
-                    href={badge.verifyUrl}
+                    href={item.verifyUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="mt-3 w-full flex items-center justify-center gap-1.5 py-1.5 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                    className="mt-auto w-full flex items-center justify-center gap-1.5 py-1.5 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
                   >
                     <span>Verify</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
-                </div>
-              ))}
+                </>
+              )}
             </div>
-          </div>
-
+          ))}
         </div>
         
       </div>
