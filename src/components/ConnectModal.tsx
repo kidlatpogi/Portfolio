@@ -23,18 +23,15 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
   const [currentPlaceholderIdx, setCurrentPlaceholderIdx] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Prevent background scrolling and toggle modal-open class when open
+  // Prevent background scrolling when open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      document.body.classList.add('modal-open');
     } else {
       document.body.style.overflow = '';
-      document.body.classList.remove('modal-open');
     }
     return () => {
       document.body.style.overflow = '';
-      document.body.classList.remove('modal-open');
     };
   }, [isOpen]);
 

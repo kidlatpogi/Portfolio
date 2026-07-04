@@ -83,7 +83,6 @@ export default function SocialsSidebar() {
 
   return (
     <div 
-      id="socials-sidebar-container"
       className={`fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3.5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
         isVisible 
           ? 'opacity-100 translate-x-0 pointer-events-auto' 
