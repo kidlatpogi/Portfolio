@@ -457,7 +457,7 @@ export default function Certifications() {
               ref={track2Ref} 
               className="track-container track-container-2 flex flex-row gap-6 md:gap-10 items-start w-max will-change-transform z-10"
             >
-              {[...badgesData, ...badgesData].map((badge, index) => (
+              {badgesData.map((badge, index) => (
                 <div 
                   key={index} 
                   onClick={() => setSelectedItem({ type: 'badge', ...badge })}
