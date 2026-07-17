@@ -2,6 +2,9 @@ import React from 'react';
 import ScrollReveal from './ScrollReveal.tsx';
 import { Cpu, Sparkles } from 'lucide-react';
 
+const profileImage = "https://zeusbautista.site/Common/Profile%20Picture.webp";
+const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Profile%20Picture.webp";
+
 export default function About() {
   return (
     <section className="h-auto w-full flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden" id="about">
@@ -33,8 +36,16 @@ export default function About() {
             Hi, I’m{' '}
             <span className="inline-flex items-center gap-2 align-middle">
               <img
-                src="/zeus_avatar.png"
-                alt="Zeus Avatar"
+                src={profileImage}
+                alt="Zeus Angelo Bautista"
+                loading="lazy"
+                decoding="async"
+                onError={(event) => {
+                  const image = event.currentTarget;
+                  if (image.src !== profileImageBackup) {
+                    image.src = profileImageBackup;
+                  }
+                }}
                 className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-[2.5px] border-accent object-cover shadow-sm"
               />
               <span className="text-accent font-bold">Zeus</span>

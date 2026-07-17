@@ -7,34 +7,40 @@ gsap.registerPlugin(ScrollTrigger);
 
 const designsData = [
   {
-    title: "AI Agent Platform Dashboard",
-    category: "Product Design",
-    color: "#0f172a" // Dark slate
+    title: "Cloud9",
+    category: "Poster Design",
+    image: "https://zeusbautista.site/Designs/Cloud9-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Cloud9-1200.webp"
   },
   {
-    title: "Smart Home Controller UI",
-    category: "Mobile Design",
-    color: "#1e293b" // Charcoal
+    title: "Ketchup",
+    category: "Poster Design",
+    image: "https://zeusbautista.site/Designs/Ketchup-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Ketchup-1200.webp"
   },
   {
-    title: "Cyberpunk Portfolio Concept",
-    category: "Creative Direction",
-    color: "#C44900" // Accent Orange
+    title: "Here With Me",
+    category: "Poster Design",
+    image: "https://zeusbautista.site/Designs/Here-with-me-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Here-with-me-1200.webp"
   },
   {
-    title: "Fintech Mobile Wallet",
-    category: "Financial App",
-    color: "#111827" // Very dark gray
+    title: "Multo",
+    category: "Poster Design",
+    image: "https://zeusbautista.site/Designs/Multo-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Multo-1200.webp"
   },
   {
-    title: "Crypto Trading Terminal",
-    category: "Data Visualization",
-    color: "#1f2937" // Dark gray
+    title: "Typography",
+    category: "Poster Design",
+    image: "https://zeusbautista.site/Designs/Typography-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Typography-1200.webp"
   },
   {
-    title: "Developer Workspace Theme",
-    category: "IDE Experience",
-    color: "#090d16" // Deep navy
+    title: "Podcast Poster",
+    category: "Poster Design",
+    image: "https://zeusbautista.site/Designs/lamaw-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/lamaw-1200.webp"
   }
 ];
 
@@ -155,15 +161,19 @@ export default function Designs() {
               key={index} 
               className="w-full md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
             >
-              {/* Solid Color Background with Large Translucent Index Number */}
-              <div 
-                style={{ backgroundColor: design.color }} 
-                className="w-full h-full group-hover:scale-105 transition-transform duration-500 flex items-center justify-center select-none"
-              >
-                <span className="text-white/10 font-sans text-8xl md:text-9xl font-black tracking-tighter">
-                  0{index + 1}
-                </span>
-              </div>
+              <img
+                src={design.image}
+                alt={`${design.title} poster design`}
+                loading={index < 2 ? "eager" : "lazy"}
+                decoding="async"
+                onError={(event) => {
+                  const image = event.currentTarget;
+                  if (image.src !== design.backupImage) {
+                    image.src = design.backupImage;
+                  }
+                }}
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 select-none"
+              />
               
               {/* Gradient Hover Info Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 md:p-8">
