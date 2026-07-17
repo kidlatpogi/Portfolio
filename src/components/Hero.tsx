@@ -11,16 +11,16 @@ export default function Hero() {
 
         {/* Typography — full-width block */}
         <div className="flex flex-col items-start gap-5 text-left relative z-10 w-max max-w-full">
-          <span className="hero-subtitle font-array-semibold text-[1.5rem] md:text-[2rem] font-semibold uppercase tracking-wider text-[#334155]">
+          <span className="hero-subtitle font-array-semibold text-[1.25rem] md:text-[1.5rem] lg:text-[1.75rem] 2xl:text-[2rem] font-semibold uppercase tracking-wider text-[#334155]">
             4th year College Student
           </span>
 
           <div className="relative w-max max-w-full">
-            <h1 className="hero-title-1 relative inline-block font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="hero-title-1 relative inline-block font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Zeus Angelo
  
               {/* Profile picture on the right side */}
-              <div className="absolute top-1/2 -translate-y-1/2 left-[100%] ml-1 sm:ml-3 md:ml-4 lg:ml-6 flex items-center z-20 w-[5rem] sm:w-[8rem] md:w-[14rem] lg:w-[18rem]">
+              <div className="absolute top-1/2 -translate-y-1/2 left-[100%] ml-1 sm:ml-3 md:ml-4 lg:ml-6 flex items-center z-20 w-[5rem] sm:w-[8rem] md:w-[12rem] lg:w-[13rem] xl:w-[16rem] 2xl:w-[18rem]">
                 {/* Playful Dotted Line */}
                 <div className="relative flex-grow h-8 sm:h-14 md:h-20 overflow-visible">
                   <svg
@@ -59,17 +59,17 @@ export default function Hero() {
                       image.src = profileImageBackup;
                     }
                   }}
-                  className="w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] object-cover object-center flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10"
+                  className="w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-[9.5rem] xl:h-[9.5rem] 2xl:w-40 2xl:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] object-cover object-center flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10"
                 />
               </div>
             </h1>
-            <h1 className="hero-title-2 font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="hero-title-2 font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Bautista
             </h1>
-            <h1 className="hero-title-3 font-clash-semibold text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="hero-title-3 font-clash-semibold text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               <span className="relative inline-block italic mr-[0.25em]">
                 <span>Future</span>
-                <span className="absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[6px] lg:h-[8px] bg-black rounded-full pointer-events-none" />
+                <span className="absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[5px] lg:h-[6px] xl:h-[7px] 2xl:h-[8px] bg-black rounded-full pointer-events-none" />
               </span>
               Developer
             </h1>
