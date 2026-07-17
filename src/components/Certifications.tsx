@@ -358,7 +358,7 @@ export default function Certifications() {
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
           </span>
-          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
+          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[4rem] 2xl:text-[4.5rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
             Certifications
           </h2>
         </div>
@@ -417,7 +417,7 @@ export default function Certifications() {
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Skill Endorsements
           </span>
-          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
+          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[4rem] 2xl:text-[4.5rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
             Badges
           </h2>
         </div>

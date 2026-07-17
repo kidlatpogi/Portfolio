@@ -219,7 +219,7 @@ export default function Projects() {
               <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-3">
                 Selected Projects
               </span>
-              <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4rem] xl:text-[4.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none mb-6">
+              <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[2.25rem] xl:text-[3rem] 2xl:text-[4.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none mb-6">
                 Featured<br />Work
               </h2>
             </ScrollReveal>

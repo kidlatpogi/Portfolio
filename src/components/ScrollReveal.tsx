@@ -62,7 +62,7 @@ const SimpleScrollReveal: React.FC<ScrollRevealProps> = ({
   const { scrollYProgress } = useScroll({
     target: containerRef as any,
     container: scrollContainerRef || undefined,
-    offset: ["start 90%", endOffset]
+    offset: ["start 90%", endOffset as any]
   });
 
   const rotationEndVal = useMemo(() => {
@@ -97,7 +97,7 @@ const SimpleScrollReveal: React.FC<ScrollRevealProps> = ({
       >
         <motion.p 
           style={style}
-          className={`text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] font-semibold ${textClassName}`}
+          className={`text-[clamp(1.4rem,2.8vw,2.5rem)] leading-[1.5] font-semibold ${textClassName}`}
         >
           {children}
         </motion.p>
@@ -145,7 +145,7 @@ const WordScrollReveal: React.FC<ScrollRevealProps> = ({
   const { scrollYProgress } = useScroll({
     target: containerRef as any,
     container: scrollContainerRef || undefined,
-    offset: ["start 90%", endOffset]
+    offset: ["start 90%", endOffset as any]
   });
 
   const rotationEndVal = useMemo(() => {
@@ -168,7 +168,7 @@ const WordScrollReveal: React.FC<ScrollRevealProps> = ({
         return node.reduce((acc, child) => acc + countWords(child), 0);
       }
       if (React.isValidElement(node)) {
-        return countWords(node.props.children);
+        return countWords((node as React.ReactElement<any>).props.children);
       }
       return 0;
     };
@@ -267,7 +267,7 @@ const WordScrollReveal: React.FC<ScrollRevealProps> = ({
       >
         <motion.p 
           style={{ rotate, transformOrigin: '0% 50%' }}
-          className={`text-[clamp(1.6rem,4vw,3rem)] leading-[1.5] font-semibold ${textClassName}`}
+          className={`text-[clamp(1.4rem,2.8vw,2.5rem)] leading-[1.5] font-semibold ${textClassName}`}
         >
           {splitText}
         </motion.p>
