@@ -7,414 +7,353 @@ import ShapeGrid from './ShapeGrid.tsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const certificationsData = [
+type Certificate = {
+  title: string;
+  issuer: string;
+  date: string;
+  color: string;
+  image: string;
+  backupImage: string;
+  verifyUrl: string;
+  actionLabel?: string;
+};
+
+type Badge = {
+  name: string;
+  issuer: string;
+  date: string;
+  initials: string;
+  color: string;
+  image: string;
+  backupImage: string;
+  verifyUrl: string;
+};
+
+type SelectedItem = ({ type: 'cert' } & Certificate) | ({ type: 'badge' } & Badge);
+
+const badgeVerifyUrls = {
+  databases: "https://www.credly.com/badges/ec097417-e36a-4642-b03b-df96919ae380/public_url",
+  htmlAndCss: "https://www.credly.com/badges/0d6ce002-6844-49de-976f-df4cd26edea0/public_url",
+  webDevelopmentFundamentals: "https://www.credly.com/badges/1cce4817-3dd9-4fd5-b508-594add0cb399/public_url",
+  htmlEssentials: "https://www.credly.com/badges/b67c1cd5-ad38-4666-89fd-f4cdcf974d8c/public_url",
+  cssEssentials: "https://www.credly.com/badges/c1acd1ec-2db1-4b12-923b-0841a1668f38/public_url",
+  javascriptEssentials1: "https://www.credly.com/badges/6dac7d87-44c6-49fa-a6cf-6c7d55904935/public_url",
+  javascriptEssentials2: "https://www.credly.com/badges/83527a67-c83a-4711-a666-da79ab09933b/public_url",
+  vertexAiPromptDesign: "https://www.credly.com/badges/7276c4e4-eedb-48d6-b445-bc68aa49fcd4/public_url"
+};
+
+const certificationsData: Certificate[] = [
+  // ==========================================
+  // 1. Cisco Networking Academy
+  // ==========================================
   {
-    title: "AWS Certified Cloud Practitioner",
-    issuer: "Amazon Web Services",
-    date: "2024",
-    id: "AWS-CCP-12345",
-    color: "#C44900", // Burnt Orange
-    verifyUrl: "https://aws.amazon.com/verification"
+    title: "HTML Essentials",
+    issuer: "Cisco Networking Academy",
+    date: "Verified",
+    color: "#dc2626",
+    image: "https://zeusbautista.site/Certifications/Html%20Essentials.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Html%20Essentials.webp",
+    verifyUrl: badgeVerifyUrls.htmlEssentials
   },
   {
-    title: "Google IT Support Professional",
-    issuer: "Google Career Certificates",
-    date: "2023",
-    id: "GOOG-ITSP-67890",
-    color: "#4285F4", // Google Blue
-    verifyUrl: "https://www.coursera.org/verify/professional-cert/google-it-support"
+    title: "CSS Essentials",
+    issuer: "Cisco Networking Academy",
+    date: "Verified",
+    color: "#0ea5e9",
+    image: "https://zeusbautista.site/Certifications/CSS%20Essentials.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/CSS%20Essentials.webp",
+    verifyUrl: badgeVerifyUrls.cssEssentials
   },
   {
-    title: "Meta Front-End Developer",
-    issuer: "Meta Professional Certificates",
-    date: "2023",
-    id: "META-FED-11223",
-    color: "#0668E1", // Meta Blue
-    verifyUrl: "https://www.coursera.org/verify/professional-cert/meta-front-end-developer"
+    title: "JavaScript Essentials 1",
+    issuer: "Cisco Networking Academy",
+    date: "Verified",
+    color: "#ca8a04",
+    image: "https://zeusbautista.site/Certifications/JS%20Essentials%201.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/JS%20Essentials%201.webp",
+    verifyUrl: badgeVerifyUrls.javascriptEssentials1
   },
+  {
+    title: "JavaScript Essentials 2",
+    issuer: "Cisco Networking Academy",
+    date: "Verified",
+    color: "#eab308",
+    image: "https://zeusbautista.site/Certifications/JS%20Essentials%202.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/JS%20Essentials%202.webp",
+    verifyUrl: badgeVerifyUrls.javascriptEssentials2
+  },
+
+  // ==========================================
+  // 2. IT Specialist
+  // ==========================================
+  {
+    title: "Web Development Fundamentals",
+    issuer: "IT Specialist",
+    date: "Verified",
+    color: "#0891b2",
+    image: "https://zeusbautista.site/Certifications/Web%20Development%20Fundamentals.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Web%20Development%20Fundamentals.webp",
+    verifyUrl: badgeVerifyUrls.webDevelopmentFundamentals
+  },
+  {
+    title: "HTML and CSS",
+    issuer: "IT Specialist",
+    date: "Verified",
+    color: "#f97316",
+    image: "https://zeusbautista.site/Certifications/HTML%20and%20CSS.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/HTML%20and%20CSS.webp",
+    verifyUrl: badgeVerifyUrls.htmlAndCss
+  },
+  {
+    title: "Database",
+    issuer: "IT Specialist",
+    date: "Verified",
+    color: "#2563eb",
+    image: "https://zeusbautista.site/Certifications/Database.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Database.webp",
+    verifyUrl: badgeVerifyUrls.databases
+  },
+
+  // ==========================================
+  // 3. Simplilearn SkillUp
+  // ==========================================
+  {
+    title: "Git Training",
+    issuer: "Simplilearn SkillUp",
+    date: "Verified",
+    color: "#ef4444",
+    image: "https://zeusbautista.site/Certifications/Git%20Training.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Git%20Training.webp",
+    verifyUrl: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true"
+  },
+  {
+    title: "Cloud Computing",
+    issuer: "Simplilearn SkillUp",
+    date: "Verified",
+    color: "#f97316",
+    image: "https://zeusbautista.site/Certifications/Cloud%20Computing.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Cloud%20Computing.webp",
+    verifyUrl: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true"
+  },
+  {
+    title: "DevOps",
+    issuer: "Simplilearn SkillUp",
+    date: "Verified",
+    color: "#7c3aed",
+    image: "https://zeusbautista.site/Certifications/DevOps.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/DevOps.webp",
+    verifyUrl: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true"
+  },
+  // ==========================================
+  // 4. Freecode Camps
+  // ==========================================
   {
     title: "Responsive Web Design",
-    issuer: "freeCodeCamp",
-    date: "2022",
-    id: "FCC-RWD-33445",
-    color: "#2EC866", // Green
-    verifyUrl: "https://www.freecodecamp.org/certification/fccdf895147-3023-455b-9d41-456b3e9444fc/responsive-web-design"
+    issuer: "Web Design Certification",
+    date: "Verified",
+    color: "#10b981",
+    image: "https://zeusbautista.site/Certifications/Responsive%20Web%20Design.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Responsive%20Web%20Design.webp",
+    verifyUrl: "https://zeusbautista.site/Certifications/Responsive%20Web%20Design.webp",
+    actionLabel: "View Credential"
+  }
+];
+
+const badgesData: Badge[] = [
+  {
+    name: "IT Specialist - Databases",
+    issuer: "Certiport",
+    date: "Verified",
+    initials: "DB",
+    color: "#2563eb",
+    image: "https://zeusbautista.site/Badges/it-specialist-databases.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/it-specialist-databases.webp",
+    verifyUrl: badgeVerifyUrls.databases
   },
   {
-    title: "JavaScript Algorithms & DS",
-    issuer: "freeCodeCamp",
-    date: "2023",
-    id: "FCC-JSD-55667",
-    color: "#FF9900", // Orange-yellow
-    verifyUrl: "https://www.freecodecamp.org/certification/fccdf895147-3023-455b-9d41-456b3e9444fc/javascript-algorithms-and-data-structures"
+    name: "IT Specialist - HTML and CSS",
+    issuer: "Certiport",
+    date: "Verified",
+    initials: "HC",
+    color: "#f97316",
+    image: "https://zeusbautista.site/Badges/it-specialist-html-and-css.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/it-specialist-html-and-css.webp",
+    verifyUrl: badgeVerifyUrls.htmlAndCss
   },
   {
-    title: "Google UX Design Professional",
-    issuer: "Google Career Certificates",
-    date: "2023",
-    id: "GOOG-UXD-88990",
-    color: "#EA4335", // Google Red
-    verifyUrl: "https://www.coursera.org/verify/professional-cert/google-ux-design"
+    name: "Web Development Fundamentals",
+    issuer: "Certiport",
+    date: "Verified",
+    initials: "WD",
+    color: "#0891b2",
+    image: "https://zeusbautista.site/Badges/web-development-fundamentals.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/web-development-fundamentals.webp",
+    verifyUrl: badgeVerifyUrls.webDevelopmentFundamentals
   },
   {
-    title: "AWS Certified Developer – Associate",
-    issuer: "Amazon Web Services",
-    date: "2024",
-    id: "AWS-CDA-44556",
-    color: "#FF9900",
-    verifyUrl: "https://aws.amazon.com/verification"
-  },
-  {
-    title: "Cisco Networking Essentials",
+    name: "HTML Essentials",
     issuer: "Cisco Networking Academy",
-    date: "2023",
-    id: "CISCO-NE-77889",
-    color: "#00b4d8", // Cisco Cyan
-    verifyUrl: "https://www.credly.com"
+    date: "Verified",
+    initials: "HTML",
+    color: "#dc2626",
+    image: "https://zeusbautista.site/Badges/html-essentials.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/html-essentials.webp",
+    verifyUrl: badgeVerifyUrls.htmlEssentials
   },
   {
-    title: "Scrum Foundation Professional",
-    issuer: "CertiProf Professional",
-    date: "2023",
-    id: "CP-SFP-99001",
-    color: "#00F2FE",
-    verifyUrl: "https://certiprof.com/pages/scrum-foundation-professional-certificate-sfpc"
+    name: "CSS Essentials",
+    issuer: "Cisco Networking Academy",
+    date: "Verified",
+    initials: "CSS",
+    color: "#0ea5e9",
+    image: "https://zeusbautista.site/Badges/css-essentials.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/css-essentials.webp",
+    verifyUrl: badgeVerifyUrls.cssEssentials
   },
   {
-    title: "EF SET English (C2 Proficient)",
-    issuer: "EF Education First",
-    date: "2022",
-    id: "EFSET-C2-22334",
-    color: "#800080", // Purple
-    verifyUrl: "https://www.efset.org/cert/c2-proficient"
+    name: "JavaScript Essentials 1",
+    issuer: "Cisco Networking Academy",
+    date: "Verified",
+    initials: "JS1",
+    color: "#ca8a04",
+    image: "https://zeusbautista.site/Badges/javascript-essentials-1.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/javascript-essentials-1.webp",
+    verifyUrl: badgeVerifyUrls.javascriptEssentials1
+  },
+  {
+    name: "JavaScript Essentials 2",
+    issuer: "Cisco Networking Academy",
+    date: "Verified",
+    initials: "JS2",
+    color: "#eab308",
+    image: "https://zeusbautista.site/Badges/javascript-essentials-2.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/javascript-essentials-2.webp",
+    verifyUrl: badgeVerifyUrls.javascriptEssentials2
+  },
+  {
+    name: "Prompt Design in Vertex AI",
+    issuer: "Google Cloud Skills Boost",
+    date: "Verified",
+    initials: "AI",
+    color: "#4285f4",
+    image: "https://zeusbautista.site/Badges/prompt-design-in-vertex-ai-skill-badge.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/prompt-design-in-vertex-ai-skill-badge.webp",
+    verifyUrl: badgeVerifyUrls.vertexAiPromptDesign
   }
 ];
 
-const badgesData = [
-  {
-    name: "Google Cloud Essentials",
-    issuer: "Google Cloud",
-    date: "2023",
-    initials: "GCP",
-    color: "#34A853", // Google Green
-    verifyUrl: "https://www.cloudskillsboost.google"
-  },
-  {
-    name: "AWS Cloud Quest: Practitioner",
-    issuer: "Amazon Web Services",
-    date: "2024",
-    initials: "AWS",
-    color: "#FF9900",
-    verifyUrl: "https://aws.amazon.com/training/pathways/quest-practitioner"
-  },
-  {
-    name: "Python for Data Science",
-    issuer: "IBM Skills Network",
-    date: "2023",
-    initials: "IBM",
-    color: "#052FAD", // IBM Blue
-    verifyUrl: "https://www.credly.com"
-  },
-  {
-    name: "GitHub Global Campus",
-    issuer: "GitHub Education",
-    date: "2022",
-    initials: "GIT",
-    color: "#24292F",
-    verifyUrl: "https://education.github.com"
-  },
-  {
-    name: "Problem Solving (Intermediate)",
-    issuer: "HackerRank",
-    date: "2023",
-    initials: "HR",
-    color: "#2EC866",
-    verifyUrl: "https://www.hackerrank.com/certificates"
-  },
-  {
-    name: "OCI Foundations Associate",
-    issuer: "Oracle University",
-    date: "2023",
-    initials: "OCI",
-    color: "#F20F0F", // Oracle Red
-    verifyUrl: "https://education.oracle.com"
-  },
-  {
-    name: "React Developer Badge",
-    issuer: "Meta Careers",
-    date: "2023",
-    initials: "MDB",
-    color: "#0668E1",
-    verifyUrl: "https://www.coursera.org"
-  },
-  {
-    name: "Docker Foundations",
-    issuer: "Docker Inc",
-    date: "2024",
-    initials: "DKR",
-    color: "#2496ED", // Docker Blue
-    verifyUrl: "https://www.docker.com"
-  }
-];
+const credentialDescription =
+  "This credential links to the official verification page when available and uses the hosted artwork from Cloudflare R2 for the portfolio preview.";
 
-// Helper Component: Renders a miniature high-fidelity mockup document for Certificates
-const CertificateMock: React.FC<{ color: string; title: string; issuer: string; id: string }> = ({ color, title, issuer, id }) => {
+function CredentialImage({
+  src,
+  fallbackSrc,
+  alt,
+  className,
+  loading = "lazy"
+}: {
+  src: string;
+  fallbackSrc: string;
+  alt: string;
+  className: string;
+  loading?: "eager" | "lazy";
+}) {
   return (
-    <div className="w-full aspect-[1.6/1] bg-slate-50 border-2 border-slate-200 rounded-xl relative overflow-hidden flex flex-col justify-between p-4 shadow-inner select-none">
-      {/* Elegant Border Inset */}
-      <div className="absolute inset-1.5 border border-slate-200 pointer-events-none rounded-lg" />
-      
-      {/* Certificate Header Accent */}
-      <div className="flex justify-between items-start z-10">
-        <div className="flex flex-col gap-0.5">
-          <span className="text-[6px] font-mono tracking-widest text-slate-400 uppercase">CERTIFICATE OF ACHIEVEMENT</span>
-          <span className="text-[5px] font-sans font-bold text-slate-500">{issuer}</span>
-        </div>
-        <div style={{ backgroundColor: color }} className="w-2 h-2 rounded-full opacity-80" />
-      </div>
-
-      {/* Certificate Body Lines */}
-      <div className="flex flex-col items-center justify-center my-auto z-10 gap-0.5 text-center">
-        <span className="text-[4px] font-sans text-slate-400 italic">This is to certify that</span>
-        <span className="text-[8px] font-clash-semibold font-bold text-slate-800 tracking-wide uppercase leading-none my-0.5">ZEUS ANGELO BAUTISTA</span>
-        <span className="text-[4px] font-sans text-slate-400 leading-none">has successfully met all requirements for</span>
-        <span style={{ color: color }} className="text-[6px] font-sans font-bold tracking-tight px-1 text-center line-clamp-1 mt-0.5">{title}</span>
-      </div>
-
-      {/* Certificate Footer with Seal & Signatures */}
-      <div className="flex justify-between items-end z-10 text-[4px] font-mono text-slate-400 leading-none">
-        <div className="flex flex-col">
-          <div className="w-5 h-[0.5px] bg-slate-300 mb-0.5" />
-          <span>SIGNATURE</span>
-        </div>
-        
-        {/* Golden/Accent Seal */}
-        <div style={{ backgroundColor: color }} className="w-5 h-5 rounded-full flex items-center justify-center border border-white/50 shadow-sm relative rotate-12">
-          {/* Ribbons */}
-          <div style={{ borderLeftColor: color, borderRightColor: color }} className="absolute bottom-[-3px] w-3 h-2 border-l-3 border-r-3 border-t-3 border-t-transparent opacity-60" />
-          <span className="text-white text-[3.5px] font-bold">SEAL</span>
-        </div>
-
-        <div className="flex flex-col items-end">
-          <div className="w-5 h-[0.5px] bg-slate-300 mb-0.5" />
-          <span>CREDENTIAL</span>
-        </div>
-      </div>
-    </div>
+    <img
+      src={src}
+      alt={alt}
+      loading={loading}
+      decoding="async"
+      onError={(event) => {
+        const image = event.currentTarget;
+        if (image.src !== fallbackSrc) {
+          image.src = fallbackSrc;
+        }
+      }}
+      className={className}
+    />
   );
-};
-
-// Helper Component: Renders a miniature high-fidelity mockup shield/badge for Badges
-const BadgeMock: React.FC<{ color: string; initials: string }> = ({ color, initials }) => {
-  return (
-    <div className="w-full aspect-[1.4/1] bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden flex items-center justify-center p-2 shadow-inner select-none">
-      {/* Decorative Dashed Ring */}
-      <div className="absolute inset-1.5 border border-dashed border-slate-300 rounded-full" />
-      
-      {/* Center Shield/Emblem */}
-      <div 
-        style={{ 
-          background: `radial-gradient(circle, ${color} 0%, ${color}dd 70%, ${color}aa 100%)`,
-          boxShadow: `0 4px 8px -2px ${color}40`
-        }} 
-        className="w-14 h-14 rounded-full flex flex-col items-center justify-center border-2 border-white text-white relative z-10 shadow-sm transition-transform duration-500 group-hover:scale-105"
-      >
-        <span className="font-mono text-xs font-black tracking-wider leading-none drop-shadow-sm">{initials}</span>
-        <span className="text-[4px] tracking-widest text-white/80 uppercase font-bold mt-0.5">VERIFIED</span>
-      </div>
-
-      {/* Decorative Corner Dots */}
-      <div className="absolute top-1 left-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
-      <div className="absolute top-1 right-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
-      <div className="absolute bottom-1 left-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
-      <div className="absolute bottom-1 right-1 w-0.5 h-0.5 rounded-full bg-slate-300" />
-    </div>
-  );
-};
+}
 
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const badgesContainerRef = useRef<HTMLDivElement>(null);
-  const col1Ref = useRef<HTMLDivElement>(null);
-  const col2Ref = useRef<HTMLDivElement>(null);
-  const col3Ref = useRef<HTMLDivElement>(null);
-  const col4Ref = useRef<HTMLDivElement>(null);
-  const certCol1Ref = useRef<HTMLDivElement>(null);
-  const certCol2Ref = useRef<HTMLDivElement>(null);
-  const certCol3Ref = useRef<HTMLDivElement>(null);
-  const certCol4Ref = useRef<HTMLDivElement>(null);
+  const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
 
-  // Modal State
-  const [selectedItem, setSelectedItem] = useState<{
-    type: 'cert' | 'badge';
-    title?: string;
-    name?: string;
-    issuer: string;
-    date: string;
-    id?: string;
-    color: string;
-    initials?: string;
-    verifyUrl: string;
-  } | null>(null);
-
-  // Close modal on Escape key & toggle body scroll overflow
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setSelectedItem(null);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setSelectedItem(null);
     };
+
     if (selectedItem) {
       document.body.style.overflow = 'hidden';
       window.addEventListener('keydown', handleKeyDown);
     } else {
       document.body.style.overflow = '';
     }
+
     return () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [selectedItem]);
 
-  // GSAP Scroll Reveal Stagger and Vertical Parallax
   useEffect(() => {
-    let ctx = gsap.context(() => {
-      // Stagger reveal for certifications grid cards
+    const ctx = gsap.context(() => {
       gsap.fromTo(
         ".cert-grid-item",
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.6,
-          stagger: 0.05,
-          ease: 'power3.out',
+          duration: 0.45,
+          stagger: 0.04,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: gridRef.current,
-            start: 'top 85%',
+            start: 'top 88%',
             toggleActions: 'play none none none'
           }
         }
       );
 
-      // Stagger reveal for badge cards
       gsap.fromTo(
         ".badge-emblem-card",
-        { opacity: 0, scale: 0.8 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
-          scale: 1,
-          duration: 0.6,
-          stagger: 0.06,
-          ease: 'back.out(1.2)',
+          y: 0,
+          duration: 0.45,
+          stagger: 0.05,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: badgesContainerRef.current,
-            start: 'top 85%',
+            start: 'top 88%',
             toggleActions: 'play none none none'
           }
         }
       );
-
-      // Column vertical parallax (only on desktop/tablet md and above)
-      let mm = gsap.matchMedia();
-      mm.add("(min-width: 768px)", () => {
-        if (!badgesContainerRef.current) return;
-        
-        gsap.fromTo(
-          col1Ref.current,
-          { y: 0 },
-          {
-            y: -15,
-            ease: "none",
-            scrollTrigger: {
-              trigger: badgesContainerRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true
-            }
-          }
-        );
-
-        gsap.fromTo(
-          col2Ref.current,
-          { y: 25 },
-          {
-            y: -30,
-            ease: "none",
-            scrollTrigger: {
-              trigger: badgesContainerRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true
-            }
-          }
-        );
-
-        gsap.fromTo(
-          col3Ref.current,
-          { y: -25 },
-          {
-            y: 30,
-            ease: "none",
-            scrollTrigger: {
-              trigger: badgesContainerRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true
-            }
-          }
-        );
-
-        gsap.fromTo(
-          col4Ref.current,
-          { y: 10 },
-          {
-            y: -15,
-            ease: "none",
-            scrollTrigger: {
-              trigger: badgesContainerRef.current,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true
-            }
-          }
-        );
-      });
     }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
-  // Split certifications into 4 columns
-  const certCol1 = [certificationsData[0], certificationsData[4], certificationsData[8]];
-  const certCol2 = [certificationsData[1], certificationsData[5], certificationsData[9]];
-  const certCol3 = [certificationsData[2], certificationsData[6]];
-  const certCol4 = [certificationsData[3], certificationsData[7]];
-
-  // Split badges into 4 columns
-  const col1Badges = [badgesData[0], badgesData[4]];
-  const col2Badges = [badgesData[1], badgesData[5]];
-  const col3Badges = [badgesData[2], badgesData[6]];
-  const col4Badges = [badgesData[3], badgesData[7]];
-
   return (
     <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 z-30 flex flex-col gap-24">
-      
-      {/* Interactive Background ShapeGrid */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <ShapeGrid 
-          speed={0} 
-          squareSize={55} 
-          borderColor="rgba(51, 65, 85, 0.05)" 
-          hoverFillColor="rgba(51, 65, 85, 0.12)" 
-          shape="square" 
-          hoverTrailAmount={6} 
-          gradientColor="#f8f8f8" 
+        <ShapeGrid
+          speed={0}
+          squareSize={55}
+          borderColor="rgba(51, 65, 85, 0.05)"
+          hoverFillColor="rgba(51, 65, 85, 0.12)"
+          shape="square"
+          hoverTrailAmount={6}
+          gradientColor="#f8f8f8"
         />
       </div>
 
-      {/* SUBSECTION 1: CERTIFICATIONS */}
       <div className="relative z-10 w-full flex flex-col items-center">
-        {/* Section Header - Centered */}
         <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
@@ -424,205 +363,56 @@ export default function Certifications() {
           </h2>
         </div>
 
-        {/* Certifications Grid (4 vertical columns on desktop, 1-2 columns on mobile/tablet) */}
-        <div 
+        <div
           ref={gridRef}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-6 md:px-24 justify-center items-start"
         >
-          {/* Column 1 */}
-          <div ref={certCol1Ref} className="flex flex-col gap-6 md:gap-8">
-            {certCol1.map((cert, index) => (
-              <div 
-                key={`cert-1-${index}`} 
-                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-                className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
-              >
-                {/* Miniature Mock Image of the Certificate */}
-                <div className="cursor-target w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
-                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
-                </div>
-
-                {/* Metadata Row below the Image */}
-                <div className="flex justify-between items-center mb-1.5 pt-1">
-                  <span 
-                    style={{ color: cert.color }} 
-                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
-                  >
-                    {cert.issuer}
-                  </span>
-                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
-                    {cert.date}
-                  </span>
-                </div>
-
-                {/* Title of the Certificate */}
-                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
-                  {cert.title}
-                </h3>
-
-                {/* Verify Button */}
-                <a 
-                  href={cert.verifyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label={`Verify Credential for ${cert.title}`}
-                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
-                >
-                  <span>Verify Credential</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+          {certificationsData.map((cert, index) => (
+            <div
+              key={cert.title}
+              onClick={() => setSelectedItem({ type: 'cert', ...cert })}
+              className="cert-grid-item w-full min-h-full relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
+            >
+              <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-4 bg-white">
+                <CredentialImage
+                  src={cert.image}
+                  fallbackSrc={cert.backupImage}
+                  alt={`${cert.title} certificate`}
+                  loading={index < 2 ? "eager" : "lazy"}
+                  className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                />
               </div>
-            ))}
-          </div>
 
-          {/* Column 2 */}
-          <div ref={certCol2Ref} className="flex flex-col gap-6 md:gap-8">
-            {certCol2.map((cert, index) => (
-              <div 
-                key={`cert-2-${index}`} 
-                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-                className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
-              >
-                {/* Miniature Mock Image of the Certificate */}
-                <div className="cursor-target w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
-                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
-                </div>
-
-                {/* Metadata Row below the Image */}
-                <div className="flex justify-between items-center mb-1.5 pt-1">
-                  <span 
-                    style={{ color: cert.color }} 
-                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
-                  >
-                    {cert.issuer}
-                  </span>
-                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
-                    {cert.date}
-                  </span>
-                </div>
-
-                {/* Title of the Certificate */}
-                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
-                  {cert.title}
-                </h3>
-
-                {/* Verify Button */}
-                <a 
-                  href={cert.verifyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label={`Verify Credential for ${cert.title}`}
-                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
-                >
-                  <span>Verify Credential</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+              <div className="flex justify-between items-center gap-3 mb-1.5 pt-1">
+                <span style={{ color: cert.color }} className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
+                  {cert.issuer}
+                </span>
+                <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase shrink-0">
+                  {cert.date}
+                </span>
               </div>
-            ))}
-          </div>
 
-          {/* Column 3 */}
-          <div ref={certCol3Ref} className="flex flex-col gap-6 md:gap-8">
-            {certCol3.map((cert, index) => (
-              <div 
-                key={`cert-3-${index}`} 
-                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-                className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
+              <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left min-h-[40px] md:min-h-[48px] mb-4">
+                {cert.title}
+              </h3>
+
+              <a
+                href={cert.verifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(event) => event.stopPropagation()}
+                aria-label={`${cert.actionLabel || 'Verify Credential'} for ${cert.title}`}
+                className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
               >
-                {/* Miniature Mock Image of the Certificate */}
-                <div className="cursor-target w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
-                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
-                </div>
-
-                {/* Metadata Row below the Image */}
-                <div className="flex justify-between items-center mb-1.5 pt-1">
-                  <span 
-                    style={{ color: cert.color }} 
-                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
-                  >
-                    {cert.issuer}
-                  </span>
-                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
-                    {cert.date}
-                  </span>
-                </div>
-
-                {/* Title of the Certificate */}
-                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
-                  {cert.title}
-                </h3>
-
-                {/* Verify Button */}
-                <a 
-                  href={cert.verifyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label={`Verify Credential for ${cert.title}`}
-                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
-                >
-                  <span>Verify Credential</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            ))}
-          </div>
-
-          {/* Column 4 */}
-          <div ref={certCol4Ref} className="flex flex-col gap-6 md:gap-8">
-            {certCol4.map((cert, index) => (
-              <div 
-                key={`cert-4-${index}`} 
-                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-                className="cert-grid-item w-full flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/70 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
-              >
-                {/* Miniature Mock Image of the Certificate */}
-                <div className="cursor-target w-full relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-slate-200/60 mb-4 transition-transform duration-500 group-hover:scale-[1.02]">
-                  <CertificateMock color={cert.color} title={cert.title} issuer={cert.issuer} id={cert.id} />
-                </div>
-
-                {/* Metadata Row below the Image */}
-                <div className="flex justify-between items-center mb-1.5 pt-1">
-                  <span 
-                    style={{ color: cert.color }} 
-                    className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider"
-                  >
-                    {cert.issuer}
-                  </span>
-                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase">
-                    {cert.date}
-                  </span>
-                </div>
-
-                {/* Title of the Certificate */}
-                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left line-clamp-2 min-h-[40px] md:min-h-[48px] mb-4">
-                  {cert.title}
-                </h3>
-
-                {/* Verify Button */}
-                <a 
-                  href={cert.verifyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label={`Verify Credential for ${cert.title}`}
-                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
-                >
-                  <span>Verify Credential</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            ))}
-          </div>
-
+                <span>{cert.actionLabel || "Verify Credential"}</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* SUBSECTION 2: BADGES */}
       <div ref={badgesContainerRef} className="relative z-10 w-full flex flex-col items-center pt-12">
-        {/* Section Header - Centered */}
         <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Skill Endorsements
@@ -632,168 +422,63 @@ export default function Certifications() {
           </h2>
         </div>
 
-        {/* Badges Parallax Grid Columns */}
-        <div className="grid grid-cols-2 gap-6 md:flex md:flex-row md:gap-8 justify-center items-start w-full max-w-[1600px] mx-auto px-6 md:px-24">
-          
-          {/* Column 1 */}
-          <div ref={col1Ref} className="flex flex-col gap-6 md:gap-8 items-center">
-            {col1Badges.map((badge, idx) => (
-              <div 
-                key={`badge-1-${idx}`} 
-                onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-                className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-8 justify-center items-stretch w-full max-w-[1300px] mx-auto px-6 md:px-24">
+          {badgesData.map((badge, index) => (
+            <div
+              key={badge.name}
+              onClick={() => setSelectedItem({ type: 'badge', ...badge })}
+              className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-between bg-white/75 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-4 sm:p-5 rounded-2xl min-h-[210px] text-center"
+            >
+              <a
+                href={badge.verifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(event) => event.stopPropagation()}
+                aria-label={`Verify ${badge.name} badge`}
+                className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
+                title="Verify Badge"
               >
-                <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
-                <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
-                <span className="font-mono text-2xl md:text-3xl font-black tracking-wider leading-none drop-shadow-sm select-none" style={{ color: badge.color }}>
-                  {badge.initials}
-                </span>
-                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2.5">
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+
+              <div className="w-full aspect-square max-w-[132px] sm:max-w-[148px] mb-3 flex items-center justify-center">
+                <CredentialImage
+                  src={badge.image}
+                  fallbackSrc={badge.backupImage}
+                  alt={`${badge.name} badge`}
+                  loading={index < 4 ? "eager" : "lazy"}
+                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+
+              <div className="w-full">
+                <span style={{ color: badge.color }} className="font-mono text-[9px] md:text-[10px] font-bold uppercase tracking-wider">
                   {badge.issuer}
                 </span>
-                <span className="font-sans text-[10px] md:text-xs font-bold text-slate-700 mt-1 truncate max-w-full px-2">
+                <h3 className="font-sans text-xs md:text-sm font-bold text-slate-700 mt-1 leading-snug">
                   {badge.name}
-                </span>
-                <a 
-                  href={badge.verifyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label={`Verify ${badge.name} badge`}
-                  className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
-                  title="Verify Badge"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+                </h3>
               </div>
-            ))}
-          </div>
-
-          {/* Column 2 */}
-          <div ref={col2Ref} className="flex flex-col gap-6 md:gap-8 items-center">
-            {col2Badges.map((badge, idx) => (
-              <div 
-                key={`badge-2-${idx}`} 
-                onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-                className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
-              >
-                <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
-                <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
-                <span className="font-mono text-2xl md:text-3xl font-black tracking-wider leading-none drop-shadow-sm select-none" style={{ color: badge.color }}>
-                  {badge.initials}
-                </span>
-                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2.5">
-                  {badge.issuer}
-                </span>
-                <span className="font-sans text-[10px] md:text-xs font-bold text-slate-700 mt-1 truncate max-w-full px-2">
-                  {badge.name}
-                </span>
-                <a 
-                  href={badge.verifyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label={`Verify ${badge.name} badge`}
-                  className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
-                  title="Verify Badge"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            ))}
-          </div>
-
-          {/* Column 3 */}
-          <div ref={col3Ref} className="flex flex-col gap-6 md:gap-8 items-center">
-            {col3Badges.map((badge, idx) => (
-              <div 
-                key={`badge-3-${idx}`} 
-                onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-                className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
-              >
-                <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
-                <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
-                <span className="font-mono text-2xl md:text-3xl font-black tracking-wider leading-none drop-shadow-sm select-none" style={{ color: badge.color }}>
-                  {badge.initials}
-                </span>
-                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2.5">
-                  {badge.issuer}
-                </span>
-                <span className="font-sans text-[10px] md:text-xs font-bold text-slate-700 mt-1 truncate max-w-full px-2">
-                  {badge.name}
-                </span>
-                <a 
-                  href={badge.verifyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label={`Verify ${badge.name} badge`}
-                  className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
-                  title="Verify Badge"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            ))}
-          </div>
-
-          {/* Column 4 */}
-          <div ref={col4Ref} className="flex flex-col gap-6 md:gap-8 items-center">
-            {col4Badges.map((badge, idx) => (
-              <div 
-                key={`badge-4-${idx}`} 
-                onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-                className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-center bg-white/70 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-6 rounded-[2.5rem] w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 lg:w-48 lg:h-48 text-center"
-              >
-                <div style={{ borderColor: badge.color }} className="absolute inset-2 border-2 border-dashed rounded-[2rem] opacity-30 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
-                <div style={{ backgroundColor: badge.color, boxShadow: `0 0 30px 10px ${badge.color}20` }} className="absolute inset-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none -z-10" />
-                <span className="font-mono text-2xl md:text-3xl font-black tracking-wider leading-none drop-shadow-sm select-none" style={{ color: badge.color }}>
-                  {badge.initials}
-                </span>
-                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2.5">
-                  {badge.issuer}
-                </span>
-                <span className="font-sans text-[10px] md:text-xs font-bold text-slate-700 mt-1 truncate max-w-full px-2">
-                  {badge.name}
-                </span>
-                <a 
-                  href={badge.verifyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  aria-label={`Verify ${badge.name} badge`}
-                  className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
-                  title="Verify Badge"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            ))}
-          </div>
-
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Fullscreen Overlay Modal */}
       {selectedItem && typeof document !== 'undefined' && createPortal(
-        <div 
+        <div
           className="fixed inset-0 z-[9995] flex items-center justify-center p-4 md:p-8 bg-black/40 backdrop-blur-md transition-all duration-300"
           onClick={() => setSelectedItem(null)}
         >
-          {/* Brand glow behind the modal */}
-          <div 
-            style={{ 
-              background: `radial-gradient(circle, ${selectedItem.color}15 0%, transparent 70%)` 
-            }}
+          <div
+            style={{ background: `radial-gradient(circle, ${selectedItem.color}15 0%, transparent 70%)` }}
             className="absolute inset-0 pointer-events-none opacity-80 blur-3xl"
           />
 
-          <div 
-            className="relative w-full max-w-4xl bg-[#FAFAFA] border border-[#334155]/20 rounded-3xl p-6 md:p-10 text-slate-800 shadow-2xl flex flex-col md:flex-row items-center gap-8 md:gap-12 animate-in fade-in zoom-in-95 duration-200"
-            onClick={(e) => e.stopPropagation()}
+          <div
+            className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto bg-[#FAFAFA] border border-[#334155]/20 rounded-3xl p-6 md:p-10 text-slate-800 shadow-2xl flex flex-col md:flex-row items-center gap-8 md:gap-12 animate-in fade-in zoom-in-95 duration-200"
+            onClick={(event) => event.stopPropagation()}
           >
-            {/* Close Button */}
-            <button 
+            <button
               onClick={() => setSelectedItem(null)}
               className="absolute top-5 right-5 text-zinc-400 hover:text-black transition-colors p-1.5 rounded-full hover:bg-zinc-100 cursor-pointer z-20"
               aria-label="Close modal"
@@ -801,119 +486,54 @@ export default function Certifications() {
               <X size={20} />
             </button>
 
-            {/* Credential Image View (Left / Top) */}
-            <div className="w-full md:w-1/2 flex items-center justify-center">
-              {selectedItem.type === 'cert' ? (
-                // Elegant large-format Certificate view
-                <div className="w-full aspect-[1.6/1] bg-slate-50 rounded-2xl relative overflow-hidden flex flex-col justify-between p-6 md:p-10 shadow-lg select-none text-slate-800">
-                  {/* Elegant Double Border Inset to prevent overflow border clipping */}
-                  <div className="absolute inset-2 border-8 border-double border-slate-200 pointer-events-none rounded-xl" />
-                  <div className="absolute inset-4 border border-slate-200 pointer-events-none rounded-lg" />
-                  
-                  <div className="flex justify-between items-start z-10">
-                    <div className="flex flex-col gap-1">
-                      <span className="text-[9px] md:text-xs font-mono tracking-widest text-slate-400 uppercase">CERTIFICATE OF ACHIEVEMENT</span>
-                      <span className="text-[8px] md:text-sm font-sans font-bold text-slate-500">{selectedItem.issuer}</span>
-                    </div>
-                    <div style={{ backgroundColor: selectedItem.color }} className="w-3.5 h-3.5 rounded-full opacity-80" />
-                  </div>
-
-                  <div className="flex flex-col items-center justify-center my-auto z-10 gap-1.5 text-center">
-                    <span className="text-[7px] md:text-[10px] font-sans text-slate-400 italic">This is to certify that</span>
-                    <span className="text-[12px] md:text-xl font-bold font-sans text-slate-800 tracking-wide uppercase leading-none my-0.5">ZEUS ANGELO BAUTISTA</span>
-                    <span className="text-[7px] md:text-[10px] font-sans text-slate-400 leading-none">has successfully met all requirements for</span>
-                    <span style={{ color: selectedItem.color }} className="text-[10px] md:text-lg font-sans font-bold tracking-tight px-2 text-center mt-1">{selectedItem.title}</span>
-                  </div>
-
-                  <div className="flex justify-between items-end z-10 text-[7px] md:text-[10px] font-mono text-slate-400 leading-none">
-                    <div className="flex flex-col items-start">
-                      <span className="font-mono text-slate-600 font-bold mb-1 italic">Zeus Angelo</span>
-                      <div className="w-10 md:w-16 h-[0.5px] bg-slate-300 mb-0.5" />
-                      <span>SIGNATURE</span>
-                    </div>
-                    
-                    <div style={{ backgroundColor: selectedItem.color }} className="w-10 h-10 md:w-14 md:h-14 rounded-full flex items-center justify-center border border-white/50 shadow-md relative rotate-12">
-                      <div style={{ borderLeftColor: selectedItem.color, borderRightColor: selectedItem.color }} className="absolute bottom-[-6px] w-6 h-4 border-l-6 border-r-6 border-t-6 border-t-transparent opacity-60" />
-                      <span className="text-white text-[7px] md:text-xs font-bold font-mono">SEAL</span>
-                    </div>
-
-                    <div className="flex flex-col items-end">
-                      <span className="font-mono text-slate-600 font-bold mb-1">{selectedItem.id || 'VERIFIED'}</span>
-                      <div className="w-10 md:w-16 h-[0.5px] bg-slate-300 mb-0.5" />
-                      <span>CREDENTIAL</span>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                // Elegant large-format Badge view
-                <div className="relative p-6 bg-white rounded-3xl border border-[#E5E7EB] w-full max-w-[280px] aspect-square flex items-center justify-center shadow-lg">
-                  {/* Outer animated rings */}
-                  <div className="absolute inset-4 border border-dashed border-slate-300 rounded-full animate-[spin_40s_linear_infinite]" />
-                  <div className="absolute inset-8 border border-slate-200 rounded-full" />
-                  
-                  {/* Glowing center badge */}
-                  <div 
-                    style={{ 
-                      background: `radial-gradient(circle, ${selectedItem.color} 0%, ${selectedItem.color}dd 70%, ${selectedItem.color}aa 100%)`,
-                      boxShadow: `0 10px 30px -5px ${selectedItem.color}80`
-                    }} 
-                    className="w-40 h-40 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center border-4 border-white text-white relative z-10 select-none"
-                  >
-                    <span className="font-mono text-4xl font-black tracking-wider leading-none drop-shadow-md">{selectedItem.initials}</span>
-                    <span className="text-[8px] tracking-[0.2em] text-white/90 uppercase font-extrabold mt-2 border-t border-white/20 pt-1.5">VERIFIED BADGE</span>
-                  </div>
-                </div>
-              )}
+            <div className="w-full md:w-[56%] flex items-center justify-center">
+              <div className={selectedItem.type === 'cert' ? "w-full rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-lg" : "w-full max-w-[320px] rounded-3xl border border-slate-200 bg-white p-6 shadow-lg"}>
+                <CredentialImage
+                  src={selectedItem.image}
+                  fallbackSrc={selectedItem.backupImage}
+                  alt={`${selectedItem.type === 'cert' ? selectedItem.title : selectedItem.name} preview`}
+                  loading="eager"
+                  className={selectedItem.type === 'cert' ? "w-full h-auto object-contain" : "w-full h-auto object-contain"}
+                />
+              </div>
             </div>
 
-            {/* Credential Details (Right / Bottom) */}
-            <div className="w-full md:w-1/2 flex flex-col justify-center">
-              <span 
-                style={{ color: selectedItem.color }} 
-                className="font-mono text-xs md:text-sm font-bold uppercase tracking-widest mb-1"
-              >
+            <div className="w-full md:w-[44%] flex flex-col justify-center">
+              <span style={{ color: selectedItem.color }} className="font-mono text-xs md:text-sm font-bold uppercase tracking-widest mb-1">
                 {selectedItem.issuer}
               </span>
-              
+
               <h3 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-black tracking-tight leading-tight mb-4">
-                {selectedItem.title || selectedItem.name}
+                {selectedItem.type === 'cert' ? selectedItem.title : selectedItem.name}
               </h3>
 
               <div className="flex gap-4 mb-6">
                 <div className="flex flex-col bg-white border border-[#E5E7EB] px-4 py-2 rounded-xl">
-                  <span className="text-[9px] text-[#334155]/60 font-bold font-mono uppercase tracking-wider">Issued Date</span>
+                  <span className="text-[9px] text-[#334155]/60 font-bold font-mono uppercase tracking-wider">Status</span>
                   <span className="text-sm font-semibold text-slate-700">{selectedItem.date}</span>
                 </div>
-                {selectedItem.id && (
-                  <div className="flex flex-col bg-white border border-[#E5E7EB] px-4 py-2 rounded-xl">
-                    <span className="text-[9px] text-[#334155]/60 font-bold font-mono uppercase tracking-wider">Credential ID</span>
-                    <span className="text-sm font-mono font-semibold text-slate-700">{selectedItem.id}</span>
-                  </div>
-                )}
               </div>
 
               <p className="text-sm md:text-base text-[#334155] leading-relaxed mb-8">
-                This verified credential confirms the completion of professional training requirements and validation of expertise in standard technologies and frameworks.
+                {credentialDescription}
               </p>
 
-              <a 
+              <a
                 href={selectedItem.verifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-accent text-[#FAFAFA] font-mono font-semibold tracking-wider transition-colors duration-250 cursor-pointer text-sm hover:opacity-90 w-full md:w-auto"
               >
                 <span className="w-2 h-2 bg-[#FAFAFA] rounded-full" />
-                <span>Verify Credential</span>
+                <span>{selectedItem.type === 'cert' ? selectedItem.actionLabel || "Verify Credential" : "Verify Badge"}</span>
                 <ExternalLink className="w-4 h-4 text-[#FAFAFA]" />
               </a>
             </div>
-
           </div>
         </div>,
         document.body
       )}
 
-      {/* Anchor target for CTA Connect button */}
       <div id="connect" className="absolute bottom-0" />
     </section>
   );

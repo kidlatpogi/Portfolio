@@ -1,5 +1,7 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+
+const profileImage = "https://zeusbautista.site/Common/Profile%20Picture.webp";
+const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Profile%20Picture.webp";
 
 export default function Hero() {
   return (
@@ -17,7 +19,7 @@ export default function Hero() {
             <h1 className="hero-title-1 relative inline-block font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Zeus Angelo
  
-              {/* Profile picture placeholder on the right side */}
+              {/* Profile picture on the right side */}
               <div className="absolute top-1/2 -translate-y-1/2 left-[100%] ml-1 sm:ml-3 md:ml-4 lg:ml-6 flex items-center z-20 w-[5rem] sm:w-[8rem] md:w-[14rem] lg:w-[18rem]">
                 {/* Playful Dotted Line */}
                 <div className="relative flex-grow h-8 sm:h-14 md:h-20 overflow-visible">
@@ -46,9 +48,18 @@ export default function Hero() {
                   </svg>
                 </div>
  
-                {/* Circular Profile Holder (empty grey circle with accent border) */}
-                <div
-                  className="w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10"
+                <img
+                  src={profileImage}
+                  alt="Zeus Angelo Bautista"
+                  loading="eager"
+                  decoding="async"
+                  onError={(event) => {
+                    const image = event.currentTarget;
+                    if (image.src !== profileImageBackup) {
+                      image.src = profileImageBackup;
+                    }
+                  }}
+                  className="w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] object-cover object-center flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10"
                 />
               </div>
             </h1>
