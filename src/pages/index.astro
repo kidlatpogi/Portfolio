@@ -1,15 +1,19 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import CardNav from '../components/CardNav';
-import TargetCursor from '../components/TargetCursor';
-import Hero from '../components/Hero';
-import About from '../components/About';
-import Skills from '../components/Skills';
-import Experience from '../components/Experience';
-import Projects from '../components/Projects';
-import Certifications from '../components/Certifications';
-import ShapeGrid from '../components/ShapeGrid';
-import ChatBot from '../components/ChatBot';
+import CardNav from '../components/CardNav.tsx';
+import TargetCursor from '../components/TargetCursor.tsx';
+import Hero from '../components/Hero.tsx';
+import About from '../components/About.tsx';
+import Skills from '../components/Skills.tsx';
+import Experience from '../components/Experience.tsx';
+import Projects from '../components/Projects.tsx';
+import Designs from '../components/Designs.tsx';
+import Certifications from '../components/Certifications.tsx';
+import ShapeGrid from '../components/ShapeGrid.tsx';
+import ChatBot from '../components/ChatBot.tsx';
+import SocialsSidebar from '../components/SocialsSidebar.tsx';
+import ParallaxTextSection from '../components/ParallaxTextSection.tsx';
+import Footer from '../components/Footer.tsx';
 
 
 
@@ -49,19 +53,23 @@ const navItems = [
 
 <Layout>
 	<div class="fixed inset-0 z-0 pointer-events-none">
-		<ShapeGrid client:load speed={0} squareSize={55} borderColor="rgba(51, 65, 85, 0.05)" hoverFillColor="rgba(51, 65, 85, 0.12)" shape="square" hoverTrailAmount={6} gradientColor="#FAFAFA" />
+		<ShapeGrid client:load speed={0} squareSize={55} borderColor="rgba(51, 65, 85, 0.05)" hoverFillColor="rgba(51, 65, 85, 0.12)" shape="square" hoverTrailAmount={6} gradientColor="#f8f8f8" />
 	</div>
 
 
-	<TargetCursor client:load targetSelector="a, button, .cursor-target" />
+	<TargetCursor client:only="react" targetSelector="a, button, .cursor-target" />
 	<CardNav client:load logoText="Zeus Angelo" items={navItems} />
 	<main class="w-full relative z-10">
 		<Hero client:load />
+		<ParallaxTextSection client:visible />
 		<About client:visible />
 		<Skills client:visible />
 		<Experience client:visible />
-		<Projects />
-		<Certifications />
+		<Projects client:visible />
+		<Designs client:load />
+		<Certifications client:visible />
 	</main>
-	<ChatBot client:load />
+	<Footer client:visible />
+	<ChatBot client:idle />
+	<SocialsSidebar client:idle />
 </Layout>

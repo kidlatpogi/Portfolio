@@ -42,19 +42,30 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
 
+    let isVisible = false;
+    let isLoopRunning = false;
+
     const isHex = shape === 'hexagon';
     const isTri = shape === 'triangle';
     const hexHoriz = squareSize * 1.5;
     const hexVert = squareSize * Math.sqrt(3);
+
+    let rect = canvas.getBoundingClientRect();
 
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth;
       canvas.height = canvas.offsetHeight;
       numSquaresX.current = Math.ceil(canvas.width / squareSize) + 1;
       numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
+      rect = canvas.getBoundingClientRect();
+    };
+
+    const updateRect = () => {
+      rect = canvas.getBoundingClientRect();
     };
 
     window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('scroll', updateRect, { passive: true });
     resizeCanvas();
 
     const drawHex = (cx: number, cy: number, size: number) => {
@@ -225,6 +236,11 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     };
 
     const updateAnimation = () => {
+      if (!isVisible) {
+        isLoopRunning = false;
+        return;
+      }
+
       if (speed > 0) {
         const wrapX = isHex ? hexHoriz * 2 : squareSize;
         const wrapY = isHex ? hexVert : isTri ? squareSize * 2 : squareSize;
@@ -291,8 +307,6 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-
       // Bounds check so hover cell calculations only run when cursor is inside the canvas
       if (
         event.clientX < rect.left ||
@@ -406,10 +420,23 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
 
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
-    requestRef.current = requestAnimationFrame(updateAnimation);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !isLoopRunning) {
+          isLoopRunning = true;
+          requestRef.current = requestAnimationFrame(updateAnimation);
+        }
+      });
+    }, { threshold: 0.01 });
+
+    observer.observe(canvas);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('scroll', updateRect);
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);

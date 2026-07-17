@@ -1,0 +1,176 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TargetCursor from '../components/TargetCursor.tsx';
+import ShapeGrid from '../components/ShapeGrid.tsx';
+
+const projects = [
+  {
+    title: "AI Automation Platform",
+    year: "2024",
+    isFeatured: true,
+    description: "An automated system integrating large language models with customized agent workflows to execute repetitive tasks and optimize data structures.",
+    tags: ["Python", "FastAPI", "React", "OpenAI"],
+    stack: "[PYTHON] — [REACT]",
+    color: "#0f172a", // Dark slate
+    github: "#",
+    link: "#"
+  },
+  {
+    title: "E-Commerce Microservices",
+    year: "2024",
+    isFeatured: true,
+    description: "A highly resilient e-commerce application composed of autonomous microservices using Docker containerization, Kafka event streaming, and PostgreSQL.",
+    tags: ["Node.js", "Docker", "PostgreSQL", "Kafka"],
+    stack: "[NODE.JS] — [DOCKER]",
+    color: "#1e293b", // Charcoal
+    github: "#",
+    link: "#"
+  },
+  {
+    title: "High-Fidelity Portfolio",
+    year: "2024",
+    isFeatured: true,
+    description: "Personal responsive portfolio built using React, Astro, and Tailwind CSS. Implements smooth Lenis scroll and customized scroll reveal animations.",
+    tags: ["Astro", "React", "Tailwind CSS", "Framer Motion"],
+    stack: "[REACT] — [ASTRO]",
+    color: "#C44900", // Accent Orange
+    github: "#",
+    link: "#"
+  },
+  {
+    title: "IoT Smart Farming Dashboard",
+    year: "2024",
+    isFeatured: false,
+    description: "A real-time environmental monitoring and automated irrigation system utilizing ESP8266 microcontrollers, sensor arrays, and Firebase IoT database.",
+    tags: ["IoT", "Arduino", "Firebase", "C++"],
+    stack: "[ARDUINO] — [FIREBASE]",
+    color: "#111827", // Very dark gray
+    github: "#",
+    link: "#"
+  },
+  {
+    title: "Blockchain Voting System",
+    year: "2023",
+    isFeatured: false,
+    description: "A decentralized, secure e-voting platform built on the Ethereum network using Solidity smart contracts to guarantee vote anonymity and prevent electoral fraud.",
+    tags: ["Solidity", "Ethereum", "Web3.js", "React"],
+    stack: "[SOLIDITY] — [REACT]",
+    color: "#1f2937", // Dark gray
+    github: "#",
+    link: "#"
+  },
+  {
+    title: "Medical Image Segmentation AI",
+    year: "2024",
+    isFeatured: false,
+    description: "A deep learning tool using U-Net neural network architecture to perform automated segmentation of brain tumors from MRI scans with 95%+ Dice coefficient.",
+    tags: ["PyTorch", "U-Net", "Python", "Flask"],
+    stack: "[PYTORCH] — [FLASK]",
+    color: "#090d16", // Deep navy
+    github: "#",
+    link: "#"
+  }
+];
+---
+
+<Layout title="All Projects — Zeus Angelo">
+  <!-- Background ShapeGrid -->
+  <div class="fixed inset-0 z-0 pointer-events-none">
+    <ShapeGrid client:load speed={0} squareSize={55} borderColor="rgba(51, 65, 85, 0.05)" hoverFillColor="rgba(51, 65, 85, 0.12)" shape="square" hoverTrailAmount={6} gradientColor="#f8f8f8" />
+  </div>
+
+  <TargetCursor client:only="react" targetSelector="a, button, .cursor-target" />
+
+  <div class="relative z-10 w-full min-h-screen flex flex-col pt-16 pb-24 px-6 md:px-16 lg:px-24 max-w-[1600px] mx-auto overflow-x-hidden">
+    
+    <!-- Top Back Navigation -->
+    <nav class="w-full flex items-center justify-between mb-16 md:mb-24 flex-shrink-0">
+      <a href="/#projects" class="group flex items-center gap-2 font-mono text-xs md:text-sm uppercase tracking-[0.15em] font-bold bg-[#C44900] text-white px-5 py-2.5 rounded-full shadow-sm cursor-target">
+        ← Back to Projects
+      </a>
+      <span class="font-mono text-xs md:text-sm uppercase tracking-[0.2em] font-semibold text-slate-800">
+        Zeus Angelo
+      </span>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="w-full mb-16 flex flex-col items-start gap-4">
+      <span class="font-mono text-xs md:text-sm uppercase tracking-[0.25em] font-bold text-accent">
+        Portfolio
+      </span>
+      <h1 class="font-clash-bold text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] xl:text-[5.5rem] font-bold uppercase tracking-tight leading-[0.85] text-slate-900 select-none">
+        All Projects
+      </h1>
+      <p class="font-sans text-base md:text-lg text-slate-600 max-w-xl leading-relaxed mt-2">
+        Full list of work—same craft as the featured section. Explore details and repositories for the full case studies.
+      </p>
+    </header>
+
+    <!-- Grid Layout -->
+    <main class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 flex-grow">
+      {projects.map((project, index) => (
+        <article class="flex flex-col group overflow-hidden border border-slate-200/50 rounded-xl bg-white shadow-sm hover:shadow-lg transition-all duration-300">
+          
+          {/* Card Visual Header */}
+          <div 
+            style={`background-color: ${project.color}`}
+            class="w-full aspect-[16/10] relative overflow-hidden flex items-center justify-center select-none"
+          >
+            <!-- Large Translucent Index Number -->
+            <span class="text-white/10 font-sans text-7xl sm:text-8xl md:text-[5.5rem] lg:text-8xl font-black tracking-tighter group-hover:scale-105 transition-transform duration-500">
+              0{index + 1}
+            </span>
+
+            <!-- Year Pill & Tags overlay -->
+            <div class="absolute top-4 left-4 flex gap-2">
+              <span class="font-mono text-[10px] uppercase tracking-wider px-2 py-1 rounded bg-black/40 text-white backdrop-blur-sm">
+                {project.year}
+              </span>
+              {project.isFeatured && (
+                <span class="font-mono text-[10px] uppercase tracking-wider px-2 py-1 rounded bg-accent text-white font-bold">
+                  Featured
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Card Info Section */}
+          <div class="flex flex-col p-6 flex-grow gap-4">
+            <div>
+              <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-accent font-bold">
+                {project.stack}
+              </span>
+              <h2 class="font-clash-bold text-xl md:text-2xl font-bold text-slate-900 uppercase tracking-tight mt-1 group-hover:text-accent transition-colors duration-300">
+                {project.title}
+              </h2>
+            </div>
+            
+            <p class="font-sans text-sm text-slate-500 leading-relaxed flex-grow">
+              {project.description}
+            </p>
+
+            <div class="flex flex-wrap gap-1.5 mt-2">
+              {project.tags.map((tag) => (
+                <span class="font-mono text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/50">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* Action Links */}
+            <div class="flex items-center justify-between border-t border-slate-100 pt-4 mt-2">
+              <a href={project.github} class="font-mono text-xs uppercase tracking-wider text-slate-400 hover:text-slate-900 transition-colors flex items-center gap-1 cursor-target">
+                GitHub Repo
+              </a>
+              <a href={project.link} class="font-mono text-xs uppercase tracking-wider text-accent hover:text-slate-900 transition-colors flex items-center gap-1 font-bold cursor-target">
+                View Project Details →
+              </a>
+            </div>
+
+          </div>
+        </article>
+      ))}
+    </main>
+
+  </div>
+</Layout>
