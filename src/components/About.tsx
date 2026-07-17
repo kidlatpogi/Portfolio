@@ -1,10 +1,13 @@
 import React from 'react';
-import ScrollReveal from './ScrollReveal';
+import ScrollReveal from './ScrollReveal.tsx';
 import { Cpu, Sparkles } from 'lucide-react';
+
+const profileImage = "https://zeusbautista.site/Common/Profile%20Picture.webp";
+const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Profile%20Picture.webp";
 
 export default function About() {
   return (
-    <section className="h-auto w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="about">
+    <section className="h-auto w-full flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden" id="about">
       {/* Anchor targets for sub-navigation scroll links */}
       <div id="about-me" className="absolute top-0" />
 
@@ -16,7 +19,7 @@ export default function About() {
         </span>
 
         {/* "About" Heading - styled like "Developer" from Hero, centered */}
-        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-10">
+        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[4.5rem] xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-12">
           About
         </h2>
 
@@ -24,18 +27,26 @@ export default function About() {
         <div className="w-[95%] md:w-[95%] max-w-[2000px] flex justify-center mx-auto">
           <ScrollReveal
             baseOpacity={0.08}
-            enableBlur={true}
+            enableBlur={false}
             baseRotation={2}
             blurStrength={12}
             textClassName="text-black font-sans text-left md:text-justify tracking-normal leading-relaxed"
-            wordAnimationEnd="bottom center"
+            wordAnimationEnd="top 55%"
           >
             Hi, I’m{' '}
             <span className="inline-flex items-center gap-2 align-middle">
               <img
-                src="/zeus_avatar.png"
-                alt="Zeus Avatar"
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-[2.5px] border-accent object-cover shadow-sm"
+                src={profileImage}
+                alt="Zeus Angelo Bautista"
+                loading="lazy"
+                decoding="async"
+                onError={(event) => {
+                  const image = event.currentTarget;
+                  if (image.src !== profileImageBackup) {
+                    image.src = profileImageBackup;
+                  }
+                }}
+                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-[2.5px] border-accent object-cover shadow-sm"
               />
               <span className="text-accent font-bold">Zeus</span>
             </span>

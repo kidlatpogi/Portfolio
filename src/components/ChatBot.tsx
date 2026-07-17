@@ -167,7 +167,7 @@ export const ChatBot: React.FC = () => {
                   <button
                     key={idx}
                     onClick={() => handleTopicClick(t.label, t.query, t.response)}
-                    className="font-mono text-[10px] font-semibold rounded-full border border-[#334155] px-3 py-1.5 text-[#334155] bg-transparent cursor-pointer transition-colors duration-200 hover:bg-[#C44900] hover:text-[#FAFAFA]"
+                    className="font-mono text-[10px] font-semibold rounded-full border border-[#334155] px-3 py-1.5 text-[#334155] bg-transparent cursor-pointer transition-colors duration-200 hover:bg-accent hover:text-[#FAFAFA]"
                   >
                     {t.label}
                   </button>

@@ -1,7 +1,7 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ArrowUpRight } from 'lucide-react';
-import ConnectModal from './ConnectModal';
+import ConnectModal from './ConnectModal.tsx';
 
 type CardNavLink = {
   label: string;
@@ -34,7 +34,7 @@ const CardNav: React.FC<CardNavProps> = ({
   ease = 'power3.out',
   baseColor = 'rgba(250, 250, 250, 0.85)',
   menuColor = '#000000',
-  buttonBgColor = '#C44900 ',
+  buttonBgColor = '#A83E00',
   buttonTextColor = '#FAFAFA'
 }) => {
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
@@ -43,6 +43,34 @@ const CardNav: React.FC<CardNavProps> = ({
   const navRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const footerEl = document.getElementById('contact');
+      // If we are at the top of the page, the navigation bar must be visible
+      if (window.scrollY < 50) {
+        setIsFooterVisible(false);
+        return;
+      }
+      const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+      if (isNearBottom) {
+        setIsFooterVisible(true);
+      } else if (footerEl) {
+        const rect = footerEl.getBoundingClientRect();
+        setIsFooterVisible(rect.top < window.innerHeight - 80);
+      } else {
+        setIsFooterVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const calculateHeight = () => {
     const navEl = navRef.current;
@@ -170,23 +198,39 @@ const CardNav: React.FC<CardNavProps> = ({
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
+    if (href === '#project-card-1' || href === '#projects') { // Target the first project card explicitly
+      const targetSection = document.getElementById('project-card-1');
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Close the menu after clicking a link
+      toggleMenu();
+        return;
+    }
+    }
+    // General fallback for other links or if the explicit target isn't found in structure
     const id = href.replace('#', '');
     const targetSection = document.getElementById(id);
     if (targetSection) {
-      targetSection.scrollIntoView({ behavior: 'smooth' });
+      targetSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
       // Close the menu after clicking a link
       toggleMenu();
+    } else if (href !== '#') {
+      console.warn(`Could not find target section for href: ${href}`);
     }
   };
 
   return (
     <div className="contents">
-      <div className={`fixed top-6 max-sm:top-4 left-1/2 -translate-x-1/2 w-[90%] max-sm:w-[92%] max-w-[800px] z-[100] box-border ${className}`}>
+      <div className={`fixed top-6 max-sm:top-4 left-1/2 -translate-x-1/2 transform w-[90%] max-sm:w-[92%] max-w-[800px] z-[100] box-border ${className}`}>
         <nav
           ref={navRef}
-          className={`block h-[60px] p-0 border border-[#334155]/20 backdrop-blur-[24px] relative overflow-hidden will-change-[height] transition-[border-radius,border-color] duration-400 ease-in-out ${isExpanded
+          className={`block h-[60px] p-0 border border-[#334155]/20 backdrop-blur-[24px] relative overflow-hidden will-change-[height] transition-[border-radius,border-color,opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isExpanded
             ? 'rounded-[1.5rem] max-sm:rounded-[1.25rem] border-[#334155]/40'
             : 'rounded-[2rem] max-sm:rounded-[1.75rem] border-[#334155]/20'
+            } ${
+              isFooterVisible 
+                ? 'opacity-0 -translate-y-12 pointer-events-none' 
+                : 'opacity-100 translate-y-0 pointer-events-auto'
             }`}
           style={{ backgroundColor: baseColor }}
         >
