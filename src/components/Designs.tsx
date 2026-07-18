@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ShapeGrid from './ShapeGrid.tsx';
+import { getOptimizedImageUrl } from '../utils/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -198,7 +199,7 @@ export default function Designs() {
               className="w-full md:w-[var(--card-width)] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
             >
               <img
-                src={design.image}
+                src={getOptimizedImageUrl(design.image, { width: 800, quality: 80 })}
                 alt={`${design.title} poster design`}
                 loading={index < 2 ? "eager" : "lazy"}
                 decoding="async"

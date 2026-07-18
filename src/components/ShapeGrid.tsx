@@ -61,12 +61,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
       rect = canvas.getBoundingClientRect();
     };
 
-    const updateRect = () => {
-      rect = canvas.getBoundingClientRect();
-    };
-
     window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('scroll', updateRect, { passive: true });
     resizeCanvas();
 
     const drawHex = (cx: number, cy: number, size: number) => {
@@ -449,7 +444,6 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     return () => {
       observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('scroll', updateRect);
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
