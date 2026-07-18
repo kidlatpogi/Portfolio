@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { getOptimizedImageUrl } from '../utils/image';
 
 const profileImage = "https://zeusbautista.site/Common/Profile%20Picture.webp";
 const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Profile%20Picture.webp";
@@ -12,14 +13,14 @@ export default function Hero() {
     if (isPreloaderGone) {
       const timer = setTimeout(() => {
         setStartStrikethrough(true);
-      }, 1000);
+      }, 400);
       return () => clearTimeout(timer);
     }
 
     const handlePreloaderRemoved = () => {
       setTimeout(() => {
         setStartStrikethrough(true);
-      }, 1000);
+      }, 400);
     };
 
     window.addEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
@@ -73,7 +74,7 @@ export default function Hero() {
                 </div>
  
                 <img
-                  src={profileImage}
+                  src={getOptimizedImageUrl(profileImage, { width: 360, quality: 85 })}
                   alt="Zeus Angelo Bautista"
                   loading="eager"
                   decoding="async"
