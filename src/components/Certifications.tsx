@@ -395,7 +395,7 @@ export default function Certifications() {
   }, []);
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 z-30 flex flex-col gap-24">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 md:py-0 z-30 flex flex-col">
       <style>{`
         #certifications {
           --cert-card-width: 420px;
@@ -440,7 +440,7 @@ export default function Certifications() {
       </div>
 
       {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
-      <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
+      <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
         <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16 flex-shrink-0">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
@@ -618,7 +618,7 @@ export default function Certifications() {
         </div>
       </div>
 
-      <div ref={badgesContainerRef} className="relative z-10 w-full flex flex-col items-center pt-12">
+      <div ref={badgesContainerRef} className="relative z-10 w-full flex flex-col items-center pt-12 pb-24 md:py-24">
         <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Skill Endorsements
