@@ -1,6 +1,9 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ShapeGrid from './ShapeGrid.tsx';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const designsData = [
   {
@@ -38,29 +41,124 @@ const designsData = [
     category: "Poster Design",
     image: "https://zeusbautista.site/Designs/lamaw-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/lamaw-1200.webp"
-  },
-  {
-    title: "Coming Soon",
-    category: "Poster Design",
-    image: "",
-    backupImage: ""
   }
 ];
 
 export default function Designs() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollSectionRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      let mm = gsap.matchMedia();
 
-  const x1 = useTransform(scrollYProgress, [0, 1], [200, -800]);
-  const x2 = useTransform(scrollYProgress, [0, 1], [-800, 200]);
+      // Desktop layout: min-width 768px
+      mm.add("(min-width: 768px)", () => {
+        if (!scrollSectionRef.current || !containerRef.current) return;
+
+        const scrollWidth = scrollSectionRef.current.scrollWidth;
+        const totalTranslation = -(scrollWidth - window.innerWidth);
+
+        gsap.fromTo(
+          scrollSectionRef.current,
+          { x: 0 },
+          {
+            x: totalTranslation,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: containerRef.current,
+              pin: true,
+              scrub: 1,
+              start: 'top top',
+              end: () => `+=${scrollWidth - window.innerWidth}`,
+              invalidateOnRefresh: true
+            },
+          }
+        );
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8] py-20 md:py-32 z-30 flex flex-col items-center">
-      
+    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8] pt-4 pb-12 md:pt-0">
+      {/* Centering calculations, adaptive widths, and scrollbar hiding scoped to Designs section */}
+      <style>{`
+        #designs {
+          --card-width: 420px; /* default xl card width */
+        }
+        @media (min-width: 768px) and (max-width: 1023px) {
+          #designs {
+            --card-width: 320px; /* md card width */
+          }
+        }
+        @media (min-width: 1024px) and (max-width: 1279px) {
+          #designs {
+            --card-width: 360px; /* lg card width */
+          }
+        }
+        /* Height-based corrections for smaller laptops */
+        @media (min-width: 1024px) and (max-height: 800px) {
+          #designs {
+            --card-width: 290px;
+          }
+        }
+        @media (min-width: 1280px) and (max-height: 800px) {
+          #designs {
+            --card-width: 330px;
+          }
+        }
+        @media (min-width: 1536px) and (max-height: 900px) {
+          #designs {
+            --card-width: 380px;
+          }
+        }
+
+        #designs,
+        #designs * {
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+        }
+        #designs::-webkit-scrollbar,
+        #designs *::-webkit-scrollbar {
+          display: none !important;
+        }
+
+        #designs .designs-track {
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+        }
+        @media (min-width: 768px) {
+          #designs .designs-track {
+            /* Calculates left/right padding so Card 01 starts centered and Card 06 ends centered */
+            padding-left: calc(50vw - (var(--card-width) / 2)) !important;
+            padding-right: calc(50vw - (var(--card-width) / 2)) !important;
+          }
+        }
+
+        #designs .designs-container {
+          padding-top: 3rem;
+          padding-bottom: 3rem;
+        }
+        #designs .designs-header {
+          margin-bottom: 3rem;
+        }
+        @media (max-height: 800px) {
+          #designs .designs-container {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+          }
+          #designs .designs-header {
+            margin-bottom: 0.75rem !important;
+          }
+          #designs .designs-header p {
+            margin-top: 0.25rem !important;
+          }
+        }
+      `}</style>
+
+      {/* Interactive Background ShapeGrid */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <ShapeGrid 
           speed={0} 
@@ -73,109 +171,59 @@ export default function Designs() {
         />
       </div>
 
-      <div className="relative z-10 flex flex-col w-full h-full max-w-[100vw]">
+      {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
+      <div className="designs-container relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
         
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-16 flex flex-col items-center text-center">
+        {/* Section Header */}
+        <div className="designs-header w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-12 flex flex-col items-start z-10 flex-shrink-0">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
             Creative Showcase
           </span>
           <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4rem] 2xl:text-[4.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none">
             Designs
           </h2>
-          <p className="font-sans text-sm md:text-base text-slate-500 leading-relaxed max-w-[360px] mx-auto mt-4">
+          <p className="font-sans text-sm md:text-base text-slate-500 leading-relaxed max-w-[360px] mt-3">
             Multi-media graphic design posters crafted using Adobe Photoshop.
           </p>
         </div>
 
-        <div className="flex flex-col gap-6 md:gap-10 w-full overflow-hidden">
-          
-          <motion.div 
-            style={{ x: x1 }}
-            className="flex items-center gap-6 md:gap-10 will-change-transform pl-10 md:pl-[20vw] w-max"
-          >
-            {designsData.map((design, index) => (
-              <div 
-                key={`row1-${index}`} 
-                className="w-[280px] md:w-[360px] lg:w-[400px] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-xl hover:border-accent transition-all duration-300 cursor-pointer bg-slate-200/30 flex items-center justify-center"
-              >
-                {design.image || design.backupImage ? 
-                  <img
-                    src={design.image}
-                    alt={`${design.title} poster design`}
-                    loading="lazy"
-                    decoding="async"
-                    onError={(event) => {
-                      const image = event.currentTarget;
-                      if (image.src !== design.backupImage) {
-                        image.src = design.backupImage;
-                      }
-                    }}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 select-none"
-                  />
-                  :
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 group-hover:scale-105 transition-transform duration-500">
-                    <span className="font-mono text-xs md:text-sm uppercase tracking-wider text-slate-400 font-bold">
-                      {design.title}
-                    </span>
-                  </div>
-                }
-                
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 md:p-8">
-                  <span className="text-accent font-mono text-xs md:text-sm uppercase tracking-wider font-bold mb-1">
-                    {design.category}
-                  </span>
-                  <h3 className="text-white font-sans text-lg md:text-2xl font-bold tracking-tight">
-                    {design.title}
-                  </h3>
-                </div>
+        {/* Cards container: 3x2 grid on mobile viewports, horizontal flex on desktop */}
+        <div 
+          ref={scrollSectionRef} 
+          className="designs-track grid grid-cols-2 grid-rows-3 gap-4 max-sm:gap-3 md:flex md:flex-row md:gap-16 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
+        >
+          {designsData.map((design, index) => (
+            <div 
+              key={index} 
+              className="w-full md:w-[var(--card-width)] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+            >
+              <img
+                src={design.image}
+                alt={`${design.title} poster design`}
+                loading={index < 2 ? "eager" : "lazy"}
+                decoding="async"
+                onError={(event) => {
+                  const image = event.currentTarget;
+                  if (image.src !== design.backupImage) {
+                    image.src = design.backupImage;
+                  }
+                }}
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 select-none"
+              />
+              
+              {/* Gradient Hover Info Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 md:p-8">
+                <span className="text-accent font-mono text-xs md:text-sm uppercase tracking-wider font-bold mb-1">
+                  {design.category}
+                </span>
+                <h3 className="text-white font-sans text-lg md:text-xl font-bold tracking-tight">
+                  {design.title}
+                </h3>
               </div>
-            ))}
-          </motion.div>
-
-          <motion.div 
-            style={{ x: x2 }}
-            className="flex items-center gap-6 md:gap-10 will-change-transform pr-10 md:pr-[20vw] w-max"
-          >
-            {[...designsData].reverse().map((design, index) => (
-              <div 
-                key={`row2-${index}`} 
-                className="w-[280px] md:w-[360px] lg:w-[400px] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/60 rounded-2xl shadow-sm hover:shadow-xl hover:border-accent transition-all duration-300 cursor-pointer bg-slate-200/30 flex items-center justify-center"
-              >
-                {design.image || design.backupImage ? 
-                  <img
-                    src={design.image}
-                    alt={`${design.title} poster design`}
-                    loading="lazy"
-                    decoding="async"
-                    onError={(event) => {
-                      const image = event.currentTarget;
-                      if (image.src !== design.backupImage) {
-                        image.src = design.backupImage;
-                      }
-                    }}
-                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 select-none"
-                  />
-                  :
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 group-hover:scale-105 transition-transform duration-500">
-                    <span className="font-mono text-xs md:text-sm uppercase tracking-wider text-slate-400 font-bold">
-                      {design.title}
-                    </span>
-                  </div>
-                }
-                
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 md:p-8">
-                  <span className="text-accent font-mono text-xs md:text-sm uppercase tracking-wider font-bold mb-1">
-                    {design.category}
-                  </span>
-                  <h3 className="text-white font-sans text-lg md:text-2xl font-bold tracking-tight">
-                    {design.title}
-                  </h3>
-                </div>
-              </div>
-            ))}
-          </motion.div>
-
+            </div>
+          ))}
         </div>
+
       </div>
     </section>
   );
