@@ -277,7 +277,8 @@ function CredentialImage({
 
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
+  const certScrollPinnedContainerRef = useRef<HTMLDivElement>(null);
+  const certScrollTrackRef = useRef<HTMLDivElement>(null);
   const badgesContainerRef = useRef<HTMLDivElement>(null);
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
 
@@ -301,22 +302,52 @@ export default function Certifications() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".cert-grid-item",
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.45,
-          stagger: 0.04,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: gridRef.current,
-            start: 'top 88%',
-            toggleActions: 'play none none none'
+      let mm = gsap.matchMedia();
+
+      // Mobile: keep fade-in for certs
+      mm.add("(max-width: 767px)", () => {
+        gsap.fromTo(
+          ".cert-grid-item",
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.45,
+            stagger: 0.04,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: certScrollTrackRef.current,
+              start: 'top 88%',
+              toggleActions: 'play none none none'
+            }
           }
-        }
-      );
+        );
+      });
+
+      // Desktop: Horizontal pin scroll for certs
+      mm.add("(min-width: 768px)", () => {
+        if (!certScrollTrackRef.current || !certScrollPinnedContainerRef.current) return;
+
+        const scrollWidth = certScrollTrackRef.current.scrollWidth;
+        const totalTranslation = -(scrollWidth - window.innerWidth);
+
+        gsap.fromTo(
+          certScrollTrackRef.current,
+          { x: 0 },
+          {
+            x: totalTranslation,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: certScrollPinnedContainerRef.current,
+              pin: true,
+              scrub: 1,
+              start: 'center center',
+              end: () => `+=${scrollWidth - window.innerWidth}`,
+              invalidateOnRefresh: true
+            },
+          }
+        );
+      });
 
       gsap.fromTo(
         ".badge-emblem-card",
@@ -341,6 +372,38 @@ export default function Certifications() {
 
   return (
     <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 z-30 flex flex-col gap-24">
+      <style>{`
+        #certifications-pin {
+          --cert-card-width: 420px;
+        }
+        @media (min-width: 768px) and (max-width: 1023px) {
+          #certifications-pin { --cert-card-width: 320px; }
+        }
+        @media (min-width: 1024px) and (max-width: 1279px) {
+          #certifications-pin { --cert-card-width: 360px; }
+        }
+        @media (min-width: 1024px) and (max-height: 800px) {
+          #certifications-pin { --cert-card-width: 290px; }
+        }
+        @media (min-width: 1280px) and (max-height: 800px) {
+          #certifications-pin { --cert-card-width: 330px; }
+        }
+        @media (min-width: 1536px) and (max-height: 900px) {
+          #certifications-pin { --cert-card-width: 380px; }
+        }
+
+        #certifications-pin .cert-track {
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+        }
+        @media (min-width: 768px) {
+          #certifications-pin .cert-track {
+            padding-left: calc(50vw - (var(--cert-card-width) / 2)) !important;
+            padding-right: calc(50vw - (var(--cert-card-width) / 2)) !important;
+          }
+        }
+      `}</style>
+      
       <div className="absolute inset-0 z-0 pointer-events-none">
         <ShapeGrid
           speed={0}
@@ -353,8 +416,8 @@ export default function Certifications() {
         />
       </div>
 
-      <div className="relative z-10 w-full flex flex-col items-center">
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16">
+      <div id="certifications-pin" ref={certScrollPinnedContainerRef} className="relative z-10 w-full flex flex-col md:h-screen md:justify-center overflow-hidden">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-12 md:mb-16 flex-shrink-0">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
           </span>
@@ -364,14 +427,14 @@ export default function Certifications() {
         </div>
 
         <div
-          ref={gridRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8 w-full max-w-[1600px] mx-auto px-6 md:px-24 justify-center items-start"
+          ref={certScrollTrackRef}
+          className="cert-track grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-[1600px] mx-auto md:flex md:flex-row md:gap-8 md:max-w-none md:w-max will-change-transform md:items-stretch"
         >
           {certificationsData.map((cert, index) => (
             <div
               key={cert.title}
               onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-              className="cert-grid-item w-full min-h-full relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
+              className="cert-grid-item w-full md:w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer max-md:h-full"
             >
               <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-4 bg-white">
                 <CredentialImage
