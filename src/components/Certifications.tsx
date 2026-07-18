@@ -4,7 +4,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, X } from 'lucide-react';
 import ShapeGrid from './ShapeGrid.tsx';
-import { getOptimizedImageUrl } from '../utils/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -251,19 +250,17 @@ function CredentialImage({
   fallbackSrc,
   alt,
   className,
-  loading = "lazy",
-  width = 360
+  loading = "lazy"
 }: {
   src: string;
   fallbackSrc: string;
   alt: string;
   className: string;
   loading?: "eager" | "lazy";
-  width?: number;
 }) {
   return (
     <img
-      src={getOptimizedImageUrl(src, { width, quality: 80 })}
+      src={src}
       alt={alt}
       loading={loading}
       decoding="async"
@@ -497,7 +494,6 @@ export default function Certifications() {
                   alt={`${selectedItem.type === 'cert' ? selectedItem.title : selectedItem.name} preview`}
                   loading="eager"
                   className={selectedItem.type === 'cert' ? "w-full h-auto object-contain" : "w-full h-auto object-contain"}
-                  width={800}
                 />
               </div>
             </div>

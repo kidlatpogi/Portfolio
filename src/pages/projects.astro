@@ -5,70 +5,108 @@ import ShapeGrid from '../components/ShapeGrid.tsx';
 
 const projects = [
   {
-    title: "AI Automation Platform",
+    title: "Bigkas Capstone",
+    year: "2025",
+    isFeatured: true,
+    description: "A speech rehabilitation and therapy mobile/web application utilizing speech-to-text recognition models to assist children with speech impediments in practicing pronunciation.",
+    tags: ["React", "Node.js", "Web Speech API", "Tailwind CSS"],
+    stack: "[REACT] — [NODE.JS]",
+    color: "#4f46e5",
+    github: "https://github.com/kidlatpogi/bigkas-capstone",
+    link: "https://bigkas.site/",
+    image: "",
+    backupImage: ""
+  },
+  {
+    title: "L.I.N.N.Y",
     year: "2024",
     isFeatured: true,
-    description: "An automated system integrating large language models with customized agent workflows to execute repetitive tasks and optimize data structures.",
-    tags: ["Python", "FastAPI", "React", "OpenAI"],
-    stack: "[PYTHON] — [REACT]",
-    color: "#0f172a", // Dark slate
-    github: "#",
-    link: "#"
+    description: "An offline voice assistant and automation tool utilizing local natural language processing models to perform system-level tasks and tasks automation without internet dependencies.",
+    tags: ["Python", "PyTorch", "Vosk NLP", "Speech Recognition"],
+    stack: "[PYTHON] — [PYTORCH]",
+    color: "#0f172a",
+    github: "https://github.com/kidlatpogi/L.I.N.N.Y",
+    link: "",
+    image: "https://zeusbautista.site/Project%20Overview/Linny-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/Linny-1200.webp"
   },
   {
-    title: "E-Commerce Microservices",
+    title: "SafeLink",
+    year: "2024",
+    isFeatured: false,
+    description: "A cyber-security tool and link analyzer that parses URLs to detect phishing sites, malware redirects, and shortener tracking cookies in real-time.",
+    tags: ["FastAPI", "React", "Python", "VirusTotal API"],
+    stack: "[FASTAPI] — [REACT]",
+    color: "#022c22",
+    github: "https://github.com/kidlatpogi/SafeLink",
+    link: "",
+    image: "https://zeusbautista.site/Project%20Overview/SafeLink-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/SafeLink-1200.webp"
+  },
+  {
+    title: "Calendar Widget",
+    year: "2024",
+    isFeatured: false,
+    description: "A highly customizable desktop calendar and productivity widget displaying schedule overlays, weather forecast, and system status widgets.",
+    tags: ["Electron", "JavaScript", "HTML5", "CSS3"],
+    stack: "[ELECTRON] — [JS]",
+    color: "#172554",
+    github: "https://github.com/kidlatpogi/Calendar-Widget",
+    link: "",
+    image: "https://zeusbautista.site/Project%20Overview/CalendarWidget-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/CalendarWidget-1200.webp"
+  },
+  {
+    title: "My-PC InfoSec E-Commerce",
     year: "2024",
     isFeatured: true,
-    description: "A highly resilient e-commerce application composed of autonomous microservices using Docker containerization, Kafka event streaming, and PostgreSQL.",
-    tags: ["Node.js", "Docker", "PostgreSQL", "Kafka"],
-    stack: "[NODE.JS] — [DOCKER]",
-    color: "#1e293b", // Charcoal
-    github: "#",
-    link: "#"
+    description: "A secure e-commerce application designed with robust protection inputs against SQL injections, XSS attacks, and CSRF attempts, managing hardware transactions safely.",
+    tags: ["React", "Express", "Node.js", "MongoDB", "JWT Security"],
+    stack: "[REACT] — [EXPRESS]",
+    color: "#C44900",
+    github: "https://github.com/kidlatpogi/InfoSec-MyPC",
+    link: "https://mypcinfosec.vercel.app/",
+    image: "https://zeusbautista.site/Project%20Overview/MyPC-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/MyPC-1200.webp"
   },
   {
-    title: "High-Fidelity Portfolio",
+    title: "WebToolz",
+    year: "2024",
+    isFeatured: false,
+    description: "A comprehensive developer toolkit compilation offering formatting converters, hash generators, regex testing utility panels, and API payload formatters.",
+    tags: ["Vite", "React", "TypeScript", "Tailwind CSS"],
+    stack: "[REACT] — [VITE]",
+    color: "#581c87",
+    github: "https://github.com/kidlatpogi/Web-tools",
+    link: "https://wtoolz.vercel.app/",
+    image: "https://zeusbautista.site/Project%20Overview/WebToolz-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/WebToolz-1200.webp"
+  },
+  {
+    title: "Gnosis Recall",
     year: "2024",
     isFeatured: true,
-    description: "Personal responsive portfolio built using React, Astro, and Tailwind CSS. Implements smooth Lenis scroll and customized scroll reveal animations.",
-    tags: ["Astro", "React", "Tailwind CSS", "Framer Motion"],
-    stack: "[REACT] — [ASTRO]",
-    color: "#C44900", // Accent Orange
-    github: "#",
-    link: "#"
+    description: "An active recall and Spaced Repetition flashcard system helping students optimize cognitive retention for academic studies using smart algorithm schedules.",
+    tags: ["Next.js", "Firebase", "React", "OpenAI GPT API"],
+    stack: "[NEXT.JS] — [FIREBASE]",
+    color: "#0b0f19",
+    github: "https://github.com/kidlatpogi/Gnosis",
+    link: "https://gnosis-study.vercel.app/",
+    image: "https://zeusbautista.site/Project%20Overview/Gnosis-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/Gnosis-1200.webp"
   },
   {
-    title: "IoT Smart Farming Dashboard",
+    title: "Room Reservation",
     year: "2024",
     isFeatured: false,
-    description: "A real-time environmental monitoring and automated irrigation system utilizing ESP8266 microcontrollers, sensor arrays, and Firebase IoT database.",
-    tags: ["IoT", "Arduino", "Firebase", "C++"],
-    stack: "[ARDUINO] — [FIREBASE]",
-    color: "#111827", // Very dark gray
-    github: "#",
-    link: "#"
-  },
-  {
-    title: "Blockchain Voting System",
-    year: "2023",
-    isFeatured: false,
-    description: "A decentralized, secure e-voting platform built on the Ethereum network using Solidity smart contracts to guarantee vote anonymity and prevent electoral fraud.",
-    tags: ["Solidity", "Ethereum", "Web3.js", "React"],
-    stack: "[SOLIDITY] — [REACT]",
-    color: "#1f2937", // Dark gray
-    github: "#",
-    link: "#"
-  },
-  {
-    title: "Medical Image Segmentation AI",
-    year: "2024",
-    isFeatured: false,
-    description: "A deep learning tool using U-Net neural network architecture to perform automated segmentation of brain tumors from MRI scans with 95%+ Dice coefficient.",
-    tags: ["PyTorch", "U-Net", "Python", "Flask"],
-    stack: "[PYTORCH] — [FLASK]",
-    color: "#090d16", // Deep navy
-    github: "#",
-    link: "#"
+    description: "An enterprise room and workspaces reservation system handling schedule clashes, resources allocation, and automated booking notifications.",
+    tags: ["Java", "Spring Boot", "React", "MySQL"],
+    stack: "[JAVA] — [REACT]",
+    color: "#312e81",
+    github: "https://github.com/kidlatpogi/Room-Reservation-System",
+    link: "",
+    image: "https://zeusbautista.site/Project%20Overview/RoomReservationSystem-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/RoomReservationSystem-1200.webp"
   }
 ];
 ---
@@ -116,10 +154,19 @@ const projects = [
             style={`background-color: ${project.color}`}
             class="w-full aspect-[16/10] relative overflow-hidden flex items-center justify-center select-none"
           >
-            <!-- Large Translucent Index Number -->
-            <span class="text-white/10 font-sans text-7xl sm:text-8xl md:text-[5.5rem] lg:text-8xl font-black tracking-tighter group-hover:scale-105 transition-transform duration-500">
-              0{index + 1}
-            </span>
+            {project.image ? (
+              <img 
+                src={project.image} 
+                alt={`${project.title} preview`}
+                class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                onerror={`this.onerror=null; this.src='${project.backupImage || ''}';`}
+              />
+            ) : (
+              <!-- Large Translucent Index Number -->
+              <span class="text-white/10 font-sans text-7xl sm:text-8xl md:text-[5.5rem] lg:text-8xl font-black tracking-tighter group-hover:scale-105 transition-transform duration-500">
+                0{index + 1}
+              </span>
+            )}
 
             <!-- Year Pill & Tags overlay -->
             <div class="absolute top-4 left-4 flex gap-2">
@@ -158,14 +205,16 @@ const projects = [
             </div>
 
             {/* Action Links */}
-            <div class="flex items-center justify-between border-t border-slate-100 pt-4 mt-2">
-              <a href={project.github} class="font-mono text-xs uppercase tracking-wider text-slate-400 hover:text-slate-900 transition-colors flex items-center gap-1 cursor-target">
-                GitHub Repo
-              </a>
-              <a href={project.link} class="font-mono text-xs uppercase tracking-wider text-accent hover:text-slate-900 transition-colors flex items-center gap-1 font-bold cursor-target">
-                View Project Details →
-              </a>
-            </div>
+             <div class="flex items-center justify-between border-t border-slate-100 pt-4 mt-2">
+               <a href={project.github} target="_blank" rel="noopener noreferrer" class="font-mono text-xs uppercase tracking-wider text-slate-400 hover:text-slate-900 transition-colors flex items-center gap-1 cursor-target">
+                 GitHub Repo
+               </a>
+               {project.link && (
+                 <a href={project.link} target="_blank" rel="noopener noreferrer" class="font-mono text-xs uppercase tracking-wider text-accent hover:text-slate-900 transition-colors flex items-center gap-1 font-bold cursor-target">
+                   Live Demo →
+                 </a>
+               )}
+             </div>
 
           </div>
         </article>
