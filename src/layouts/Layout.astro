@@ -242,11 +242,12 @@ const {
 		// Recalculate GSAP ScrollTrigger offsets once the preloading layout shifts have settled
 		setTimeout(() => {
 			ScrollTrigger.refresh();
-		}, 100);
+		}, 1800);
 
 		const tl = gsap.timeline({
 			onComplete: () => {
 				document.getElementById('preloader')?.remove();
+				window.dispatchEvent(new CustomEvent('preloaderFullyRemoved'));
 			}
 		});
 

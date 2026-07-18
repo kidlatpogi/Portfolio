@@ -59,6 +59,20 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   const activeStrengthRef = useRef({ current: 0 });
 
   const [isMobile, setIsMobile] = useState(false);
+  const [preloaderActive, setPreloaderActive] = useState(
+    () => typeof window !== 'undefined' && !!document.getElementById('preloader')
+  );
+
+  useEffect(() => {
+    if (!preloaderActive) return;
+    const handlePreloaderRemoved = () => {
+      setPreloaderActive(false);
+    };
+    window.addEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
+    return () => {
+      window.removeEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
+    };
+  }, [preloaderActive]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -86,7 +100,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   }, []);
 
   useEffect(() => {
-    if (isMobile || !cursorRef.current) return;
+    if (preloaderActive || isMobile || !cursorRef.current) return;
 
     const originalCursor = document.body.style.cursor;
     if (hideDefaultCursor) {
@@ -345,7 +359,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
       targetCornerPositionsRef.current = null;
       activeStrengthRef.current.current = 0;
     };
-  }, [targetSelector, spinDuration, moveCursor, constants, hideDefaultCursor, isMobile, hoverDuration, parallaxOn]);
+  }, [targetSelector, spinDuration, moveCursor, constants, hideDefaultCursor, isMobile, hoverDuration, parallaxOn, preloaderActive]);
 
   useEffect(() => {
     if (isMobile || !cursorRef.current || !spinTl.current) return;
