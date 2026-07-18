@@ -98,6 +98,22 @@ export default function Designs() {
             --card-width: 360px; /* lg card width */
           }
         }
+        /* Height-based corrections for smaller laptops */
+        @media (min-width: 1024px) and (max-height: 800px) {
+          #designs {
+            --card-width: 290px;
+          }
+        }
+        @media (min-width: 1280px) and (max-height: 800px) {
+          #designs {
+            --card-width: 330px;
+          }
+        }
+        @media (min-width: 1536px) and (max-height: 900px) {
+          #designs {
+            --card-width: 380px;
+          }
+        }
 
         #designs,
         #designs * {
@@ -120,6 +136,26 @@ export default function Designs() {
             padding-right: calc(50vw - (var(--card-width) / 2)) !important;
           }
         }
+
+        #designs .designs-container {
+          padding-top: 3rem;
+          padding-bottom: 3rem;
+        }
+        #designs .designs-header {
+          margin-bottom: 3rem;
+        }
+        @media (max-height: 800px) {
+          #designs .designs-container {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+          }
+          #designs .designs-header {
+            margin-bottom: 0.75rem !important;
+          }
+          #designs .designs-header p {
+            margin-top: 0.25rem !important;
+          }
+        }
       `}</style>
 
       {/* Interactive Background ShapeGrid */}
@@ -136,10 +172,10 @@ export default function Designs() {
       </div>
 
       {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
-      <div className="relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
+      <div className="designs-container relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
         
         {/* Section Header */}
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-12 flex flex-col items-start z-10 flex-shrink-0">
+        <div className="designs-header w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-12 flex flex-col items-start z-10 flex-shrink-0">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
             Creative Showcase
           </span>
@@ -159,7 +195,7 @@ export default function Designs() {
           {designsData.map((design, index) => (
             <div 
               key={index} 
-              className="w-full md:w-[320px] lg:w-[360px] xl:w-[420px] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+              className="w-full md:w-[var(--card-width)] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
             >
               <img
                 src={design.image}
