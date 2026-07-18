@@ -395,7 +395,7 @@ export default function Certifications() {
   }, []);
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 md:py-0 z-30 flex flex-col">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 md:py-0 z-30">
       <style>{`
         #certifications {
           --cert-card-width: 340px;
