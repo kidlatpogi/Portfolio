@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, X } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import ShapeGrid from './ShapeGrid.tsx';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -156,6 +157,16 @@ const certificationsData: Certificate[] = [
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Responsive%20Web%20Design.webp",
     verifyUrl: "https://zeusbautista.site/Certifications/Responsive%20Web%20Design.webp",
     actionLabel: "View Credential"
+  },
+  {
+    title: "Coming Soon",
+    issuer: "Future Certification",
+    date: "TBD",
+    color: "#64748b",
+    image: "",
+    backupImage: "",
+    verifyUrl: "#",
+    actionLabel: "Coming Soon"
   }
 ];
 
@@ -277,10 +288,16 @@ function CredentialImage({
 
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const certScrollPinnedContainerRef = useRef<HTMLDivElement>(null);
-  const certScrollTrackRef = useRef<HTMLDivElement>(null);
   const badgesContainerRef = useRef<HTMLDivElement>(null);
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const x1 = useTransform(scrollYProgress, [0, 1], [150, -500]);
+  const x2 = useTransform(scrollYProgress, [0, 1], [-500, 150]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -302,52 +319,22 @@ export default function Certifications() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      let mm = gsap.matchMedia();
-
-      // Mobile: keep fade-in for certs
-      mm.add("(max-width: 767px)", () => {
-        gsap.fromTo(
-          ".cert-grid-item",
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.45,
-            stagger: 0.04,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: certScrollTrackRef.current,
-              start: 'top 88%',
-              toggleActions: 'play none none none'
-            }
+      gsap.fromTo(
+        ".cert-grid-item",
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.45,
+          stagger: 0.04,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: "#certifications",
+            start: 'top 88%',
+            toggleActions: 'play none none none'
           }
-        );
-      });
-
-      // Desktop: Horizontal pin scroll for certs
-      mm.add("(min-width: 768px)", () => {
-        if (!certScrollTrackRef.current || !certScrollPinnedContainerRef.current) return;
-
-        const scrollWidth = certScrollTrackRef.current.scrollWidth;
-        const totalTranslation = -(scrollWidth - window.innerWidth);
-
-        gsap.fromTo(
-          certScrollTrackRef.current,
-          { x: 0 },
-          {
-            x: totalTranslation,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: certScrollPinnedContainerRef.current,
-              pin: true,
-              scrub: 1,
-              start: 'center center',
-              end: () => `+=${scrollWidth - window.innerWidth}`,
-              invalidateOnRefresh: true
-            },
-          }
-        );
-      });
+        }
+      );
 
       gsap.fromTo(
         ".badge-emblem-card",
@@ -373,34 +360,23 @@ export default function Certifications() {
   return (
     <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 z-30 flex flex-col gap-24">
       <style>{`
-        #certifications-pin {
+        #certifications {
           --cert-card-width: 420px;
         }
         @media (min-width: 768px) and (max-width: 1023px) {
-          #certifications-pin { --cert-card-width: 320px; }
+          #certifications { --cert-card-width: 320px; }
         }
         @media (min-width: 1024px) and (max-width: 1279px) {
-          #certifications-pin { --cert-card-width: 360px; }
+          #certifications { --cert-card-width: 360px; }
         }
         @media (min-width: 1024px) and (max-height: 800px) {
-          #certifications-pin { --cert-card-width: 290px; }
+          #certifications { --cert-card-width: 290px; }
         }
         @media (min-width: 1280px) and (max-height: 800px) {
-          #certifications-pin { --cert-card-width: 330px; }
+          #certifications { --cert-card-width: 330px; }
         }
         @media (min-width: 1536px) and (max-height: 900px) {
-          #certifications-pin { --cert-card-width: 380px; }
-        }
-
-        #certifications-pin .cert-track {
-          padding-left: 1.5rem;
-          padding-right: 1.5rem;
-        }
-        @media (min-width: 768px) {
-          #certifications-pin .cert-track {
-            padding-left: calc(50vw - (var(--cert-card-width) / 2)) !important;
-            padding-right: calc(50vw - (var(--cert-card-width) / 2)) !important;
-          }
+          #certifications { --cert-card-width: 380px; }
         }
       `}</style>
       
@@ -416,8 +392,8 @@ export default function Certifications() {
         />
       </div>
 
-      <div id="certifications-pin" ref={certScrollPinnedContainerRef} className="relative z-10 w-full flex flex-col md:h-screen md:justify-center overflow-hidden">
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-12 md:mb-16 flex-shrink-0">
+      <div className="relative z-10 w-full flex flex-col">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16 flex-shrink-0">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
           </span>
@@ -426,52 +402,171 @@ export default function Certifications() {
           </h2>
         </div>
 
-        <div
-          ref={certScrollTrackRef}
-          className="cert-track grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-[1600px] mx-auto md:flex md:flex-row md:gap-8 md:max-w-none md:w-max will-change-transform md:items-stretch"
-        >
-          {certificationsData.map((cert, index) => (
-            <div
-              key={cert.title}
-              onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-              className="cert-grid-item w-full md:w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer max-md:h-full"
-            >
-              <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-4 bg-white">
-                <CredentialImage
-                  src={cert.image}
-                  fallbackSrc={cert.backupImage}
-                  alt={`${cert.title} certificate`}
-                  loading={index < 2 ? "eager" : "lazy"}
-                  className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
-                />
-              </div>
-
-              <div className="flex justify-between items-center gap-3 mb-1.5 pt-1">
-                <span style={{ color: cert.color }} className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
-                  {cert.issuer}
-                </span>
-                <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase shrink-0">
-                  {cert.date}
-                </span>
-              </div>
-
-              <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left min-h-[40px] md:min-h-[48px] mb-4">
-                {cert.title}
-              </h3>
-
-              <a
-                href={cert.verifyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(event) => event.stopPropagation()}
-                aria-label={`${cert.actionLabel || 'Verify Credential'} for ${cert.title}`}
-                className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+        {/* Mobile View: Dynamic Grid */}
+        <div className="block md:hidden px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+            {certificationsData.map((cert) => (
+              <div
+                key={`mobile-${cert.title}`}
+                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
+                className="cert-grid-item w-full relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer"
               >
-                <span>{cert.actionLabel || "Verify Credential"}</span>
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
-          ))}
+                <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-4 bg-white flex items-center justify-center">
+                  {cert.image ? (
+                    <CredentialImage
+                      src={cert.image}
+                      fallbackSrc={cert.backupImage}
+                      alt={`${cert.title} certificate`}
+                      loading="lazy"
+                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-slate-100 flex items-center justify-center font-mono text-slate-400 text-xs font-bold uppercase tracking-wider">
+                      {cert.title}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex justify-between items-center gap-3 mb-1.5 pt-1">
+                  <span style={{ color: cert.color }} className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
+                    {cert.issuer}
+                  </span>
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase shrink-0">
+                    {cert.date}
+                  </span>
+                </div>
+
+                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left min-h-[40px] md:min-h-[48px] mb-4">
+                  {cert.title}
+                </h3>
+
+                <a
+                  href={cert.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                  aria-label={`${cert.actionLabel || 'Verify Credential'} for ${cert.title}`}
+                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                >
+                  <span>{cert.actionLabel || "Verify Credential"}</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll rows - Desktop */}
+        <div className="hidden md:flex flex-col gap-10 w-full overflow-hidden">
+          {/* Row 1 - scrolling left */}
+          <motion.div
+            style={{ x: x1 }}
+            className="flex items-center gap-8 will-change-transform pl-[10vw] w-max"
+          >
+            {certificationsData.slice(0, 6).map((cert) => (
+              <div
+                key={`desktop-row1-${cert.title}`}
+                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
+                className="cert-grid-item w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer max-md:h-full"
+              >
+                <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-4 bg-white flex items-center justify-center">
+                  {cert.image ? (
+                    <CredentialImage
+                      src={cert.image}
+                      fallbackSrc={cert.backupImage}
+                      alt={`${cert.title} certificate`}
+                      loading="lazy"
+                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-slate-100 flex items-center justify-center font-mono text-slate-400 text-sm font-bold uppercase tracking-wider">
+                      Coming Soon
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex justify-between items-center gap-3 mb-1.5 pt-1">
+                  <span style={{ color: cert.color }} className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
+                    {cert.issuer}
+                  </span>
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase shrink-0">
+                    {cert.date}
+                  </span>
+                </div>
+
+                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left min-h-[40px] md:min-h-[48px] mb-4">
+                  {cert.title}
+                </h3>
+
+                <a
+                  href={cert.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                  aria-label={`${cert.actionLabel || 'Verify Credential'} for ${cert.title}`}
+                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                >
+                  <span>{cert.actionLabel || "Verify Credential"}</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Row 2 - scrolling right */}
+          <motion.div
+            style={{ x: x2 }}
+            className="flex items-center gap-8 will-change-transform pr-[10vw] w-max self-end"
+          >
+            {certificationsData.slice(6, 12).map((cert) => (
+              <div
+                key={`desktop-row2-${cert.title}`}
+                onClick={() => setSelectedItem({ type: 'cert', ...cert })}
+                className="cert-grid-item w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer max-md:h-full"
+              >
+                <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-4 bg-white flex items-center justify-center">
+                  {cert.image ? (
+                    <CredentialImage
+                      src={cert.image}
+                      fallbackSrc={cert.backupImage}
+                      alt={`${cert.title} certificate`}
+                      loading="lazy"
+                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-slate-100 flex items-center justify-center font-mono text-slate-400 text-sm font-bold uppercase tracking-wider">
+                      Coming Soon
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex justify-between items-center gap-3 mb-1.5 pt-1">
+                  <span style={{ color: cert.color }} className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
+                    {cert.issuer}
+                  </span>
+                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase shrink-0">
+                    {cert.date}
+                  </span>
+                </div>
+
+                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left min-h-[40px] md:min-h-[48px] mb-4">
+                  {cert.title}
+                </h3>
+
+                <a
+                  href={cert.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(event) => event.stopPropagation()}
+                  aria-label={`${cert.actionLabel || 'Verify Credential'} for ${cert.title}`}
+                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                >
+                  <span>{cert.actionLabel || "Verify Credential"}</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </div>
 
