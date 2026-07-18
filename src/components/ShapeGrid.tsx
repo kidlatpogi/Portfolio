@@ -44,6 +44,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
 
     let isVisible = false;
     let isLoopRunning = false;
+    let isPreloaderActive = typeof window !== 'undefined' && !!document.getElementById('preloader');
 
     const isHex = shape === 'hexagon';
     const isTri = shape === 'triangle';
@@ -236,7 +237,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     };
 
     const updateAnimation = () => {
-      if (!isVisible) {
+      if (!isVisible || isPreloaderActive) {
         isLoopRunning = false;
         return;
       }
@@ -421,6 +422,18 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     window.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseleave', handleMouseLeave);
 
+    const handlePreloaderRemoved = () => {
+      isPreloaderActive = false;
+      if (isVisible && !isLoopRunning) {
+        isLoopRunning = true;
+        requestRef.current = requestAnimationFrame(updateAnimation);
+      }
+    };
+
+    if (isPreloaderActive) {
+      window.addEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         isVisible = entry.isIntersecting;
@@ -440,6 +453,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
     };
   }, [direction, speed, borderColor, hoverFillColor, squareSize, shape, hoverTrailAmount, gradientColor]);
 
