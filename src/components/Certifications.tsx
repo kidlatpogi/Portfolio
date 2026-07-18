@@ -288,16 +288,11 @@ function CredentialImage({
 
 export default function Certifications() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const certScrollPinnedContainerRef = useRef<HTMLDivElement>(null);
+  const row1Ref = useRef<HTMLDivElement>(null);
+  const row2Ref = useRef<HTMLDivElement>(null);
   const badgesContainerRef = useRef<HTMLDivElement>(null);
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  const x1 = useTransform(scrollYProgress, [0, 1], [150, -500]);
-  const x2 = useTransform(scrollYProgress, [0, 1], [-500, 150]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -319,22 +314,64 @@ export default function Certifications() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".cert-grid-item",
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.45,
-          stagger: 0.04,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: "#certifications",
-            start: 'top 88%',
-            toggleActions: 'play none none none'
+      let mm = gsap.matchMedia();
+
+      // Mobile: keep fade-in for certs
+      mm.add("(max-width: 767px)", () => {
+        gsap.fromTo(
+          ".cert-grid-item",
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.45,
+            stagger: 0.04,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: "#certifications",
+              start: 'top 88%',
+              toggleActions: 'play none none none'
+            }
           }
-        }
-      );
+        );
+      });
+
+      // Desktop: Horizontal pin scroll for certs
+      mm.add("(min-width: 768px)", () => {
+        if (!row1Ref.current || !row2Ref.current || !certScrollPinnedContainerRef.current) return;
+
+        const row1Width = row1Ref.current.scrollWidth;
+        const row2Width = row2Ref.current.scrollWidth;
+
+        const scrollAmt1 = row1Width - window.innerWidth + 80;
+        const scrollAmt2 = row2Width - window.innerWidth + 80;
+        const maxScroll = Math.max(scrollAmt1, scrollAmt2, 600);
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: certScrollPinnedContainerRef.current,
+            pin: true,
+            scrub: 1,
+            start: 'top top',
+            end: () => `+=${maxScroll}`,
+            invalidateOnRefresh: true
+          }
+        });
+
+        tl.to(row1Ref.current, {
+          x: -scrollAmt1,
+          ease: 'none'
+        }, 0);
+
+        tl.fromTo(row2Ref.current,
+          { x: -scrollAmt2 },
+          {
+            x: 0,
+            ease: 'none'
+          },
+          0
+        );
+      });
 
       gsap.fromTo(
         ".badge-emblem-card",
@@ -378,6 +415,16 @@ export default function Certifications() {
         @media (min-width: 1536px) and (max-height: 900px) {
           #certifications { --cert-card-width: 380px; }
         }
+
+        #certifications,
+        #certifications * {
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+        }
+        #certifications::-webkit-scrollbar,
+        #certifications *::-webkit-scrollbar {
+          display: none !important;
+        }
       `}</style>
       
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -392,7 +439,8 @@ export default function Certifications() {
         />
       </div>
 
-      <div className="relative z-10 w-full flex flex-col">
+      {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
+      <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
         <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16 flex-shrink-0">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
             Milestones & Credentials
@@ -459,9 +507,9 @@ export default function Certifications() {
         {/* Scroll rows - Desktop */}
         <div className="hidden md:flex flex-col gap-10 w-full overflow-hidden">
           {/* Row 1 - scrolling left */}
-          <motion.div
-            style={{ x: x1 }}
-            className="flex items-center gap-8 will-change-transform pl-[10vw] w-max"
+          <div
+            ref={row1Ref}
+            className="flex items-center gap-8 will-change-transform pl-[10vw] pr-[10vw] w-max"
           >
             {certificationsData.slice(0, 6).map((cert) => (
               <div
@@ -511,12 +559,12 @@ export default function Certifications() {
                 </a>
               </div>
             ))}
-          </motion.div>
+          </div>
 
           {/* Row 2 - scrolling right */}
-          <motion.div
-            style={{ x: x2 }}
-            className="flex items-center gap-8 will-change-transform pr-[10vw] w-max self-end"
+          <div
+            ref={row2Ref}
+            className="flex items-center gap-8 will-change-transform pl-[10vw] pr-[10vw] w-max self-end"
           >
             {certificationsData.slice(6, 12).map((cert) => (
               <div
@@ -566,7 +614,7 @@ export default function Certifications() {
                 </a>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
 

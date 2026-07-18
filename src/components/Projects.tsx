@@ -43,18 +43,6 @@ const projectsData = [
     github: "https://github.com/kidlatpogi/InfoSec-MyPC",
     image: "https://zeusbautista.site/Project%20Overview/MyPC-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/MyPC-1200.webp"
-  },
-  {
-    title: "Gnosis Recall",
-    description: "An active recall and Spaced Repetition flashcard system helping students optimize cognitive retention for academic studies using smart algorithm schedules.",
-    tags: ["Next.js", "Firebase", "React", "OpenAI GPT API"],
-    stack: "[NEXT.JS] — [FIREBASE]",
-    bgGradient: "bg-gradient-to-br from-[#0b0f19] via-[#101726] to-[#1d4ed8]",
-    accentColor: "from-blue-500/20 to-indigo-600/20",
-    link: "https://gnosis-study.vercel.app/",
-    github: "https://github.com/kidlatpogi/Gnosis",
-    image: "https://zeusbautista.site/Project%20Overview/Gnosis-1200.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/Gnosis-1200.webp"
   }
 ];
 
