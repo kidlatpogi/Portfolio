@@ -363,14 +363,10 @@ export default function Certifications() {
           ease: 'none'
         }, 0);
 
-        tl.fromTo(row2Ref.current,
-          { x: -scrollAmt2 },
-          {
-            x: 0,
-            ease: 'none'
-          },
-          0
-        );
+        tl.to(row2Ref.current, {
+          x: scrollAmt2,
+          ease: 'none'
+        }, 0);
       });
 
       gsap.fromTo(
