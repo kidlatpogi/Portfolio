@@ -16,7 +16,9 @@ const projectsData = [
     bgGradient: "bg-gradient-to-br from-[#4f46e5] via-[#5b21b6] to-[#7c3aed]",
     accentColor: "from-indigo-500/20 to-purple-600/20",
     link: "https://bigkas.site/",
-    github: "https://github.com/kidlatpogi/bigkas-capstone"
+    github: "https://github.com/kidlatpogi/bigkas-capstone",
+    image: "",
+    backupImage: ""
   },
   {
     title: "L.I.N.N.Y",
@@ -26,7 +28,9 @@ const projectsData = [
     bgGradient: "bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155]",
     accentColor: "from-slate-500/20 to-zinc-600/20",
     link: "",
-    github: "https://github.com/kidlatpogi/L.I.N.N.Y"
+    github: "https://github.com/kidlatpogi/L.I.N.N.Y",
+    image: "https://zeusbautista.site/Project%20Overview/Linny-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/Linny-1200.webp"
   },
   {
     title: "My-PC InfoSec E-Commerce",
@@ -36,7 +40,9 @@ const projectsData = [
     bgGradient: "bg-gradient-to-br from-[#C44900] via-[#E85D04] to-[#f97316]",
     accentColor: "from-orange-500/20 to-red-600/20",
     link: "https://mypcinfosec.vercel.app/",
-    github: "https://github.com/kidlatpogi/InfoSec-MyPC"
+    github: "https://github.com/kidlatpogi/InfoSec-MyPC",
+    image: "https://zeusbautista.site/Project%20Overview/MyPC-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/MyPC-1200.webp"
   },
   {
     title: "Gnosis Recall",
@@ -46,7 +52,9 @@ const projectsData = [
     bgGradient: "bg-gradient-to-br from-[#0b0f19] via-[#101726] to-[#1d4ed8]",
     accentColor: "from-blue-500/20 to-indigo-600/20",
     link: "https://gnosis-study.vercel.app/",
-    github: "https://github.com/kidlatpogi/Gnosis"
+    github: "https://github.com/kidlatpogi/Gnosis",
+    image: "https://zeusbautista.site/Project%20Overview/Gnosis-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/Gnosis-1200.webp"
   }
 ];
 
@@ -297,54 +305,94 @@ export default function Projects() {
                     {/* Decorative gradient overlay */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${project.accentColor} pointer-events-none rounded-[40px]`} />
 
-                    <div className={`w-full h-full flex flex-col justify-between transition-opacity duration-300 z-10 ${isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                      <div className="flex flex-col gap-4">
-                        {/* Counter + Title Header */}
-                        <div className="flex flex-col gap-1">
-                          <span className="font-mono text-[11px] md:text-xs text-white/50 font-bold tracking-widest uppercase">
-                            {String(index + 1).padStart(2, '0')} / {String(projectsData.length).padStart(2, '0')}
+                     <div className={`w-full h-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 transition-opacity duration-300 z-10 ${isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                      {/* Left: Info */}
+                      <div className="md:col-span-7 flex flex-col justify-between h-full min-w-0">
+                        <div className="flex flex-col gap-4">
+                          {/* Counter + Title Header */}
+                          <div className="flex flex-col gap-1">
+                            <span className="font-mono text-[11px] md:text-xs text-white/50 font-bold tracking-widest uppercase">
+                              {String(index + 1).padStart(2, '0')} / {String(projectsData.length).padStart(2, '0')}
+                            </span>
+                            <h3 className="font-clash-semibold text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white uppercase">
+                              {project.title}
+                            </h3>
+                          </div>
+
+                          {/* Stack Label */}
+                          <span className="font-mono text-[11px] md:text-xs text-white/40 tracking-[0.15em] uppercase">
+                            {project.stack}
                           </span>
-                          <h3 className="font-clash-semibold text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white uppercase">
-                            {project.title}
-                          </h3>
+
+                          {/* Technology Pills */}
+                          <div className="flex flex-wrap gap-2">
+                            {project.tags.map((tag, tIdx) => (
+                              <span
+                                key={tIdx}
+                                className="font-mono text-[10px] md:text-[11px] uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 text-white/80 border border-white/10 backdrop-blur-sm"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
                         </div>
 
-                        {/* Stack Label */}
-                        <span className="font-mono text-[11px] md:text-xs text-white/40 tracking-[0.15em] uppercase">
-                          {project.stack}
-                        </span>
+                        {/* Bottom Row: Description + Links */}
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mt-auto">
+                          <p className="font-sans text-xs md:text-sm leading-relaxed text-white/60 max-w-md">
+                            {project.description}
+                          </p>
 
-                        {/* Technology Pills */}
-                        <div className="flex flex-wrap gap-2">
-                          {project.tags.map((tag, tIdx) => (
-                            <span
-                              key={tIdx}
-                              className="font-mono text-[10px] md:text-[11px] uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 text-white/80 border border-white/10 backdrop-blur-sm"
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                          {/* Action Links */}
+                          <div className="flex items-center gap-3 flex-shrink-0">
+                            <a href={project.github} className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-target" aria-label="GitHub Repository">
+                              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                                <path d="M9 18c-4.51 2-5-2-7-2" />
+                              </svg>
+                            </a>
+                            <a href={project.link} className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-target" aria-label="Live Demo">
+                              <ExternalLink className="w-4 h-4 text-white" />
+                            </a>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Bottom Row: Description + Links */}
-                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mt-auto">
-                        <p className="font-sans text-xs md:text-sm leading-relaxed text-white/60 max-w-md">
-                          {project.description}
-                        </p>
-
-                        {/* Action Links */}
-                        <div className="flex items-center gap-3 flex-shrink-0">
-                          <a href={project.github} className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-target" aria-label="GitHub Repository">
-                            <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                              <path d="M9 18c-4.51 2-5-2-7-2" />
-                            </svg>
-                          </a>
-                          <a href={project.link} className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-target" aria-label="Live Demo">
-                            <ExternalLink className="w-4 h-4 text-white" />
-                          </a>
-                        </div>
+                      {/* Right: Mock Preview Device */}
+                      <div className="hidden md:flex md:col-span-5 h-[90%] self-center items-center justify-center min-w-0">
+                        {project.image ? (
+                          <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-950/40 group/browser">
+                            {/* Browser top-bar */}
+                            <div className="h-5 w-full bg-white/5 border-b border-white/5 flex items-center px-3 gap-1 flex-shrink-0">
+                              <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                            </div>
+                            {/* Browser content */}
+                            <div className="w-full h-[calc(100%-20px)] overflow-hidden bg-slate-900">
+                              <img 
+                                src={project.image} 
+                                alt={`${project.title} Preview`}
+                                className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700 select-none pointer-events-none"
+                                onError={(e) => {
+                                  const img = e.currentTarget;
+                                  if (img.src !== project.backupImage) {
+                                    img.src = project.backupImage || "";
+                                  }
+                                }}
+                              />
+                            </div>
+                          </div>
+                        ) : (
+                          // Fallback abstract glow layout for non-image systems like Capstone
+                          <div className="relative w-[70%] max-w-[200px] aspect-square rounded-full border border-white/5 bg-white/5 flex items-center justify-center shadow-inner hover:scale-105 transition-transform duration-500">
+                            <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-white/5 to-transparent blur-md" />
+                            <span className="font-clash-bold text-5xl font-bold text-white/20 uppercase tracking-tighter select-none">
+                              {project.title.substring(0, 2)}
+                            </span>
+                            <div className="absolute w-2.5 h-2.5 bg-accent rounded-full animate-ping top-1/4 right-1/4" />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </ScrollStackItem>
