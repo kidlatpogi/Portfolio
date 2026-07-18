@@ -5,6 +5,29 @@ const profileImage = "https://zeusbautista.site/Common/Profile%20Picture.webp";
 const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Profile%20Picture.webp";
 
 export default function Hero() {
+  const [startStrikethrough, setStartStrikethrough] = React.useState(false);
+
+  React.useEffect(() => {
+    const isPreloaderGone = typeof document !== 'undefined' && !document.getElementById('preloader');
+    if (isPreloaderGone) {
+      const timer = setTimeout(() => {
+        setStartStrikethrough(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+
+    const handlePreloaderRemoved = () => {
+      setTimeout(() => {
+        setStartStrikethrough(true);
+      }, 1000);
+    };
+
+    window.addEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
+    return () => {
+      window.removeEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
+    };
+  }, []);
+
   return (
     <section className="min-h-screen w-full flex items-center justify-center px-4 py-12 md:p-12 relative overflow-hidden" id="home">
 
@@ -72,16 +95,15 @@ export default function Hero() {
                 <span>Future</span>
                 <motion.span 
                   initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
+                  animate={{ scaleX: startStrikethrough ? 1 : 0 }}
                   transition={{ 
-                    delay: 1.8, 
                     type: 'spring', 
                     stiffness: 180, 
                     damping: 12, 
                     mass: 0.6 
                   }}
                   style={{ originX: 0 }}
-                  className="absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[5px] lg:h-[6px] xl:h-[7px] 2xl:h-[8px] bg-accent rounded-full pointer-events-none" 
+                  className="absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[5px] lg:h-[6px] xl:h-[7px] 2xl:h-[8px] bg-black rounded-full pointer-events-none" 
                 />
               </span>
               Developer
