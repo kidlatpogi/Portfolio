@@ -9,34 +9,44 @@ const DESKTOP_QUERY = '(min-width: 1024px)';
 
 const projectsData = [
   {
-    title: "AI Automation Platform",
-    description: "An automated system integrating large language models with customized agent workflows to execute repetitive tasks and optimize data structures.",
-    tags: ["Python", "FastAPI", "React", "OpenAI"],
-    stack: "[PYTHON] — [REACT]",
+    title: "Bigkas Capstone",
+    description: "A speech rehabilitation and therapy mobile/web application utilizing speech-to-text recognition models to assist children with speech impediments in practicing pronunciation.",
+    tags: ["React", "Node.js", "Web Speech API", "Tailwind CSS"],
+    stack: "[REACT] — [NODE.JS]",
+    bgGradient: "bg-gradient-to-br from-[#4f46e5] via-[#5b21b6] to-[#7c3aed]",
+    accentColor: "from-indigo-500/20 to-purple-600/20",
+    link: "https://bigkas.site/",
+    github: "https://github.com/kidlatpogi/bigkas-capstone"
+  },
+  {
+    title: "L.I.N.N.Y",
+    description: "An offline voice assistant and automation tool utilizing local natural language processing models to perform system-level tasks and tasks automation without internet dependencies.",
+    tags: ["Python", "PyTorch", "Vosk NLP", "Speech Recognition"],
+    stack: "[PYTHON] — [PYTORCH]",
     bgGradient: "bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155]",
-    accentColor: "from-blue-500/20 to-purple-600/20",
-    link: "#",
-    github: "#"
+    accentColor: "from-slate-500/20 to-zinc-600/20",
+    link: "",
+    github: "https://github.com/kidlatpogi/L.I.N.N.Y"
   },
   {
-    title: "E-Commerce Microservices",
-    description: "A highly resilient e-commerce application composed of autonomous microservices using Docker containerization, Kafka event streaming, and PostgreSQL.",
-    tags: ["Node.js", "Docker", "PostgreSQL", "Kafka"],
-    stack: "[NODE.JS] — [DOCKER]",
-    bgGradient: "bg-gradient-to-br from-[#1a1a2e] via-[#16213e] to-[#0f3460]",
-    accentColor: "from-emerald-500/20 to-cyan-600/20",
-    link: "#",
-    github: "#"
-  },
-  {
-    title: "High-Fidelity Portfolio",
-    description: "Personal responsive portfolio built using React, Astro, and Tailwind CSS. Implements smooth Lenis scroll and customized scroll reveal animations.",
-    tags: ["Astro", "React", "Tailwind CSS", "Framer Motion"],
-    stack: "[REACT] — [ASTRO]",
-    bgGradient: "bg-gradient-to-br from-[#C44900] via-[#E85D04] to-[#dc2626]",
+    title: "My-PC InfoSec E-Commerce",
+    description: "A secure e-commerce application designed with robust protection inputs against SQL injections, XSS attacks, and CSRF attempts, managing hardware transactions safely.",
+    tags: ["React", "Express", "Node.js", "MongoDB", "JWT Security"],
+    stack: "[REACT] — [EXPRESS]",
+    bgGradient: "bg-gradient-to-br from-[#C44900] via-[#E85D04] to-[#f97316]",
     accentColor: "from-orange-500/20 to-red-600/20",
-    link: "#",
-    github: "#"
+    link: "https://mypcinfosec.vercel.app/",
+    github: "https://github.com/kidlatpogi/InfoSec-MyPC"
+  },
+  {
+    title: "Gnosis Recall",
+    description: "An active recall and Spaced Repetition flashcard system helping students optimize cognitive retention for academic studies using smart algorithm schedules.",
+    tags: ["Next.js", "Firebase", "React", "OpenAI GPT API"],
+    stack: "[NEXT.JS] — [FIREBASE]",
+    bgGradient: "bg-gradient-to-br from-[#0b0f19] via-[#101726] to-[#1d4ed8]",
+    accentColor: "from-blue-500/20 to-indigo-600/20",
+    link: "https://gnosis-study.vercel.app/",
+    github: "https://github.com/kidlatpogi/Gnosis"
   }
 ];
 
