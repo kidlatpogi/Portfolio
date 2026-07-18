@@ -398,22 +398,29 @@ export default function Certifications() {
     <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 md:py-0 z-30 flex flex-col">
       <style>{`
         #certifications {
-          --cert-card-width: 420px;
+          --cert-card-width: 340px;
         }
         @media (min-width: 768px) and (max-width: 1023px) {
-          #certifications { --cert-card-width: 320px; }
+          #certifications { --cert-card-width: 250px; }
         }
         @media (min-width: 1024px) and (max-width: 1279px) {
-          #certifications { --cert-card-width: 360px; }
+          #certifications { --cert-card-width: 275px; }
+        }
+        @media (min-width: 1280px) and (max-width: 1535px) {
+          #certifications { --cert-card-width: 300px; }
+        }
+        /* Height-based corrections for smaller laptops */
+        @media (min-width: 768px) and (max-height: 800px) {
+          #certifications { --cert-card-width: 240px; }
         }
         @media (min-width: 1024px) and (max-height: 800px) {
-          #certifications { --cert-card-width: 290px; }
+          #certifications { --cert-card-width: 250px; }
         }
         @media (min-width: 1280px) and (max-height: 800px) {
-          #certifications { --cert-card-width: 330px; }
+          #certifications { --cert-card-width: 270px; }
         }
         @media (min-width: 1536px) and (max-height: 900px) {
-          #certifications { --cert-card-width: 380px; }
+          #certifications { --cert-card-width: 300px; }
         }
 
         #certifications,
@@ -440,12 +447,12 @@ export default function Certifications() {
       </div>
 
       {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
-      <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16 flex-shrink-0">
-          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
+      <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 md:py-6 z-30">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16 md:mb-8 flex-shrink-0">
+          <span className="font-array-semibold text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-1.5">
             Milestones & Credentials
           </span>
-          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[4rem] 2xl:text-[4.5rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
+          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-5xl lg:text-[2.75rem] xl:text-[3.25rem] 2xl:text-[3.75rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
             Certifications
           </h2>
         </div>
@@ -505,7 +512,7 @@ export default function Certifications() {
         </div>
 
         {/* Scroll rows - Desktop */}
-        <div className="hidden md:flex flex-col gap-10 w-full overflow-hidden">
+        <div className="hidden md:flex flex-col gap-6 w-full overflow-hidden">
           {/* Row 1 - scrolling left */}
           <div
             ref={row1Ref}
@@ -515,9 +522,9 @@ export default function Certifications() {
               <div
                 key={`desktop-row1-${cert.title}`}
                 onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-                className="cert-grid-item w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer max-md:h-full"
+                className="cert-grid-item w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer"
               >
-                <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-4 bg-white flex items-center justify-center">
+                <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-3 bg-white flex items-center justify-center">
                   {cert.image ? (
                     <CredentialImage
                       src={cert.image}
@@ -534,15 +541,15 @@ export default function Certifications() {
                 </div>
 
                 <div className="flex justify-between items-center gap-3 mb-1.5 pt-1">
-                  <span style={{ color: cert.color }} className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
+                  <span style={{ color: cert.color }} className="font-mono text-[9px] md:text-[10px] font-bold uppercase tracking-wider truncate">
                     {cert.issuer}
                   </span>
-                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase shrink-0">
+                  <span className="font-mono text-[8px] md:text-[9px] text-slate-500 font-bold bg-slate-100/80 px-2 py-0.5 rounded-full uppercase shrink-0">
                     {cert.date}
                   </span>
                 </div>
 
-                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left min-h-[40px] md:min-h-[48px] mb-4">
+                <h3 className="font-sans text-xs md:text-[13px] lg:text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left md:min-h-0 md:max-h-[36px] overflow-hidden line-clamp-2 md:mb-1">
                   {cert.title}
                 </h3>
 
@@ -552,7 +559,7 @@ export default function Certifications() {
                   rel="noopener noreferrer"
                   onClick={(event) => event.stopPropagation()}
                   aria-label={`${cert.actionLabel || 'Verify Credential'} for ${cert.title}`}
-                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                  className="mt-auto w-full md:hidden items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
                 >
                   <span>{cert.actionLabel || "Verify Credential"}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -570,9 +577,9 @@ export default function Certifications() {
               <div
                 key={`desktop-row2-${cert.title}`}
                 onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-                className="cert-grid-item w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-5 cursor-pointer max-md:h-full"
+                className="cert-grid-item w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer"
               >
-                <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-4 bg-white flex items-center justify-center">
+                <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-3 bg-white flex items-center justify-center">
                   {cert.image ? (
                     <CredentialImage
                       src={cert.image}
@@ -589,15 +596,15 @@ export default function Certifications() {
                 </div>
 
                 <div className="flex justify-between items-center gap-3 mb-1.5 pt-1">
-                  <span style={{ color: cert.color }} className="font-mono text-[10px] md:text-xs font-bold uppercase tracking-wider truncate">
+                  <span style={{ color: cert.color }} className="font-mono text-[9px] md:text-[10px] font-bold uppercase tracking-wider truncate">
                     {cert.issuer}
                   </span>
-                  <span className="font-mono text-[9px] md:text-[10px] text-slate-500 font-bold bg-slate-100/80 px-2.5 py-1 rounded-full uppercase shrink-0">
+                  <span className="font-mono text-[8px] md:text-[9px] text-slate-500 font-bold bg-slate-100/80 px-2 py-0.5 rounded-full uppercase shrink-0">
                     {cert.date}
                   </span>
                 </div>
 
-                <h3 className="font-sans text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left min-h-[40px] md:min-h-[48px] mb-4">
+                <h3 className="font-sans text-xs md:text-[13px] lg:text-sm font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors duration-300 text-left md:min-h-0 md:max-h-[36px] overflow-hidden line-clamp-2 md:mb-1">
                   {cert.title}
                 </h3>
 
@@ -607,7 +614,7 @@ export default function Certifications() {
                   rel="noopener noreferrer"
                   onClick={(event) => event.stopPropagation()}
                   aria-label={`${cert.actionLabel || 'Verify Credential'} for ${cert.title}`}
-                  className="mt-auto w-full flex items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
+                  className="mt-auto w-full md:hidden items-center justify-center gap-1.5 py-2 px-3 border border-slate-200 hover:border-accent bg-white/50 hover:bg-accent hover:text-white rounded-xl text-xs font-semibold text-slate-600 transition-all duration-300 z-10"
                 >
                   <span>{cert.actionLabel || "Verify Credential"}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
