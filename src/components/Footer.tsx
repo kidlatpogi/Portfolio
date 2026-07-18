@@ -82,13 +82,13 @@ export default function Footer() {
           </a>
         </div>
 
-        {/* Massive Watermark display text */}
-        <div className="w-full mt-12 md:mt-16 overflow-hidden select-none pointer-events-none flex justify-center">
-          <h3 className="font-clash-semibold text-[9.5vw] xl:text-[160px] 2xl:text-[200px] font-black text-black/[0.06] leading-none tracking-tighter text-center uppercase whitespace-nowrap">
-            GETINTOUCH
-          </h3>
-        </div>
+      </div>
 
+      {/* Massive Watermark display text */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden select-none pointer-events-none flex justify-center z-0">
+        <h3 className="font-clash-semibold text-[15vw] xl:text-[180px] 2xl:text-[220px] font-black text-black/[0.04] leading-none tracking-tighter text-center uppercase whitespace-nowrap translate-y-6">
+          GETINTOUCH
+        </h3>
       </div>
     </footer>
   );

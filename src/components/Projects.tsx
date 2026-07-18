@@ -283,6 +283,7 @@ export default function Projects() {
             >
               {projectsData.map((project, index) => {
                 const isActive = activeProjectIndex === index;
+                const isVisible = index >= activeProjectIndex;
 
                 return (
                   <ScrollStackItem
@@ -293,7 +294,7 @@ export default function Projects() {
                     {/* Decorative gradient overlay */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${project.accentColor} pointer-events-none rounded-[40px]`} />
 
-                     <div className={`w-full h-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 transition-opacity duration-300 z-10 ${isActive ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                     <div className={`w-full h-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 transition-opacity duration-300 z-10 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                       {/* Left: Info */}
                       <div className="md:col-span-7 flex flex-col justify-between h-full min-w-0">
                         <div className="flex flex-col gap-4">
