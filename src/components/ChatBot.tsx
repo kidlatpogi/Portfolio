@@ -2,16 +2,25 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bot, Sparkles } from 'lucide-react';
 
-// Helper to detect inappropriate language, curse words, and keyboard mash spam
+// Helper to detect inappropriate language, curse words, slurs, dating sites, and porn sites
 const containsInappropriateLanguage = (text: string): boolean => {
   const badWords = [
-    // English
+    // English curses & slurs
     'fuck', 'shit', 'asshole', 'bitch', 'cunt', 'dick', 'pussy', 'bastard', 'slut', 'whore', 'crap',
-    // Filipino
-    'putangina', 'tangina', 'gago', 'puke', 'tite', 'kupal', 'bobo', 'tarantado', 'kantot', 'ulol', 'pota', 'puta', 'iyot'
+    'nigger', 'nigga', 'retard', 'faggot', 'dyke', 'kike', 'chink', 'spic', 'tranny',
+    // Filipino curses & slurs
+    'putangina', 'tangina', 'gago', 'puke', 'tite', 'kupal', 'bobo', 'tarantado', 'kantot', 'ulol',
+    'pota', 'puta', 'iyot', 'iyotin', 'bilat', 'bayag', 'pepe', 'dede', 'salsal', 'jakol', 'burat', 'pakshet',
+    // Adult / Porn Sites & Terms (American & Filipino)
+    'pornhub', 'xvideos', 'xnxx', 'spankbang', 'redtube', 'youporn', 'chaturbate', 'onlyfans', 'brazzers', 
+    'xhamster', 'hentai', 'doujin', 'camfour', 'livejasmin', 'stripchat', 'bongacams', 'camsoda',
+    'vivamax', 'phalter', 'alter-ph', 'alterph', 'leak', 'leaks', 'sex', 'xxx', 'porn', 'nude', 'nudes', 
+    'nudity', 'erotic', 'milf', 'anal', 'blowjob', 'handjob', 'orgasm', 'cum', 'ejaculation',
+    // Dating apps
+    'tinder', 'grindr', 'bumble', 'okcupid', 'hinge', 'badoo'
   ];
   
-  const lowerText = text.toLowerCase();
+  const lowerText = text.toLowerCase().trim();
   
   // 1. Direct word match
   const hasBadWord = badWords.some(word => {
@@ -103,7 +112,7 @@ export const ChatBot: React.FC = () => {
         }
       ]);
       setInputValue('');
-      setCooldownRemaining(10); // Start 10 seconds cooldown
+      setCooldownRemaining(15); // Start 15 seconds cooldown
       return;
     }
 
@@ -118,7 +127,7 @@ export const ChatBot: React.FC = () => {
     setMessages(updatedMessages);
     setIsTyping(true);
     setInputValue('');
-    setCooldownRemaining(10); // Start 10 seconds cooldown
+    setCooldownRemaining(15); // Start 15 seconds cooldown
 
     try {
       const response = await fetch('/api/chat', {
