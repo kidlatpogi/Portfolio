@@ -2,6 +2,35 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bot, Sparkles } from 'lucide-react';
 
+// Helper to detect inappropriate language, curse words, and keyboard mash spam
+const containsInappropriateLanguage = (text: string): boolean => {
+  const badWords = [
+    // English
+    'fuck', 'shit', 'asshole', 'bitch', 'cunt', 'dick', 'pussy', 'bastard', 'slut', 'whore', 'crap',
+    // Filipino
+    'putangina', 'tangina', 'gago', 'puke', 'tite', 'kupal', 'bobo', 'tarantado', 'kantot', 'ulol', 'pota', 'puta', 'iyot'
+  ];
+  
+  const lowerText = text.toLowerCase();
+  
+  // 1. Direct word match
+  const hasBadWord = badWords.some(word => {
+    const regex = new RegExp(`\\b${word}\\b|${word}`, 'i');
+    return regex.test(lowerText);
+  });
+  if (hasBadWord) return true;
+
+  // 2. Keyboard mash check
+  const words = lowerText.split(/\s+/);
+  const hasMash = words.some(w => {
+    if (w.length > 7 && !/[aeiouy]/i.test(w) && /^[a-z0-9]+$/i.test(w)) return true;
+    return false;
+  });
+  if (hasMash) return true;
+
+  return false;
+};
+
 interface Message {
   id: string;
   sender: 'bot' | 'user';
@@ -15,7 +44,17 @@ export const ChatBot: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [hasNewNotification, setHasNewNotification] = useState(true);
   const [inputValue, setInputValue] = useState('');
+  const [cooldownRemaining, setCooldownRemaining] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  // Cooldown countdown timer
+  useEffect(() => {
+    if (cooldownRemaining <= 0) return;
+    const timer = setTimeout(() => {
+      setCooldownRemaining(prev => prev - 1);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [cooldownRemaining]);
 
   // Initialize with greeting messages
   useEffect(() => {
@@ -41,12 +80,37 @@ export const ChatBot: React.FC = () => {
   }, [messages, isTyping]);
 
   const handleSend = async (textToSend: string) => {
-    if (!textToSend.trim() || isTyping) return;
+    if (!textToSend.trim() || isTyping || cooldownRemaining > 0) return;
+
+    const cleanText = textToSend.trim();
+
+    // Check for inappropriate words/spam
+    if (containsInappropriateLanguage(cleanText)) {
+      const userMsg: Message = {
+        id: `user-${Date.now()}`,
+        sender: 'user',
+        text: cleanText,
+        timestamp: new Date()
+      };
+      setMessages(prev => [
+        ...prev,
+        userMsg,
+        {
+          id: `bot-warn-${Date.now()}`,
+          sender: 'bot',
+          text: "I cannot process messages containing inappropriate language, curse words, or spam. Please keep the conversation professional.",
+          timestamp: new Date()
+        }
+      ]);
+      setInputValue('');
+      setCooldownRemaining(10); // Start 10 seconds cooldown
+      return;
+    }
 
     const userMsg: Message = {
       id: `user-${Date.now()}`,
       sender: 'user',
-      text: textToSend,
+      text: cleanText,
       timestamp: new Date()
     };
 
@@ -54,6 +118,7 @@ export const ChatBot: React.FC = () => {
     setMessages(updatedMessages);
     setIsTyping(true);
     setInputValue('');
+    setCooldownRemaining(10); // Start 10 seconds cooldown
 
     try {
       const response = await fetch('/api/chat', {
@@ -219,13 +284,13 @@ export const ChatBot: React.FC = () => {
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask me something about Zeus..."
-                disabled={isTyping}
+                placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Ask me something about Zeus..."}
+                disabled={isTyping || cooldownRemaining > 0}
                 className="flex-grow px-3 py-2 text-xs rounded-xl border border-[#334155]/20 bg-white text-black focus:outline-none focus:border-accent disabled:opacity-60 transition-all font-sans"
               />
               <button
                 type="submit"
-                disabled={isTyping || !inputValue.trim()}
+                disabled={isTyping || !inputValue.trim() || cooldownRemaining > 0}
                 className="p-2 rounded-xl bg-black text-[#FAFAFA] hover:bg-accent disabled:opacity-40 disabled:hover:bg-black transition-colors cursor-pointer flex items-center justify-center border-none outline-none"
                 aria-label="Send message"
               >
