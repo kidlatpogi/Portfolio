@@ -10,7 +10,12 @@ const DESKTOP_QUERY = '(min-width: 1024px)';
 const projectsData = [
   {
     title: "Bigkas Capstone",
-    description: "An AI-powered public speaking simulator and analysis platform. It leverages Librosa for advanced audio analysis and MediaPipe for real-time facial and posture tracking, providing speakers with automated metrics to refine and elevate their presentation skills.",
+    platform: "Web App",
+    year: "2025",
+    description: [
+      "Built an AI-powered public speaking simulator that analyzes user performance to enhance confidence and delivery",
+      "Integrated Librosa for audio frequency analysis and MediaPipe to track facial pacing and expressions in real-time"
+    ],
     tags: ["React JS", "Python", "MediaPipe", "Librosa", "Supabase"],
     stack: "[REACT JS] — [PYTHON]",
     bgGradient: "bg-[#000000]",
@@ -22,7 +27,12 @@ const projectsData = [
   },
   {
     title: "L.I.N.N.Y",
-    description: "Inspired by J.A.R.V.I.S., L.I.N.N.Y. (Loyal Intelligent Neural Network for You) is a personal AI assistant that provides real-time verbal responses, manages daily tasks like checking the time, weather, and schedule, and seamlessly connects to Tapo smart devices via Kasa for efficient home automation.",
+    platform: "AI Assistant",
+    year: "2025",
+    description: [
+      "Engineered a voice-activated neural assistant integrating Python and Generative AI for real-time task management",
+      "Seamlessly connected to Tapo smart devices via Kasa integration to automate and manage home electronics"
+    ],
     tags: ["Python"],
     stack: "[PYTHON]",
     bgGradient: "bg-[#0D0D0D]",
@@ -34,7 +44,12 @@ const projectsData = [
   },
   {
     title: "SafeLink Mobile",
-    description: "SafeLink is a React Native/Expo app for family safety with emergency broadcasts and evacuation info using Firebase and OpenStreetMap.",
+    platform: "Mobile App",
+    year: "2025",
+    description: [
+      "Developed a cross-platform React Native/Expo disaster preparedness app enabling family emergency notifications",
+      "Integrated Firebase database and OpenStreetMap tracking for real-time local updates and evacuation routing"
+    ],
     tags: ["React Native", "Firebase"],
     stack: "[REACT NATIVE] — [FIREBASE]",
     bgGradient: "bg-[#1A1A1A]",
@@ -46,7 +61,12 @@ const projectsData = [
   },
   {
     title: "MyPC E-Commerce Shop",
-    description: "MyPC is a web-based e-commerce platform developed for the Information Assurance and Security course. This emulates a real-world online store where users can browse, select, and purchase computer components and accessories.",
+    platform: "Web App",
+    year: "2024",
+    description: [
+      "Developed a secure e-commerce component shop using PHP, Tailwind CSS, and MySQL for component tracking",
+      "Implemented core web security principles including encrypted user authentication and robust session management"
+    ],
     tags: ["PHP", "MySQL"],
     stack: "[PHP] — [MYSQL]",
     bgGradient: "bg-[#262626]",
@@ -58,7 +78,12 @@ const projectsData = [
   },
   {
     title: "Calendar Widget",
-    description: "A sleek and lightweight Windows Calendar Widget seamlessly connected to Google Calendar — without relying on any external databases or APIs.",
+    platform: "Desktop App",
+    year: "2024",
+    description: [
+      "Built a lightweight Windows calendar widget using Electron and JavaScript to sync Google Calendar events",
+      "Designed offline data storage to load schedules instantly and operate without active internet connection"
+    ],
     tags: ["JavaScript", "Electron"],
     stack: "[ELECTRON] — [JS]",
     bgGradient: "bg-[#333333]",
@@ -323,14 +348,22 @@ export default function Projects() {
                       <div className="md:col-span-6 flex flex-col justify-center h-full min-w-0">
                         <div className="flex flex-col gap-6">
                           {/* Counter + Title Header */}
-                          <div className="flex flex-col gap-1">
+                          <div className="flex flex-col gap-1.5">
                             <span className="font-mono text-[11px] md:text-xs text-white/50 font-bold tracking-widest uppercase">
                               {String(index + 1).padStart(2, '0')} / {String(projectsData.length).padStart(2, '0')}
                             </span>
-                            <h3 className="font-clash-semibold text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white uppercase">
-                              {project.title}
-                            </h3>
-                            <span className="font-mono text-[11px] md:text-xs text-white/40 tracking-[0.15em] uppercase">
+                            <div className="flex flex-wrap items-baseline justify-between gap-x-4 w-full">
+                              <h3 className="font-clash-semibold text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white uppercase leading-none">
+                                {project.title}{" "}
+                                <span className="font-sans text-xs md:text-sm font-normal text-white/60 normal-case">
+                                  ({project.platform})
+                                </span>
+                              </h3>
+                              <span className="font-mono text-sm md:text-base text-white/70 font-bold">
+                                {project.year}
+                              </span>
+                            </div>
+                            <span className="font-mono text-[11px] md:text-xs text-white/40 tracking-[0.15em] uppercase mt-1">
                               {project.stack}
                             </span>
                           </div>
@@ -348,9 +381,14 @@ export default function Projects() {
                           </div>
 
                           {/* Description */}
-                          <p className="font-sans text-xs md:text-sm leading-relaxed text-white/70 max-w-md">
-                            {project.description}
-                          </p>
+                          <ul className="list-none flex flex-col gap-2.5 max-w-md">
+                            {project.description.map((bullet, bIdx) => (
+                              <li key={bIdx} className="font-sans text-xs md:text-sm leading-relaxed text-white/70 flex items-start gap-2.5 select-text">
+                                <span className="text-accent flex-shrink-0 mt-0.5 select-none text-[10px]">●</span>
+                                <span>{bullet}</span>
+                              </li>
+                            ))}
+                          </ul>
 
                           {/* Action Links */}
                           <div className="flex items-center gap-3">

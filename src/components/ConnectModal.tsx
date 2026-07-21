@@ -281,9 +281,13 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                   {/* Social Links */}
                   <div className="mt-8 pt-6 border-t border-zinc-200/60 flex items-center justify-center gap-6">
                     <a
-                      href="/resume.pdf"
+                      href="/Zeus_Angelo_Bautista_Resume.pdf"
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.dispatchEvent(new CustomEvent('openResumePreview'));
+                      }}
                       className="flex items-center gap-2 text-[#334155] hover:text-accent font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer group"
                     >
                       <svg className="w-4 h-4 text-[#334155] group-hover:text-accent transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
