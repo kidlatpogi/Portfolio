@@ -129,10 +129,17 @@ const {
 				let isLoaded = false;
 				let isMinTimeElapsed = false;
 
+				// Remove preloading class as soon as page resources are ready so layout/hydration settles in the background
 				window.addEventListener('load', () => {
 					isLoaded = true;
+					document.documentElement.classList.remove('preloading');
 					checkRemoval();
 				});
+
+				// Fallback: Force start rendering/hydration after 500ms even if heavy images are slow to trigger window load
+				setTimeout(() => {
+					document.documentElement.classList.remove('preloading');
+				}, 500);
 
 				setTimeout(() => {
 					isMinTimeElapsed = true;
@@ -145,7 +152,6 @@ const {
 						if (textContainer) {
 							textContainer.style.transition = 'opacity 0.4s ease';
 							textContainer.style.opacity = '0';
-							document.documentElement.classList.remove('preloading');
 							
 							// Dispatch finish event right when text starts fading so background sweep overlays nicely
 							window.dispatchEvent(new CustomEvent('preloaderFinished'));
