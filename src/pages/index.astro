@@ -14,6 +14,7 @@ import ChatBot from '../components/ChatBot.tsx';
 import SocialsSidebar from '../components/SocialsSidebar.tsx';
 import ParallaxTextSection from '../components/ParallaxTextSection.tsx';
 import Footer from '../components/Footer.tsx';
+import GithubHeatmap from '../components/GithubHeatmap.tsx';
 
 
 
@@ -68,6 +69,8 @@ const navItems = [
 		<div class="h-12" />
 		<Projects client:visible />
 		<Designs client:load />
+		<div class="h-12" />
+		<GithubHeatmap client:visible />
 		<div class="h-12" />
 		<Certifications client:visible />
 	</main>
