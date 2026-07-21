@@ -11,6 +11,41 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: "Invalid messages array" }), { status: 400 });
     }
 
+    // Server-side check for bad words/spam from private env binding
+    const lastMessage = messages[messages.length - 1]?.text || "";
+    const badWordsString = (env as any).CHAT_BAD_WORDS || "";
+    const badWords = badWordsString ? badWordsString.split(',').map((w: string) => w.trim().toLowerCase()) : [];
+
+    const containsInappropriateLanguage = (text: string): boolean => {
+      const lowerText = text.toLowerCase().trim();
+      if (!lowerText) return false;
+
+      // 1. Direct word match
+      const hasBadWord = badWords.some((word: string) => {
+        if (!word) return false;
+        const regex = new RegExp(`\\b${word}\\b|${word}`, 'i');
+        return regex.test(lowerText);
+      });
+      if (hasBadWord) return true;
+
+      // 2. Keyboard mash check
+      const words = lowerText.split(/\s+/);
+      const hasMash = words.some((w: string) => {
+        if (w.length > 7 && !/[aeiouy]/i.test(w) && /^[a-z0-9]+$/i.test(w)) return true;
+        return false;
+      });
+      if (hasMash) return true;
+
+      return false;
+    };
+
+    if (containsInappropriateLanguage(lastMessage)) {
+      return new Response(JSON.stringify({ error: "Inappropriate language blocked", isBlocked: true }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     // Get the Cloudflare AI binding from cloudflare:workers env
     const ai = (env as any).AI;
 
