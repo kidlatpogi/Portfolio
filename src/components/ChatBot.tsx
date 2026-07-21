@@ -148,7 +148,7 @@ export const ChatBot: React.FC = () => {
             </div>
 
             {/* Messages Container */}
-            <div className="h-[280px] overflow-y-auto overscroll-contain p-4 flex flex-col gap-3 bg-[#FAFAFA]">
+            <div data-lenis-prevent className="h-[280px] overflow-y-auto overscroll-contain p-4 flex flex-col gap-3 bg-[#FAFAFA]">
               {messages.map((msg) => (
                 <div
                   key={msg.id}
