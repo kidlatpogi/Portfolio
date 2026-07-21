@@ -11,21 +11,21 @@ const projectsData = [
   {
     title: "Bigkas Capstone",
     description: "A capstone prototype showcasing a Flutter-based public speaking assistant. It utilizes FastAPI and Whisper AI to analyze vocal confidence, fluency, and pacing, providing real-time data-driven feedback for Filipino speakers.",
-    tags: ["React", "Node.js", "Web Speech API", "Tailwind CSS"],
-    stack: "[REACT] — [NODE.JS]",
+    tags: ["Flutter", "FastAPI", "OpenAI Whisper", "Acoustic Analysis", "Supabase"],
+    stack: "[FLUTTER] — [FASTAPI]",
     bgGradient: "bg-[#000000]",
     accentColor: "from-white/5 to-transparent",
-    link: "https://bigkas.site/",
-    github: "https://github.com/kidlatpogi/bigkas-capstone",
+    link: "https://flutter-bigkas.vercel.app",
+    github: "https://github.com/kidlatpogi/flutter-project-2526.git",
     image: "",
     backupImage: ""
   },
   {
     title: "L.I.N.N.Y",
     description: "Inspired by J.A.R.V.I.S., L.I.N.N.Y. (Loyal Intelligent Neural Network for You) is a personal AI assistant that provides real-time verbal responses, manages daily tasks like checking the time, weather, and schedule, and seamlessly connects to Tapo smart devices via Kasa for efficient home automation.",
-    tags: ["Python", "PyTorch", "Vosk NLP", "Speech Recognition"],
-    stack: "[PYTHON] — [PYTORCH]",
-    bgGradient: "bg-[#1A1A1A]",
+    tags: ["Python"],
+    stack: "[PYTHON]",
+    bgGradient: "bg-[#0D0D0D]",
     accentColor: "from-white/5 to-transparent",
     link: "",
     github: "https://github.com/kidlatpogi/L.I.N.N.Y",
@@ -33,16 +33,40 @@ const projectsData = [
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/Linny-1200.webp"
   },
   {
-    title: "My-PC InfoSec E-Commerce",
-    description: "MyPC is a web-based e-commerce platform developed for the Information Assurance and Security course. This emulates a real-world online store where users can browse, select, and purchase computer components and accessories.",
-    tags: ["React", "Express", "Node.js", "MongoDB", "JWT Security"],
-    stack: "[REACT] — [EXPRESS]",
-    bgGradient: "bg-[#333333]",
+    title: "SafeLink Mobile",
+    description: "SafeLink is a React Native/Expo app for family safety with emergency broadcasts and evacuation info using Firebase and OpenStreetMap.",
+    tags: ["React Native", "Firebase"],
+    stack: "[REACT NATIVE] — [FIREBASE]",
+    bgGradient: "bg-[#1A1A1A]",
     accentColor: "from-white/5 to-transparent",
-    link: "https://mypcinfosec.vercel.app/",
-    github: "https://github.com/kidlatpogi/InfoSec-MyPC",
+    link: "",
+    github: "https://github.com/kidlatpogi/SafeLink",
+    image: "https://zeusbautista.site/Project%20Overview/SafeLink-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/SafeLink-1200.webp"
+  },
+  {
+    title: "MyPC E-Commerce Shop",
+    description: "MyPC is a web-based e-commerce platform developed for the Information Assurance and Security course. This emulates a real-world online store where users can browse, select, and purchase computer components and accessories.",
+    tags: ["PHP", "MySQL"],
+    stack: "[PHP] — [MYSQL]",
+    bgGradient: "bg-[#262626]",
+    accentColor: "from-white/5 to-transparent",
+    link: "https://mypcinfosec.vercel.app",
+    github: "https://github.com/kidlatpogi/InfoSec-MyPC.git",
     image: "https://zeusbautista.site/Project%20Overview/MyPC-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/MyPC-1200.webp"
+  },
+  {
+    title: "Calendar Widget",
+    description: "A sleek and lightweight Windows Calendar Widget seamlessly connected to Google Calendar — without relying on any external databases or APIs.",
+    tags: ["JavaScript", "Electron"],
+    stack: "[ELECTRON] — [JS]",
+    bgGradient: "bg-[#333333]",
+    accentColor: "from-white/5 to-transparent",
+    link: "https://github.com/kidlatpogi/Calendar-Widget/releases/latest",
+    github: "https://github.com/kidlatpogi/Calendar-Widget",
+    image: "https://zeusbautista.site/Project%20Overview/CalendarWidget-1200.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/CalendarWidget-1200.webp"
   }
 ];
 
