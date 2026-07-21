@@ -14,6 +14,7 @@ export const ChatBot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [hasNewNotification, setHasNewNotification] = useState(true);
+  const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // Initialize with greeting messages
@@ -28,7 +29,7 @@ export const ChatBot: React.FC = () => {
       {
         id: 'greet-2',
         sender: 'bot',
-        text: "Click any of the topics below to learn more about Zeus's experience, services, and FAQ!",
+        text: "Feel free to type any custom question or click the suggestion topics below!",
         timestamp: new Date()
       }
     ]);
@@ -39,48 +40,78 @@ export const ChatBot: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  const handleTopicClick = (topic: string, queryText: string, botResponse: string) => {
-    if (isTyping) return;
+  const handleSend = async (textToSend: string) => {
+    if (!textToSend.trim() || isTyping) return;
 
-    // Add user message
     const userMsg: Message = {
       id: `user-${Date.now()}`,
       sender: 'user',
-      text: queryText,
+      text: textToSend,
       timestamp: new Date()
     };
 
-    setMessages((prev) => [...prev, userMsg]);
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     setIsTyping(true);
+    setInputValue('');
 
-    // Simulate typing delay
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          messages: updatedMessages.map(m => ({
+            sender: m.sender,
+            text: m.text
+          }))
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.response) {
+        setMessages(prev => [
+          ...prev,
+          {
+            id: `bot-${Date.now()}`,
+            sender: 'bot',
+            text: data.response,
+            timestamp: new Date()
+          }
+        ]);
+      } else {
+        throw new Error(data.error || 'Failed to generate response');
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      setMessages(prev => [
+        ...prev,
+        {
+          id: `bot-err-${Date.now()}`,
+          sender: 'bot',
+          text: "I'm having trouble connecting to my server right now. Feel free to contact Zeus directly at bautistaangelozeus17@gmail.com!",
+          timestamp: new Date()
+        }
+      ]);
+    } finally {
       setIsTyping(false);
-      const botMsg: Message = {
-        id: `bot-${Date.now()}`,
-        sender: 'bot',
-        text: botResponse,
-        timestamp: new Date()
-      };
-      setMessages((prev) => [...prev, botMsg]);
-    }, 1200);
+    }
   };
 
   const topics = [
     {
       label: 'About Zeus',
-      query: 'Tell me about Zeus',
-      response: 'Zeus Angelo is an IT Developer & AI Engineer specializing in high-fidelity digital experiences. He is currently a 4th-year BSIT student focused on building high-performance, animation-rich web and mobile applications.'
+      query: 'Tell me about Zeus'
     },
     {
       label: 'Work Experience',
-      query: 'Tell me about your work experience?',
-      response: 'Yes, I do have work experience. I have worked as a Freelance Web Developer and as a UI/UX Design Intern at Sabiya Cloud Technology.'
+      query: 'Tell me about your work experience'
     },
     {
-      label: 'Tech Stack & Tools',
-      query: 'What technologies do you use?',
-      response: 'The core stack includes Astro, React, TypeScript, Tailwind CSS, Framer Motion, and Cloudflare Pages/R2. This portfolio is built strictly following a brutalist minimalist typography and color design system.'
+      label: 'Tech Stack',
+      query: 'What technologies do you use?'
     }
   ];
 
@@ -157,23 +188,53 @@ export const ChatBot: React.FC = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Quick replies */}
-            <div className="p-4 border-t border-[#334155]/10 bg-[#FAFAFA] flex flex-col gap-2.5">
-              <span className="font-mono text-[9px] font-semibold text-[#334155]/60 uppercase tracking-wider">
-                Select a topic to chat:
+            {/* Quick replies suggestion bar (above input) */}
+            <div className="p-3 border-t border-[#334155]/10 bg-[#FAFAFA] flex flex-col gap-1.5">
+              <span className="font-mono text-[8px] font-semibold text-[#334155]/60 uppercase tracking-wider">
+                Suggested Topics:
               </span>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {topics.map((t, idx) => (
                   <button
                     key={idx}
-                    onClick={() => handleTopicClick(t.label, t.query, t.response)}
-                    className="font-mono text-[10px] font-semibold rounded-full border border-[#334155] px-3 py-1.5 text-[#334155] bg-transparent cursor-pointer transition-colors duration-200 hover:bg-accent hover:text-[#FAFAFA]"
+                    type="button"
+                    onClick={() => handleSend(t.query)}
+                    className="font-mono text-[9px] font-semibold rounded-full border border-[#334155]/30 hover:border-accent px-2.5 py-1 text-slate-700 bg-white hover:bg-orange-50 hover:text-accent cursor-pointer transition-all duration-200"
                   >
                     {t.label}
                   </button>
                 ))}
               </div>
             </div>
+
+            {/* Input form */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSend(inputValue);
+              }}
+              className="p-3 border-t border-[#334155]/10 bg-[#FAFAFA] flex gap-2 items-center"
+            >
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Ask me something about Zeus..."
+                disabled={isTyping}
+                className="flex-grow px-3 py-2 text-xs rounded-xl border border-[#334155]/20 bg-white text-black focus:outline-none focus:border-accent disabled:opacity-60 transition-all font-sans"
+              />
+              <button
+                type="submit"
+                disabled={isTyping || !inputValue.trim()}
+                className="p-2 rounded-xl bg-black text-[#FAFAFA] hover:bg-accent disabled:opacity-40 disabled:hover:bg-black transition-colors cursor-pointer flex items-center justify-center border-none outline-none"
+                aria-label="Send message"
+              >
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <line x1="22" y1="2" x2="11" y2="13" />
+                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                </svg>
+              </button>
+            </form>
           </motion.div>
         )}
       </AnimatePresence>

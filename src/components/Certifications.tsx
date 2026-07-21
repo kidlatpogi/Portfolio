@@ -343,9 +343,9 @@ export default function Certifications() {
         const row1Width = row1Ref.current.scrollWidth;
         const row2Width = row2Ref.current.scrollWidth;
 
-        const scrollAmt1 = row1Width - window.innerWidth + 80;
-        const scrollAmt2 = row2Width - window.innerWidth + 80;
-        const maxScroll = Math.max(scrollAmt1, scrollAmt2, 600);
+        const maxRowWidth = Math.max(row1Width, row2Width);
+        const scrollAmt = maxRowWidth - window.innerWidth + 80;
+        const maxScroll = Math.max(scrollAmt, 600);
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -359,12 +359,12 @@ export default function Certifications() {
         });
 
         tl.to(row1Ref.current, {
-          x: -scrollAmt1,
+          x: -scrollAmt,
           ease: 'none'
         }, 0);
 
         tl.to(row2Ref.current, {
-          x: scrollAmt2,
+          x: scrollAmt,
           ease: 'none'
         }, 0);
       });
