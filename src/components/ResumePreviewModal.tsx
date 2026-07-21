@@ -78,7 +78,7 @@ export default function ResumePreviewModal() {
         <div className="w-full h-[75vh] md:h-[80vh] bg-slate-100 relative overflow-y-auto overscroll-contain flex justify-center py-6 px-4 data-lenis-prevent">
           <div className="max-w-full w-auto shadow-md border border-slate-200/80 rounded-lg overflow-hidden bg-white select-text">
             <img 
-              src="/Zeus_Angelo_Bautista_Resume.png" 
+              src="https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Zeus_Angelo_Bautista_Resume.webp" 
               alt="Zeus Angelo Bautista Resume Preview"
               className="max-w-full h-auto object-contain pointer-events-auto select-text"
               draggable="false"
