@@ -13,8 +13,8 @@ const projectsData = [
     description: "A capstone prototype showcasing a Flutter-based public speaking assistant. It utilizes FastAPI and Whisper AI to analyze vocal confidence, fluency, and pacing, providing real-time data-driven feedback for Filipino speakers.",
     tags: ["React", "Node.js", "Web Speech API", "Tailwind CSS"],
     stack: "[REACT] — [NODE.JS]",
-    bgGradient: "bg-gradient-to-br from-[#4f46e5] via-[#5b21b6] to-[#7c3aed]",
-    accentColor: "from-indigo-500/20 to-purple-600/20",
+    bgGradient: "bg-[#000000]",
+    accentColor: "from-white/5 to-transparent",
     link: "https://bigkas.site/",
     github: "https://github.com/kidlatpogi/bigkas-capstone",
     image: "",
@@ -25,8 +25,8 @@ const projectsData = [
     description: "Inspired by J.A.R.V.I.S., L.I.N.N.Y. (Loyal Intelligent Neural Network for You) is a personal AI assistant that provides real-time verbal responses, manages daily tasks like checking the time, weather, and schedule, and seamlessly connects to Tapo smart devices via Kasa for efficient home automation.",
     tags: ["Python", "PyTorch", "Vosk NLP", "Speech Recognition"],
     stack: "[PYTHON] — [PYTORCH]",
-    bgGradient: "bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155]",
-    accentColor: "from-slate-500/20 to-zinc-600/20",
+    bgGradient: "bg-[#1A1A1A]",
+    accentColor: "from-white/5 to-transparent",
     link: "",
     github: "https://github.com/kidlatpogi/L.I.N.N.Y",
     image: "https://zeusbautista.site/Project%20Overview/Linny-1200.webp",
@@ -37,8 +37,8 @@ const projectsData = [
     description: "MyPC is a web-based e-commerce platform developed for the Information Assurance and Security course. This emulates a real-world online store where users can browse, select, and purchase computer components and accessories.",
     tags: ["React", "Express", "Node.js", "MongoDB", "JWT Security"],
     stack: "[REACT] — [EXPRESS]",
-    bgGradient: "bg-gradient-to-br from-[#C44900] via-[#E85D04] to-[#f97316]",
-    accentColor: "from-orange-500/20 to-red-600/20",
+    bgGradient: "bg-[#333333]",
+    accentColor: "from-white/5 to-transparent",
     link: "https://mypcinfosec.vercel.app/",
     github: "https://github.com/kidlatpogi/InfoSec-MyPC",
     image: "https://zeusbautista.site/Project%20Overview/MyPC-1200.webp",
@@ -296,8 +296,8 @@ export default function Projects() {
 
                      <div className={`w-full h-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 transition-opacity duration-300 z-10 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                       {/* Left: Info */}
-                      <div className="md:col-span-6 flex flex-col justify-between h-full min-w-0">
-                        <div className="flex flex-col gap-4">
+                      <div className="md:col-span-6 flex flex-col justify-center h-full min-w-0">
+                        <div className="flex flex-col gap-6">
                           {/* Counter + Title Header */}
                           <div className="flex flex-col gap-1">
                             <span className="font-mono text-[11px] md:text-xs text-white/50 font-bold tracking-widest uppercase">
@@ -306,12 +306,10 @@ export default function Projects() {
                             <h3 className="font-clash-semibold text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white uppercase">
                               {project.title}
                             </h3>
+                            <span className="font-mono text-[11px] md:text-xs text-white/40 tracking-[0.15em] uppercase">
+                              {project.stack}
+                            </span>
                           </div>
-
-                          {/* Stack Label */}
-                          <span className="font-mono text-[11px] md:text-xs text-white/40 tracking-[0.15em] uppercase">
-                            {project.stack}
-                          </span>
 
                           {/* Technology Pills */}
                           <div className="flex flex-wrap gap-2">
@@ -324,25 +322,27 @@ export default function Projects() {
                               </span>
                             ))}
                           </div>
-                        </div>
 
-                        {/* Bottom Row: Description + Links */}
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mt-auto">
-                          <p className="font-sans text-xs md:text-sm leading-relaxed text-white/60 max-w-md">
+                          {/* Description */}
+                          <p className="font-sans text-xs md:text-sm leading-relaxed text-white/70 max-w-md">
                             {project.description}
                           </p>
 
                           {/* Action Links */}
-                          <div className="flex items-center gap-3 flex-shrink-0">
-                            <a href={project.github} className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-target" aria-label="GitHub Repository">
-                              <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-                                <path d="M9 18c-4.51 2-5-2-7-2" />
-                              </svg>
-                            </a>
-                            <a href={project.link} className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-target" aria-label="Live Demo">
-                              <ExternalLink className="w-4 h-4 text-white" />
-                            </a>
+                          <div className="flex items-center gap-3">
+                            {project.github && (
+                              <a href={project.github} className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-target" aria-label="GitHub Repository">
+                                <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                                  <path d="M9 18c-4.51 2-5-2-7-2" />
+                                </svg>
+                              </a>
+                            )}
+                            {project.link && (
+                              <a href={project.link} className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-target" aria-label="Live Demo">
+                                <ExternalLink className="w-4 h-4 text-white" />
+                              </a>
+                            )}
                           </div>
                         </div>
                       </div>
