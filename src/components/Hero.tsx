@@ -133,7 +133,7 @@ export default function Hero() {
                   Resume
                 </a>
                 <a
-                  href="https://linkedin.com/in/zeusbautista"
+                  href="https://www.linkedin.com/in/zeus-angelo-bautista/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2.5 text-[#334155] hover:text-accent font-mono text-sm md:text-base uppercase tracking-wider transition-colors cursor-pointer group"

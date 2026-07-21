@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 export interface ConnectModalProps {
   isOpen: boolean;
@@ -22,6 +23,11 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
   const [isFocused, setIsFocused] = useState(false);
   const [currentPlaceholderIdx, setCurrentPlaceholderIdx] = useState(0);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // EmailJS states
+  const [isSending, setIsSending] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [honeypot, setHoneypot] = useState('');
 
   // Prevent background scrolling when open
   useEffect(() => {
@@ -66,21 +72,71 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
       setEmail('');
       setProjectDesc('');
       setIsSubmitted(false);
+      setIsSending(false);
+      setErrorMsg('');
+      setHoneypot('');
       setCurrentPlaceholderIdx(0);
     }
   }, [isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !projectDesc) return;
 
-    // Simulate submission (no backend work for now)
-    setIsSubmitted(true);
+    // 1. Honeypot check (anti-bot)
+    if (honeypot !== '') {
+      // Silently discard spam but act like it succeeded to fool the bot
+      setIsSubmitted(true);
+      setTimeout(() => {
+        onClose();
+      }, 2500);
+      return;
+    }
 
-    // Auto-close after 2.5 seconds
-    setTimeout(() => {
-      onClose();
-    }, 2500);
+    // 2. LocalStorage rate-limiting (anti-spam cooldown)
+    const lastSent = localStorage.getItem('last_email_sent_time');
+    const cooldownPeriod = 30 * 60 * 1000; // 30 minutes in milliseconds
+    if (lastSent) {
+      const timePassed = Date.now() - Number(lastSent);
+      if (timePassed < cooldownPeriod) {
+        const minutesLeft = Math.ceil((cooldownPeriod - timePassed) / (60 * 1000));
+        setErrorMsg(`Please wait ${minutesLeft} minute${minutesLeft > 1 ? 's' : ''} before sending another message.`);
+        return;
+      }
+    }
+
+    setIsSending(true);
+    setErrorMsg('');
+
+    try {
+      const templateParams = {
+        name: name,
+        email: email,
+        title: projectDesc,
+      };
+
+      await emailjs.send(
+        import.meta.env.PUBLIC_EMAILJS_SERVICE_ID,
+        import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        import.meta.env.PUBLIC_EMAILJS_PUBLIC_KEY
+      );
+
+      // Save submission time to limit spamming from the same device
+      localStorage.setItem('last_email_sent_time', Date.now().toString());
+
+      setIsSubmitted(true);
+
+      // Auto-close after 2.5 seconds
+      setTimeout(() => {
+        onClose();
+      }, 2500);
+    } catch (error) {
+      console.error('Failed to send email:', error);
+      setErrorMsg('Something went wrong. Please try again or reach out directly.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -139,20 +195,22 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                         <input
                           type="text"
                           required
+                          disabled={isSending}
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           placeholder="Enter your name"
-                          className="w-full px-4 py-3 rounded-xl border border-[#E5E7EB] bg-[#FAFAFA] text-black text-sm placeholder-zinc-400 focus:outline-none focus:border-2 focus:border-accent transition-all font-sans"
+                          className="w-full px-4 py-3 rounded-xl border border-[#E5E7EB] bg-[#FAFAFA] text-black text-sm placeholder-zinc-400 focus:outline-none focus:border-2 focus:border-accent disabled:opacity-60 disabled:cursor-not-allowed transition-all font-sans"
                         />
                       </div>
                       <div className="flex flex-col">
                         <input
                           type="email"
                           required
+                          disabled={isSending}
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="Enter your email"
-                          className="w-full px-4 py-3 rounded-xl border border-[#E5E7EB] bg-[#FAFAFA] text-black text-sm placeholder-zinc-400 focus:outline-none focus:border-2 focus:border-accent transition-all font-sans"
+                          className="w-full px-4 py-3 rounded-xl border border-[#E5E7EB] bg-[#FAFAFA] text-black text-sm placeholder-zinc-400 focus:outline-none focus:border-2 focus:border-accent disabled:opacity-60 disabled:cursor-not-allowed transition-all font-sans"
                         />
                       </div>
                     </div>
@@ -161,11 +219,12 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                     <div className="relative w-full h-36">
                       <textarea
                         required
+                        disabled={isSending}
                         value={projectDesc}
                         onChange={(e) => setProjectDesc(e.target.value)}
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
-                        className="w-full h-full rounded-xl border border-[#E5E7EB] bg-[#FAFAFA] px-4 py-3 text-black text-sm focus:outline-none focus:border-2 focus:border-accent resize-none transition-all font-sans"
+                        className="w-full h-full rounded-xl border border-[#E5E7EB] bg-[#FAFAFA] px-4 py-3 text-black text-sm focus:outline-none focus:border-2 focus:border-accent resize-none disabled:opacity-60 disabled:cursor-not-allowed transition-all font-sans"
                       />
 
                       {/* Animated Placeholder overlay */}
@@ -187,13 +246,35 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                       )}
                     </div>
 
+                    {/* Honeypot field (anti-spam bot trap) */}
+                    <div style={{ display: 'none' }} aria-hidden="true">
+                      <input
+                        type="text"
+                        name="website_feedback_trap"
+                        value={honeypot}
+                        onChange={(e) => setHoneypot(e.target.value)}
+                        tabIndex={-1}
+                        autoComplete="off"
+                      />
+                    </div>
+
+                    {/* Error message */}
+                    {errorMsg && (
+                      <p className="text-red-600 text-xs text-center font-sans mt-1">
+                        {errorMsg}
+                      </p>
+                    )}
+
                     {/* Submit Button */}
                     <button
                       type="submit"
-                      className="mt-4 mx-auto flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-accent text-[#FAFAFA] font-mono font-semibold tracking-wider transition-colors duration-250 cursor-pointer text-sm"
+                      disabled={isSending}
+                      className={`mt-4 mx-auto flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-accent text-[#FAFAFA] font-mono font-semibold tracking-wider transition-colors duration-250 cursor-pointer text-sm ${
+                        isSending ? 'opacity-70 cursor-not-allowed' : ''
+                      }`}
                     >
-                      <span className="w-2.5 h-2.5 bg-[#FAFAFA] rounded-full" />
-                      Submit Inquiry
+                      <span className={`w-2.5 h-2.5 bg-[#FAFAFA] rounded-full ${isSending ? 'animate-ping' : ''}`} />
+                      {isSending ? 'Sending...' : 'Submit Inquiry'}
                     </button>
                   </form>
 
@@ -227,7 +308,7 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                       GitHub
                     </a>
                     <a
-                      href="https://linkedin.com/in/zeusbautista"
+                      href="https://www.linkedin.com/in/zeus-angelo-bautista/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 text-[#334155] hover:text-accent font-mono text-xs uppercase tracking-wider transition-colors cursor-pointer group"
