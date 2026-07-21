@@ -80,7 +80,7 @@ export const ChatBot: React.FC = () => {
         {
           id: `bot-warn-${Date.now()}`,
           sender: 'bot',
-          text: "I cannot process messages containing inappropriate language, curse words, or spam. Please keep the conversation professional.",
+          text: "The use of bad words, curse words, or any profanity is not allowed. Please keep our conversation professional and respectful.",
           timestamp: new Date()
         }
       ]);
@@ -135,7 +135,7 @@ export const ChatBot: React.FC = () => {
           {
             id: `bot-warn-${Date.now()}`,
             sender: 'bot',
-            text: "I cannot process messages containing inappropriate language, curse words, or spam. Please keep the conversation professional.",
+            text: "The use of bad words, curse words, or any profanity is not allowed. Please keep our conversation professional and respectful.",
             timestamp: new Date()
           }
         ]);
