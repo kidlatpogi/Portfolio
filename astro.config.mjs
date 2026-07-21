@@ -15,9 +15,6 @@ export default defineConfig({
     assetsInclude: ['**/*.glb'],
     resolve: {
       dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client', 'three', 'lenis']
-    },
-    ssr: {
-      noExternal: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client']
     }
   },
 
