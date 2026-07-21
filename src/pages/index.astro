@@ -63,20 +63,20 @@ const navItems = [
 	<CardNav client:load logoText="Zeus Angelo" items={navItems} />
 	<main class="w-full relative z-10">
 		<Hero client:load />
-		<ParallaxTextSection client:visible />
-		<About client:visible />
-		<Skills client:visible />
-		<Experience client:visible />
+		<ParallaxTextSection client:load />
+		<About client:load />
+		<Skills client:load />
+		<Experience client:load />
 		<div class="h-8" />
-		<Projects client:visible />
+		<Projects client:load />
 		<Designs client:load />
 		<div class="h-8" />
-		<GithubHeatmap client:visible />
+		<GithubHeatmap client:load />
 		<div class="h-8" />
-		<Certifications client:visible />
+		<Certifications client:load />
 	</main>
-	<Footer client:visible />
-	<ChatBot client:idle />
-	<SocialsSidebar client:idle />
+	<Footer client:load />
+	<ChatBot client:load />
+	<SocialsSidebar client:load />
 	<ResumePreviewModal client:load />
 </Layout>

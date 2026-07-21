@@ -7,13 +7,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 const designsData = [
   {
-    title: "Cloud9",
+    title: "Cloud 9",
     category: "Poster Design",
     image: "https://zeusbautista.site/Designs/Cloud9-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Cloud9-1200.webp"
   },
   {
-    title: "Ketchup",
+    title: "Papa Ketchup",
     category: "Poster Design",
     image: "https://zeusbautista.site/Designs/Ketchup-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Ketchup-1200.webp"
@@ -31,7 +31,7 @@ const designsData = [
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Multo-1200.webp"
   },
   {
-    title: "Typography",
+    title: "Let Down",
     category: "Poster Design",
     image: "https://zeusbautista.site/Designs/Typography-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Typography-1200.webp"
@@ -70,7 +70,7 @@ export default function Designs() {
               pin: true,
               scrub: 1,
               start: 'top top',
-              end: () => `+=${scrollWidth - window.innerWidth}`,
+              end: () => `+=${(scrollWidth - window.innerWidth) * 1.6}`,
               invalidateOnRefresh: true
             },
           }
@@ -160,20 +160,20 @@ export default function Designs() {
 
       {/* Interactive Background ShapeGrid */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <ShapeGrid 
-          speed={0} 
-          squareSize={55} 
-          borderColor="rgba(51, 65, 85, 0.05)" 
-          hoverFillColor="rgba(51, 65, 85, 0.12)" 
-          shape="square" 
-          hoverTrailAmount={6} 
-          gradientColor="#f8f8f8" 
+        <ShapeGrid
+          speed={0}
+          squareSize={55}
+          borderColor="rgba(51, 65, 85, 0.05)"
+          hoverFillColor="rgba(51, 65, 85, 0.12)"
+          shape="square"
+          hoverTrailAmount={6}
+          gradientColor="#f8f8f8"
         />
       </div>
 
       {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
       <div className="designs-container relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
-        
+
         {/* Section Header */}
         <div className="designs-header w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-12 flex flex-col items-start z-10 flex-shrink-0">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
@@ -188,13 +188,13 @@ export default function Designs() {
         </div>
 
         {/* Cards container: 3x2 grid on mobile viewports, horizontal flex on desktop */}
-        <div 
-          ref={scrollSectionRef} 
+        <div
+          ref={scrollSectionRef}
           className="designs-track grid grid-cols-2 grid-rows-3 gap-4 max-sm:gap-3 md:flex md:flex-row md:gap-16 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
         >
           {designsData.map((design, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="w-full md:w-[var(--card-width)] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
             >
               <img
@@ -210,7 +210,7 @@ export default function Designs() {
                 }}
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 select-none"
               />
-              
+
               {/* Gradient Hover Info Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 md:p-8">
                 <span className="text-accent font-mono text-xs md:text-sm uppercase tracking-wider font-bold mb-1">
