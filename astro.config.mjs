@@ -18,22 +18,6 @@ export default defineConfig({
     },
     ssr: {
       noExternal: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client']
-    },
-    optimizeDeps: {
-      include: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        'react/jsx-dev-runtime',
-        'react-dom/client',
-        'framer-motion',
-        '@react-three/fiber',
-        '@react-three/drei',
-        '@react-three/rapier',
-        'three',
-        'lucide-react',
-        'lenis'
-      ]
     }
   },
 
