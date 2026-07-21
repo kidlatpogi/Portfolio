@@ -118,9 +118,13 @@ export default function Hero() {
               </span>
               <div className="flex flex-wrap items-center gap-8">
                 <a
-                  href="/resume.pdf"
+                  href="/Zeus_Angelo_Bautista_Resume.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent('openResumePreview'));
+                  }}
                   className="flex items-center gap-2.5 text-[#334155] hover:text-accent font-mono text-sm md:text-base uppercase tracking-wider transition-colors cursor-pointer group"
                 >
                   <svg className="w-5 h-5 text-[#334155] group-hover:text-accent transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

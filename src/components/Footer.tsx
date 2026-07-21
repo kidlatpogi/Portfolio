@@ -16,7 +16,7 @@ const socials = [
   },
   {
     name: 'Resume',
-    url: '/resume.pdf'
+    url: '/Zeus_Angelo_Bautista_Resume.pdf'
   }
 ];
 
@@ -47,21 +47,28 @@ export default function Footer() {
             <span className="font-mono text-xs uppercase tracking-[0.2em] text-orange-200/90 mb-2 font-bold">
               Connections
             </span>
-            {socials.map((social, index) => (
-              <a
-                key={index}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-3 font-clash-semibold text-2xl sm:text-3xl md:text-4xl font-bold text-white hover:text-slate-950 transition-colors duration-300 cursor-target"
-              >
-                <span className="relative">
-                  {social.name}
-                  <span className="absolute left-0 bottom-0.5 w-0 h-[2.5px] bg-slate-950 transition-all duration-300 group-hover:w-full" />
-                </span>
-                <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300 text-slate-950" />
-              </a>
-            ))}
+            {socials.map((social, index) => {
+              const isResume = social.name === 'Resume';
+              return (
+                <a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={isResume ? (e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent('openResumePreview'));
+                  } : undefined}
+                  className="group flex items-center gap-3 font-clash-semibold text-2xl sm:text-3xl md:text-4xl font-bold text-white hover:text-slate-950 transition-colors duration-300 cursor-target"
+                >
+                  <span className="relative">
+                    {social.name}
+                    <span className="absolute left-0 bottom-0.5 w-0 h-[2.5px] bg-slate-950 transition-all duration-300 group-hover:w-full" />
+                  </span>
+                  <ArrowUpRight className="w-6 h-6 md:w-8 md:h-8 opacity-0 -translate-x-2 translate-y-2 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 transition-all duration-300 text-slate-950" />
+                </a>
+              );
+            })}
           </div>
 
         </div>

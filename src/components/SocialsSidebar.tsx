@@ -76,7 +76,7 @@ export default function SocialsSidebar() {
           <line x1="16" y1="17" x2="8" y2="17" />
         </svg>
       ),
-      href: '/resume.pdf',
+      href: '/Zeus_Angelo_Bautista_Resume.pdf',
       ariaLabel: 'View resume'
     }
   ];
@@ -89,25 +89,32 @@ export default function SocialsSidebar() {
           : 'opacity-0 translate-x-6 pointer-events-none'
       }`}
     >
-      {socials.map((social) => (
-        <a
-          key={social.name}
-          href={social.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={social.ariaLabel}
-          className="group relative w-11 h-11 rounded-full bg-black flex items-center justify-center text-white hover:bg-accent hover:scale-110 active:scale-95 transition-all duration-300 ease-out cursor-target"
-        >
-          {social.icon}
-          
-          {/* Hover Tooltip/Title (positioned to the left) */}
-          <div className="absolute right-[125%] top-1/2 -translate-y-1/2 bg-black text-white text-xs font-mono uppercase tracking-wider py-1.5 px-3 rounded-md shadow-md whitespace-nowrap pointer-events-none opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out z-30">
-            {social.name}
-            {/* Small triangle arrow on the right pointing to the button */}
-            <div className="absolute left-[99%] top-1/2 -translate-y-1/2 w-2 h-2 bg-black rotate-45" />
-          </div>
-        </a>
-      ))}
+      {socials.map((social) => {
+        const isResume = social.name === 'Resume';
+        return (
+          <a
+            key={social.name}
+            href={social.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={isResume ? (e) => {
+              e.preventDefault();
+              window.dispatchEvent(new CustomEvent('openResumePreview'));
+            } : undefined}
+            aria-label={social.ariaLabel}
+            className="group relative w-11 h-11 rounded-full bg-black flex items-center justify-center text-white hover:bg-accent hover:scale-110 active:scale-95 transition-all duration-300 ease-out cursor-target"
+          >
+            {social.icon}
+            
+            {/* Hover Tooltip/Title (positioned to the left) */}
+            <div className="absolute right-[125%] top-1/2 -translate-y-1/2 bg-black text-white text-xs font-mono uppercase tracking-wider py-1.5 px-3 rounded-md shadow-md whitespace-nowrap pointer-events-none opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out z-30">
+              {social.name}
+              {/* Small triangle arrow on the right pointing to the button */}
+              <div className="absolute left-[99%] top-1/2 -translate-y-1/2 w-2 h-2 bg-black rotate-45" />
+            </div>
+          </a>
+        );
+      })}
     </div>
   );
 }
