@@ -22,9 +22,9 @@ export const POST: APIRoute = async ({ request }) => {
 
       // 1. Direct word match
       const hasBadWord = badWords.some((word: string) => {
-        if (!word) return false;
-        const regex = new RegExp(`\\b${word}\\b|${word}`, 'i');
-        return regex.test(lowerText);
+        const cleanWord = word.trim().toLowerCase();
+        if (!cleanWord) return false;
+        return lowerText.includes(cleanWord);
       });
       if (hasBadWord) return true;
 
