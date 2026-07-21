@@ -2,42 +2,15 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bot, Sparkles } from 'lucide-react';
 
-// Helper to detect inappropriate language, curse words, slurs, dating sites, and porn sites
-const containsInappropriateLanguage = (text: string): boolean => {
-  const badWords = [
-    // English curses & slurs
-    'fuck', 'shit', 'asshole', 'bitch', 'cunt', 'dick', 'pussy', 'bastard', 'slut', 'whore', 'crap',
-    'nigger', 'nigga', 'retard', 'faggot', 'dyke', 'kike', 'chink', 'spic', 'tranny',
-    // Filipino curses & slurs
-    'putangina', 'tangina', 'gago', 'puke', 'tite', 'kupal', 'bobo', 'tarantado', 'kantot', 'ulol',
-    'pota', 'puta', 'iyot', 'iyotin', 'bilat', 'bayag', 'pepe', 'dede', 'salsal', 'jakol', 'burat', 'pakshet',
-    // Adult / Porn Sites & Terms (American & Filipino)
-    'pornhub', 'xvideos', 'xnxx', 'spankbang', 'redtube', 'youporn', 'chaturbate', 'onlyfans', 'brazzers', 
-    'xhamster', 'hentai', 'doujin', 'camfour', 'livejasmin', 'stripchat', 'bongacams', 'camsoda',
-    'vivamax', 'phalter', 'alter-ph', 'alterph', 'leak', 'leaks', 'sex', 'xxx', 'porn', 'nude', 'nudes', 
-    'nudity', 'erotic', 'milf', 'anal', 'blowjob', 'handjob', 'orgasm', 'cum', 'ejaculation',
-    // Dating apps
-    'tinder', 'grindr', 'bumble', 'okcupid', 'hinge', 'badoo'
-  ];
-  
+// Helper to detect keyboard mash spam client-side instantly
+const containsKeyboardMash = (text: string): boolean => {
   const lowerText = text.toLowerCase().trim();
-  
-  // 1. Direct word match
-  const hasBadWord = badWords.some(word => {
-    const regex = new RegExp(`\\b${word}\\b|${word}`, 'i');
-    return regex.test(lowerText);
-  });
-  if (hasBadWord) return true;
-
-  // 2. Keyboard mash check
   const words = lowerText.split(/\s+/);
   const hasMash = words.some(w => {
     if (w.length > 7 && !/[aeiouy]/i.test(w) && /^[a-z0-9]+$/i.test(w)) return true;
     return false;
   });
-  if (hasMash) return true;
-
-  return false;
+  return hasMash;
 };
 
 interface Message {
@@ -93,8 +66,8 @@ export const ChatBot: React.FC = () => {
 
     const cleanText = textToSend.trim();
 
-    // Check for inappropriate words/spam
-    if (containsInappropriateLanguage(cleanText)) {
+    // Check for keyboard mash spam client-side instantly
+    if (containsKeyboardMash(cleanText)) {
       const userMsg: Message = {
         id: `user-${Date.now()}`,
         sender: 'user',
@@ -152,6 +125,17 @@ export const ChatBot: React.FC = () => {
             id: `bot-${Date.now()}`,
             sender: 'bot',
             text: data.response,
+            timestamp: new Date()
+          }
+        ]);
+      } else if (response.status === 400 && data.isBlocked) {
+        // Server blocked the message due to inappropriate language
+        setMessages(prev => [
+          ...prev,
+          {
+            id: `bot-warn-${Date.now()}`,
+            sender: 'bot',
+            text: "I cannot process messages containing inappropriate language, curse words, or spam. Please keep the conversation professional.",
             timestamp: new Date()
           }
         ]);
