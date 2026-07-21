@@ -13,7 +13,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Server-side check for bad words/spam from private env binding
     const lastMessage = messages[messages.length - 1]?.text || "";
-    const badWordsString = (env as any).CHAT_BAD_WORDS || "";
+    const badWordsString = (env as any).CHAT_BAD_WORDS || import.meta.env.CHAT_BAD_WORDS || process.env.CHAT_BAD_WORDS || "";
     const badWords = badWordsString ? badWordsString.split(',').map((w: string) => w.trim().toLowerCase()) : [];
 
     const containsInappropriateLanguage = (text: string): boolean => {
