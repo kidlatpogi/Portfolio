@@ -10,7 +10,7 @@ const DESKTOP_QUERY = '(min-width: 1024px)';
 const projectsData = [
   {
     title: "Bigkas Capstone",
-    description: "A speech rehabilitation and therapy mobile/web application utilizing speech-to-text recognition models to assist children with speech impediments in practicing pronunciation.",
+    description: "A capstone prototype showcasing a Flutter-based public speaking assistant. It utilizes FastAPI and Whisper AI to analyze vocal confidence, fluency, and pacing, providing real-time data-driven feedback for Filipino speakers.",
     tags: ["React", "Node.js", "Web Speech API", "Tailwind CSS"],
     stack: "[REACT] — [NODE.JS]",
     bgGradient: "bg-gradient-to-br from-[#4f46e5] via-[#5b21b6] to-[#7c3aed]",
@@ -22,7 +22,7 @@ const projectsData = [
   },
   {
     title: "L.I.N.N.Y",
-    description: "An offline voice assistant and automation tool utilizing local natural language processing models to perform system-level tasks and tasks automation without internet dependencies.",
+    description: "Inspired by J.A.R.V.I.S., L.I.N.N.Y. (Loyal Intelligent Neural Network for You) is a personal AI assistant that provides real-time verbal responses, manages daily tasks like checking the time, weather, and schedule, and seamlessly connects to Tapo smart devices via Kasa for efficient home automation.",
     tags: ["Python", "PyTorch", "Vosk NLP", "Speech Recognition"],
     stack: "[PYTHON] — [PYTORCH]",
     bgGradient: "bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155]",
@@ -34,7 +34,7 @@ const projectsData = [
   },
   {
     title: "My-PC InfoSec E-Commerce",
-    description: "A secure e-commerce application designed with robust protection inputs against SQL injections, XSS attacks, and CSRF attempts, managing hardware transactions safely.",
+    description: "MyPC is a web-based e-commerce platform developed for the Information Assurance and Security course. This emulates a real-world online store where users can browse, select, and purchase computer components and accessories.",
     tags: ["React", "Express", "Node.js", "MongoDB", "JWT Security"],
     stack: "[REACT] — [EXPRESS]",
     bgGradient: "bg-gradient-to-br from-[#C44900] via-[#E85D04] to-[#f97316]",
@@ -296,7 +296,7 @@ export default function Projects() {
 
                      <div className={`w-full h-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 transition-opacity duration-300 z-10 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                       {/* Left: Info */}
-                      <div className="md:col-span-7 flex flex-col justify-between h-full min-w-0">
+                      <div className="md:col-span-6 flex flex-col justify-between h-full min-w-0">
                         <div className="flex flex-col gap-4">
                           {/* Counter + Title Header */}
                           <div className="flex flex-col gap-1">
@@ -348,7 +348,7 @@ export default function Projects() {
                       </div>
 
                       {/* Right: Mock Preview Device */}
-                      <div className="hidden md:flex md:col-span-5 h-[90%] self-center items-center justify-center min-w-0">
+                      <div className="hidden md:flex md:col-span-6 h-[95%] self-center items-center justify-center min-w-0">
                         {project.image ? (
                           <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-950/40 group/browser">
                             {/* Browser top-bar */}
