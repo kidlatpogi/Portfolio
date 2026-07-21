@@ -193,7 +193,7 @@ const badgesData: Badge[] = [
   },
   {
     name: "Web Development Fundamentals",
-    issuer: "Certiport",
+    issuer: "IBM SkillsBuild",
     date: "Verified",
     initials: "WD",
     color: "#0891b2",
