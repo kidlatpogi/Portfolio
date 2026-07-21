@@ -1,8 +1,9 @@
 import type { APIRoute } from 'astro';
+import { env } from 'cloudflare:workers';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
     const { messages } = await request.json();
 
@@ -10,12 +11,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
       return new Response(JSON.stringify({ error: "Invalid messages array" }), { status: 400 });
     }
 
-    // Get the Cloudflare AI binding from Astro locals
-    const env = (locals as any).runtime?.env;
-    const ai = env?.AI;
+    // Get the Cloudflare AI binding from cloudflare:workers env
+    const ai = (env as any).AI;
 
     if (!ai) {
-      console.error("Cloudflare AI binding not found in locals.runtime.env");
+      console.error("Cloudflare AI binding not found in cloudflare:workers env");
       return new Response(
         JSON.stringify({ error: "AI binding not found on server. Make sure wrangler.jsonc has the AI binding." }),
         { status: 500, headers: { 'Content-Type': 'application/json' } }
