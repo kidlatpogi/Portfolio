@@ -52,7 +52,7 @@ export default function SocialsSidebar() {
           <circle cx="4" cy="4" r="2" />
         </svg>
       ),
-      href: 'https://linkedin.com/in/zeusbautista',
+      href: 'https://www.linkedin.com/in/zeus-angelo-bautista/',
       ariaLabel: 'LinkedIn profile'
     },
     {

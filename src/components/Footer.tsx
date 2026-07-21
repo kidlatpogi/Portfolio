@@ -8,7 +8,7 @@ const socials = [
   },
   {
     name: 'LinkedIn',
-    url: 'https://linkedin.com/in/zeusbautista'
+    url: 'https://www.linkedin.com/in/zeus-angelo-bautista/'
   },
   {
     name: 'Email',
