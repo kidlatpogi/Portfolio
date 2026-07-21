@@ -51,8 +51,8 @@ export const POST: APIRoute = async ({ request }) => {
       }))
     ];
 
-    // Call Cloudflare Llama 3 AI model
-    const aiResponse = await ai.run('@cf/meta/llama-3-8b-instruct', {
+    // Call Cloudflare Llama 3.1 AI model
+    const aiResponse = await ai.run('@cf/meta/llama-3.1-8b-instruct', {
       messages: formattedMessages
     });
 
