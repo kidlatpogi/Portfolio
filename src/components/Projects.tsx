@@ -12,10 +12,7 @@ const projectsData = [
     title: "Bigkas Capstone",
     platform: "Web App",
     year: "2025",
-    description: [
-      "Built an AI-powered public speaking simulator that analyzes user performance to enhance confidence and delivery",
-      "Integrated Librosa for audio frequency analysis and MediaPipe to track facial pacing and expressions in real-time"
-    ],
+    description: "An AI-powered public speaking simulator and analysis platform. It leverages Librosa for advanced audio analysis and MediaPipe for real-time facial and posture tracking, providing speakers with automated metrics to refine and elevate their presentation skills.",
     tags: ["React JS", "Python", "MediaPipe", "Librosa", "Supabase"],
     stack: "[REACT JS] — [PYTHON]",
     bgGradient: "bg-[#000000]",
@@ -29,10 +26,7 @@ const projectsData = [
     title: "L.I.N.N.Y",
     platform: "AI Assistant",
     year: "2025",
-    description: [
-      "Engineered a voice-activated neural assistant integrating Python and Generative AI for real-time task management",
-      "Seamlessly connected to Tapo smart devices via Kasa integration to automate and manage home electronics"
-    ],
+    description: "Inspired by J.A.R.V.I.S., L.I.N.N.Y. (Loyal Intelligent Neural Network for You) is a personal AI assistant that provides real-time verbal responses, manages daily tasks like checking the time, weather, and schedule, and seamlessly connects to Tapo smart devices via Kasa for efficient home automation.",
     tags: ["Python"],
     stack: "[PYTHON]",
     bgGradient: "bg-[#0D0D0D]",
@@ -46,10 +40,7 @@ const projectsData = [
     title: "SafeLink Mobile",
     platform: "Mobile App",
     year: "2025",
-    description: [
-      "Developed a cross-platform React Native/Expo disaster preparedness app enabling family emergency notifications",
-      "Integrated Firebase database and OpenStreetMap tracking for real-time local updates and evacuation routing"
-    ],
+    description: "SafeLink is a React Native/Expo app for family safety with emergency broadcasts and evacuation info using Firebase and OpenStreetMap.",
     tags: ["React Native", "Firebase"],
     stack: "[REACT NATIVE] — [FIREBASE]",
     bgGradient: "bg-[#1A1A1A]",
@@ -63,10 +54,7 @@ const projectsData = [
     title: "MyPC E-Commerce Shop",
     platform: "Web App",
     year: "2024",
-    description: [
-      "Developed a secure e-commerce component shop using PHP, Tailwind CSS, and MySQL for component tracking",
-      "Implemented core web security principles including encrypted user authentication and robust session management"
-    ],
+    description: "MyPC is a web-based e-commerce platform developed for the Information Assurance and Security course. This emulates a real-world online store where users can browse, select, and purchase computer components and accessories.",
     tags: ["PHP", "MySQL"],
     stack: "[PHP] — [MYSQL]",
     bgGradient: "bg-[#262626]",
@@ -80,10 +68,7 @@ const projectsData = [
     title: "Calendar Widget",
     platform: "Desktop App",
     year: "2024",
-    description: [
-      "Built a lightweight Windows calendar widget using Electron and JavaScript to sync Google Calendar events",
-      "Designed offline data storage to load schedules instantly and operate without active internet connection"
-    ],
+    description: "A sleek and lightweight Windows Calendar Widget seamlessly connected to Google Calendar — without relying on any external databases or APIs.",
     tags: ["JavaScript", "Electron"],
     stack: "[ELECTRON] — [JS]",
     bgGradient: "bg-[#333333]",
@@ -381,28 +366,33 @@ export default function Projects() {
                           </div>
 
                           {/* Description */}
-                          <ul className="list-none flex flex-col gap-2.5 max-w-md">
-                            {project.description.map((bullet, bIdx) => (
-                              <li key={bIdx} className="font-sans text-xs md:text-sm leading-relaxed text-white/70 flex items-start gap-2.5 select-text">
-                                <span className="text-accent flex-shrink-0 mt-0.5 select-none text-[10px]">●</span>
-                                <span>{bullet}</span>
-                              </li>
-                            ))}
-                          </ul>
+                          <p className="font-sans text-xs md:text-sm leading-relaxed text-white/70 max-w-md">
+                            {project.description}
+                          </p>
 
                           {/* Action Links */}
-                          <div className="flex items-center gap-3">
+                          <div className="flex flex-wrap items-center gap-3">
                             {project.github && (
-                              <a href={project.github} className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-target" aria-label="GitHub Repository">
-                                <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <a 
+                                href={project.github} 
+                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-all cursor-target font-mono text-[10px] md:text-xs uppercase tracking-wider font-bold shadow-sm"
+                                aria-label="GitHub Repository"
+                              >
+                                <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                   <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
                                   <path d="M9 18c-4.51 2-5-2-7-2" />
                                 </svg>
+                                Github
                               </a>
                             )}
                             {project.link && (
-                              <a href={project.link} className="w-9 h-9 rounded-full bg-white/10 border border-white/10 flex items-center justify-center hover:bg-white/20 transition-all cursor-target" aria-label="Live Demo">
-                                <ExternalLink className="w-4 h-4 text-white" />
+                              <a 
+                                href={project.link} 
+                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-all cursor-target font-mono text-[10px] md:text-xs uppercase tracking-wider font-bold shadow-sm"
+                                aria-label="Live Demo"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
+                                Visit Website
                               </a>
                             )}
                           </div>
