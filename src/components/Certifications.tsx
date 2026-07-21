@@ -89,7 +89,7 @@ const certificationsData: Certificate[] = [
   // ==========================================
   {
     title: "Web Development Fundamentals",
-    issuer: "IT Specialist",
+    issuer: "IBM SkillsBuild",
     date: "Verified",
     color: "#0891b2",
     image: "https://zeusbautista.site/Certifications/Web%20Development%20Fundamentals.webp",
