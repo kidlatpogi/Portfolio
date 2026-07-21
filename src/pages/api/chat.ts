@@ -27,7 +27,7 @@ export const POST: APIRoute = async ({ request }) => {
 - Full Name: Zeus Angelo Bautista
 - Role: IT Developer & AI Engineer
 - Education: 4th-year BSIT student
-- Skills: React, Astro, TypeScript, Tailwind CSS, Python, React Native, PHP, MySQL, Flutter, FastAPI, Whisper AI.
+- Skills: React, Astro, TypeScript, Tailwind CSS, Python, React Native, PHP, MySQL, Flutter, FastAPI.
 - Contact: bautistaangelozeus17@gmail.com / dzeref4000@gmail.com.
 - LinkedIn: https://www.linkedin.com/in/zeus-angelo-bautista/
 - GitHub: https://github.com/kidlatpogi`;
