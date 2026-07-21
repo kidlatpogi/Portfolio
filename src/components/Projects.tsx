@@ -10,13 +10,13 @@ const DESKTOP_QUERY = '(min-width: 1024px)';
 const projectsData = [
   {
     title: "Bigkas Capstone",
-    description: "A capstone prototype showcasing a Flutter-based public speaking assistant. It utilizes FastAPI and Whisper AI to analyze vocal confidence, fluency, and pacing, providing real-time data-driven feedback for Filipino speakers.",
-    tags: ["Flutter", "FastAPI", "OpenAI Whisper", "Acoustic Analysis", "Supabase"],
-    stack: "[FLUTTER] — [FASTAPI]",
+    description: "An AI-powered public speaking simulator and analysis platform. It leverages Librosa for advanced audio analysis and MediaPipe for real-time facial and posture tracking, providing speakers with automated metrics to refine and elevate their presentation skills.",
+    tags: ["React JS", "Python", "MediaPipe", "Librosa", "Supabase"],
+    stack: "[REACT JS] — [PYTHON]",
     bgGradient: "bg-[#000000]",
     accentColor: "from-white/5 to-transparent",
-    link: "https://flutter-bigkas.vercel.app",
-    github: "https://github.com/kidlatpogi/flutter-project-2526.git",
+    link: "https://bigkas.site/",
+    github: "https://github.com/kidlatpogi/bigkas-capstone",
     image: "",
     backupImage: ""
   },
