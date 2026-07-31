@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 .wrangler
 .wrangler/
+
+# lockfiles (generated per OS build container)
+package-lock.json
