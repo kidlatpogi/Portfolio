@@ -5,6 +5,10 @@
   "engines": {
     "node": ">=22.12.0"
   },
+  "supportedArchitectures": {
+    "os": ["current", "linux", "darwin", "win32"],
+    "cpu": ["current", "x64", "arm64"]
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
