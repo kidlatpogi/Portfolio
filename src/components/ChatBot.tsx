@@ -13,6 +13,7 @@ export const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const [hasNewNotification, setHasNewNotification] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -28,13 +29,13 @@ export const ChatBot: React.FC = () => {
     ]);
   }, []);
 
-  // Scroll to bottom whenever messages change or typing state changes
+  // Scroll to bottom whenever messages change or typing/streaming state changes
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+  }, [messages, isTyping, isStreaming]);
 
   const handleTopicSelect = async (queryText: string, label: string) => {
-    if (isTyping) return;
+    if (isTyping || isStreaming) return;
 
     const userMsg: Message = {
       id: `user-${Date.now()}`,
@@ -61,28 +62,53 @@ export const ChatBot: React.FC = () => {
 
       const data = await response.json();
 
-      // Artificial delay (900ms - 1500ms) to simulate live AI thinking & typing
+      // Artificial thinking delay (600ms - 900ms) before typing begins
       const elapsedTime = Date.now() - startTime;
-      const targetDelay = Math.floor(900 + Math.random() * 600);
+      const targetDelay = Math.floor(600 + Math.random() * 300);
       if (elapsedTime < targetDelay) {
         await new Promise(resolve => setTimeout(resolve, targetDelay - elapsedTime));
       }
 
       if (response.ok && data.response) {
+        setIsTyping(false);
+        setIsStreaming(true);
+
+        const botMsgId = `bot-${Date.now()}`;
+        const fullText: string = data.response;
+
+        // Create empty bot message bubble
         setMessages(prev => [
           ...prev,
           {
-            id: `bot-${Date.now()}`,
+            id: botMsgId,
             sender: 'bot',
-            text: data.response,
+            text: '',
             timestamp: new Date()
           }
         ]);
+
+        // Stream typing effect character by character
+        let currentText = '';
+        const chunkSize = 2;
+        const delayMs = 18;
+
+        for (let i = 0; i < fullText.length; i += chunkSize) {
+          currentText += fullText.slice(i, i + chunkSize);
+          const snap = currentText;
+          setMessages(prev => prev.map(m => m.id === botMsgId ? { ...m, text: snap } : m));
+          await new Promise(resolve => setTimeout(resolve, delayMs));
+        }
+
+        // Finalize full text
+        setMessages(prev => prev.map(m => m.id === botMsgId ? { ...m, text: fullText } : m));
+        setIsStreaming(false);
       } else {
         throw new Error(data.error || 'Failed to get response');
       }
     } catch (error) {
       console.error('Topic query error:', error);
+      setIsTyping(false);
+      setIsStreaming(false);
       setMessages(prev => [
         ...prev,
         {
@@ -92,8 +118,6 @@ export const ChatBot: React.FC = () => {
           timestamp: new Date()
         }
       ]);
-    } finally {
-      setIsTyping(false);
     }
   };
 
@@ -153,15 +177,18 @@ export const ChatBot: React.FC = () => {
                   <div
                     className={`px-3.5 py-2.5 rounded-[1.25rem] text-xs leading-relaxed border ${msg.sender === 'user'
                       ? 'bg-black text-[#FAFAFA] border-black rounded-tr-none'
-                      : 'bg-[#FAFAFA] text-[#334155] border-[#E5E7EB] rounded-tl-none font-sans'
+                      : 'bg-[#FAFAFA] text-[#334155] border-[#E5E7EB] rounded-tl-none font-sans min-h-[32px]'
                       }`}
                   >
                     {msg.text}
+                    {isStreaming && msg.id === messages[messages.length - 1]?.id && (
+                      <span className="inline-block w-1 h-3 ml-0.5 bg-[#334155] animate-pulse vertical-middle" />
+                    )}
                   </div>
                 </div>
               ))}
 
-              {/* Typing indicator */}
+              {/* Thinking indicator */}
               {isTyping && (
                 <div className="flex gap-2.5 max-w-[85%] self-start">
                   <div className="w-7 h-7 rounded-full bg-[#334155]/10 flex items-center justify-center text-[#334155] shrink-0 border border-[#334155]/20">
@@ -188,7 +215,7 @@ export const ChatBot: React.FC = () => {
                   <button
                     key={idx}
                     type="button"
-                    disabled={isTyping}
+                    disabled={isTyping || isStreaming}
                     onClick={() => handleTopicSelect(t.query, t.label)}
                     className="font-mono text-[10px] font-semibold rounded-full border border-[#334155]/30 hover:border-accent px-3 py-1.5 text-slate-700 bg-white hover:bg-orange-50 hover:text-accent disabled:opacity-50 cursor-pointer transition-all duration-200 shadow-sm"
                   >
