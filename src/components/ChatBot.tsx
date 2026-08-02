@@ -2,17 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bot, Sparkles } from 'lucide-react';
 
-// Helper to detect keyboard mash spam client-side instantly
-const containsKeyboardMash = (text: string): boolean => {
-  const lowerText = text.toLowerCase().trim();
-  const words = lowerText.split(/\s+/);
-  const hasMash = words.some(w => {
-    if (w.length > 7 && !/[aeiouy]/i.test(w) && /^[a-z0-9]+$/i.test(w)) return true;
-    return false;
-  });
-  return hasMash;
-};
-
 interface Message {
   id: string;
   sender: 'bot' | 'user';
@@ -25,32 +14,15 @@ export const ChatBot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [hasNewNotification, setHasNewNotification] = useState(true);
-  const [inputValue, setInputValue] = useState('');
-  const [cooldownRemaining, setCooldownRemaining] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // Cooldown countdown timer
-  useEffect(() => {
-    if (cooldownRemaining <= 0) return;
-    const timer = setTimeout(() => {
-      setCooldownRemaining(prev => prev - 1);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [cooldownRemaining]);
-
-  // Initialize with greeting messages
+  // Initialize with greeting message
   useEffect(() => {
     setMessages([
       {
         id: 'greet-1',
         sender: 'bot',
-        text: "Hello! I'm Zeus's portfolio assistant.",
-        timestamp: new Date()
-      },
-      {
-        id: 'greet-2',
-        sender: 'bot',
-        text: "Feel free to type any custom question or click the suggestion topics below!",
+        text: "Hello! Select any suggested topic below to learn more about Zeus.",
         timestamp: new Date()
       }
     ]);
@@ -61,46 +33,20 @@ export const ChatBot: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  const handleSend = async (textToSend: string) => {
-    if (!textToSend.trim() || isTyping || cooldownRemaining > 0) return;
-
-    const cleanText = textToSend.trim();
-
-    // Check for keyboard mash spam client-side instantly
-    if (containsKeyboardMash(cleanText)) {
-      const userMsg: Message = {
-        id: `user-${Date.now()}`,
-        sender: 'user',
-        text: cleanText,
-        timestamp: new Date()
-      };
-      setMessages(prev => [
-        ...prev,
-        userMsg,
-        {
-          id: `bot-warn-${Date.now()}`,
-          sender: 'bot',
-          text: "The use of bad words, curse words, or any profanity is not allowed. Please keep our conversation professional and respectful.",
-          timestamp: new Date()
-        }
-      ]);
-      setInputValue('');
-      setCooldownRemaining(15); // Start 15 seconds cooldown
-      return;
-    }
+  const handleTopicSelect = async (queryText: string, label: string) => {
+    if (isTyping) return;
 
     const userMsg: Message = {
       id: `user-${Date.now()}`,
       sender: 'user',
-      text: cleanText,
+      text: label,
       timestamp: new Date()
     };
 
-    const updatedMessages = [...messages, userMsg];
-    setMessages(updatedMessages);
+    setMessages(prev => [...prev, userMsg]);
     setIsTyping(true);
-    setInputValue('');
-    setCooldownRemaining(15); // Start 15 seconds cooldown
+
+    const startTime = Date.now();
 
     try {
       const response = await fetch('/api/chat', {
@@ -109,14 +55,18 @@ export const ChatBot: React.FC = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          messages: updatedMessages.map(m => ({
-            sender: m.sender,
-            text: m.text
-          }))
+          topic: queryText
         })
       });
 
       const data = await response.json();
+
+      // Artificial delay (900ms - 1500ms) to simulate live AI thinking & typing
+      const elapsedTime = Date.now() - startTime;
+      const targetDelay = Math.floor(900 + Math.random() * 600);
+      if (elapsedTime < targetDelay) {
+        await new Promise(resolve => setTimeout(resolve, targetDelay - elapsedTime));
+      }
 
       if (response.ok && data.response) {
         setMessages(prev => [
@@ -128,28 +78,17 @@ export const ChatBot: React.FC = () => {
             timestamp: new Date()
           }
         ]);
-      } else if (response.status === 400 && data.isBlocked) {
-        // Server blocked the message due to inappropriate language
-        setMessages(prev => [
-          ...prev,
-          {
-            id: `bot-warn-${Date.now()}`,
-            sender: 'bot',
-            text: "The use of bad words, curse words, or any profanity is not allowed. Please keep our conversation professional and respectful.",
-            timestamp: new Date()
-          }
-        ]);
       } else {
-        throw new Error(data.error || 'Failed to generate response');
+        throw new Error(data.error || 'Failed to get response');
       }
     } catch (error) {
-      console.error('Chat error:', error);
+      console.error('Topic query error:', error);
       setMessages(prev => [
         ...prev,
         {
           id: `bot-err-${Date.now()}`,
           sender: 'bot',
-          text: "I'm having trouble connecting to my server right now. Feel free to contact Zeus directly at bautistaangelozeus17@gmail.com!",
+          text: "Feel free to contact Zeus directly at bautistaangelozeus17@gmail.com!",
           timestamp: new Date()
         }
       ]);
@@ -159,23 +98,16 @@ export const ChatBot: React.FC = () => {
   };
 
   const topics = [
-    {
-      label: 'About Zeus',
-      query: 'Tell me about Zeus'
-    },
-    {
-      label: 'Work Experience',
-      query: 'Tell me about your work experience'
-    },
-    {
-      label: 'Tech Stack',
-      query: 'What technologies do you use?'
-    }
+    { label: 'About Zeus', query: 'Tell me about Zeus' },
+    { label: 'Work Experience', query: 'Tell me about your work experience' },
+    { label: 'Tech Stack', query: 'What technologies do you use?' },
+    { label: 'Projects', query: 'Tell me about your projects' },
+    { label: 'Contact', query: 'How can I contact Zeus?' }
   ];
 
   return (
     <div className="fixed bottom-6 left-6 z-[9990] flex flex-col items-start font-sans">
-      {/* Chat Window */}
+      {/* Assistant Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -183,7 +115,7 @@ export const ChatBot: React.FC = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', duration: 0.45, bounce: 0.1 }}
-            className="w-[360px] max-sm:w-[calc(100vw-32px)] bg-[#FAFAFA] border border-[#334155]/20 rounded-3xl overflow-hidden mb-4 flex flex-col"
+            className="w-[360px] max-sm:w-[calc(100vw-32px)] bg-[#FAFAFA] border border-[#334155]/20 rounded-3xl overflow-hidden mb-4 flex flex-col shadow-xl"
           >
             {/* Header */}
             <div className="bg-black text-[#FAFAFA] p-4 flex items-center justify-between border-b border-[#334155]/10">
@@ -246,9 +178,9 @@ export const ChatBot: React.FC = () => {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Quick replies suggestion bar (above input) */}
-            <div className="p-3 border-t border-[#334155]/10 bg-[#FAFAFA] flex flex-col gap-1.5">
-              <span className="font-mono text-[8px] font-semibold text-[#334155]/60 uppercase tracking-wider">
+            {/* Suggested Topics Container (No Chatbox Input) */}
+            <div className="p-3.5 border-t border-[#334155]/10 bg-[#FAFAFA] flex flex-col gap-2">
+              <span className="font-mono text-[9px] font-semibold text-[#334155]/70 uppercase tracking-wider">
                 Suggested Topics:
               </span>
               <div className="flex flex-wrap gap-1.5">
@@ -256,43 +188,15 @@ export const ChatBot: React.FC = () => {
                   <button
                     key={idx}
                     type="button"
-                    onClick={() => handleSend(t.query)}
-                    className="font-mono text-[9px] font-semibold rounded-full border border-[#334155]/30 hover:border-accent px-2.5 py-1 text-slate-700 bg-white hover:bg-orange-50 hover:text-accent cursor-pointer transition-all duration-200"
+                    disabled={isTyping}
+                    onClick={() => handleTopicSelect(t.query, t.label)}
+                    className="font-mono text-[10px] font-semibold rounded-full border border-[#334155]/30 hover:border-accent px-3 py-1.5 text-slate-700 bg-white hover:bg-orange-50 hover:text-accent disabled:opacity-50 cursor-pointer transition-all duration-200 shadow-sm"
                   >
                     {t.label}
                   </button>
                 ))}
               </div>
             </div>
-
-            {/* Input form */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSend(inputValue);
-              }}
-              className="p-3 border-t border-[#334155]/10 bg-[#FAFAFA] flex gap-2 items-center"
-            >
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Ask me something about Zeus..."}
-                disabled={isTyping || cooldownRemaining > 0}
-                className="flex-grow px-3 py-2 text-xs rounded-xl border border-[#334155]/20 bg-white text-black focus:outline-none focus:border-accent disabled:opacity-60 transition-all font-sans"
-              />
-              <button
-                type="submit"
-                disabled={isTyping || !inputValue.trim() || cooldownRemaining > 0}
-                className="p-2 rounded-xl bg-black text-[#FAFAFA] hover:bg-accent disabled:opacity-40 disabled:hover:bg-black transition-colors cursor-pointer flex items-center justify-center border-none outline-none"
-                aria-label="Send message"
-              >
-                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="22" y1="2" x2="11" y2="13" />
-                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                </svg>
-              </button>
-            </form>
           </motion.div>
         )}
       </AnimatePresence>
@@ -303,8 +207,8 @@ export const ChatBot: React.FC = () => {
           setIsOpen(!isOpen);
           setHasNewNotification(false);
         }}
-        className="w-14 h-14 rounded-full bg-black text-[#FAFAFA] flex items-center justify-center cursor-pointer relative border-none outline-none focus:outline-none"
-        aria-label="Toggle chatbot assistant"
+        className="w-14 h-14 rounded-full bg-black text-[#FAFAFA] flex items-center justify-center cursor-pointer relative border-none outline-none focus:outline-none shadow-lg"
+        aria-label="Toggle assistant"
         animate={{
           y: isOpen ? 0 : [0, -8, 0]
         }}
