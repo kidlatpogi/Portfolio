@@ -49,6 +49,12 @@ export default function Designs() {
   const scrollSectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const island = containerRef.current?.parentElement;
+    if (island?.tagName === 'ASTRO-ISLAND') {
+      island.style.display = 'block';
+      island.style.width = '100%';
+    }
+
     let ctx = gsap.context(() => {
       let mm = gsap.matchMedia();
 
@@ -171,8 +177,8 @@ export default function Designs() {
         />
       </div>
 
-      {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
-      <div className="designs-container relative md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
+      {/* On Desktop: Sticky full-screen view via GSAP pin. On Mobile: static relative view */}
+      <div className="designs-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
 
         {/* Section Header */}
         <div className="designs-header w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-12 flex flex-col items-start z-10 flex-shrink-0">
