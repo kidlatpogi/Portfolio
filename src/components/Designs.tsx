@@ -62,25 +62,23 @@ export default function Designs() {
       mm.add("(min-width: 768px)", () => {
         if (!scrollSectionRef.current || !containerRef.current) return;
 
-        const scrollWidth = scrollSectionRef.current.scrollWidth;
-        const totalTranslation = -(scrollWidth - window.innerWidth);
+        const getScrollDistance = () => {
+          if (!scrollSectionRef.current) return 0;
+          return Math.max(0, scrollSectionRef.current.scrollWidth - window.innerWidth);
+        };
 
-        gsap.fromTo(
-          scrollSectionRef.current,
-          { x: 0 },
-          {
-            x: totalTranslation,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: containerRef.current,
-              pin: true,
-              scrub: 1,
-              start: 'top top',
-              end: () => `+=${(scrollWidth - window.innerWidth) * 1.6}`,
-              invalidateOnRefresh: true
-            },
-          }
-        );
+        gsap.to(scrollSectionRef.current, {
+          x: () => -getScrollDistance(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            pin: true,
+            scrub: 1,
+            start: 'top top',
+            end: () => `+=${getScrollDistance() * 1.6}`,
+            invalidateOnRefresh: true
+          },
+        });
       });
     }, containerRef);
 

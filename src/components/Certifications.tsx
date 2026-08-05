@@ -346,12 +346,12 @@ export default function Certifications() {
       mm.add("(min-width: 768px)", () => {
         if (!row1Ref.current || !row2Ref.current || !certScrollPinnedContainerRef.current) return;
 
-        const row1Width = row1Ref.current.scrollWidth;
-        const row2Width = row2Ref.current.scrollWidth;
-
-        const maxRowWidth = Math.max(row1Width, row2Width);
-        const scrollAmt = maxRowWidth - window.innerWidth + 80;
-        const maxScroll = Math.max(scrollAmt, 600);
+        const getScrollAmt = () => {
+          if (!row1Ref.current || !row2Ref.current) return 600;
+          const maxRowWidth = Math.max(row1Ref.current.scrollWidth, row2Ref.current.scrollWidth);
+          const scrollAmt = maxRowWidth - window.innerWidth + 80;
+          return Math.max(scrollAmt, 600);
+        };
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -359,18 +359,18 @@ export default function Certifications() {
             pin: true,
             scrub: 1,
             start: 'top top',
-            end: () => `+=${maxScroll}`,
+            end: () => `+=${getScrollAmt()}`,
             invalidateOnRefresh: true
           }
         });
 
         tl.to(row1Ref.current, {
-          x: -scrollAmt,
+          x: () => -getScrollAmt(),
           ease: 'none'
         }, 0);
 
         tl.to(row2Ref.current, {
-          x: scrollAmt,
+          x: () => getScrollAmt(),
           ease: 'none'
         }, 0);
       });
