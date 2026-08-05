@@ -1,0 +1,92 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TargetCursor from '../components/TargetCursor.tsx';
+import ShapeGrid from '../components/ShapeGrid.tsx';
+---
+
+<Layout title="404 — Page Not Found | Zeus Angelo Bautista">
+  <!-- Background Interactive Grid -->
+  <div class="fixed inset-0 z-0 pointer-events-none">
+    <ShapeGrid 
+      client:load 
+      speed={0} 
+      squareSize={55} 
+      borderColor="rgba(51, 65, 85, 0.05)" 
+      hoverFillColor="rgba(51, 65, 85, 0.12)" 
+      shape="square" 
+      hoverTrailAmount={6} 
+      gradientColor="#f8f8f8" 
+    />
+  </div>
+
+  <TargetCursor client:only="react" targetSelector="a, button, .cursor-target" />
+
+  <div class="relative z-10 w-full min-h-screen flex flex-col justify-between px-6 py-8 md:px-16 lg:px-24 max-w-[1600px] mx-auto overflow-x-hidden">
+    
+    <!-- Top Bar -->
+    <header class="w-full flex items-center justify-between pt-4">
+      <a href="/" class="group flex items-center gap-2 font-mono text-xs md:text-sm uppercase tracking-[0.15em] font-bold text-slate-900 hover:text-[#C44900] transition-colors duration-300 cursor-target">
+        <span class="text-[#C44900]">⚡</span> Zeus Angelo
+      </a>
+      <span class="font-mono text-[11px] md:text-xs uppercase tracking-[0.2em] font-semibold text-slate-400 border border-slate-200 rounded-full px-3 py-1 bg-white/60 backdrop-blur-sm">
+        Error 404
+      </span>
+    </header>
+
+    <!-- Main 404 Hero Content -->
+    <main class="w-full my-auto py-12 flex flex-col items-center justify-center text-center">
+      <!-- Status Tag -->
+      <div class="inline-flex items-center gap-2 font-mono text-xs md:text-sm uppercase tracking-[0.25em] font-bold text-[#C44900] mb-4 px-4 py-1.5 rounded-full bg-[#C44900]/10 border border-[#C44900]/20">
+        <span class="w-2 h-2 rounded-full bg-[#C44900] animate-pulse"></span>
+        [ STATUS: 404_PAGE_NOT_FOUND ]
+      </div>
+
+      <!-- Giant 404 Display -->
+      <div class="relative my-2 select-none">
+        <!-- Glitch Shadow Accent -->
+        <h1 class="font-clash-bold text-[7rem] sm:text-[10rem] md:text-[13rem] lg:text-[16rem] font-black tracking-tighter leading-none text-[#C44900]/15 absolute inset-0 blur-sm translate-x-1.5 translate-y-1.5 pointer-events-none">
+          404
+        </h1>
+        <!-- Main 404 Text -->
+        <h1 class="font-clash-bold text-[7rem] sm:text-[10rem] md:text-[13rem] lg:text-[16rem] font-black tracking-tighter leading-none text-slate-900 relative">
+          404
+        </h1>
+      </div>
+
+      <!-- Title & Message -->
+      <h2 class="font-clash-semibold text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 uppercase tracking-tight mt-2 mb-4">
+        Lost in Digital Space
+      </h2>
+      <p class="font-sans text-slate-600 text-base md:text-lg max-w-md mx-auto leading-relaxed mb-10">
+        The route you requested could not be located or has been shifted into another dimension.
+      </p>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-4">
+        <a 
+          href="/" 
+          class="group font-mono text-xs md:text-sm uppercase tracking-[0.15em] font-bold bg-[#C44900] hover:bg-slate-900 text-white px-7 py-3.5 rounded-full shadow-lg shadow-[#C44900]/20 hover:shadow-xl transition-all duration-300 hover:scale-[1.03] cursor-target flex items-center gap-2"
+        >
+          <span>←</span> Return Home
+        </a>
+        <a 
+          href="/projects" 
+          class="group font-mono text-xs md:text-sm uppercase tracking-[0.15em] font-bold bg-white border border-slate-300 hover:border-slate-900 text-slate-800 hover:text-black px-7 py-3.5 rounded-full shadow-sm hover:shadow-md transition-all duration-300 hover:scale-[1.03] cursor-target flex items-center gap-2"
+        >
+          View Projects <span>→</span>
+        </a>
+      </div>
+    </main>
+
+    <!-- Footer Status -->
+    <footer class="w-full flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-2 border-t border-slate-200/60 pt-6 text-slate-400 font-mono text-[11px] uppercase tracking-wider">
+      <div>
+        © {new Date().getFullYear()} Zeus Angelo Bautista
+      </div>
+      <div>
+        HTTP_404_NOT_FOUND
+      </div>
+    </footer>
+
+  </div>
+</Layout>
