@@ -313,6 +313,12 @@ export default function Certifications() {
   }, [selectedItem]);
 
   useEffect(() => {
+    const island = containerRef.current?.parentElement;
+    if (island?.tagName === 'ASTRO-ISLAND') {
+      island.style.display = 'block';
+      island.style.width = '100%';
+    }
+
     const ctx = gsap.context(() => {
       let mm = gsap.matchMedia();
 
