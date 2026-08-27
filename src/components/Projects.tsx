@@ -19,8 +19,8 @@ const projectsData = [
     accentColor: "from-white/5 to-transparent",
     link: "https://bigkas.site/",
     github: "https://github.com/kidlatpogi/bigkas-capstone",
-    image: "",
-    backupImage: ""
+    image: "https://zeusbautista.site/Project%20Overview/TalkTics.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/TalkTics.webp"
   },
   {
     title: "L.I.N.N.Y",

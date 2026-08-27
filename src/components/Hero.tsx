@@ -75,22 +75,40 @@ export default function Hero() {
                   </svg>
                 </div>
 
-                <img
-                  src={isProfileHovered ? profileImageHover : profileImage}
-                  alt="Zeus Angelo Bautista"
-                  loading="eager"
-                  decoding="async"
+                <div
+                  className="relative w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-[9.5rem] xl:h-[9.5rem] 2xl:w-40 2xl:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10 cursor-pointer overflow-hidden"
                   onMouseEnter={() => setIsProfileHovered(true)}
                   onMouseLeave={() => setIsProfileHovered(false)}
-                  onError={(event) => {
-                    const image = event.currentTarget;
-                    const backup = isProfileHovered ? profileImageHoverBackup : profileImageBackup;
-                    if (image.src !== backup) {
-                      image.src = backup;
-                    }
-                  }}
-                  className="w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-[9.5rem] xl:h-[9.5rem] 2xl:w-40 2xl:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] object-cover object-center flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10 transition-all duration-300 cursor-pointer"
-                />
+                >
+                  <img
+                    src={profileImage}
+                    alt="Zeus Angelo Bautista"
+                    loading="eager"
+                    decoding="async"
+                    onError={(event) => {
+                      const image = event.currentTarget;
+                      if (image.src !== profileImageBackup) {
+                        image.src = profileImageBackup;
+                      }
+                    }}
+                    className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 ease-out"
+                    style={{ opacity: isProfileHovered ? 0 : 1 }}
+                  />
+                  <img
+                    src={profileImageHover}
+                    alt="Zeus Angelo Bautista smiling"
+                    loading="eager"
+                    decoding="async"
+                    onError={(event) => {
+                      const image = event.currentTarget;
+                      if (image.src !== profileImageHoverBackup) {
+                        image.src = profileImageHoverBackup;
+                      }
+                    }}
+                    className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 ease-out"
+                    style={{ opacity: isProfileHovered ? 1 : 0 }}
+                  />
+                </div>
               </div>
             </h1>
             <h1 className="hero-title-2 font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
