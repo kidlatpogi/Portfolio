@@ -9,7 +9,7 @@ const DESKTOP_QUERY = '(min-width: 1024px)';
 
 const projectsData = [
   {
-    title: "Bigkas Capstone",
+    title: "TalkTics",
     platform: "Web App",
     year: "2025",
     description: "An AI-powered public speaking simulator and analysis platform. It leverages Librosa for advanced audio analysis and MediaPipe for real-time facial and posture tracking, providing speakers with automated metrics to refine and elevate their presentation skills.",

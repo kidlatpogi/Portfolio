@@ -3,9 +3,12 @@ import { motion } from 'framer-motion';
 
 const profileImage = "https://zeusbautista.site/Common/Profile%20Picture.webp";
 const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Profile%20Picture.webp";
+const profileImageHover = "https://zeusbautista.site/Common/Bautista%20Zeus%20Angelo%20V..webp";
+const profileImageHoverBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Bautista%20Zeus%20Angelo%20V..webp";
 
 export default function Hero() {
   const [startStrikethrough, setStartStrikethrough] = React.useState(false);
+  const [isProfileHovered, setIsProfileHovered] = React.useState(false);
 
   React.useEffect(() => {
     const isPreloaderGone = typeof document !== 'undefined' && !document.getElementById('preloader');
@@ -42,7 +45,7 @@ export default function Hero() {
           <div className="relative w-max max-w-full">
             <h1 className="hero-title-1 relative inline-block font-sans text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Zeus Angelo
- 
+
               {/* Profile picture on the right side */}
               <div className="absolute top-1/2 -translate-y-1/2 left-[100%] ml-1 sm:ml-3 md:ml-4 lg:ml-6 flex items-center z-20 w-[5rem] sm:w-[8rem] md:w-[12rem] lg:w-[13rem] xl:w-[16rem] 2xl:w-[18rem]">
                 {/* Playful Dotted Line */}
@@ -71,19 +74,22 @@ export default function Hero() {
                     <circle cx="160" cy="40" r="4.5" fill="currentColor" opacity="0.15" />
                   </svg>
                 </div>
- 
+
                 <img
-                  src={profileImage}
+                  src={isProfileHovered ? profileImageHover : profileImage}
                   alt="Zeus Angelo Bautista"
                   loading="eager"
                   decoding="async"
+                  onMouseEnter={() => setIsProfileHovered(true)}
+                  onMouseLeave={() => setIsProfileHovered(false)}
                   onError={(event) => {
                     const image = event.currentTarget;
-                    if (image.src !== profileImageBackup) {
-                      image.src = profileImageBackup;
+                    const backup = isProfileHovered ? profileImageHoverBackup : profileImageBackup;
+                    if (image.src !== backup) {
+                      image.src = backup;
                     }
                   }}
-                  className="w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-[9.5rem] xl:h-[9.5rem] 2xl:w-40 2xl:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] object-cover object-center flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10"
+                  className="w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-[9.5rem] xl:h-[9.5rem] 2xl:w-40 2xl:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] object-cover object-center flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10 transition-all duration-300 cursor-pointer"
                 />
               </div>
             </h1>
@@ -93,17 +99,17 @@ export default function Hero() {
             <h1 className="hero-title-3 font-clash-semibold text-[9.5vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               <span className="relative inline-block italic mr-[0.25em]">
                 <span>Future</span>
-                <motion.span 
+                <motion.span
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: startStrikethrough ? 1 : 0 }}
-                  transition={{ 
-                    type: 'spring', 
-                    stiffness: 180, 
-                    damping: 12, 
-                    mass: 0.6 
+                  transition={{
+                    type: 'spring',
+                    stiffness: 180,
+                    damping: 12,
+                    mass: 0.6
                   }}
                   style={{ originX: 0 }}
-                  className="absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[5px] lg:h-[6px] xl:h-[7px] 2xl:h-[8px] bg-black rounded-full pointer-events-none" 
+                  className="absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[5px] lg:h-[6px] xl:h-[7px] 2xl:h-[8px] bg-black rounded-full pointer-events-none"
                 />
               </span>
               Developer
