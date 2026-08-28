@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Bot, ExternalLink, ArrowRight, CornerDownLeft } from 'lucide-react';
-import { PORTFOLIO_DATA } from '../data/portfolioData';
+import { X, Bot, Keyboard, ExternalLink, ArrowRight, CornerDownLeft } from 'lucide-react';
+import { TypingTest } from './TypingTest';
 
 const COOLDOWN_SECONDS = 30;
 const COOLDOWN_KEY = 'zeus_chatbot_cooldown_expiry';
@@ -133,11 +133,11 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
   const lines = cleanContent.split('\n');
 
   return (
-    <div className="flex flex-col gap-2 text-xs md:text-sm text-slate-700 leading-relaxed font-sans">
+    <div className="flex flex-col gap-1.5 text-xs md:text-sm text-slate-700 leading-relaxed font-sans">
       {lines.map((line, index) => {
         const trimmed = line.trim();
         if (!trimmed) {
-          return <div key={index} className="h-1.5" />;
+          return <div key={index} className="h-1" />;
         }
 
         // Section Title: ### Title
@@ -145,7 +145,7 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
           return (
             <div
               key={index}
-              className="font-clash-bold text-xs md:text-sm font-bold text-[#C44900] uppercase tracking-wider mt-3 mb-1 pb-1.5 border-b border-[#C44900]/20 flex items-center gap-2"
+              className="font-clash-bold text-xs md:text-sm font-bold text-[#C44900] uppercase tracking-wider mt-2 mb-0.5 pb-1 border-b border-[#C44900]/20 flex items-center gap-2"
             >
               <span className="w-2 h-2 rounded-[2px] bg-[#C44900] shrink-0" />
               <span>{trimmed.replace(/^###\s+/, '')}</span>
@@ -158,7 +158,7 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
           return (
             <div
               key={index}
-              className="font-bold text-xs md:text-[13px] text-slate-900 mt-2.5 mb-1 flex items-center gap-2"
+              className="font-bold text-xs md:text-[13px] text-slate-900 mt-2 mb-0.5 flex items-center gap-2"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[#C44900] shrink-0" />
               <span>{renderInlineMarkdown(trimmed.replace(/^####\s+/, ''))}</span>
@@ -166,7 +166,7 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
           );
         }
 
-        // Nested List Item (indented with 2+ spaces or tabs before - or *)
+        // Nested List Item
         if (/^(\s{2,}|\t)[-*]\s+/.test(line)) {
           const itemText = line.replace(/^\s*[-*]\s+/, '');
           return (
@@ -177,7 +177,7 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
           );
         }
 
-        // Primary List Item (- or *)
+        // Primary List Item
         if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
           const itemText = trimmed.replace(/^[-*]\s+/, '');
           return (
@@ -188,12 +188,12 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
           );
         }
 
-        // Numbered List Item (e.g. 1. , 2. )
+        // Numbered List Item
         if (/^\d+\.\s+/.test(trimmed)) {
           const match = trimmed.match(/^(\d+)\.\s+(.*)/);
           if (match) {
             return (
-              <div key={index} className="flex items-start gap-2.5 ml-1.5 my-1 text-slate-800">
+              <div key={index} className="flex items-start gap-2.5 ml-1.5 my-0.5 text-slate-800">
                 <span className="font-mono text-[11px] font-bold text-[#C44900] bg-orange-50 border border-[#C44900]/30 rounded px-1.5 py-0.2 shrink-0">
                   {match[1]}
                 </span>
@@ -216,6 +216,7 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
 
 export const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isTypingTestOpen, setIsTypingTestOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -307,7 +308,7 @@ export const ChatBot: React.FC = () => {
 
     const cleanText = textToSend.trim();
 
-    // 1. Check for bad words, adult content, or keyboard mash client-side (NEVER sends to Cloudflare AI)
+    // 1. Check for bad words, adult content, or keyboard mash client-side
     if (containsBadContent(cleanText) || containsKeyboardMash(cleanText)) {
       const userMsg: Message = {
         id: `user-${Date.now()}`,
@@ -330,7 +331,7 @@ export const ChatBot: React.FC = () => {
       return;
     }
 
-    // 2. Check for Prompt Injection / System Prompt Extraction (NEVER sends to Cloudflare AI)
+    // 2. Check for Prompt Injection / System Prompt Extraction
     if (containsPromptInjection(cleanText)) {
       const userMsg: Message = {
         id: `user-${Date.now()}`,
@@ -432,7 +433,13 @@ export const ChatBot: React.FC = () => {
 
   return (
     <>
-      {/* Immersive Overlay Interface (matching reference design) */}
+      {/* Typing Test Modal Island */}
+      <TypingTest
+        isOpen={isTypingTestOpen}
+        onClose={() => setIsTypingTestOpen(false)}
+      />
+
+      {/* Immersive Overlay Interface */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -443,7 +450,7 @@ export const ChatBot: React.FC = () => {
             className="fixed inset-0 z-[100] flex flex-col justify-between bg-[#f8f8f8]/85 backdrop-blur-2xl px-6 py-8 sm:px-12 md:px-20 lg:px-28"
           >
             {/* Top Navigation Bar */}
-            <div className="w-full flex items-center justify-between max-w-5xl mx-auto flex-shrink-0">
+            <div className="w-full flex items-center justify-between max-w-4xl mx-auto flex-shrink-0">
               <div className="flex items-center gap-3">
                 <span className="font-mono text-xs uppercase tracking-[0.2em] font-bold text-[#C44900]">
                   PORTFOLIO ASSISTANT
@@ -465,9 +472,9 @@ export const ChatBot: React.FC = () => {
             </div>
 
             {/* Main Interactive Content Area */}
-            <div className="w-full max-w-4xl mx-auto flex flex-col justify-center flex-grow py-6 overflow-hidden">
+            <div className="w-full max-w-3xl mx-auto flex flex-col justify-center flex-grow py-4 overflow-hidden">
               {messages.length === 0 ? (
-                /* Initial State: Big Prominent Prompt (Reference Design) */
+                /* Initial State: Big Prominent Prompt */
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -526,20 +533,20 @@ export const ChatBot: React.FC = () => {
                   </div>
                 </motion.div>
               ) : (
-                /* Conversation View */
-                <div className="flex flex-col h-full max-h-[72vh] justify-between">
-                  {/* Messages Feed without vertical scrollbar (scrollbar-none across desktop and mobile) */}
+                /* Conversation View with tight, natural spacing */
+                <div className="flex flex-col h-full max-h-[75vh]">
+                  {/* Messages Feed */}
                   <div
                     ref={scrollContainerRef}
                     data-lenis-prevent
-                    className="overflow-y-auto overscroll-contain flex flex-col gap-6 flex-grow mb-4 pr-1 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                    className="overflow-y-auto overscroll-contain flex flex-col gap-4 flex-1 min-h-0 mb-3 pr-1 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   >
                     {messages.map((msg) => (
                       <div
                         key={msg.id}
-                        className={`flex flex-col gap-2 ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+                        className={`flex flex-col gap-1.5 ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
                       >
-                        <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                        <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-slate-400 px-1">
                           {msg.sender === 'user' ? (
                             <span>You</span>
                           ) : (
@@ -547,11 +554,12 @@ export const ChatBot: React.FC = () => {
                           )}
                         </div>
 
+                        {/* Text bubble: Bot bubble has no orange left border */}
                         <div
-                          className={`w-full max-w-3xl p-5 sm:p-6 rounded-2xl border ${
+                          className={`w-full max-w-2xl p-4 sm:p-5 rounded-2xl border ${
                             msg.sender === 'user'
                               ? 'bg-black text-white border-black self-end'
-                              : 'bg-white text-slate-800 border-slate-200/80 border-l-4 border-l-[#C44900] shadow-sm'
+                              : 'bg-white text-slate-800 border-slate-200/80 shadow-2xs'
                           }`}
                         >
                           <FormattedMessage content={msg.text} isUser={msg.sender === 'user'} />
@@ -559,24 +567,24 @@ export const ChatBot: React.FC = () => {
                       </div>
                     ))}
 
-                    {/* Typing State */}
+                    {/* Typing Indicator: No orange left border */}
                     {isTyping && (
-                      <div className="flex flex-col gap-2 items-start">
-                        <span className="font-mono text-[10px] uppercase tracking-wider text-[#C44900] font-bold">
+                      <div className="flex flex-col gap-1.5 items-start">
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-[#C44900] font-bold px-1">
                           Zeus's Assistant
                         </span>
-                        <div className="p-4 rounded-2xl bg-white border border-slate-200/80 border-l-4 border-l-[#C44900] flex items-center gap-2 shadow-sm">
+                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 flex items-center gap-2 shadow-2xs">
                           <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '0ms' }} />
                           <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '150ms' }} />
                           <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '300ms' }} />
-                          <span className="font-mono text-xs text-slate-400 ml-2">Thinking...</span>
+                          <span className="font-mono text-xs text-slate-400 ml-1.5">Thinking...</span>
                         </div>
                       </div>
                     )}
                   </div>
 
-                  {/* Bottom Persistent Input Bar */}
-                  <div className="flex flex-col gap-3 pt-3 border-t border-slate-200/80 flex-shrink-0">
+                  {/* Bottom Input Bar */}
+                  <div className="flex flex-col gap-2.5 pt-2 border-t border-slate-200/80 flex-shrink-0">
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -590,7 +598,7 @@ export const ChatBot: React.FC = () => {
                         onChange={(e) => setInputValue(e.target.value)}
                         placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Ask a follow-up question..."}
                         disabled={isTyping || cooldownRemaining > 0}
-                        className="w-full text-base sm:text-lg font-sans text-slate-900 bg-white border border-slate-300 focus:border-[#C44900] rounded-xl px-4 py-3 pr-12 focus:outline-none transition-colors duration-200 shadow-2xs"
+                        className="w-full text-sm sm:text-base font-sans text-slate-900 bg-white border border-slate-300 focus:border-[#C44900] rounded-xl px-4 py-2.5 pr-10 focus:outline-none transition-colors duration-200 shadow-2xs"
                       />
                       <button
                         type="submit"
@@ -598,18 +606,18 @@ export const ChatBot: React.FC = () => {
                         className="absolute right-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
                         aria-label="Submit follow-up query"
                       >
-                        <CornerDownLeft size={20} />
+                        <CornerDownLeft size={18} />
                       </button>
                     </form>
 
-                    {/* Quick Suggestion Pills (with hidden scrollbar) */}
+                    {/* Quick Suggestion Pills */}
                     <div className="flex flex-wrap gap-1.5 overflow-x-auto pb-1 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                       {TOPICS.map((t, idx) => (
                         <button
                           key={idx}
                           type="button"
                           onClick={() => handleSend(t.query)}
-                          className="font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#C44900] bg-white hover:bg-orange-50 px-3 py-1 text-slate-700 hover:text-[#C44900] transition-all duration-200 cursor-pointer shadow-2xs"
+                          className="font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#C44900] bg-white hover:bg-orange-50 px-3 py-1 text-slate-700 hover:text-[#C44900] transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
                         >
                           {t.label}
                         </button>
@@ -623,25 +631,39 @@ export const ChatBot: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Floating Trigger Button (Bottom-Left) */}
-      <div className="fixed bottom-6 left-6 z-50">
-        <motion.button
-          onClick={() => {
-            setIsOpen(true);
-          }}
-          className="flex items-center gap-2.5 bg-black hover:bg-[#C44900] text-[#FAFAFA] pl-4 pr-5 py-3 rounded-full cursor-pointer shadow-2xl transition-colors duration-300 border border-white/10"
-          aria-label="Open portfolio AI assistant"
-          whileHover={{ scale: 1.04 }}
-          whileTap={{ scale: 0.96 }}
-        >
-          <div className="relative w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-white">
-            <Bot size={15} />
-            <span className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 border border-black rounded-full" />
-          </div>
-          <span className="font-mono text-xs uppercase tracking-wider font-bold">
-            Ask AI
-          </span>
-        </motion.button>
+      {/* Floating Action Buttons Stack (Bottom-Left) */}
+      <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-3 items-start">
+        {/* 1. Typing Test Button (Top) */}
+        <div className="group relative flex items-center">
+          <button
+            onClick={() => setIsTypingTestOpen(true)}
+            className="flex items-center h-12 rounded-full bg-black hover:bg-[#C44900] text-[#FAFAFA] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[200px] px-3.5 group-hover:pr-5 group-hover:pl-4"
+            aria-label="Open typing test"
+          >
+            <div className="flex items-center justify-center shrink-0">
+              <Keyboard size={19} className="text-white" />
+            </div>
+            <span className="font-mono text-xs uppercase tracking-wider font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 ml-2.5 transition-opacity duration-200">
+              Typing Test
+            </span>
+          </button>
+        </div>
+
+        {/* 2. Ask AI Button (Bottom) */}
+        <div className="group relative flex items-center">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="flex items-center h-12 rounded-full bg-black hover:bg-[#C44900] text-[#FAFAFA] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[180px] px-3.5 group-hover:pr-5 group-hover:pl-4"
+            aria-label="Open portfolio AI assistant"
+          >
+            <div className="flex items-center justify-center shrink-0">
+              <Bot size={19} className="text-white" />
+            </div>
+            <span className="font-mono text-xs uppercase tracking-wider font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 ml-2.5 transition-opacity duration-200">
+              Ask AI
+            </span>
+          </button>
+        </div>
       </div>
     </>
   );
