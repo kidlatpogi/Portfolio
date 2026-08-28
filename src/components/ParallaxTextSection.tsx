@@ -1,43 +1,43 @@
-import React, { useRef } from 'react';
+﻿import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 export default function ParallaxTextSection() {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Track scroll progress of the section
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"]
+    offset: ['start end', 'end start']
   });
 
-  // Transform row 1 to slide right-to-left on scroll down
-  const x1 = useTransform(scrollYProgress, [0, 1], [180, -180]);
-  // Transform row 2 to slide left-to-right on scroll down
-  const x2 = useTransform(scrollYProgress, [0, 1], [-180, 180]);
+  // Smooth scroll-driven horizontal parallax on both desktop & mobile
+  const x1 = useTransform(scrollYProgress, [0, 1], [150, -150]);
+  const x2 = useTransform(scrollYProgress, [0, 1], [-150, 150]);
 
   return (
-    <div
+    <section
       ref={containerRef}
-      className="w-full relative overflow-hidden bg-transparent py-20 md:py-32 flex flex-col justify-center border-y border-slate-200/40"
+      className="relative w-full overflow-hidden bg-[#fafafa] py-16 md:py-24 border-y border-slate-200/60"
     >
-      {/* Desktop Layout */}
-      <div className="hidden md:flex flex-col gap-12 lg:gap-16 w-full">
-        {/* Row 1 */}
+      {/* Background Grid Pattern */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+
+      {/* 2 Parallax Animated Rows */}
+      <div className="flex flex-col gap-6 sm:gap-10 md:gap-16 w-full relative z-10">
+        {/* Row 1: Web Dev & App Dev */}
         <motion.div
           style={{ x: x1 }}
           className="flex items-center whitespace-nowrap will-change-transform select-none"
         >
-          <span className="font-sans text-[clamp(6rem,11vw,13rem)] font-black text-black leading-none tracking-tighter uppercase">
+          <span className="font-sans text-[clamp(2.5rem,7.5vw,13rem)] font-black text-black leading-none tracking-tighter uppercase">
             Web Dev
           </span>
-          <span className="font-serif text-[clamp(3rem,5vw,5rem)] text-slate-300 mx-14 font-light italic">
+          <span className="font-serif text-[clamp(1.5rem,3.5vw,5rem)] text-slate-300 mx-4 sm:mx-8 md:mx-14 font-light italic">
             &
           </span>
-          <span className="font-sans text-[clamp(6rem,11vw,13rem)] font-black text-black leading-none tracking-tighter uppercase">
+          <span className="font-sans text-[clamp(2.5rem,7.5vw,13rem)] font-black text-black leading-none tracking-tighter uppercase">
             App Dev
           </span>
 
-          <div className="ml-16 pr-32 flex flex-col gap-1 text-left border-l border-slate-200/80 pl-10">
+          <div className="hidden md:flex ml-16 pr-32 flex-col gap-1 text-left border-l border-slate-200/80 pl-10 flex-shrink-0">
             <span className="text-xs text-slate-500 font-mono uppercase tracking-[0.25em]">Competency</span>
             <div className="h-[1.5px] w-6 bg-accent mb-1.5" />
             <span className="text-lg text-slate-700 font-mono uppercase tracking-tight font-bold">Web Applications</span>
@@ -46,22 +46,22 @@ export default function ParallaxTextSection() {
           </div>
         </motion.div>
 
-        {/* Row 2 */}
+        {/* Row 2: Software & Hardware */}
         <motion.div
           style={{ x: x2 }}
           className="flex items-center whitespace-nowrap will-change-transform select-none"
         >
-          <span className="font-sans text-[clamp(6rem,11vw,13rem)] font-black text-black leading-none tracking-tighter uppercase">
+          <span className="font-sans text-[clamp(2.5rem,7.5vw,13rem)] font-black text-black leading-none tracking-tighter uppercase">
             Software
           </span>
-          <span className="font-serif text-[clamp(3rem,5vw,5rem)] text-slate-300 mx-14 font-light italic">
+          <span className="font-serif text-[clamp(1.5rem,3.5vw,5rem)] text-slate-300 mx-4 sm:mx-8 md:mx-14 font-light italic">
             &
           </span>
-          <span className="font-sans text-[clamp(6rem,11vw,13rem)] font-black text-black leading-none tracking-tighter uppercase">
+          <span className="font-sans text-[clamp(2.5rem,7.5vw,13rem)] font-black text-black leading-none tracking-tighter uppercase">
             Hardware
           </span>
 
-          <div className="ml-16 pr-32 flex flex-col gap-1 text-left border-l border-slate-200/80 pl-10">
+          <div className="hidden md:flex ml-16 pr-32 flex-col gap-1 text-left border-l border-slate-200/80 pl-10 flex-shrink-0">
             <span className="text-xs text-slate-500 font-mono uppercase tracking-[0.25em]">Focus</span>
             <div className="h-[1.5px] w-6 bg-accent mb-1.5" />
             <span className="text-lg text-slate-700 font-mono uppercase tracking-tight font-bold">Performance</span>
@@ -71,48 +71,9 @@ export default function ParallaxTextSection() {
         </motion.div>
       </div>
 
-      {/* Mobile Layout */}
-      <div className="md:hidden px-6 flex flex-col gap-8">
-        {/* Pair 1: Web Dev & App Dev */}
-        <div className="space-y-3">
-          <div className="whitespace-nowrap">
-            <span className="text-4xl sm:text-5xl font-black text-black uppercase leading-none tracking-tighter">
-              Web Dev
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-slate-200" />
-            <span className="text-lg font-light italic text-slate-300 font-serif">&</span>
-            <div className="h-px flex-1 bg-slate-200" />
-          </div>
-          <div className="whitespace-nowrap flex justify-end">
-            <span className="text-4xl sm:text-5xl font-black text-black uppercase leading-none tracking-tighter">
-              App Dev
-            </span>
-          </div>
-        </div>
-
-        {/* Pair 2: Software & Hardware */}
-        <div className="space-y-3 pt-4 border-t border-slate-200/40">
-          <div className="whitespace-nowrap">
-            <span className="text-4xl sm:text-5xl font-black text-black uppercase leading-none tracking-tighter">
-              Software
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-slate-200" />
-            <span className="text-lg font-light italic text-slate-300 font-serif">&</span>
-            <div className="h-px flex-1 bg-slate-200" />
-          </div>
-          <div className="whitespace-nowrap flex justify-end">
-            <span className="text-4xl sm:text-5xl font-black text-black uppercase leading-none tracking-tighter">
-              Hardware
-            </span>
-          </div>
-        </div>
-
-        {/* Competency & Focus Columns */}
-        <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-200/60">
+      {/* Mobile-only Competency & Focus grid directly below the 2 animated rows */}
+      <div className="md:hidden px-6 pt-10 mt-8 border-t border-slate-200/60 w-full max-w-[480px] mx-auto relative z-10">
+        <div className="grid grid-cols-2 gap-6">
           <div className="flex flex-col gap-1.5 text-left">
             <span className="text-[10px] text-slate-500 font-mono uppercase tracking-[0.2em] mb-0.5">Competency</span>
             <div className="h-[1.5px] w-5 bg-accent mb-1" />
@@ -129,6 +90,6 @@ export default function ParallaxTextSection() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

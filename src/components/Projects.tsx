@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+﻿import { useCallback, useEffect, useRef, useState } from 'react';
 import ScrollStack, { ScrollStackItem } from './ScrollStack.tsx';
 import ScrollReveal from './ScrollReveal.tsx';
 import { ExternalLink, ArrowUpRight } from 'lucide-react';
@@ -15,8 +15,8 @@ const projectsData = [
     description: "An AI-powered public speaking simulator and analysis platform. It leverages Librosa for advanced audio analysis and MediaPipe for real-time facial and posture tracking, providing speakers with automated metrics to refine and elevate their presentation skills.",
     tags: ["React JS", "Python", "MediaPipe", "Librosa", "Supabase"],
     stack: "[REACT JS] — [PYTHON]",
-    bgGradient: "bg-[#000000]",
-    accentColor: "from-white/5 to-transparent",
+    bgGradient: "bg-[#3D1400]",
+    accentColor: "from-white/10 to-transparent",
     link: "https://bigkas.site/",
     github: "https://github.com/kidlatpogi/bigkas-capstone",
     image: "https://zeusbautista.site/Project%20Overview/TalkTics.webp",
@@ -29,8 +29,8 @@ const projectsData = [
     description: "Inspired by J.A.R.V.I.S., L.I.N.N.Y. (Loyal Intelligent Neural Network for You) is a personal AI assistant that provides real-time verbal responses, manages daily tasks like checking the time, weather, and schedule, and seamlessly connects to Tapo smart devices via Kasa for efficient home automation.",
     tags: ["Python"],
     stack: "[PYTHON]",
-    bgGradient: "bg-[#0D0D0D]",
-    accentColor: "from-white/5 to-transparent",
+    bgGradient: "bg-[#662300]",
+    accentColor: "from-white/10 to-transparent",
     link: "",
     github: "https://github.com/kidlatpogi/L.I.N.N.Y",
     image: "https://zeusbautista.site/Project%20Overview/Linny-1200.webp",
@@ -43,8 +43,8 @@ const projectsData = [
     description: "SafeLink is a React Native/Expo app for family safety with emergency broadcasts and evacuation info using Firebase and OpenStreetMap.",
     tags: ["React Native", "Firebase"],
     stack: "[REACT NATIVE] — [FIREBASE]",
-    bgGradient: "bg-[#1A1A1A]",
-    accentColor: "from-white/5 to-transparent",
+    bgGradient: "bg-[#943500]",
+    accentColor: "from-white/10 to-transparent",
     link: "",
     github: "https://github.com/kidlatpogi/SafeLink",
     image: "https://zeusbautista.site/Project%20Overview/SafeLink-1200.webp",
@@ -57,8 +57,8 @@ const projectsData = [
     description: "MyPC is a web-based e-commerce platform developed for the Information Assurance and Security course. This emulates a real-world online store where users can browse, select, and purchase computer components and accessories.",
     tags: ["PHP", "MySQL"],
     stack: "[PHP] — [MYSQL]",
-    bgGradient: "bg-[#262626]",
-    accentColor: "from-white/5 to-transparent",
+    bgGradient: "bg-[#C44900]",
+    accentColor: "from-white/10 to-transparent",
     link: "https://mypcinfosec.vercel.app",
     github: "https://github.com/kidlatpogi/InfoSec-MyPC.git",
     image: "https://zeusbautista.site/Project%20Overview/MyPC-1200.webp",
@@ -71,8 +71,8 @@ const projectsData = [
     description: "A sleek and lightweight Windows Calendar Widget seamlessly connected to Google Calendar — without relying on any external databases or APIs.",
     tags: ["JavaScript", "Electron"],
     stack: "[ELECTRON] — [JS]",
-    bgGradient: "bg-[#333333]",
-    accentColor: "from-white/5 to-transparent",
+    bgGradient: "bg-[#E65B07]",
+    accentColor: "from-white/10 to-transparent",
     link: "https://github.com/kidlatpogi/Calendar-Widget/releases/latest",
     github: "https://github.com/kidlatpogi/Calendar-Widget",
     image: "https://zeusbautista.site/Project%20Overview/CalendarWidget-1200.webp",
@@ -282,8 +282,8 @@ export default function Projects() {
                   onClick={() => scrollToProject(index)}
                   className={`flex items-center gap-3 group cursor-target text-left transition-opacity duration-300 ${isActive ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`}
                 >
-                  <div className={`w-[72px] h-[48px] md:w-[88px] md:h-[56px] rounded-lg overflow-hidden ${project.bgGradient} flex items-center justify-center border transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg ${isActive ? 'border-accent/80 shadow-[0_12px_24px_-12px_rgba(196,73,0,0.6)]' : 'border-white/10'}`}>
-                    <span className="font-mono text-[10px] text-white/60 font-bold tracking-wider">
+                  <div className={`w-[72px] h-[48px] md:w-[88px] md:h-[56px] rounded-lg overflow-hidden ${project.bgGradient} flex items-center justify-center border transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg ${isActive ? 'border-white ring-2 ring-accent shadow-[0_12px_24px_-12px_rgba(196,73,0,0.8)]' : 'border-white/20'}`}>
+                    <span className="font-mono text-[10px] md:text-xs text-white/80 font-bold tracking-wider">
                       {String(index + 1).padStart(2, '0')}
                     </span>
                   </div>
@@ -316,7 +316,6 @@ export default function Projects() {
               onActiveIndexChange={setActiveProjectIndex}
             >
               {projectsData.map((project, index) => {
-                const isActive = activeProjectIndex === index;
                 const isVisible = index >= activeProjectIndex;
 
                 return (
@@ -326,39 +325,64 @@ export default function Projects() {
                     itemClassName={`${project.bgGradient} text-white flex flex-col justify-between cursor-target overflow-hidden`}
                   >
                     {/* Decorative gradient overlay */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${project.accentColor} pointer-events-none rounded-[40px]`} />
+                    <div className={`absolute inset-0 bg-gradient-to-br ${project.accentColor} pointer-events-none rounded-[32px] sm:rounded-[40px]`} />
 
-                     <div className={`w-full h-full grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 transition-opacity duration-300 z-10 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                      {/* Left: Info */}
+                     <div className={`w-full h-full grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-8 transition-opacity duration-300 z-10 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                      {/* Left Column / Mobile Unified Info */}
                       <div className="md:col-span-6 flex flex-col justify-center h-full min-w-0">
-                        <div className="flex flex-col gap-6">
+                        <div className="flex flex-col gap-3.5 sm:gap-5">
                           {/* Counter + Title Header */}
-                          <div className="flex flex-col gap-1.5">
-                            <span className="font-mono text-[11px] md:text-xs text-white/50 font-bold tracking-widest uppercase">
+                          <div className="flex flex-col gap-1">
+                            <span className="font-mono text-[11px] md:text-xs text-white/70 font-bold tracking-widest uppercase">
                               {String(index + 1).padStart(2, '0')} / {String(projectsData.length).padStart(2, '0')}
                             </span>
                             <div className="flex flex-wrap items-baseline justify-between gap-x-4 w-full">
-                              <h3 className="font-clash-semibold text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white uppercase leading-none">
+                              <h3 className="font-clash-semibold text-2xl sm:text-3xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white uppercase leading-none">
                                 {project.title}{" "}
-                                <span className="font-sans text-xs md:text-sm font-normal text-white/60 normal-case">
+                                <span className="font-sans text-xs md:text-sm font-normal text-white/80 normal-case">
                                   ({project.platform})
                                 </span>
                               </h3>
-                              <span className="font-mono text-sm md:text-base text-white/70 font-bold">
+                              <span className="font-mono text-sm md:text-base text-white/90 font-bold">
                                 {project.year}
                               </span>
                             </div>
-                            <span className="font-mono text-[11px] md:text-xs text-white/40 tracking-[0.15em] uppercase mt-1">
+                            <span className="font-mono text-[10px] sm:text-[11px] md:text-xs text-white/60 tracking-[0.15em] uppercase mt-0.5">
                               {project.stack}
                             </span>
                           </div>
 
+                          {/* Mobile Mock Preview Device (Visible on Mobile) */}
+                          {project.image && (
+                            <div className="flex md:hidden w-full aspect-[16/10] max-h-[180px] sm:max-h-[220px] rounded-xl overflow-hidden border border-white/20 shadow-xl bg-black/40 my-1 flex-shrink-0">
+                              <div className="h-4 w-full bg-white/10 border-b border-white/10 flex items-center px-2.5 gap-1 flex-shrink-0">
+                                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                                <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                              </div>
+                              <div className="w-full h-[calc(100%-16px)] overflow-hidden bg-slate-900">
+                                <img
+                                  src={project.image}
+                                  alt={`${project.title} Preview`}
+                                  className="w-full h-full object-cover object-top select-none pointer-events-none"
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    const img = e.currentTarget;
+                                    if (img.src !== project.backupImage) {
+                                      img.src = project.backupImage || "";
+                                    }
+                                  }}
+                                />
+                              </div>
+                            </div>
+                          )}
+
                           {/* Technology Pills */}
-                          <div className="flex flex-wrap gap-2">
+                          <div className="flex flex-wrap gap-1.5 sm:gap-2">
                             {project.tags.map((tag, tIdx) => (
                               <span
                                 key={tIdx}
-                                className="font-mono text-[10px] md:text-[11px] uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 text-white/80 border border-white/10 backdrop-blur-sm"
+                                className="font-mono text-[9px] sm:text-[10px] md:text-[11px] uppercase tracking-wider px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-black/25 text-white/90 border border-white/20 backdrop-blur-sm"
                               >
                                 {tag}
                               </span>
@@ -366,16 +390,16 @@ export default function Projects() {
                           </div>
 
                           {/* Description */}
-                          <p className="font-sans text-xs md:text-sm leading-relaxed text-white/70 max-w-md">
+                          <p className="font-sans text-xs sm:text-sm leading-relaxed text-white/85 max-w-md">
                             {project.description}
                           </p>
 
                           {/* Action Links */}
-                          <div className="flex flex-wrap items-center gap-3">
+                          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-1">
                             {project.github && (
                               <a 
                                 href={project.github} 
-                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-all cursor-target font-mono text-[10px] md:text-xs uppercase tracking-wider font-bold shadow-sm"
+                                className="flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-black/25 hover:bg-black/40 border border-white/25 hover:border-white/40 text-white transition-all cursor-target font-mono text-[10px] md:text-xs uppercase tracking-wider font-bold shadow-sm"
                                 aria-label="GitHub Repository"
                               >
                                 <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -388,7 +412,7 @@ export default function Projects() {
                             {project.link && (
                               <a 
                                 href={project.link} 
-                                className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-all cursor-target font-mono text-[10px] md:text-xs uppercase tracking-wider font-bold shadow-sm"
+                                className="flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-black/25 hover:bg-black/40 border border-white/25 hover:border-white/40 text-white transition-all cursor-target font-mono text-[10px] md:text-xs uppercase tracking-wider font-bold shadow-sm"
                                 aria-label="Live Demo"
                               >
                                 <ExternalLink className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
@@ -399,15 +423,15 @@ export default function Projects() {
                         </div>
                       </div>
 
-                      {/* Right: Mock Preview Device */}
+                      {/* Desktop Mock Preview Device (Hidden on Mobile) */}
                       <div className="hidden md:flex md:col-span-6 h-[95%] self-center items-center justify-center min-w-0">
                         {project.image ? (
-                          <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-950/40 group/browser">
+                          <div className="relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/20 shadow-2xl bg-black/30 group/browser">
                             {/* Browser top-bar */}
-                            <div className="h-5 w-full bg-white/5 border-b border-white/5 flex items-center px-3 gap-1 flex-shrink-0">
-                              <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
-                              <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
-                              <span className="w-1.5 h-1.5 rounded-full bg-white/20" />
+                            <div className="h-5 w-full bg-white/10 border-b border-white/10 flex items-center px-3 gap-1 flex-shrink-0">
+                              <span className="w-1.5 h-1.5 rounded-full bg-white/30" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-white/30" />
+                              <span className="w-1.5 h-1.5 rounded-full bg-white/30" />
                             </div>
                             {/* Browser content */}
                             <div className="w-full h-[calc(100%-20px)] overflow-hidden bg-slate-900">
@@ -425,10 +449,9 @@ export default function Projects() {
                             </div>
                           </div>
                         ) : (
-                          // Fallback abstract glow layout for non-image systems like Capstone
-                          <div className="relative w-[70%] max-w-[200px] aspect-square rounded-full border border-white/5 bg-white/5 flex items-center justify-center shadow-inner hover:scale-105 transition-transform duration-500">
-                            <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-white/5 to-transparent blur-md" />
-                            <span className="font-clash-bold text-5xl font-bold text-white/20 uppercase tracking-tighter select-none">
+                          <div className="relative w-[70%] max-w-[200px] aspect-square rounded-full border border-white/10 bg-white/10 flex items-center justify-center shadow-inner hover:scale-105 transition-transform duration-500">
+                            <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-md" />
+                            <span className="font-clash-bold text-5xl font-bold text-white/30 uppercase tracking-tighter select-none">
                               {project.title.substring(0, 2)}
                             </span>
                             <div className="absolute w-2.5 h-2.5 bg-accent rounded-full animate-ping top-1/4 right-1/4" />
