@@ -1,16 +1,58 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Bot, Sparkles } from 'lucide-react';
+import { X, Bot, Sparkles, ExternalLink, ArrowRight, CornerDownLeft } from 'lucide-react';
+import { PORTFOLIO_DATA } from '../data/portfolioData';
+
+const COOLDOWN_SECONDS = 30;
+const COOLDOWN_KEY = 'zeus_chatbot_cooldown_expiry';
+
+// Comprehensive Client-side Bad Words, Adult Terms, Porn Sites, and Slurs
+const CLIENT_BAD_WORDS = [
+  'fuck', 'fucking', 'fucker', 'shit', 'bitch', 'asshole', 'bastard', 'cunt', 'dick', 'pussy',
+  'nigger', 'nigga', 'faggot', 'fag', 'slut', 'whore', 'motherfucker', 'cock', 'twat', 'wanker',
+  'gago', 'gaga', 'tanga', 'tangina', 'putangina', 'putang ina', 'puta', 'pota', 'ulol', 'bobo',
+  'inutil', 'pakshet', 'tarantado', 'hayop', 'leche', 'letse', 'punyeta', 'tae', 'kantot', 'iyot',
+  'bwisit', 'kupal', 'hindot', 'pokpok', 'bayag', 'tamod', 'pepe', 'tite', 'burat', 'ogag', 'buwisit',
+  'pornhub', 'xvideos', 'xnxx', 'redtube', 'brazzers', 'onlyfans', 'xhamster', 'hentai', 'rule34',
+  'nude', 'nudes', 'porn', 'porno', 'xxx', 'sex', 'erotic', 'nsfw', 'camgirl', 'chaturbate',
+  'stripchat', 'eporner', 'youporn', 'beeg', 'milf', 'deepfake', 'escort', 'sex video'
+];
+
+// Client-side Prompt Injection & Extraction Patterns
+const CLIENT_INJECTION_KEYWORDS = [
+  'system prompt', 'system instructions', 'initial prompt', 'base prompt', 'hidden prompt',
+  'prompt text', 'reveal prompt', 'reveal instructions', 'leak prompt', 'ignore previous',
+  'disregard previous', 'ignore all previous', 'forget all instructions', 'ignore your instructions',
+  'disregard instructions', 'new instructions', 'override instructions', '.env', 'dotenv',
+  'api_key', 'apikey', 'api key', 'secret_key', 'cloudflare_token', 'cloudflare token', 'auth token',
+  'jwt secret', 'password', 'credentials', 'jailbreak', 'dan mode', 'developer mode',
+  'unrestricted mode', 'bypass filter', 'bypass safety', 'repeat everything above',
+  'what are your instructions', 'reveal your system instructions', 'output initialization'
+];
+
+// Strip emojis helper
+const stripEmojis = (text: string): string => {
+  return text.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '');
+};
 
 // Helper to detect keyboard mash spam client-side instantly
 const containsKeyboardMash = (text: string): boolean => {
   const lowerText = text.toLowerCase().trim();
   const words = lowerText.split(/\s+/);
-  const hasMash = words.some(w => {
+  return words.some(w => {
     if (w.length > 7 && !/[aeiouy]/i.test(w) && /^[a-z0-9]+$/i.test(w)) return true;
     return false;
   });
-  return hasMash;
+};
+
+const containsBadContent = (text: string): boolean => {
+  const lowerText = text.toLowerCase().trim();
+  return CLIENT_BAD_WORDS.some(word => lowerText.includes(word));
+};
+
+const containsPromptInjection = (text: string): boolean => {
+  const lowerText = text.toLowerCase().trim();
+  return CLIENT_INJECTION_KEYWORDS.some(term => lowerText.includes(term));
 };
 
 interface Message {
@@ -22,11 +64,155 @@ interface Message {
 
 const TOPICS = [
   { label: 'About Zeus', query: 'Tell me about Zeus Angelo Bautista' },
-  { label: 'Experience', query: 'What is Zeus\'s work experience?' },
-  { label: 'Tech Stack', query: 'What technologies and skills does Zeus use?' },
-  { label: 'Featured Projects', query: 'Tell me about Zeus\'s projects like TalkTics and LINNY' },
-  { label: 'Contact Zeus', query: 'How can I contact Zeus?' }
+  { label: 'Experience', query: 'What is Zeus\'s current work experience?' },
+  { label: 'Tech Stack', query: 'What is Zeus\'s current tech stack and skillset?' },
+  { label: 'Projects', query: 'Can you give me a full overview of Zeus\'s projects?' },
+  { label: 'Certifications', query: 'What verified certifications does Zeus have?' },
+  { label: 'Contact', query: 'How can I contact or hire Zeus?' }
 ];
+
+// Helper to format inline markdown (links, bold, code)
+const renderInlineMarkdown = (text: string) => {
+  const clean = stripEmojis(text);
+  const linkRegex = /\[(.*?)\]\((.*?)\)/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match;
+
+  while ((match = linkRegex.exec(clean)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(renderBoldAndCode(clean.substring(lastIndex, match.index)));
+    }
+    const linkText = match[1];
+    const linkUrl = match[2];
+    parts.push(
+      <a
+        key={`link-${match.index}`}
+        href={linkUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[#C44900] font-semibold underline underline-offset-2 hover:text-[#9A3800] transition-colors inline-flex items-center gap-0.5"
+      >
+        <span>{linkText}</span>
+        <ExternalLink size={11} className="inline opacity-70" />
+      </a>
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < clean.length) {
+    parts.push(renderBoldAndCode(clean.substring(lastIndex)));
+  }
+
+  return parts.length > 0 ? parts : clean;
+};
+
+// Helper for bold and inline code
+const renderBoldAndCode = (text: string) => {
+  const boldParts = text.split(/(\*\*.*?\*\*)/g);
+  return boldParts.map((part, idx) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      const boldText = part.slice(2, -2);
+      return (
+        <strong key={idx} className="font-bold text-slate-900">
+          {boldText}
+        </strong>
+      );
+    }
+    return part;
+  });
+};
+
+// Structured ATS / Pretty Markdown Formatter Component
+const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ content, isUser }) => {
+  if (isUser) {
+    return <span className="font-sans text-sm md:text-base font-semibold text-slate-900">{stripEmojis(content)}</span>;
+  }
+
+  const cleanContent = stripEmojis(content);
+  const lines = cleanContent.split('\n');
+
+  return (
+    <div className="flex flex-col gap-2 text-xs md:text-sm text-slate-700 leading-relaxed font-sans">
+      {lines.map((line, index) => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          return <div key={index} className="h-1.5" />;
+        }
+
+        // Section Title: ### Title
+        if (trimmed.startsWith('### ')) {
+          return (
+            <div
+              key={index}
+              className="font-clash-bold text-xs md:text-sm font-bold text-[#C44900] uppercase tracking-wider mt-3 mb-1 pb-1.5 border-b border-[#C44900]/20 flex items-center gap-2"
+            >
+              <span className="w-2 h-2 rounded-[2px] bg-[#C44900] shrink-0" />
+              <span>{trimmed.replace(/^###\s+/, '')}</span>
+            </div>
+          );
+        }
+
+        // Subheading: #### Subtitle
+        if (trimmed.startsWith('#### ')) {
+          return (
+            <div
+              key={index}
+              className="font-bold text-xs md:text-[13px] text-slate-900 mt-2.5 mb-1 flex items-center gap-2"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C44900] shrink-0" />
+              <span>{renderInlineMarkdown(trimmed.replace(/^####\s+/, ''))}</span>
+            </div>
+          );
+        }
+
+        // Nested List Item (indented with 2+ spaces or tabs before - or *)
+        if (/^(\s{2,}|\t)[-*]\s+/.test(line)) {
+          const itemText = line.replace(/^\s*[-*]\s+/, '');
+          return (
+            <div key={index} className="flex items-start gap-2 ml-5 my-0.5 text-slate-600">
+              <span className="w-1 h-1 rounded-full bg-slate-400 mt-2 shrink-0" />
+              <div className="flex-1">{renderInlineMarkdown(itemText)}</div>
+            </div>
+          );
+        }
+
+        // Primary List Item (- or *)
+        if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+          const itemText = trimmed.replace(/^[-*]\s+/, '');
+          return (
+            <div key={index} className="flex items-start gap-2.5 ml-1.5 my-0.5 text-slate-800">
+              <span className="w-1.5 h-1.5 rounded-[1.5px] bg-[#C44900] mt-2 shrink-0" />
+              <div className="flex-1">{renderInlineMarkdown(itemText)}</div>
+            </div>
+          );
+        }
+
+        // Numbered List Item (e.g. 1. , 2. )
+        if (/^\d+\.\s+/.test(trimmed)) {
+          const match = trimmed.match(/^(\d+)\.\s+(.*)/);
+          if (match) {
+            return (
+              <div key={index} className="flex items-start gap-2.5 ml-1.5 my-1 text-slate-800">
+                <span className="font-mono text-[11px] font-bold text-[#C44900] bg-orange-50 border border-[#C44900]/30 rounded px-1.5 py-0.2 shrink-0">
+                  {match[1]}
+                </span>
+                <div className="flex-1">{renderInlineMarkdown(match[2])}</div>
+              </div>
+            );
+          }
+        }
+
+        // Regular Paragraph
+        return (
+          <p key={index} className="my-0.5 text-slate-700">
+            {renderInlineMarkdown(trimmed)}
+          </p>
+        );
+      })}
+    </div>
+  );
+};
 
 export const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,38 +221,86 @@ export const ChatBot: React.FC = () => {
   const [hasNewNotification, setHasNewNotification] = useState(true);
   const [inputValue, setInputValue] = useState('');
   const [cooldownRemaining, setCooldownRemaining] = useState(0);
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // Restore persistent 30s cooldown from localStorage across page refreshes
+  useEffect(() => {
+    try {
+      const savedExpiry = localStorage.getItem(COOLDOWN_KEY);
+      if (savedExpiry) {
+        const remaining = Math.ceil((parseInt(savedExpiry, 10) - Date.now()) / 1000);
+        if (remaining > 0) {
+          setCooldownRemaining(remaining);
+        } else {
+          localStorage.removeItem(COOLDOWN_KEY);
+        }
+      }
+    } catch {}
+  }, []);
 
   // Cooldown countdown timer
   useEffect(() => {
-    if (cooldownRemaining <= 0) return;
+    if (cooldownRemaining <= 0) {
+      try {
+        localStorage.removeItem(COOLDOWN_KEY);
+      } catch {}
+      return;
+    }
     const timer = setTimeout(() => {
-      setCooldownRemaining(prev => prev - 1);
+      setCooldownRemaining(prev => {
+        const next = prev - 1;
+        if (next <= 0) {
+          try {
+            localStorage.removeItem(COOLDOWN_KEY);
+          } catch {}
+        }
+        return Math.max(0, next);
+      });
     }, 1000);
     return () => clearTimeout(timer);
   }, [cooldownRemaining]);
 
-  // Initialize with greeting messages
+  const activateCooldown = (seconds = COOLDOWN_SECONDS) => {
+    const expiry = Date.now() + seconds * 1000;
+    try {
+      localStorage.setItem(COOLDOWN_KEY, expiry.toString());
+    } catch {}
+    setCooldownRemaining(seconds);
+  };
+
+  // Keyboard shortcut listener (ESC to close)
   useEffect(() => {
-    setMessages([
-      {
-        id: 'greet-1',
-        sender: 'bot',
-        text: "Hello! I'm Zeus's portfolio AI assistant.",
-        timestamp: new Date()
-      },
-      {
-        id: 'greet-2',
-        sender: 'bot',
-        text: "Feel free to type any custom question or click the suggestion topics below!",
-        timestamp: new Date()
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
       }
-    ]);
-  }, []);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
+
+  // Auto-focus input when opened
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => inputRef.current?.focus(), 150);
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   // Scroll to bottom whenever messages change or typing state changes
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: scrollContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   }, [messages, isTyping]);
 
   const handleSend = async (textToSend: string) => {
@@ -74,8 +308,8 @@ export const ChatBot: React.FC = () => {
 
     const cleanText = textToSend.trim();
 
-    // Check for keyboard mash spam client-side instantly
-    if (containsKeyboardMash(cleanText)) {
+    // 1. Check for bad words, adult content, or keyboard mash client-side (NEVER sends to Cloudflare AI)
+    if (containsBadContent(cleanText) || containsKeyboardMash(cleanText)) {
       const userMsg: Message = {
         id: `user-${Date.now()}`,
         sender: 'user',
@@ -88,15 +322,39 @@ export const ChatBot: React.FC = () => {
         {
           id: `bot-warn-${Date.now()}`,
           sender: 'bot',
-          text: "The use of bad words, curse words, or any profanity is not allowed. Please keep our conversation professional and respectful.",
+          text: "The use of bad words, curse words, profanity, or inappropriate content is not allowed. Please keep our conversation professional and respectful.",
           timestamp: new Date()
         }
       ]);
       setInputValue('');
-      setCooldownRemaining(15);
+      activateCooldown(COOLDOWN_SECONDS);
       return;
     }
 
+    // 2. Check for Prompt Injection / System Prompt Extraction (NEVER sends to Cloudflare AI)
+    if (containsPromptInjection(cleanText)) {
+      const userMsg: Message = {
+        id: `user-${Date.now()}`,
+        sender: 'user',
+        text: cleanText,
+        timestamp: new Date()
+      };
+      setMessages(prev => [
+        ...prev,
+        userMsg,
+        {
+          id: `bot-shield-${Date.now()}`,
+          sender: 'bot',
+          text: "I can only answer questions related to Zeus's portfolio, professional background, projects, certifications, and tech stack.",
+          timestamp: new Date()
+        }
+      ]);
+      setInputValue('');
+      activateCooldown(COOLDOWN_SECONDS);
+      return;
+    }
+
+    // 3. Valid user query
     const userMsg: Message = {
       id: `user-${Date.now()}`,
       sender: 'user',
@@ -108,7 +366,7 @@ export const ChatBot: React.FC = () => {
     setMessages(updatedMessages);
     setIsTyping(true);
     setInputValue('');
-    setCooldownRemaining(15);
+    activateCooldown(COOLDOWN_SECONDS);
 
     try {
       const response = await fetch('/api/chat', {
@@ -142,7 +400,7 @@ export const ChatBot: React.FC = () => {
           {
             id: `bot-warn-${Date.now()}`,
             sender: 'bot',
-            text: "The use of bad words, curse words, or any profanity is not allowed. Please keep our conversation professional and respectful.",
+            text: data.response || "The use of bad words, curse words, profanity, or inappropriate content is not allowed. Please keep our conversation professional and respectful.",
             timestamp: new Date()
           }
         ]);
@@ -152,7 +410,7 @@ export const ChatBot: React.FC = () => {
           {
             id: `bot-err-${Date.now()}`,
             sender: 'bot',
-            text: data.response || data.error || "Sorry, I couldn't process your request right now. Please try again later.",
+            text: data.response || data.error || "Sorry, I could not process your request right now. Please try again later.",
             timestamp: new Date()
           }
         ]);
@@ -164,7 +422,7 @@ export const ChatBot: React.FC = () => {
         {
           id: `bot-err-${Date.now()}`,
           sender: 'bot',
-          text: "I'm having trouble connecting right now. Please feel free to reach Zeus directly at bautistaangelozeus17@gmail.com!",
+          text: "I am having trouble connecting right now. Please feel free to reach Zeus directly at bautistaangelozeus17@gmail.com!",
           timestamp: new Date()
         }
       ]);
@@ -174,190 +432,232 @@ export const ChatBot: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <>
+      {/* Immersive Overlay Interface (matching reference design) */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="w-[92vw] sm:w-[380px] bg-white border border-[#334155]/20 shadow-2xl rounded-2xl overflow-hidden mb-4 flex flex-col max-h-[560px]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            className="fixed inset-0 z-[100] flex flex-col justify-between bg-[#f8f8f8]/85 backdrop-blur-2xl px-6 py-8 sm:px-12 md:px-20 lg:px-28"
           >
-            {/* Header */}
-            <div className="bg-black text-[#FAFAFA] p-4 flex items-center justify-between border-b border-[#334155]/20">
+            {/* Top Navigation Bar */}
+            <div className="w-full flex items-center justify-between max-w-5xl mx-auto flex-shrink-0">
               <div className="flex items-center gap-3">
-                <div className="relative w-10 h-10 rounded-full bg-[#334155] flex items-center justify-center text-white border border-[#334155]/20">
-                  <Bot size={20} />
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border border-black rounded-full" />
-                </div>
-                <div className="flex flex-col">
-                  <h3 className="font-sans font-semibold text-sm leading-tight text-white">Zeus's Assistant</h3>
-                  <span className="text-[10px] text-zinc-400 font-mono">Cloudflare AI Powered</span>
-                </div>
+                <span className="font-mono text-xs uppercase tracking-[0.2em] font-bold text-[#C44900]">
+                  AI Portfolio Assistant
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 bg-black/5 text-slate-600 rounded-full border border-black/10">
+                  Cloudflare Workers AI
+                </span>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="text-zinc-400 hover:text-white transition-colors cursor-pointer p-1 rounded-full hover:bg-white/10"
-                aria-label="Close assistant"
-              >
-                <X size={18} />
-              </button>
+
+              <div className="flex items-center gap-4">
+                <span className="hidden sm:inline-block font-mono text-[11px] text-slate-400">
+                  Press <kbd className="px-1.5 py-0.5 bg-white border border-slate-300 rounded text-slate-600 shadow-2xs">ESC</kbd> to close
+                </span>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="w-10 h-10 rounded-full bg-black/5 hover:bg-black text-slate-700 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
+                  aria-label="Close ask modal"
+                >
+                  <X size={18} />
+                </button>
+              </div>
             </div>
 
-            {/* Messages Container */}
-            <div data-lenis-prevent className="h-[280px] overflow-y-auto overscroll-contain p-4 flex flex-col gap-3 bg-[#FAFAFA]">
-              {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex gap-2.5 max-w-[85%] ${msg.sender === 'user' ? 'self-end flex-row-reverse' : 'self-start'}`}
+            {/* Main Interactive Content Area */}
+            <div className="w-full max-w-4xl mx-auto flex flex-col justify-center flex-grow py-6 overflow-hidden">
+              {messages.length === 0 ? (
+                /* Initial State: Big Prominent Prompt (Reference Design) */
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col gap-6 my-auto"
                 >
-                  {msg.sender === 'bot' && (
-                    <div className="w-7 h-7 rounded-full bg-[#334155]/10 flex items-center justify-center text-[#334155] shrink-0 border border-[#334155]/20">
-                      <Bot size={14} />
-                    </div>
-                  )}
-                  <div
-                    className={`px-3.5 py-2.5 rounded-[1.25rem] text-xs leading-relaxed border ${
-                      msg.sender === 'user'
-                        ? 'bg-black text-[#FAFAFA] border-black rounded-tr-none'
-                        : 'bg-white text-[#334155] border-[#E5E7EB] rounded-tl-none font-sans shadow-sm'
-                    }`}
-                  >
-                    {msg.text}
-                  </div>
-                </div>
-              ))}
+                  <h1 className="font-clash-semibold text-3xl sm:text-5xl md:text-6xl text-slate-900 tracking-tight leading-none lowercase select-none">
+                    what do you want to ask?
+                  </h1>
 
-              {/* Typing indicator */}
-              {isTyping && (
-                <div className="flex gap-2.5 max-w-[85%] self-start">
-                  <div className="w-7 h-7 rounded-full bg-[#334155]/10 flex items-center justify-center text-[#334155] shrink-0 border border-[#334155]/20">
-                    <Bot size={14} />
+                  {/* Input Row */}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleSend(inputValue);
+                    }}
+                    className="relative w-full flex items-center"
+                  >
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Type a question or choose below..."}
+                      disabled={isTyping || cooldownRemaining > 0}
+                      className="w-full text-lg sm:text-2xl md:text-3xl font-sans text-slate-900 bg-transparent border-b-2 border-slate-300 focus:border-[#C44900] pb-3 pr-12 focus:outline-none transition-colors duration-200 placeholder:text-slate-400/70"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isTyping || !inputValue.trim() || cooldownRemaining > 0}
+                      className="absolute right-0 bottom-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
+                      aria-label="Submit query"
+                    >
+                      <CornerDownLeft size={24} />
+                    </button>
+                  </form>
+
+                  {/* Suggestion Chips */}
+                  <div className="flex flex-col gap-2.5 mt-4">
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
+                      Suggested Questions:
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {TOPICS.map((t, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handleSend(t.query)}
+                          className="font-mono text-xs font-semibold rounded-full border border-slate-300 hover:border-[#C44900] bg-white hover:bg-orange-50 px-4 py-2 text-slate-700 hover:text-[#C44900] transition-all duration-200 shadow-2xs cursor-pointer flex items-center gap-1.5"
+                        >
+                          <span>{t.label}</span>
+                          <ArrowRight size={12} className="opacity-60" />
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                  <div className="px-3.5 py-2.5 rounded-[1.25rem] bg-white border border-[#E5E7EB] rounded-tl-none flex items-center gap-1 shadow-sm">
-                    <span className="w-1.5 h-1.5 bg-[#334155] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 bg-[#334155] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 bg-[#334155] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                </motion.div>
+              ) : (
+                /* Conversation View */
+                <div className="flex flex-col h-full max-h-[68vh] justify-between">
+                  {/* Messages Feed */}
+                  <div
+                    ref={scrollContainerRef}
+                    data-lenis-prevent
+                    className="overflow-y-auto pr-3 overscroll-contain flex flex-col gap-6 flex-grow mb-4"
+                  >
+                    {messages.map((msg) => (
+                      <div
+                        key={msg.id}
+                        className={`flex flex-col gap-2 ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+                      >
+                        <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                          {msg.sender === 'user' ? (
+                            <span>You</span>
+                          ) : (
+                            <span className="text-[#C44900] font-bold">Zeus's Assistant</span>
+                          )}
+                        </div>
+
+                        <div
+                          className={`w-full max-w-3xl p-5 sm:p-6 rounded-2xl border ${
+                            msg.sender === 'user'
+                              ? 'bg-black text-white border-black self-end'
+                              : 'bg-white text-slate-800 border-slate-200/80 border-l-4 border-l-[#C44900] shadow-sm'
+                          }`}
+                        >
+                          <FormattedMessage content={msg.text} isUser={msg.sender === 'user'} />
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Typing State */}
+                    {isTyping && (
+                      <div className="flex flex-col gap-2 items-start">
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-[#C44900] font-bold">
+                          Zeus's Assistant
+                        </span>
+                        <div className="p-4 rounded-2xl bg-white border border-slate-200/80 border-l-4 border-l-[#C44900] flex items-center gap-2 shadow-sm">
+                          <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '0ms' }} />
+                          <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '150ms' }} />
+                          <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '300ms' }} />
+                          <span className="font-mono text-xs text-slate-400 ml-2">Thinking...</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Bottom Persistent Input Bar */}
+                  <div className="flex flex-col gap-3 pt-2 border-t border-slate-200 flex-shrink-0">
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        handleSend(inputValue);
+                      }}
+                      className="relative w-full flex items-center"
+                    >
+                      <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Ask a follow-up question..."}
+                        disabled={isTyping || cooldownRemaining > 0}
+                        className="w-full text-base sm:text-lg font-sans text-slate-900 bg-white border border-slate-300 focus:border-[#C44900] rounded-xl px-4 py-3 pr-12 focus:outline-none transition-colors duration-200 shadow-2xs"
+                      />
+                      <button
+                        type="submit"
+                        disabled={isTyping || !inputValue.trim() || cooldownRemaining > 0}
+                        className="absolute right-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
+                        aria-label="Submit follow-up query"
+                      >
+                        <CornerDownLeft size={20} />
+                      </button>
+                    </form>
+
+                    {/* Quick Suggestion Pills */}
+                    <div className="flex flex-wrap gap-1.5 overflow-x-auto pb-1">
+                      {TOPICS.map((t, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handleSend(t.query)}
+                          className="font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#C44900] bg-white hover:bg-orange-50 px-3 py-1 text-slate-700 hover:text-[#C44900] transition-all duration-200 cursor-pointer shadow-2xs"
+                        >
+                          {t.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
-
-              <div ref={messagesEndRef} />
             </div>
 
-            {/* Quick replies suggestion bar */}
-            <div className="p-3 border-t border-[#334155]/10 bg-[#FAFAFA] flex flex-col gap-1.5">
-              <span className="font-mono text-[8px] font-semibold text-[#334155]/60 uppercase tracking-wider">
-                Suggested Topics:
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {TOPICS.map((t, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => handleSend(t.query)}
-                    className="font-mono text-[9px] font-semibold rounded-full border border-[#334155]/30 hover:border-accent px-2.5 py-1 text-slate-700 bg-white hover:bg-orange-50 hover:text-accent cursor-pointer transition-all duration-200"
-                  >
-                    {t.label}
-                  </button>
-                ))}
-              </div>
+            {/* Bottom Status Footnote */}
+            <div className="w-full max-w-5xl mx-auto flex items-center justify-between text-slate-400 font-mono text-[10px] pt-4 border-t border-slate-200/60 flex-shrink-0">
+              <span>{cooldownRemaining > 0 ? `Cooldown: ${cooldownRemaining}s remaining` : 'Rate limit: 30s per request'}</span>
+              <span>Single Source of Truth Knowledge Architecture</span>
             </div>
-
-            {/* Input form */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleSend(inputValue);
-              }}
-              className="p-3 border-t border-[#334155]/10 bg-[#FAFAFA] flex gap-2 items-center"
-            >
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Ask me something about Zeus..."}
-                disabled={isTyping || cooldownRemaining > 0}
-                className="flex-grow px-3 py-2 text-xs rounded-xl border border-[#334155]/20 bg-white text-black focus:outline-none focus:border-accent disabled:opacity-60 transition-all font-sans"
-              />
-              <button
-                type="submit"
-                disabled={isTyping || !inputValue.trim() || cooldownRemaining > 0}
-                className="p-2 rounded-xl bg-black text-[#FAFAFA] hover:bg-accent disabled:opacity-40 disabled:hover:bg-black transition-colors cursor-pointer flex items-center justify-center border-none outline-none"
-                aria-label="Send message"
-              >
-                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <line x1="22" y1="2" x2="11" y2="13" />
-                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                </svg>
-              </button>
-            </form>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Floating Toggle Button */}
-      <motion.button
-        onClick={() => {
-          setIsOpen(!isOpen);
-          setHasNewNotification(false);
-        }}
-        className="w-14 h-14 rounded-full bg-black text-[#FAFAFA] flex items-center justify-center cursor-pointer relative border-none outline-none focus:outline-none"
-        aria-label="Toggle chatbot assistant"
-        animate={{
-          y: isOpen ? 0 : [0, -8, 0]
-        }}
-        transition={
-          isOpen
-            ? { duration: 0.2 }
-            : {
-                repeat: Infinity,
-                duration: 2.5,
-                ease: 'easeInOut'
-              }
-        }
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <AnimatePresence mode="wait">
-          {isOpen ? (
-            <motion.div
-              key="close-icon"
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.15 }}
-            >
-              <X size={24} />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="chat-icon"
-              initial={{ rotate: 90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="relative flex items-center justify-center"
-            >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
-                <rect x="3" y="6" width="18" height="13" rx="4" />
-                <path d="M12 6V3" />
-                <circle cx="12" cy="2" r="1" fill="currentColor" />
-                <circle cx="8" cy="12" r="1.2" fill="currentColor" />
-                <circle cx="16" cy="12" r="1.2" fill="currentColor" />
-                <path d="M9.5 15c.5.5 1.5.8 2.5.8s2-.3 2.5-.8" />
-              </svg>
-              {hasNewNotification && (
-                <span className="absolute -top-1.5 -right-1.5 w-3.5 h-3.5 bg-red-500 rounded-full border border-black flex items-center justify-center">
-                  <Sparkles size={8} className="text-white animate-pulse" />
-                </span>
-              )}
-            </motion.div>
+      {/* Floating Trigger Button (Bottom-Left) */}
+      <div className="fixed bottom-6 left-6 z-50">
+        <motion.button
+          onClick={() => {
+            setIsOpen(true);
+            setHasNewNotification(false);
+          }}
+          className="group flex items-center gap-2.5 bg-black hover:bg-[#C44900] text-[#FAFAFA] pl-4 pr-5 py-3 rounded-full cursor-pointer shadow-2xl transition-colors duration-300 border border-white/10"
+          aria-label="Open portfolio AI assistant"
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+        >
+          <div className="relative w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-white">
+            <Bot size={15} />
+            <span className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 border border-black rounded-full" />
+          </div>
+          <span className="font-mono text-xs uppercase tracking-wider font-bold">
+            Ask AI
+          </span>
+          {hasNewNotification && (
+            <span className="w-2 h-2 rounded-full bg-[#C44900] group-hover:bg-white animate-pulse" />
           )}
-        </AnimatePresence>
-      </motion.button>
-    </div>
+        </motion.button>
+      </div>
+    </>
   );
 };
 
