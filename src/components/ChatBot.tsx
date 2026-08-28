@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Bot, Sparkles, ExternalLink, ArrowRight, CornerDownLeft } from 'lucide-react';
+import { X, Bot, ExternalLink, ArrowRight, CornerDownLeft } from 'lucide-react';
 import { PORTFOLIO_DATA } from '../data/portfolioData';
 
 const COOLDOWN_SECONDS = 30;
@@ -126,7 +126,7 @@ const renderBoldAndCode = (text: string) => {
 // Structured ATS / Pretty Markdown Formatter Component
 const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ content, isUser }) => {
   if (isUser) {
-    return <span className="font-sans text-sm md:text-base font-semibold text-slate-900">{stripEmojis(content)}</span>;
+    return <span className="font-sans text-sm md:text-base font-medium text-white">{stripEmojis(content)}</span>;
   }
 
   const cleanContent = stripEmojis(content);
@@ -218,7 +218,6 @@ export const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [hasNewNotification, setHasNewNotification] = useState(true);
   const [inputValue, setInputValue] = useState('');
   const [cooldownRemaining, setCooldownRemaining] = useState(0);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -447,10 +446,7 @@ export const ChatBot: React.FC = () => {
             <div className="w-full flex items-center justify-between max-w-5xl mx-auto flex-shrink-0">
               <div className="flex items-center gap-3">
                 <span className="font-mono text-xs uppercase tracking-[0.2em] font-bold text-[#C44900]">
-                  AI Portfolio Assistant
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 bg-black/5 text-slate-600 rounded-full border border-black/10">
-                  Cloudflare Workers AI
+                  PORTFOLIO ASSISTANT
                 </span>
               </div>
 
@@ -531,12 +527,12 @@ export const ChatBot: React.FC = () => {
                 </motion.div>
               ) : (
                 /* Conversation View */
-                <div className="flex flex-col h-full max-h-[68vh] justify-between">
-                  {/* Messages Feed */}
+                <div className="flex flex-col h-full max-h-[72vh] justify-between">
+                  {/* Messages Feed without vertical scrollbar (scrollbar-none across desktop and mobile) */}
                   <div
                     ref={scrollContainerRef}
                     data-lenis-prevent
-                    className="overflow-y-auto pr-3 overscroll-contain flex flex-col gap-6 flex-grow mb-4"
+                    className="overflow-y-auto overscroll-contain flex flex-col gap-6 flex-grow mb-4 pr-1 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   >
                     {messages.map((msg) => (
                       <div
@@ -580,7 +576,7 @@ export const ChatBot: React.FC = () => {
                   </div>
 
                   {/* Bottom Persistent Input Bar */}
-                  <div className="flex flex-col gap-3 pt-2 border-t border-slate-200 flex-shrink-0">
+                  <div className="flex flex-col gap-3 pt-3 border-t border-slate-200/80 flex-shrink-0">
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -606,8 +602,8 @@ export const ChatBot: React.FC = () => {
                       </button>
                     </form>
 
-                    {/* Quick Suggestion Pills */}
-                    <div className="flex flex-wrap gap-1.5 overflow-x-auto pb-1">
+                    {/* Quick Suggestion Pills (with hidden scrollbar) */}
+                    <div className="flex flex-wrap gap-1.5 overflow-x-auto pb-1 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                       {TOPICS.map((t, idx) => (
                         <button
                           key={idx}
@@ -623,12 +619,6 @@ export const ChatBot: React.FC = () => {
                 </div>
               )}
             </div>
-
-            {/* Bottom Status Footnote */}
-            <div className="w-full max-w-5xl mx-auto flex items-center justify-between text-slate-400 font-mono text-[10px] pt-4 border-t border-slate-200/60 flex-shrink-0">
-              <span>{cooldownRemaining > 0 ? `Cooldown: ${cooldownRemaining}s remaining` : 'Rate limit: 30s per request'}</span>
-              <span>Single Source of Truth Knowledge Architecture</span>
-            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -638,9 +628,8 @@ export const ChatBot: React.FC = () => {
         <motion.button
           onClick={() => {
             setIsOpen(true);
-            setHasNewNotification(false);
           }}
-          className="group flex items-center gap-2.5 bg-black hover:bg-[#C44900] text-[#FAFAFA] pl-4 pr-5 py-3 rounded-full cursor-pointer shadow-2xl transition-colors duration-300 border border-white/10"
+          className="flex items-center gap-2.5 bg-black hover:bg-[#C44900] text-[#FAFAFA] pl-4 pr-5 py-3 rounded-full cursor-pointer shadow-2xl transition-colors duration-300 border border-white/10"
           aria-label="Open portfolio AI assistant"
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.96 }}
@@ -652,9 +641,6 @@ export const ChatBot: React.FC = () => {
           <span className="font-mono text-xs uppercase tracking-wider font-bold">
             Ask AI
           </span>
-          {hasNewNotification && (
-            <span className="w-2 h-2 rounded-full bg-[#C44900] group-hover:bg-white animate-pulse" />
-          )}
         </motion.button>
       </div>
     </>
