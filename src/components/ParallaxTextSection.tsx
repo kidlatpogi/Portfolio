@@ -1,5 +1,6 @@
 ﻿import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import ShapeGrid from './ShapeGrid.tsx';
 
 export default function ParallaxTextSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,8 +18,18 @@ export default function ParallaxTextSection() {
       ref={containerRef}
       className="relative w-full overflow-hidden bg-[#fafafa] py-16 md:py-24 border-y border-slate-200/60"
     >
-      {/* Background Grid Pattern */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+      {/* Interactive Background ShapeGrid */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <ShapeGrid
+          speed={0}
+          squareSize={55}
+          borderColor="rgba(51, 65, 85, 0.05)"
+          hoverFillColor="rgba(51, 65, 85, 0.12)"
+          shape="square"
+          hoverTrailAmount={6}
+          gradientColor="#fafafa"
+        />
+      </div>
 
       {/* 2 Parallax Animated Rows */}
       <div className="flex flex-col gap-6 sm:gap-10 md:gap-16 w-full relative z-10">
