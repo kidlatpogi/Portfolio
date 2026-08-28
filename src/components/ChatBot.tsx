@@ -179,7 +179,7 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
 
         // Primary List Item
         if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-          const itemText = trimmed.replace(/^[-*]\s+/, '');
+          const itemText = trimmed.replace(/^[-*]\\s+/, '');
           return (
             <div key={index} className="flex items-start gap-2.5 ml-1.5 my-0.5 text-slate-800">
               <span className="w-1.5 h-1.5 rounded-[1.5px] bg-[#C44900] mt-2 shrink-0" />
@@ -221,8 +221,30 @@ export const ChatBot: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [cooldownRemaining, setCooldownRemaining] = useState(0);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // Detect footer visibility to hide bottom-left floating action buttons
+  useEffect(() => {
+    const handleScroll = () => {
+      const footerEl = document.getElementById('contact');
+      const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+      let footerInView = isNearBottom;
+      if (!footerInView && footerEl) {
+        const rect = footerEl.getBoundingClientRect();
+        footerInView = rect.top < window.innerHeight - 80;
+      }
+      setIsFooterVisible(footerInView);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   // Restore persistent 30s cooldown from localStorage across page refreshes
   useEffect(() => {
@@ -633,8 +655,10 @@ export const ChatBot: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Floating Action Buttons Stack (Bottom-Left) */}
-      <div className="fixed bottom-6 left-6 z-50 flex flex-col gap-3 items-start">
+      {/* Floating Action Buttons Stack (Bottom-Left) - Hidden when reaching footer */}
+      <div className={`fixed bottom-6 left-6 z-50 flex flex-col gap-3 items-start transition-all duration-300 ${
+        isFooterVisible ? 'opacity-0 pointer-events-none translate-y-4' : 'opacity-100 pointer-events-auto translate-y-0'
+      }`}>
         {/* 1. Typing Test Button (Top) */}
         <div className="group relative flex items-center">
           <button
