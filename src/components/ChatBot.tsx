@@ -472,9 +472,9 @@ export const ChatBot: React.FC = () => {
             </div>
 
             {/* Main Interactive Content Area */}
-            <div className="w-full max-w-3xl mx-auto flex flex-col justify-center flex-grow py-4 overflow-hidden">
-              {messages.length === 0 ? (
-                /* Initial State: Big Prominent Prompt */
+            {messages.length === 0 ? (
+              /* Initial State: Big Prominent Prompt */
+              <div className="w-full max-w-3xl mx-auto flex flex-col justify-center flex-grow py-4">
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -532,14 +532,16 @@ export const ChatBot: React.FC = () => {
                     </div>
                   </div>
                 </motion.div>
-              ) : (
-                /* Conversation View with tight, natural spacing */
-                <div className="flex flex-col h-full max-h-[75vh]">
-                  {/* Messages Feed */}
+              </div>
+            ) : (
+              /* Conversation View: Compact & Attached directly to input box without dead space */
+              <div className="w-full max-w-3xl mx-auto flex flex-col justify-center my-auto py-2">
+                <div className="flex flex-col w-full">
+                  {/* Messages Feed with natural height */}
                   <div
                     ref={scrollContainerRef}
                     data-lenis-prevent
-                    className="overflow-y-auto overscroll-contain flex flex-col gap-4 flex-1 min-h-0 mb-3 pr-1 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                    className="overflow-y-auto overscroll-contain flex flex-col gap-3.5 max-h-[52vh] mb-4 pr-1 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   >
                     {messages.map((msg) => (
                       <div
@@ -554,7 +556,7 @@ export const ChatBot: React.FC = () => {
                           )}
                         </div>
 
-                        {/* Text bubble: Bot bubble has no orange left border */}
+                        {/* Text bubble: Clean card without orange left border */}
                         <div
                           className={`w-full max-w-2xl p-4 sm:p-5 rounded-2xl border ${
                             msg.sender === 'user'
@@ -567,7 +569,7 @@ export const ChatBot: React.FC = () => {
                       </div>
                     ))}
 
-                    {/* Typing Indicator: No orange left border */}
+                    {/* Typing Indicator */}
                     {isTyping && (
                       <div className="flex flex-col gap-1.5 items-start">
                         <span className="font-mono text-[10px] uppercase tracking-wider text-[#C44900] font-bold px-1">
@@ -583,8 +585,8 @@ export const ChatBot: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Bottom Input Bar */}
-                  <div className="flex flex-col gap-2.5 pt-2 border-t border-slate-200/80 flex-shrink-0">
+                  {/* Bottom Input Bar: Positioned directly beneath message list */}
+                  <div className="flex flex-col gap-2.5 pt-3 border-t border-slate-200/80 flex-shrink-0">
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -625,8 +627,8 @@ export const ChatBot: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

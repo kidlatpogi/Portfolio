@@ -1,9 +1,9 @@
-﻿// High-fidelity synthetic mechanical keyboard audio generator via Web Audio API
-export type SwitchType = 'clicky' | 'linear' | 'tactile' | 'thock' | 'mute';
+﻿// High-fidelity Mechanical Keyboard Sound Engine (inspired by x0054/MKS)
+// Recreates authentic Cherry MX switch acoustics (click mechanism + bottom-out snap) using Web Audio API
 
 class MechanicalSoundEngine {
   private ctx: AudioContext | null = null;
-  private currentSwitch: SwitchType = 'thock';
+  private isMuted: boolean = false;
 
   private getContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -19,129 +19,77 @@ class MechanicalSoundEngine {
     return this.ctx;
   }
 
-  public setSwitch(type: SwitchType) {
-    this.currentSwitch = type;
+  public toggleMute(): boolean {
+    this.isMuted = !this.isMuted;
+    return this.isMuted;
   }
 
-  public getSwitch(): SwitchType {
-    return this.currentSwitch;
+  public getIsMuted(): boolean {
+    return this.isMuted;
   }
 
-  public playKeySound(isSpace = false) {
-    if (this.currentSwitch === 'mute') return;
+  public setMuted(muted: boolean) {
+    this.isMuted = muted;
+  }
+
+  // Play realistic Cherry MX switch click & housing bottom-out sound
+  public playKeySound(isSpace = false, isBackspace = false) {
+    if (this.isMuted) return;
     const ctx = this.getContext();
     if (!ctx) return;
 
     const now = ctx.currentTime;
+    // Micro-pitch variance for natural keystroke feel
+    const pitchMod = (Math.random() - 0.5) * 0.09;
 
-    // Pitch randomization for hyper-realistic variation
-    const pitchMod = (Math.random() - 0.5) * 0.08;
+    // 1. Switch Click Leaf (High Frequency Metallic Click)
+    const clickOsc = ctx.createOscillator();
+    const clickGain = ctx.createGain();
+    const clickFilter = ctx.createBiquadFilter();
 
-    switch (this.currentSwitch) {
-      case 'clicky': {
-        // High-pitched click + switch housing bottom out
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
+    clickOsc.type = 'triangle';
+    const baseClickFreq = isSpace ? 1900 : isBackspace ? 2100 : 2500;
+    clickOsc.frequency.setValueAtTime(baseClickFreq * (1 + pitchMod), now);
+    clickOsc.frequency.exponentialRampToValueAtTime(320, now + 0.018);
 
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime((isSpace ? 1800 : 2600) * (1 + pitchMod), now);
-        osc.frequency.exponentialRampToValueAtTime(300, now + 0.025);
+    clickFilter.type = 'bandpass';
+    clickFilter.frequency.setValueAtTime(baseClickFreq, now);
+    clickFilter.Q.setValueAtTime(4.5, now);
 
-        filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(2200, now);
-        filter.Q.setValueAtTime(4.0, now);
+    clickGain.gain.setValueAtTime(0.22, now);
+    clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.024);
 
-        gain.gain.setValueAtTime(0.18, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+    clickOsc.connect(clickFilter);
+    clickFilter.connect(clickGain);
+    clickGain.connect(ctx.destination);
 
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
+    clickOsc.start(now);
+    clickOsc.stop(now + 0.028);
 
-        osc.start(now);
-        osc.stop(now + 0.04);
-        break;
-      }
+    // 2. Housing Bottom-Out & Keycap Clack (Mid/Low Acoustic Resonance)
+    const clackOsc = ctx.createOscillator();
+    const clackGain = ctx.createGain();
+    const clackFilter = ctx.createBiquadFilter();
 
-      case 'linear': {
-        // Smooth soft clack
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
+    clackOsc.type = 'sine';
+    const baseClackFreq = isSpace ? 150 : isBackspace ? 220 : 310;
+    clackOsc.frequency.setValueAtTime(baseClackFreq * (1 + pitchMod), now + 0.004);
+    clackOsc.frequency.exponentialRampToValueAtTime(60, now + 0.045);
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime((isSpace ? 280 : 380) * (1 + pitchMod), now);
-        osc.frequency.exponentialRampToValueAtTime(80, now + 0.04);
+    clackFilter.type = 'lowpass';
+    clackFilter.frequency.setValueAtTime(isSpace ? 480 : 750, now);
+    clackFilter.Q.setValueAtTime(2.0, now);
 
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(800, now);
+    clackGain.gain.setValueAtTime(0, now);
+    clackGain.gain.setValueAtTime(isSpace ? 0.28 : 0.20, now + 0.004);
+    clackGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
 
-        gain.gain.setValueAtTime(0.16, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+    clackOsc.connect(clackFilter);
+    clackFilter.connect(clackGain);
+    clackGain.connect(ctx.destination);
 
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.05);
-        break;
-      }
-
-      case 'tactile': {
-        // Subtle bump and mid clack
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
-
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime((isSpace ? 420 : 650) * (1 + pitchMod), now);
-        osc.frequency.exponentialRampToValueAtTime(100, now + 0.035);
-
-        filter.type = 'bandpass';
-        filter.frequency.setValueAtTime(1100, now);
-        filter.Q.setValueAtTime(2.0, now);
-
-        gain.gain.setValueAtTime(0.18, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.045);
-        break;
-      }
-
-      case 'thock':
-      default: {
-        // Deep, creamy, resonant mechanical thock
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime((isSpace ? 160 : 220) * (1 + pitchMod), now);
-        osc.frequency.exponentialRampToValueAtTime(45, now + 0.06);
-
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(450, now);
-        filter.Q.setValueAtTime(1.5, now);
-
-        gain.gain.setValueAtTime(0.25, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.08);
-        break;
-      }
-    }
+    clackOsc.start(now + 0.004);
+    clackOsc.stop(now + 0.055);
   }
 }
 
