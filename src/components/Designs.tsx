@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+﻿import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ShapeGrid from './ShapeGrid.tsx';
@@ -92,75 +92,7 @@ export default function Designs() {
         #designs {
           --card-width: 420px; /* default xl card width */
         }
-        @media (min-width: 768px) and (max-width: 1023px) {
-          #designs {
-            --card-width: 320px; /* md card width */
-          }
-        }
-        @media (min-width: 1024px) and (max-width: 1279px) {
-          #designs {
-            --card-width: 360px; /* lg card width */
-          }
-        }
-        /* Height-based corrections for smaller laptops */
-        @media (min-width: 1024px) and (max-height: 800px) {
-          #designs {
-            --card-width: 290px;
-          }
-        }
-        @media (min-width: 1280px) and (max-height: 800px) {
-          #designs {
-            --card-width: 330px;
-          }
-        }
-        @media (min-width: 1536px) and (max-height: 900px) {
-          #designs {
-            --card-width: 380px;
-          }
-        }
-
-        #designs,
-        #designs * {
-          scrollbar-width: none !important;
-          -ms-overflow-style: none !important;
-        }
-        #designs::-webkit-scrollbar,
-        #designs *::-webkit-scrollbar {
-          display: none !important;
-        }
-
-        #designs .designs-track {
-          padding-left: 1.5rem;
-          padding-right: 1.5rem;
-        }
-        @media (min-width: 768px) {
-          #designs .designs-track {
-            /* Calculates left/right padding so Card 01 starts centered and Card 06 ends centered */
-            padding-left: calc(50vw - (var(--card-width) / 2)) !important;
-            padding-right: calc(50vw - (var(--card-width) / 2)) !important;
-          }
-        }
-
-        #designs .designs-container {
-          padding-top: 3rem;
-          padding-bottom: 3rem;
-        }
-        #designs .designs-header {
-          margin-bottom: 3rem;
-        }
-        @media (max-height: 800px) {
-          #designs .designs-container {
-            padding-top: 1rem !important;
-            padding-bottom: 1rem !important;
-          }
-          #designs .designs-header {
-            margin-bottom: 0.75rem !important;
-          }
-          #designs .designs-header p {
-            margin-top: 0.25rem !important;
-          }
-        }
-      `}</style>
+        @media (min-width: 768px) and (max-width: 1023px) {\n          #designs {\n            --card-width: 320px; /* md card width */\n          }\n        }\n        @media (min-width: 1024px) and (max-width: 1279px) {\n          #designs {\n            --card-width: 360px; /* lg card width */\n          }\n        }\n        /* Height-based corrections for smaller laptops */\n        @media (min-width: 1024px) and (max-height: 800px) {\n          #designs {\n            --card-width: 290px;\n          }\n        }\n        @media (min-width: 1280px) and (max-height: 800px) {\n          #designs {\n            --card-width: 330px;\n          }\n        }\n        @media (min-width: 1536px) and (max-height: 900px) {\n          #designs {\n            --card-width: 380px;\n          }\n        }\n\n        #designs,\n        #designs * {\n          scrollbar-width: none !important;\n          -ms-overflow-style: none !important;\n        }\n        #designs::-webkit-scrollbar,\n        #designs *::-webkit-scrollbar {\n          display: none !important;\n        }\n\n        #designs .designs-track {\n          padding-left: 1.5rem;\n          padding-right: 1.5rem;\n        }\n        @media (min-width: 768px) {\n          #designs .designs-track {\n            /* Calculates left/right padding so Card 01 starts centered and Card 06 ends centered */\n            padding-left: calc(50vw - (var(--card-width) / 2)) !important;\n            padding-right: calc(50vw - (var(--card-width) / 2)) !important;\n          }\n        }\n\n        #designs .designs-container {\n          padding-top: 3rem;\n          padding-bottom: 3rem;\n        }\n        #designs .designs-header {\n          margin-bottom: 3rem;\n        }\n        @media (max-height: 800px) {\n          #designs .designs-container {\n            padding-top: 1rem !important;\n            padding-bottom: 1rem !important;\n          }\n          #designs .designs-header {\n            margin-bottom: 0.75rem !important;\n          }\n          #designs .designs-header p {\n            margin-top: 0.25rem !important;\n          }\n        }\n      `}</style>
 
       {/* Interactive Background ShapeGrid */}
       <div className="absolute inset-0 z-0 pointer-events-none">
