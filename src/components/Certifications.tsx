@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+﻿import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -334,7 +334,7 @@ export default function Certifications() {
             stagger: 0.04,
             ease: 'power2.out',
             scrollTrigger: {
-              trigger: "#certifications",
+              trigger: containerRef.current,
               start: 'top 88%',
               toggleActions: 'play none none none'
             }
