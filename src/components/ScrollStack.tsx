@@ -1,4 +1,4 @@
-import React, { Children, isValidElement, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+﻿import React, { Children, isValidElement, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties, ReactElement, ReactNode } from 'react';
 
 export interface ScrollStackItemProps {
@@ -13,12 +13,12 @@ const hasHeightClass = (className: string) =>
 export const ScrollStackItem: React.FC<ScrollStackItemProps> = ({ children, itemId, itemClassName = '' }) => {
   const defaultHeightClass = hasHeightClass(itemClassName)
     ? ''
-    : 'h-[72dvh] min-h-[350px] lg:h-[min(72vh,760px)] lg:min-h-[500px] xl:h-[min(72vh,820px)]';
+    : 'h-auto min-h-[560px] sm:min-h-[580px] md:h-[72dvh] md:min-h-[480px] lg:h-[min(72vh,760px)] lg:min-h-[500px] xl:h-[min(72vh,820px)]';
 
   return (
     <div
       id={itemId}
-      className={`scroll-stack-card relative w-full ${defaultHeightClass} pt-14 pb-8 px-6 md:pt-16 md:pb-10 md:px-12 rounded-[40px] shadow-[0_0_30px_rgba(0,0,0,0.1)] box-border origin-top will-change-transform ${itemClassName}`.trim()}
+      className={`scroll-stack-card relative w-full ${defaultHeightClass} pt-8 pb-7 px-5 sm:pt-12 sm:pb-8 sm:px-8 md:pt-16 md:pb-10 md:px-12 rounded-[32px] sm:rounded-[40px] shadow-[0_0_30px_rgba(0,0,0,0.15)] box-border origin-top will-change-transform ${itemClassName}`.trim()}
       style={{
         backfaceVisibility: 'hidden',
         transform: 'translateZ(0)',
