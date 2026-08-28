@@ -72,33 +72,60 @@ export default function ParallaxTextSection() {
       </div>
 
       {/* Mobile Layout */}
-      <div className="md:hidden px-6 flex flex-col gap-10">
-        <div className="space-y-4">
-          <div className="whitespace-nowrap translate-x-4">
-            <span className="text-5xl sm:text-6xl font-black text-black uppercase leading-none tracking-tighter">IT Developer</span>
+      <div className="md:hidden px-6 flex flex-col gap-8">
+        {/* Pair 1: Web Dev & App Dev */}
+        <div className="space-y-3">
+          <div className="whitespace-nowrap">
+            <span className="text-4xl sm:text-5xl font-black text-black uppercase leading-none tracking-tighter">
+              Web Dev
+            </span>
           </div>
           <div className="flex items-center gap-3">
             <div className="h-px flex-1 bg-slate-200" />
-            <span className="text-xl font-light italic text-slate-300">&</span>
+            <span className="text-lg font-light italic text-slate-300 font-serif">&</span>
             <div className="h-px flex-1 bg-slate-200" />
           </div>
-          <div className="whitespace-nowrap -translate-x-4 flex justify-end">
-            <span className="text-5xl sm:text-6xl font-black text-black uppercase leading-none tracking-tighter">AI Engineer</span>
+          <div className="whitespace-nowrap flex justify-end">
+            <span className="text-4xl sm:text-5xl font-black text-black uppercase leading-none tracking-tighter">
+              App Dev
+            </span>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-200/60">
-          <div className="flex flex-col gap-2">
-            <span className="text-[9px] text-slate-500 font-mono uppercase tracking-[0.2em] mb-1">Competency</span>
-            <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">Web Apps</span>
-            <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">Backend API</span>
-            <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">AI Agents</span>
+        {/* Pair 2: Software & Hardware */}
+        <div className="space-y-3 pt-4 border-t border-slate-200/40">
+          <div className="whitespace-nowrap">
+            <span className="text-4xl sm:text-5xl font-black text-black uppercase leading-none tracking-tighter">
+              Software
+            </span>
           </div>
-          <div className="flex flex-col gap-2">
-            <span className="text-[9px] text-slate-500 font-mono uppercase tracking-[0.2em] mb-1">Focus</span>
-            <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">Performance</span>
-            <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">Scalability</span>
-            <span className="text-xs text-slate-600 font-mono uppercase tracking-wider font-semibold">Smart UX</span>
+          <div className="flex items-center gap-3">
+            <div className="h-px flex-1 bg-slate-200" />
+            <span className="text-lg font-light italic text-slate-300 font-serif">&</span>
+            <div className="h-px flex-1 bg-slate-200" />
+          </div>
+          <div className="whitespace-nowrap flex justify-end">
+            <span className="text-4xl sm:text-5xl font-black text-black uppercase leading-none tracking-tighter">
+              Hardware
+            </span>
+          </div>
+        </div>
+
+        {/* Competency & Focus Columns */}
+        <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-200/60">
+          <div className="flex flex-col gap-1.5 text-left">
+            <span className="text-[10px] text-slate-500 font-mono uppercase tracking-[0.2em] mb-0.5">Competency</span>
+            <div className="h-[1.5px] w-5 bg-accent mb-1" />
+            <span className="text-xs sm:text-sm text-slate-700 font-mono uppercase tracking-tight font-bold">Web Applications</span>
+            <span className="text-xs sm:text-sm text-slate-700 font-mono uppercase tracking-tight font-bold">Backend Systems</span>
+            <span className="text-xs sm:text-sm text-slate-700 font-mono uppercase tracking-tight font-bold">AI Integration</span>
+          </div>
+          <div className="flex flex-col gap-1.5 text-left">
+            <span className="text-[10px] text-slate-500 font-mono uppercase tracking-[0.2em] mb-0.5">Focus</span>
+            <div className="h-[1.5px] w-5 bg-accent mb-1" />
+            <span className="text-xs sm:text-sm text-slate-700 font-mono uppercase tracking-tight font-bold">Performance</span>
+            <span className="text-xs sm:text-sm text-slate-700 font-mono uppercase tracking-tight font-bold">Scalability</span>
+            <span className="text-xs sm:text-sm text-slate-700 font-mono uppercase tracking-tight font-bold">Clean UI</span>
           </div>
         </div>
       </div>
