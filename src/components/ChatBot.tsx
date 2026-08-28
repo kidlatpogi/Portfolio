@@ -91,7 +91,7 @@ const renderInlineMarkdown = (text: string) => {
         href={linkUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-[#C44900] font-semibold underline underline-offset-2 hover:text-[#9A3800] transition-colors inline-flex items-center gap-0.5"
+        className="text-[#C44900] font-semibold underline underline-offset-2 hover:text-[#9A3800] transition-colors inline-flex items-center gap-0.5 cursor-target"
       >
         <span>{linkText}</span>
         <ExternalLink size={11} className="inline opacity-70" />
@@ -126,14 +126,14 @@ const renderBoldAndCode = (text: string) => {
 // Structured ATS / Pretty Markdown Formatter Component
 const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ content, isUser }) => {
   if (isUser) {
-    return <span className="font-sans text-sm md:text-base font-medium text-white">{stripEmojis(content)}</span>;
+    return <span className="font-sans text-sm md:text-base font-medium text-white break-words">{stripEmojis(content)}</span>;
   }
 
   const cleanContent = stripEmojis(content);
   const lines = cleanContent.split('\n');
 
   return (
-    <div className="flex flex-col gap-1.5 text-xs md:text-sm text-slate-700 leading-relaxed font-sans">
+    <div className="flex flex-col gap-1.5 text-xs md:text-sm text-slate-700 leading-relaxed font-sans w-full">
       {lines.map((line, index) => {
         const trimmed = line.trim();
         if (!trimmed) {
@@ -463,7 +463,7 @@ export const ChatBot: React.FC = () => {
                 </span>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="w-10 h-10 rounded-full bg-black/5 hover:bg-black text-slate-700 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
+                  className="cursor-target w-10 h-10 rounded-full bg-black/5 hover:bg-black text-slate-700 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
                   aria-label="Close ask modal"
                 >
                   <X size={18} />
@@ -505,7 +505,7 @@ export const ChatBot: React.FC = () => {
                     <button
                       type="submit"
                       disabled={isTyping || !inputValue.trim() || cooldownRemaining > 0}
-                      className="absolute right-0 bottom-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
+                      className="cursor-target absolute right-0 bottom-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
                       aria-label="Submit query"
                     >
                       <CornerDownLeft size={24} />
@@ -523,7 +523,7 @@ export const ChatBot: React.FC = () => {
                           key={idx}
                           type="button"
                           onClick={() => handleSend(t.query)}
-                          className="font-mono text-xs font-semibold rounded-full border border-slate-300 hover:border-[#C44900] bg-white hover:bg-orange-50 px-4 py-2 text-slate-700 hover:text-[#C44900] transition-all duration-200 shadow-2xs cursor-pointer flex items-center gap-1.5"
+                          className="cursor-target font-mono text-xs font-semibold rounded-full border border-slate-300 hover:border-[#C44900] bg-white hover:bg-orange-50 px-4 py-2 text-slate-700 hover:text-[#C44900] transition-all duration-200 shadow-2xs cursor-pointer flex items-center gap-1.5"
                         >
                           <span>{t.label}</span>
                           <ArrowRight size={12} className="opacity-60" />
@@ -556,12 +556,12 @@ export const ChatBot: React.FC = () => {
                           )}
                         </div>
 
-                        {/* Text bubble: Clean card without orange left border */}
+                        {/* Text bubble: Fit-content for short user queries, max-w-2xl for bot responses */}
                         <div
-                          className={`w-full max-w-2xl p-4 sm:p-5 rounded-2xl border ${
+                          className={`p-4 sm:p-5 rounded-2xl border ${
                             msg.sender === 'user'
-                              ? 'bg-black text-white border-black self-end'
-                              : 'bg-white text-slate-800 border-slate-200/80 shadow-2xs'
+                              ? 'w-fit max-w-[85%] sm:max-w-xl bg-black text-white border-black self-end'
+                              : 'w-full max-w-2xl bg-white text-slate-800 border-slate-200/80 shadow-2xs'
                           }`}
                         >
                           <FormattedMessage content={msg.text} isUser={msg.sender === 'user'} />
@@ -605,7 +605,7 @@ export const ChatBot: React.FC = () => {
                       <button
                         type="submit"
                         disabled={isTyping || !inputValue.trim() || cooldownRemaining > 0}
-                        className="absolute right-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
+                        className="cursor-target absolute right-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
                         aria-label="Submit follow-up query"
                       >
                         <CornerDownLeft size={18} />
@@ -619,7 +619,7 @@ export const ChatBot: React.FC = () => {
                           key={idx}
                           type="button"
                           onClick={() => handleSend(t.query)}
-                          className="font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#C44900] bg-white hover:bg-orange-50 px-3 py-1 text-slate-700 hover:text-[#C44900] transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
+                          className="cursor-target font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#C44900] bg-white hover:bg-orange-50 px-3 py-1 text-slate-700 hover:text-[#C44900] transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
                         >
                           {t.label}
                         </button>
@@ -639,7 +639,7 @@ export const ChatBot: React.FC = () => {
         <div className="group relative flex items-center">
           <button
             onClick={() => setIsTypingTestOpen(true)}
-            className="flex items-center h-12 rounded-full bg-black hover:bg-[#C44900] text-[#FAFAFA] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[200px] px-3.5 group-hover:pr-5 group-hover:pl-4"
+            className="cursor-target flex items-center h-12 rounded-full bg-black hover:bg-[#C44900] text-[#FAFAFA] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[200px] px-3.5 group-hover:pr-5 group-hover:pl-4"
             aria-label="Open typing test"
           >
             <div className="flex items-center justify-center shrink-0">
@@ -655,7 +655,7 @@ export const ChatBot: React.FC = () => {
         <div className="group relative flex items-center">
           <button
             onClick={() => setIsOpen(true)}
-            className="flex items-center h-12 rounded-full bg-black hover:bg-[#C44900] text-[#FAFAFA] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[180px] px-3.5 group-hover:pr-5 group-hover:pl-4"
+            className="cursor-target flex items-center h-12 rounded-full bg-black hover:bg-[#C44900] text-[#FAFAFA] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[180px] px-3.5 group-hover:pr-5 group-hover:pl-4"
             aria-label="Open portfolio AI assistant"
           >
             <div className="flex items-center justify-center shrink-0">

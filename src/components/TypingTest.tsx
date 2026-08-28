@@ -111,7 +111,7 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
       setActiveKey(isSpace ? 'space' : lowerKey);
       setTimeout(() => setActiveKey(null), 100);
 
-      // Play MKS Mechanical Switch Audio
+      // Play Mechanical Switch Audio
       keyboardAudio.playKeySound(isSpace, isBackspace);
 
       // Start timer on first keypress
@@ -164,15 +164,15 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
               </span>
             </div>
 
-            {/* MKS Mechanical Switch Audio Toggle */}
+            {/* Audio Toggle */}
             <div className="flex items-center gap-3">
               <button
                 onClick={handleToggleMute}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-slate-400 text-slate-600 text-xs font-mono transition-colors cursor-pointer shadow-2xs"
-                title={isMuted ? 'Unmute mechanical switch sound' : 'Mute mechanical switch sound'}
+                className="cursor-target flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-slate-400 text-slate-600 text-xs font-mono transition-colors cursor-pointer shadow-2xs"
+                title={isMuted ? 'Unmute keyboard audio' : 'Mute keyboard audio'}
               >
                 {isMuted ? <VolumeX size={14} className="text-red-500" /> : <Volume2 size={14} className="text-[#C44900]" />}
-                <span className="hidden sm:inline">{isMuted ? 'Muted' : 'MKS Audio'}</span>
+                <span className="hidden sm:inline">{isMuted ? 'Muted' : 'Audio'}</span>
               </button>
 
               <span className="hidden md:inline-block font-mono text-[11px] text-slate-400">
@@ -180,7 +180,7 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
               </span>
               <button
                 onClick={onClose}
-                className="w-10 h-10 rounded-full bg-black/5 hover:bg-black text-slate-700 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
+                className="cursor-target w-10 h-10 rounded-full bg-black/5 hover:bg-black text-slate-700 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
                 aria-label="Close typing test"
               >
                 <X size={18} />
@@ -253,7 +253,7 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
               </p>
             </div>
 
-            {/* Virtual Keyboard Visualizer (True Square Keys) */}
+            {/* Virtual Keyboard Visualizer (Square Keys) */}
             <div className="flex flex-col items-center gap-1.5 mb-6">
               {KEYBOARD_ROWS.map((row, rIdx) => (
                 <div key={rIdx} className="flex gap-1.5 sm:gap-2">
@@ -272,7 +272,7 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
                 </div>
               ))}
 
-              {/* Square/Rectangular Space Bar */}
+              {/* Space Bar */}
               <div
                 className={`w-44 sm:w-60 h-8 sm:h-9 rounded-md flex items-center justify-center font-mono text-[10px] uppercase tracking-widest font-semibold transition-all duration-75 mt-0.5 ${
                   activeKey === 'space'
@@ -293,7 +293,7 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
               >
                 <button
                   onClick={loadNewSentence}
-                  className="flex items-center gap-2 bg-black hover:bg-[#C44900] text-white font-mono text-xs font-bold px-5 py-2.5 rounded-full transition-colors duration-200 cursor-pointer shadow-md"
+                  className="cursor-target flex items-center gap-2 bg-black hover:bg-[#C44900] text-white font-mono text-xs font-bold px-5 py-2.5 rounded-full transition-colors duration-200 cursor-pointer shadow-md"
                 >
                   <RotateCcw size={14} />
                   <span>Next Sentence (Tab)</span>
