@@ -355,7 +355,7 @@ export default function Certifications() {
 
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: certScrollPinnedContainerRef.current,
+            trigger: containerRef.current,
             pin: true,
             scrub: 1,
             start: 'top top',
