@@ -16,6 +16,7 @@ This repository contains the official portfolio website of **Zeus Angelo Bautist
 - **Frontend Islands:** React 19 interactive components hydrated using Astro client directives (`client:load`, `client:visible`, `client:only="react"`).
 - **Design System:** High-contrast editorial layout utilizing custom typography (`Clash Display`, `Array`, `Geist Mono`), custom canvas background simulations (`ShapeGrid`), and the signature **"Future Developer" accent color (`#C44900`)**.
 - **AI Portfolio Assistant:** Full-screen interactive modal powered by Cloudflare Workers AI (`@cf/meta/llama-3.2-3b-instruct`), protected with client/server prompt-injection shields, profanity/NSFW interceptors, and a 30-second persistent cooldown.
+- **Interactive Typing Test:** Fullscreen speed-typing modal featuring 100 rotated software engineering quotes, real-time WPM/accuracy tracking, interactive virtual keyboard lighting, and Web Audio API synthesized mechanical keyboard switch sounds (Thock, Clicky, Linear, Tactile).
 - **Data Centralization:** Single-source-of-truth knowledge base (`src/data/portfolioData.ts`) providing scalable synchronized data for both the website UI and the AI assistant.
 
 ---
@@ -28,6 +29,7 @@ This repository contains the official portfolio website of **Zeus Angelo Bautist
 | **UI Framework** | [React 19](https://react.dev/) | Dynamic UI components, modal overlays, and interactive canvas physics |
 | **Styling** | [Tailwind CSS](https://tailwindcss.com/) | Modern utility-first CSS styling and responsive layout rules |
 | **Animation** | [Framer Motion](https://www.framer.com/motion/) & [GSAP](https://gsap.com/) | Micro-interactions, ScrollTrigger animations, and modal state transitions |
+| **Audio Engine** | Web Audio API | Zero-latency synthetic mechanical switch sound generator |
 | **Smooth Scroll** | [@studio-freight/lenis](https://github.com/darkroomengineering/lenis) | Momentum-based smooth page scrolling |
 | **AI Runtime** | [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/) | Serverless Llama 3.2 3B LLM inference on the Cloudflare Edge |
 | **Icons** | [Lucide React](https://lucide.dev/) | Minimalist UI vector icons |
@@ -53,7 +55,7 @@ Portfolio/
 │   │   ├── About.tsx            # Philosophy & bio section
 │   │   ├── CardNav.tsx          # Sticky top navigation bar
 │   │   ├── Certifications.tsx   # Verified badges showcase with GSAP ScrollTrigger
-│   │   ├── ChatBot.tsx          # Full-screen immersive AI assistant overlay
+│   │   ├── ChatBot.tsx          # Full-screen immersive AI assistant & bottom-left floating triggers
 │   │   ├── ConnectModal.tsx     # Contact & inquiry modal
 │   │   ├── Designs.tsx          # UI/UX design previews
 │   │   ├── Experience.tsx       # Timeline of professional work and OJT
@@ -67,10 +69,14 @@ Portfolio/
 │   │   ├── ScrollStack.tsx      # Smooth stack container
 │   │   ├── ShapeGrid.tsx        # High-performance HTML5 Canvas grid animation
 │   │   ├── Skills.tsx           # Technology stack marquee badges
-│   │   ├── SocialsSidebar.tsx   # Floating left-side navigation & quick actions
-│   │   └── TargetCursor.tsx     # Custom animated cursor
+│   │   ├── SocialsSidebar.tsx   # Floating right-side quick navigation
+│   │   ├── TargetCursor.tsx     # Custom animated cursor
+│   │   └── TypingTest.tsx       # Interactive Speed Typing Test overlay
 │   ├── data/
-│   │   └── portfolioData.ts     # Single source of truth for all projects, skills, and certs
+│   │   ├── portfolioData.ts     # Single source of truth for all projects, skills, and certs
+│   │   └── typingSentences.ts   # 100 curated quotes and engineering sentences
+│   ├── utils/
+│   │   └── keyboardAudio.ts     # Web Audio API mechanical switch acoustics generator
 │   ├── layouts/
 │   │   └── Layout.astro         # Base HTML shell with SEO meta and font loader
 │   ├── pages/
@@ -109,69 +115,52 @@ To prevent discrepancies between the website's static cards and the AI assistant
 5. **`certifications`**: All 12 verified certifications and badges from Cisco, IT Specialist (Certiport), IBM, Simplilearn, Google Cloud, and FreeCodeCamp.
 6. **`contact`**: Emails, LinkedIn, GitHub, and Resume path.
 
-### Dynamic Generation:
-The helper `generateKnowledgeResponses()` transforms the raw structured objects into clean, ATS-formatted markdown sections dynamically utilized by both `api/chat.ts` and UI fallbacks.
-
 ---
 
 ## 5. AI Assistant & Edge API Integration (`ChatBot.tsx` & `api/chat.ts`)
 
 ### 1. Immersive Full-Screen UI/UX
-- **Overlay:** High-blur frosted backdrop (`backdrop-blur-2xl bg-[#f8f8f8]/85`) that creates an immersive, clean conversational canvas.
-- **Minimalist Prompt:** Features the signature headline `"what do you want to ask?"` in `font-clash-semibold` with an auto-focused borderless input line.
-- **Controls:** Fast dismiss via `ESC` key, top-right close button, or background click.
-- **Scrollbar-Free Clean Feed:** Custom CSS rules (`scrollbar-none [&::-webkit-scrollbar]:hidden`) ensure smooth vertical scrolling without distracting native scrollbars on both desktop and mobile.
+- **Overlay:** High-blur frosted backdrop (`backdrop-blur-2xl bg-[#f8f8f8]/85`) creating a distraction-free conversational canvas.
+- **Minimalist Prompt:** Features `"what do you want to ask?"` in `font-clash-semibold` with an auto-focused borderless input line.
+- **Scrollbar-Free Clean Feed:** Custom CSS rules (`scrollbar-none [&::-webkit-scrollbar]:hidden`) ensure smooth vertical scrolling without distracting native scrollbars.
+- **Clean Message Bubbles:** Pure neutral white bot card background without orange border strips for a modern editorial aesthetic.
 
 ### 2. Multi-Tier Security & Anti-Abuse System
-To protect Cloudflare AI quota and maintain a professional context:
-- **Zero Token Waste Guard (Client & Server):**
-  - Detects profanities, curse words, Tagalog slurs, adult domains (`pornhub`, `xvideos`, `onlyfans`, etc.), NSFW keywords, and keyboard mashing before sending network requests.
-  - Returns a respectful warning message and triggers cooldown without invoking the AI model.
-- **Prompt Injection & System Extraction Shield:**
-  - Blocks requests attempting to reveal system instructions, extract `.env` keys, alter bot personas (e.g. DAN mode), or execute unauthorized commands.
-- **Persistent 30-Second Cooldown:**
-  - Stored in browser `localStorage` (`zeus_chatbot_cooldown_expiry`) so page reloads or restarts cannot bypass the rate limit.
-
-### 3. Edge Inference Parameters
-- **Runtime:** `cloudflare:workers` with `@astrojs/cloudflare`.
-- **Model:** `@cf/meta/llama-3.2-3b-instruct`.
-- **Token Budget:** `max_tokens: 2048` (guaranteeing comprehensive project and certificate overviews without mid-sentence truncations).
-- **Strict Formatting Rules:** Zero emojis, pure ATS-structured bullet points, bold labels, and `#C44900` accent links.
+- **Zero Token Waste Guard (Client & Server):** Detects profanities, curse words, adult domains, NSFW keywords, and keyboard mashing before sending requests.
+- **Prompt Injection Shield:** Blocks attempts to leak system instructions, API keys, or switch personas.
+- **Persistent 30-Second Cooldown:** Stored in `localStorage` (`zeus_chatbot_cooldown_expiry`).
 
 ---
 
-## 6. Design System & Theming
+## 6. Interactive Speed Typing Test (`TypingTest.tsx` & `keyboardAudio.ts`)
 
-- **Accent Color:** `#C44900` (Signature **"Future Developer"** warm terracotta orange).
-- **Light Base:** `#FAFAFA` / `#F8F8F8` with subtle zinc borders (`#334155/20`).
-- **Dark Elements:** High-contrast `#000000` buttons, headers, and navigation chips.
-- **Typography:**
-  - Headings: `font-clash-semibold`, `font-clash-bold` (Clash Display).
-  - Secondary Accents: `font-array-semibold` (Array).
-  - Body: Modern geometric Sans-serif (`Inter`, `Geist Sans`).
-  - Code & Badges: `font-mono` (`Geist Mono`, `Courier New`).
+- **Rotation Pool:** Random selection from 100 curated software engineering and computing quotes (`src/data/typingSentences.ts`).
+- **Live Performance Telemetry:** Real-time calculation of Gross WPM, Accuracy (%), and Elapsed Time (s).
+- **Visual Feedback:** Character-level accuracy coloring (black for correct, soft red background for errors) with an active `#C44900` vertical cursor bar.
+- **Virtual Keyboard Visualizer:** Highlighting on active keydown for QWERTY rows and spacebar.
+- **Synthetic Mechanical Switch Audio Engine (`keyboardAudio.ts`):**
+  - Powered by native browser Web Audio API (zero audio file downloads).
+  - Selectable sound profiles:
+    1. **Thock:** Deep, creamy low-pass acoustic resonance.
+    2. **Clicky:** Sharp dual-peak metallic click.
+    3. **Linear:** Smooth, dampened soft clack.
+    4. **Tactile:** Medium frequency tactile bump.
+    5. **Mute:** Silent mode.
 
 ---
 
-## 7. Build, Scripts & Deployment
+## 7. Floating Action Stack (Bottom-Left)
+
+Both quick-action triggers are positioned at `fixed bottom-6 left-6 z-50`:
+1. **Top Button:** `Typing Test` (Keyboard Icon $\rightarrow$ reveals label on hover).
+2. **Bottom Button:** `Ask AI` (Bot Icon $\rightarrow$ reveals label on hover).
+Both buttons smoothly expand on hover and collapse to compact round icons when unhovered.
+
+---
+
+## 8. Build, Scripts & Deployment
 
 ### NPM Scripts:
 - `npm run dev`: Starts the local Astro development server at `http://localhost:4321`.
 - `npm run build`: Compiles SSR entrypoints, client assets, and static pages into `dist/`.
 - `npm run preview`: Previews the production build locally.
-
-### Cloudflare Deployment:
-- Connected to Cloudflare Pages via GitHub repository tracking.
-- `wrangler.jsonc` configures the binding `"binding": "AI"` for Cloudflare Workers AI.
-- `public/robots.txt` ensures search engine crawlers index public routes while disallowing `/api/`.
-
----
-
-## 8. Maintainer Guidelines for Future Updates
-
-1. **Adding New Projects or Certifications:**
-   - Add new entries directly into `src/data/portfolioData.ts`.
-   - The AI Assistant and data endpoints will automatically update without any changes to backend APIs.
-2. **Styling Rules:**
-   - Always respect the `#C44900` accent color and ensure high contrast between text and card backgrounds.
-   - Maintain the zero-emoji rule across AI outputs and official ATS components.
