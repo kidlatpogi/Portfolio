@@ -31,11 +31,11 @@ export const PORTFOLIO_DATA = {
   profile: {
     fullName: "Zeus Angelo Bautista",
     role: "IT Developer & AI Engineer",
-    education: "Bachelor of Science in Information Technology (BSIT, 4th Year)",
-    institution: "National University (NU)",
+    education: "Bachelor of Science in Information Technology Major in Mobile and Web Applications (BSIT-MWA, 4th Year)",
+    institution: "National University Dasmariñas",
     location: "Silang, Cavite, Philippines",
     // Only Professional Summary for About
-    professionalSummary: "Zeus Angelo Bautista is a results-driven IT Developer and AI Engineer with a strong aptitude for pattern recognition, rapid technology adoption, and full-stack software architecture. He specializes in designing responsive web applications, cross-platform mobile solutions, and intelligent AI-integrated systems that solve practical, real-world problems."
+    professionalSummary: "Zeus Angelo Bautista is a results-driven IT Developer and AI Engineer driven by the Kaizen philosophy of continuous compounding improvement. With a strong aptitude for pattern recognition, rapid technology adoption, and full-stack software architecture, he specializes in designing responsive web applications, cross-platform mobile solutions, and intelligent AI-integrated systems that solve practical, real-world problems."
   },
 
   // Current Experience (and historical archive)
@@ -262,92 +262,68 @@ export const PORTFOLIO_DATA = {
       title: "Responsive Web Design",
       issuer: "FreeCodeCamp",
       badgePlatform: "FreeCodeCamp",
-      description: "300-hour developer certification covering responsive CSS architectures and UI design."
+      description: "Responsive layouts, mobile-first design, accessibility, and modern CSS techniques."
     }
   ] as CertificationItem[],
 
-  // Contact Info
+  // Contact Information
   contact: {
-    primaryEmail: "bautistaangelozeus17@gmail.com",
-    secondaryEmail: "dzeref4000@gmail.com",
-    linkedIn: "https://www.linkedin.com/in/zeus-angelo-bautista/",
-    github: "https://github.com/kidlatpogi",
-    resumePath: "/Zeus_Angelo_Bautista_Resume.pdf"
+    emails: ["zeusangelobautista@gmail.com", "bautistaza@students.national-u.edu.ph"],
+    linkedIn: "https://www.linkedin.com/in/zeus-angelo-bautista-b40b082bb/",
+    gitHub: "https://github.com/kidlatpogi",
+    resumePdf: "/Zeus_Angelo_Bautista_Resume.pdf"
   }
 };
 
-// Generates the ATS response dynamically from single-source-of-truth data
 export function generateKnowledgeResponses() {
   const { profile, experiences, techStack, projects, certifications, contact } = PORTFOLIO_DATA;
 
-  // 1. About Zeus (ONLY Professional Summary)
-  const aboutText = `### ZEUS ANGELO BAUTISTA — PROFESSIONAL SUMMARY
+  const about = `**${profile.fullName}** — ${profile.role}
+- **Education**: ${profile.education} at ${profile.institution}
+- **Location**: ${profile.location}
+- **Philosophy (Kaizen)**: Dedicated to continuous improvement and rapid pattern mastery.
 
-**Role**: ${profile.role}
-**Education**: ${profile.education}
-**Institution**: ${profile.institution}
-**Location**: ${profile.location}
-
-**Professional Summary**:
 ${profile.professionalSummary}`;
 
-  // 2. Experience (Complete Professional Work & OJT Experience)
-  const experienceText = `### WORK EXPERIENCE & INTERNSHIPS\n\n` +
-    experiences.map(exp => `#### ${exp.role} (${exp.isCurrent ? 'Current' : exp.period})
-- **Organization**: ${exp.company}
-- **Location**: ${exp.location}
-- **Period**: ${exp.period}
-- **Key Responsibilities & Accomplishments**:
-${exp.responsibilities.map(r => `  - ${r}`).join('\n')}`).join('\n\n');
+  const experience = `### Professional Experience
 
-  // 3. Tech Stack (Current Tech Stack)
-  const techStackText = `### CURRENT TECH STACK & SKILLS
+${experiences.map(exp => `**${exp.role}** — *${exp.company}*
+*${exp.period} | ${exp.location}*
+${exp.responsibilities.map(r => `- ${r}`).join('\n')}`).join('\n\n')}`;
 
-#### Frontend Development
-- ${techStack.frontend.join(', ')}
+  const techStackResp = `### Zeus's Tech Stack & Arsenal
 
-#### Backend & API Engineering
-- ${techStack.backend.join(', ')}
+- **Frontend**: ${techStack.frontend.join(', ')}
+- **Backend & APIs**: ${techStack.backend.join(', ')}
+- **Databases & Cloud**: ${techStack.databasesAndCloud.join(', ')}
+- **AI & Computer Vision**: ${techStack.aiAndVision.join(', ')}
+- **Tools & DevOps**: ${techStack.tools.join(', ')}`;
 
-#### Databases & Cloud Infrastructure
-- ${techStack.databasesAndCloud.join(', ')}
+  const projectsResp = `### Featured & Built Projects
 
-#### AI & Computer Vision
-- ${techStack.aiAndVision.join(', ')}
-
-#### Tools & Methodologies
-- ${techStack.tools.join(', ')}`;
-
-  // 4. Projects (Scalable Full Project Directory)
-  const projectsText = `### COMPLETE PROJECTS DIRECTORY
-
-${projects.map((p, idx) => `#### ${idx + 1}. ${p.title} (${p.year}${p.isFeatured ? ' — Featured' : ''})
+${projects.map(p => `**${p.title}** (${p.year})
+${p.overview}
 - **Tech Stack**: ${p.techStack.join(', ')}
-- **Overview**: ${p.overview}
-- **Key Features**:
-${p.features.map(f => `  - ${f}`).join('\n')}
-- **Links**: ${p.liveUrl ? `[Live Demo](${p.liveUrl}) | ` : ''}[GitHub Repository](${p.githubUrl})`).join('\n\n')}`;
+${p.features.map(f => `- ${f}`).join('\n')}${p.liveUrl ? `\n- **Live Demo**: ${p.liveUrl}` : ''}
+- **GitHub**: ${p.githubUrl}`).join('\n\n')}`;
 
-  // 5. Certifications (Scalable Full Certifications Directory)
-  const certsText = `### VERIFIED CERTIFICATIONS & CREDENTIALS
+  const certsResp = `### Verified Certifications & Badges (${certifications.length}+ Credentials)
 
-${certifications.map((c, idx) => `- **${c.title}** (${c.issuer}${c.badgePlatform ? ` — ${c.badgePlatform}` : ''}): ${c.description}`).join('\n')}`;
+${certifications.map(c => `- **${c.title}** (${c.issuer}) — *${c.description}*`).join('\n')}`;
 
-  // 6. Contact
-  const contactText = `### CONTACT & PROFILES
+  const contactResp = `### Get in Touch with Zeus
 
-- **Email**: [${contact.primaryEmail}](mailto:${contact.primaryEmail}) / [${contact.secondaryEmail}](mailto:${contact.secondaryEmail})
-- **LinkedIn**: [linkedin.com/in/zeus-angelo-bautista](${contact.linkedIn})
-- **GitHub**: [github.com/kidlatpogi](${contact.github})
-- **Resume**: Downloadable official resume available via [Resume Document](${contact.resumePath})`;
+- **Email**: ${contact.emails.join(' or ')}
+- **LinkedIn**: [Zeus Angelo Bautista](${contact.linkedIn})
+- **GitHub**: [github.com/kidlatpogi](${contact.gitHub})
+- **Resume**: [Download Resume](${contact.resumePdf})`;
 
   return {
-    about: aboutText,
-    experience: experienceText,
-    skills: techStackText,
-    techStack: techStackText,
-    projects: projectsText,
-    certifications: certsText,
-    contact: contactText
+    about,
+    experience,
+    techStack: techStackResp,
+    projects: projectsResp,
+    certifications: certsResp,
+    contact: contactResp
   };
 }
