@@ -15,8 +15,7 @@ This repository contains the official portfolio website of **Zeus Angelo Bautist
 - **Framework:** Astro 5/6 with Server-Side Rendering (SSR) adapter for Cloudflare Pages/Workers.
 - **Frontend Islands:** React 19 interactive components hydrated using Astro client directives (`client:load`, `client:visible`, `client:only="react"`).
 - **Design System:** High-contrast editorial layout utilizing custom typography (`Clash Display`, `Array`, `Geist Mono`), custom canvas background simulations (`ShapeGrid`), and the signature **"Future Developer" accent color (`#C44900`)**.
-- **GSAP ScrollTrigger Viewport Pinning:** Pinned desktop viewport stopping (`pin: true`) applied across `About`, `Skills`, `Experience`, `Projects`, `Designs`, `Certifications`, and `Badges` so each major showcase locks into view for smooth, focused reading before transitioning to the next.
-- **Natural Content Dividers:** The `ParallaxTextSection` (Infinite Marquee) and `GithubHeatmap` (Code Contributions) serve as natural-height horizontal dividers (`<hr>`-style breaks) separating the Hero from About and Designs from Certifications respectively.
+- **Interactive Showcase Runways:** Pinned horizontal scrolling powered by GSAP ScrollTrigger for rich multi-card showcases (`Projects`, `Designs`, `Certifications`), paired with fluid natural scrolling for narrative sections (`About`, `Skills`, `Experience`) and section dividers (`ParallaxTextSection`, `GithubHeatmap`).
 - **AI Portfolio Assistant:** Full-screen interactive modal powered by Cloudflare Workers AI (`@cf/meta/llama-3.2-3b-instruct`), protected with client/server prompt-injection shields, client-side permissionless telemetry defense, profanity/NSFW interceptors, thinking indicator, and typewriter streaming effect.
 - **Interactive Typing Test:** Fullscreen speed-typing modal featuring 100 rotated software engineering quotes, real-time WPM/accuracy tracking, interactive virtual keyboard lighting, and Web Audio API synthesized mechanical keyboard switch sounds (Thock, Clicky, Linear, Tactile).
 - **Data Centralization:** Single-source-of-truth knowledge base (`src/data/portfolioData.ts`) providing scalable synchronized data for both the website UI and the AI assistant.
@@ -30,7 +29,7 @@ This repository contains the official portfolio website of **Zeus Angelo Bautist
 | **Meta-Framework** | [Astro](https://astro.build/) | SSR page rendering, asset bundling, and component islands architecture |
 | **UI Framework** | [React 19](https://react.dev/) | Dynamic UI components, modal overlays, and interactive canvas physics |
 | **Styling** | [Tailwind CSS](https://tailwindcss.com/) | Modern utility-first CSS styling and responsive layout rules |
-| **Animation** | [Framer Motion](https://www.framer.com/motion/) & [GSAP](https://gsap.com/) | Micro-interactions, ScrollTrigger desktop pinning, and modal transitions |
+| **Animation** | [Framer Motion](https://www.framer.com/motion/) & [GSAP](https://gsap.com/) | Micro-interactions, ScrollTrigger horizontal pinned runways, and modal transitions |
 | **Audio Engine** | Web Audio API | Zero-latency synthetic mechanical switch sound generator |
 | **Smooth Scroll** | [@studio-freight/lenis](https://github.com/darkroomengineering/lenis) | Momentum-based smooth page scrolling |
 | **AI Runtime** | [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/) | Serverless Llama 3.2 3B LLM inference on the Cloudflare Edge |
@@ -55,13 +54,13 @@ Portfolio/
 │   │   ├── fonts/               # Custom font definitions (Clash Display, Array)
 │   │   └── background.svg       # Geometric background textures
 │   ├── components/
-│   │   ├── About.tsx            # Kaizen in IT philosophy, BSIT-MWA bio, GSAP pinned view
+│   │   ├── About.tsx            # Kaizen in IT philosophy, BSIT-MWA bio, and bento cards
 │   │   ├── CardNav.tsx          # Sticky top navigation bar
 │   │   ├── Certifications.tsx   # Verified certs horizontal scroll & 100vh Badges showcase
 │   │   ├── ChatBot.tsx          # Full-screen immersive AI assistant & bottom-left triggers
 │   │   ├── ConnectModal.tsx     # Contact & inquiry modal
 │   │   ├── Designs.tsx          # UI/UX design horizontal pinned runway
-│   │   ├── Experience.tsx       # Standard ATS-formatted timeline with GSAP pinning
+│   │   ├── Experience.tsx       # Standard ATS-formatted timeline of municipal & school work
 │   │   ├── Footer.tsx           # Minimalist single-screen footer with GETINTOUCH watermark
 │   │   ├── GithubHeatmap.tsx    # Live commit & study heatmap (divider section)
 │   │   ├── Hero.tsx             # Hero section with interactive portrait and role badges
@@ -71,7 +70,7 @@ Portfolio/
 │   │   ├── ScrollReveal.tsx     # Viewport scroll entrance effects
 │   │   ├── ScrollStack.tsx      # Smooth stack container
 │   │   ├── ShapeGrid.tsx        # High-performance HTML5 Canvas grid animation
-│   │   ├── Skills.tsx           # Filterable technology matrix bento grid with GSAP pinning
+│   │   ├── Skills.tsx           # Filterable technology matrix bento grid
 │   │   ├── SocialsSidebar.tsx   # Floating right-side quick navigation
 │   │   ├── TargetCursor.tsx     # Custom animated cursor
 │   │   └── TypingTest.tsx       # Interactive Speed Typing Test overlay
@@ -133,19 +132,16 @@ To prevent discrepancies between the website's static cards and the AI assistant
 
 ### 1. About (`About.tsx`)
 - **ScrollReveal Narrative:** Immersive word-by-word reveal formatted with clean left-aligned typography, inline profile thumbnail, CPU pulse icon, and pattern recognition sparkles.
-- **GSAP Desktop Pinning:** Locks smoothly into the viewport on desktop (`pin: true, start: 'top top'`) to allow uninterrupted reading.
 - **Bento Overview:**
-  - **Philosophy (Kaizen in IT):** Continuous improvement applied to software engineering, codebase refinement, and architecture modernization.
+  - **Philosophy (Kaizen in IT):** Continuous self-improvement applied to software engineering, codebase refinement, and architecture modernization.
   - **Background:** Pursuing a Bachelor of Science in Information Technology Major in Mobile and Web Applications (BSIT-MWA) at National University Dasmariñas.
   - **Key Accomplishments:** Highlights `12+` Verified Badges & Certifications and `8+` Featured Projects Built.
 
 ### 2. Skills (`Skills.tsx`)
-- **GSAP Desktop Pinning:** Section smoothly pins at the top for focused interaction.
 - **Filterable Category Tabs:** Real-time filter pills (`All`, `Frontend`, `Backend & DB`, `Tools & DevOps`).
 - **Interactive Cards:** Hover elevation with smooth logo scaling and bottom accent highlight banner displaying relevant projects.
 
 ### 3. Experience (`Experience.tsx`)
-- **GSAP Desktop Pinning:** Viewport locks in place on desktop to present career milestones.
 - **Standard ATS Format:** Clean resume-ready layout with distinct role title, organization, dates, location, and action-oriented bullet points.
 - **Vertical Timeline Indicator:** Sleek accent gradient trace and glowing marker nodes.
 

@@ -1,8 +1,4 @@
-﻿import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+﻿import React, { useState, useMemo } from 'react';
 
 interface Skill {
   name: string;
@@ -42,37 +38,8 @@ const allSkills: Skill[] = [
 const categories = ['All', 'Frontend', 'Backend & DB', 'Tools & DevOps'] as const;
 
 export default function Skills() {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
-
-  useEffect(() => {
-    const island = containerRef.current?.parentElement;
-    if (island?.tagName === 'ASTRO-ISLAND') {
-      island.style.display = 'block';
-      island.style.width = '100%';
-    }
-
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-
-      // Desktop layout: pin at top to create scroll stop effect
-      mm.add("(min-width: 768px)", () => {
-        if (!containerRef.current) return;
-
-        ScrollTrigger.create({
-          trigger: containerRef.current,
-          pin: true,
-          start: 'top top',
-          end: '+=500',
-          pinSpacing: true,
-          invalidateOnRefresh: true,
-        });
-      });
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
 
   const filteredSkills = useMemo(() => {
     if (selectedCategory === 'All') return allSkills;
@@ -80,28 +47,28 @@ export default function Skills() {
   }, [selectedCategory]);
 
   return (
-    <section ref={containerRef} className="min-h-screen md:h-screen md:min-h-screen w-full flex flex-col items-center justify-center px-4 py-12 md:py-6 relative overflow-hidden bg-[#f8f8f8]" id="skills">
-      <div className="w-full max-w-[1600px] flex flex-col items-center z-10 my-auto">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="skills">
+      <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
         {/* Subheading */}
-        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
+        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
           My Tech Arsenal
         </span>
 
         {/* "Skills" Heading */}
-        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[3.75rem] 2xl:text-[4.25rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-6 md:mb-8">
+        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.25rem] 2xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-10">
           Skills
         </h2>
 
         {/* Interactive Category Filter Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-8 md:mb-10">
+        <div className="flex flex-wrap items-center justify-center gap-2.5 md:gap-3.5 mb-12">
           {categories.map(cat => {
             const isActive = selectedCategory === cat;
             return (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-1.5 md:py-2 rounded-full font-mono text-xs md:text-sm font-bold tracking-wide transition-all duration-300 cursor-target ${
+                className={`px-5 py-2 rounded-full font-mono text-xs md:text-sm font-bold tracking-wide transition-all duration-300 cursor-target ${
                   isActive
                     ? 'bg-accent text-white shadow-md shadow-accent/20 scale-105'
                     : 'bg-white border-2 border-slate-200/80 text-slate-600 hover:border-accent hover:text-accent'
@@ -114,33 +81,33 @@ export default function Skills() {
         </div>
 
         {/* Interactive Skills Bento Grid */}
-        <div className="w-[95%] md:w-[95%] max-w-[1600px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3.5 md:gap-4.5 mx-auto">
+        <div className="w-[95%] md:w-[95%] max-w-[1600px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 mx-auto">
           {filteredSkills.map(skill => {
             return (
               <div
                 key={skill.name}
                 onMouseEnter={() => setHoveredSkill(skill.name)}
                 onMouseLeave={() => setHoveredSkill(null)}
-                className="group relative border-2 border-slate-200/80 bg-white p-4 md:p-5 rounded-2xl flex flex-col items-center justify-center gap-2.5 transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.12)] cursor-target overflow-hidden"
+                className="group relative border-2 border-slate-200/80 bg-white p-5 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.12)] cursor-target overflow-hidden"
               >
                 {/* Tech Logo */}
-                <div className="w-10 h-10 md:w-11 md:h-11 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110">
+                <div className="w-11 h-11 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110">
                   <img
                     src={skill.logo}
                     alt={skill.name}
                     loading="lazy"
                     decoding="async"
-                    className="w-9 h-9 md:w-10 md:h-10 object-contain drop-shadow-sm"
+                    className="w-10 h-10 object-contain drop-shadow-sm"
                   />
                 </div>
 
                 {/* Skill Name */}
-                <span className="font-clash-semibold text-xs md:text-sm font-bold text-slate-800 text-center relative z-10 group-hover:text-accent transition-colors duration-300">
+                <span className="font-clash-semibold text-sm font-bold text-slate-800 text-center relative z-10 group-hover:text-accent transition-colors duration-300">
                   {skill.name}
                 </span>
 
                 {/* Skill Category Pill */}
-                <span className="font-mono text-[9px] md:text-[10px] text-slate-400 uppercase font-semibold px-2 py-0.5 bg-slate-50 border border-slate-100 rounded-md">
+                <span className="font-mono text-[10px] text-slate-400 uppercase font-semibold px-2 py-0.5 bg-slate-50 border border-slate-100 rounded-md">
                   {skill.category}
                 </span>
 
