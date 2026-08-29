@@ -176,51 +176,21 @@ const TOPICS = [
   { label: 'Contact', query: 'How can I contact or hire Zeus?' }
 ];
 
-// Inline formatting helper supporting bold, italics, inline code, and links
-const parseInlineFormatting = (text: string): React.ReactNode[] => {
-  const pattern = /(`.*?`|\*\*.*?\*\*|\*[^*]+?\*)/g;
-  const parts = text.split(pattern);
-
-  return parts.map((part, i) => {
-    if (part.startsWith('`') && part.endsWith('`') && part.length >= 2) {
-      return (
-        <code key={i} className="font-mono text-[11px] bg-slate-100 text-[#C44900] px-1.5 py-0.5 rounded border border-slate-200/60">
-          {part.slice(1, -1)}
-        </code>
-      );
-    }
-    if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
-      return (
-        <strong key={i} className="font-bold text-slate-900">
-          {part.slice(2, -2)}
-        </strong>
-      );
-    }
-    if (part.startsWith('*') && part.endsWith('*') && part.length >= 2) {
-      return (
-        <em key={i} className="italic text-slate-600 font-medium">
-          {part.slice(1, -1).trim()}
-        </em>
-      );
-    }
-    return part;
-  });
-};
-
-const renderInlineMarkdown = (rawText: string): React.ReactNode => {
-  const clean = stripEmojis(rawText);
+// Helper to format inline markdown (links, bold, code)
+const renderInlineMarkdown = (text: string) => {
+  const clean = stripEmojis(text);
   const linkRegex = /\[(.*?)\]\((.*?)\)/g;
-  const nodes: React.ReactNode[] = [];
+  const parts: React.ReactNode[] = [];
   let lastIndex = 0;
   let match;
 
   while ((match = linkRegex.exec(clean)) !== null) {
     if (match.index > lastIndex) {
-      nodes.push(...parseInlineFormatting(clean.substring(lastIndex, match.index)));
+      parts.push(renderBoldAndCode(clean.substring(lastIndex, match.index)));
     }
     const linkText = match[1];
     const linkUrl = match[2];
-    nodes.push(
+    parts.push(
       <a
         key={`link-${match.index}`}
         href={linkUrl}
@@ -236,10 +206,26 @@ const renderInlineMarkdown = (rawText: string): React.ReactNode => {
   }
 
   if (lastIndex < clean.length) {
-    nodes.push(...parseInlineFormatting(clean.substring(lastIndex)));
+    parts.push(renderBoldAndCode(clean.substring(lastIndex)));
   }
 
-  return nodes.length > 0 ? nodes : clean;
+  return parts.length > 0 ? parts : clean;
+};
+
+// Helper for bold and inline code
+const renderBoldAndCode = (text: string) => {
+  const boldParts = text.split(/(\*\*.*?\*\*)/g);
+  return boldParts.map((part, idx) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      const boldText = part.slice(2, -2);
+      return (
+        <strong key={idx} className="font-bold text-slate-900">
+          {boldText}
+        </strong>
+      );
+    }
+    return part;
+  });
 };
 
 // Structured ATS / Pretty Markdown Formatter Component
@@ -259,63 +245,72 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
           return <div key={index} className="h-1" />;
         }
 
-        // Heading 3
+        // Section Title: ### Title
         if (trimmed.startsWith('### ')) {
           return (
-            <h3 key={index} className="font-clash-bold text-sm sm:text-base text-slate-900 mt-2 mb-0.5 tracking-tight font-bold">
-              {renderInlineMarkdown(trimmed.slice(4))}
-            </h3>
+            <div
+              key={index}
+              className="font-clash-bold text-xs md:text-sm font-bold text-[#C44900] uppercase tracking-wider mt-2 mb-0.5 pb-1 border-b border-[#C44900]/20 flex items-center gap-2"
+            >
+              <span className="w-2 h-2 rounded-[2px] bg-[#C44900] shrink-0" />
+              <span>{trimmed.replace(/^###\s+/, '')}</span>
+            </div>
           );
         }
 
-        // Heading 2
-        if (trimmed.startsWith('## ')) {
+        // Subheading: #### Subtitle
+        if (trimmed.startsWith('#### ')) {
           return (
-            <h2 key={index} className="font-clash-bold text-base sm:text-lg text-slate-900 mt-2.5 mb-1 tracking-tight font-bold">
-              {renderInlineMarkdown(trimmed.slice(3))}
-            </h2>
+            <div
+              key={index}
+              className="font-bold text-xs md:text-[13px] text-slate-900 mt-2 mb-0.5 flex items-center gap-2"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C44900] shrink-0" />
+              <span>{renderInlineMarkdown(trimmed.replace(/^####\s+/, ''))}</span>
+            </div>
           );
         }
 
-        // Bullet point
+        // Nested List Item
+        if (/^(\s{2,}|\t)[-*]\s+/.test(line)) {
+          const itemText = line.replace(/^\s*[-*]\s+/, '');
+          return (
+            <div key={index} className="flex items-start gap-2 ml-5 my-0.5 text-slate-600">
+              <span className="w-1 h-1 rounded-full bg-slate-400 mt-2 shrink-0" />
+              <div className="flex-1">{renderInlineMarkdown(itemText)}</div>
+            </div>
+          );
+        }
+
+        // Primary List Item
         if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+          const itemText = trimmed.replace(/^[-*]\s+/, '');
           return (
-            <div key={index} className="flex items-start gap-2 pl-1.5 my-0.5">
-              <span className="text-[#C44900] font-bold text-xs mt-0.5 select-none">•</span>
-              <span className="flex-1 text-slate-800 leading-normal">
-                {renderInlineMarkdown(trimmed.slice(2))}
-              </span>
+            <div key={index} className="flex items-start gap-2.5 ml-1.5 my-0.5 text-slate-800">
+              <span className="w-1.5 h-1.5 rounded-[1.5px] bg-[#C44900] mt-2 shrink-0" />
+              <div className="flex-1">{renderInlineMarkdown(itemText)}</div>
             </div>
           );
         }
 
-        // Numbered list item (e.g. 1. 2. 3.)
-        const numberedMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
-        if (numberedMatch) {
-          return (
-            <div key={index} className="flex items-start gap-2 pl-1.5 my-0.5">
-              <span className="font-mono text-[11px] font-bold text-[#C44900] mt-0.5 select-none min-w-[14px]">
-                {numberedMatch[1]}.
-              </span>
-              <span className="flex-1 text-slate-800 leading-normal">
-                {renderInlineMarkdown(numberedMatch[2])}
-              </span>
-            </div>
-          );
-        }
-
-        // Italic note / footer (e.g. *Think before you click...*)
-        if ((trimmed.startsWith('*') && trimmed.endsWith('*')) || (trimmed.startsWith('_') && trimmed.endsWith('_'))) {
-          return (
-            <p key={index} className="text-slate-500 italic text-xs mt-2 border-t border-slate-100 pt-2 leading-normal">
-              {renderInlineMarkdown(trimmed)}
-            </p>
-          );
+        // Numbered List Item
+        if (/^\d+\.\s+/.test(trimmed)) {
+          const match = trimmed.match(/^(\d+)\.\s+(.*)/);
+          if (match) {
+            return (
+              <div key={index} className="flex items-start gap-2.5 ml-1.5 my-0.5 text-slate-800">
+                <span className="font-mono text-[11px] font-bold text-[#C44900] bg-orange-50 border border-[#C44900]/30 rounded px-1.5 py-0.2 shrink-0">
+                  {match[1]}
+                </span>
+                <div className="flex-1">{renderInlineMarkdown(match[2])}</div>
+              </div>
+            );
+          }
         }
 
         // Regular Paragraph
         return (
-          <p key={index} className="text-slate-800 my-0.5 leading-normal">
+          <p key={index} className="my-0.5 text-slate-700">
             {renderInlineMarkdown(trimmed)}
           </p>
         );
