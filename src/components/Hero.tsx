@@ -51,9 +51,9 @@ export default function Hero() {
     };
   }, []);
 
-  const triggerSimulation = (targetSeason: HolidaySeason) => {
-    const nextVal = override === targetSeason ? 'auto' : targetSeason;
-    const finalSeason = nextVal === 'auto' ? null : targetSeason;
+  const toggleChristmasSimulation = () => {
+    const nextVal = override === 'christmas' ? 'auto' : 'christmas';
+    const finalSeason = nextVal === 'auto' ? null : 'christmas';
     setOverride(finalSeason);
     window.dispatchEvent(new CustomEvent('setSeasonalOverride', { detail: nextVal }));
   };
@@ -107,60 +107,71 @@ export default function Hero() {
                   onMouseEnter={() => setIsProfileHovered(true)}
                   onMouseLeave={() => setIsProfileHovered(false)}
                 >
-                  {/* Authentic Classic Santa Hat */}
+                  {/* Authentic Classic Santa Hat for Profile Avatar */}
                   <AnimatePresence>
                     {isChristmas && (
                       <motion.div
                         initial={{ scale: 0, rotate: -15, y: -8, opacity: 0 }}
-                        animate={{ scale: 1, rotate: -6, y: 0, opacity: 1 }}
+                        animate={{ scale: 1, rotate: -8, y: 0, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                         transition={{ type: 'spring', stiffness: 280, damping: 18 }}
-                        className="absolute -top-3.5 -left-1 sm:-top-5 sm:-left-2 md:-top-8 md:-left-3 lg:-top-9 lg:-left-4 xl:-top-10 xl:-left-4 z-30 pointer-events-none select-none w-11 sm:w-16 md:w-24 lg:w-28 xl:w-32 drop-shadow-lg"
+                        className="absolute -top-3 -left-1 sm:-top-5 sm:-left-2 md:-top-7 md:-left-3 lg:-top-8 lg:-left-3 xl:-top-9 xl:-left-4 z-30 pointer-events-none select-none w-12 sm:w-16 md:w-24 lg:w-28 xl:w-32 drop-shadow-xl"
                       >
                         <svg viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
-                          {/* Hat Red Velvet Body */}
+                          <defs>
+                            <linearGradient id="santaRed" x1="20%" y1="100%" x2="80%" y2="0%">
+                              <stop offset="0%" stopColor="#991B1B" />
+                              <stop offset="45%" stopColor="#DC2626" />
+                              <stop offset="100%" stopColor="#EF4444" />
+                            </linearGradient>
+                            <linearGradient id="furGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                              <stop offset="0%" stopColor="#FFFFFF" />
+                              <stop offset="100%" stopColor="#F1F5F9" />
+                            </linearGradient>
+                          </defs>
+
+                          {/* Soft bottom contact shadow */}
+                          <ellipse cx="44" cy="56" rx="36" ry="5" fill="#000000" opacity="0.25" />
+
+                          {/* Solid Red Cone Body */}
                           <path
-                            d="M 18 58 C 22 36 38 14 62 8 C 76 5 88 12 92 24 C 94 32 90 40 85 45 C 80 49 74 46 76 38 C 78 28 72 20 62 18 C 44 18 30 38 26 58 Z"
-                            fill="#DC2626"
+                            d="M 14 54 C 22 28 44 14 65 10 C 78 8 88 16 88 28 C 88 36 86 42 84 44 C 80 44 76 46 72 48 C 46 52 28 54 14 54 Z"
+                            fill="url(#santaRed)"
                           />
-                          {/* Shadow on bottom left fold */}
+                          {/* Folded Tip Shadow Detail */}
                           <path
-                            d="M 20 58 C 24 40 36 24 54 16 C 48 24 40 38 38 58 Z"
-                            fill="#B91C1C"
+                            d="M 64 10 C 78 8 88 16 88 28 C 88 38 84 44 80 44 C 76 44 74 34 76 26 C 78 18 72 12 64 10 Z"
+                            fill="#991B1B"
                           />
-                          {/* Velvet highlight fold */}
+                          {/* Velvet highlight curve */}
                           <path
-                            d="M 62 9 C 74 7 84 14 88 24 C 84 18 76 13 65 12 Z"
+                            d="M 22 46 C 32 28 48 16 65 10 C 60 12 44 24 30 48 Z"
                             fill="#F87171"
-                          />
-                          {/* Tip dangling down */}
-                          <path
-                            d="M 88 28 C 94 34 94 44 87 50 C 83 53 78 48 82 42 C 84 38 86 34 88 28 Z"
-                            fill="#B91C1C"
+                            opacity="0.75"
                           />
 
-                          {/* Pom-Pom on tip */}
-                          <circle cx="85" cy="52" r="8" fill="#E2E8F0" />
-                          <circle cx="84" cy="51" r="7.5" fill="#FFFFFF" />
-                          <circle cx="82" cy="49" r="3" fill="#FFFFFF" />
+                          {/* White Fur Pom-Pom */}
+                          <circle cx="84" cy="46" r="9" fill="#E2E8F0" />
+                          <circle cx="83" cy="45" r="8.5" fill="#FFFFFF" />
+                          <circle cx="81" cy="43" r="3.5" fill="#FFFFFF" />
 
                           {/* White Fur Brim */}
-                          <rect x="8" y="52" width="70" height="18" rx="9" fill="#E2E8F0" />
-                          <rect x="10" y="51" width="66" height="17" rx="8.5" fill="#FFFFFF" />
+                          <rect x="8" y="46" width="70" height="18" rx="9" fill="#E2E8F0" />
+                          <rect x="10" y="45" width="66" height="17" rx="8.5" fill="url(#furGrad)" />
 
-                          {/* Fluffy Cloud Bumps */}
-                          <circle cx="16" cy="59" r="8" fill="#FFFFFF" />
-                          <circle cx="28" cy="59" r="9" fill="#FFFFFF" />
-                          <circle cx="43" cy="59" r="9.5" fill="#FFFFFF" />
-                          <circle cx="58" cy="59" r="9" fill="#FFFFFF" />
-                          <circle cx="70" cy="59" r="8" fill="#FFFFFF" />
+                          {/* Fluffy rounded puffs */}
+                          <circle cx="16" cy="53" r="7.5" fill="#FFFFFF" />
+                          <circle cx="28" cy="53" r="8.5" fill="#FFFFFF" />
+                          <circle cx="43" cy="53" r="9" fill="#FFFFFF" />
+                          <circle cx="57" cy="53" r="8.5" fill="#FFFFFF" />
+                          <circle cx="69" cy="53" r="7.5" fill="#FFFFFF" />
 
-                          {/* Subtle bottom shadow on fur puffs */}
-                          <ellipse cx="16" cy="64" rx="5" ry="2" fill="#CBD5E1" opacity="0.6" />
-                          <ellipse cx="28" cy="65" rx="6" ry="2" fill="#CBD5E1" opacity="0.6" />
-                          <ellipse cx="43" cy="65" rx="7" ry="2" fill="#CBD5E1" opacity="0.6" />
-                          <ellipse cx="58" cy="65" rx="6" ry="2" fill="#CBD5E1" opacity="0.6" />
-                          <ellipse cx="70" cy="64" rx="5" ry="2" fill="#CBD5E1" opacity="0.6" />
+                          {/* Soft bottom puff shading */}
+                          <ellipse cx="16" cy="58" rx="5" ry="2" fill="#CBD5E1" opacity="0.6" />
+                          <ellipse cx="28" cy="59" rx="6" ry="2" fill="#CBD5E1" opacity="0.6" />
+                          <ellipse cx="43" cy="59" rx="7" ry="2" fill="#CBD5E1" opacity="0.6" />
+                          <ellipse cx="57" cy="59" rx="6" ry="2" fill="#CBD5E1" opacity="0.6" />
+                          <ellipse cx="69" cy="58" rx="5" ry="2" fill="#CBD5E1" opacity="0.6" />
                         </svg>
                       </motion.div>
                     )}
@@ -294,14 +305,14 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Simulation Preview Buttons for Holiday Effects */}
+            {/* Simulation Preview Button for Christmas Holiday */}
             <div className="flex flex-wrap items-center gap-2.5 pt-2 border-t border-slate-200/60">
               <span className="font-mono text-[10px] md:text-xs uppercase tracking-wider text-slate-400 font-semibold select-none">
                 Holiday Sim:
               </span>
               <button
                 type="button"
-                onClick={() => triggerSimulation('christmas')}
+                onClick={toggleChristmasSimulation}
                 className={`cursor-target font-mono text-[11px] font-bold px-3 py-1 rounded-full border transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
                   activeSeason === 'christmas'
                     ? 'bg-red-600 border-red-600 text-white shadow-sm'
@@ -312,23 +323,13 @@ export default function Hero() {
                 {activeSeason === 'christmas' && <span className="text-[9px] bg-white/20 px-1 rounded">ON</span>}
               </button>
 
-              <button
-                type="button"
-                onClick={() => triggerSimulation('newyear')}
-                className={`cursor-target font-mono text-[11px] font-bold px-3 py-1 rounded-full border transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
-                  activeSeason === 'newyear'
-                    ? 'bg-[#C44900] border-[#C44900] text-white shadow-sm'
-                    : 'bg-white border-slate-200 text-slate-600 hover:border-[#C44900] hover:text-[#C44900]'
-                }`}
-              >
-                <span>🎆 Fireworks</span>
-                {activeSeason === 'newyear' && <span className="text-[9px] bg-white/20 px-1 rounded">ON</span>}
-              </button>
-
               {override !== null && (
                 <button
                   type="button"
-                  onClick={() => triggerSimulation('none')}
+                  onClick={() => {
+                    setOverride(null);
+                    window.dispatchEvent(new CustomEvent('setSeasonalOverride', { detail: 'auto' }));
+                  }}
                   className="cursor-target font-mono text-[10px] text-slate-400 hover:text-slate-700 underline transition-colors cursor-pointer px-1"
                 >
                   Reset

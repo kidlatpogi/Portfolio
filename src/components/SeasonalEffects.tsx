@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import confetti from 'canvas-confetti';
 import { getHolidaySeason, getMsUntilNextBoundary, type HolidaySeason } from '../utils/seasonal';
 
 export default function SeasonalEffects() {
@@ -42,10 +41,6 @@ export default function SeasonalEffects() {
 
   if (activeSeason === 'christmas') {
     return <SnowCanvas />;
-  }
-
-  if (activeSeason === 'newyear') {
-    return <FireworksLibraryEffect />;
   }
 
   return null;
@@ -186,92 +181,4 @@ function SnowCanvas() {
       className="fixed inset-0 pointer-events-none z-30 w-full h-full"
     />
   );
-}
-
-/**
- * 60fps Zero-Lag Fireworks using canvas-confetti library
- * High-performance, celebratory, smooth multi-origin bursts
- */
-function FireworksLibraryEffect() {
-  useEffect(() => {
-    let isRunning = true;
-    let timer: ReturnType<typeof setTimeout>;
-
-    const colors = [
-      '#C44900', // Signature Orange
-      '#FF8A3D', // Amber Glow
-      '#FFD700', // Festive Gold
-      '#EF4444', // New Year Crimson
-      '#10B981', // Emerald Green
-      '#06B6D4', // Cyan Sky
-      '#A855F7', // Electric Violet
-      '#FFFFFF'  // Diamond Flash
-    ];
-
-    const launchBurst = () => {
-      if (!isRunning || (typeof document !== 'undefined' && document.hidden)) return;
-
-      // Random origin in the upper sky
-      const x = Math.random() * 0.8 + 0.1;
-      const y = Math.random() * 0.4 + 0.15;
-
-      confetti({
-        particleCount: Math.floor(Math.random() * 25) + 30,
-        spread: 360,
-        startVelocity: Math.random() * 12 + 20,
-        decay: 0.93,
-        scalar: 0.9,
-        ticks: 80,
-        gravity: 0.75,
-        colors,
-        origin: { x, y },
-        zIndex: 30,
-        disableForReducedMotion: true
-      });
-
-      // Staggered double spark pop
-      if (Math.random() > 0.4) {
-        setTimeout(() => {
-          if (!isRunning || document.hidden) return;
-          confetti({
-            particleCount: 15,
-            spread: 360,
-            startVelocity: 14,
-            decay: 0.94,
-            scalar: 0.7,
-            ticks: 50,
-            gravity: 0.6,
-            colors: ['#FFD700', '#FFFFFF', '#C44900'],
-            origin: { x: x + (Math.random() - 0.5) * 0.06, y: y + (Math.random() - 0.5) * 0.06 },
-            zIndex: 30
-          });
-        }, 150);
-      }
-
-      // Schedule next burst (every 600ms to 1200ms)
-      const nextDelay = Math.random() * 600 + 600;
-      timer = setTimeout(launchBurst, nextDelay);
-    };
-
-    // Initial pair of launches
-    launchBurst();
-    const initialPairTimer = setTimeout(launchBurst, 350);
-
-    const handleVisibility = () => {
-      if (!document.hidden && isRunning) {
-        launchBurst();
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibility);
-
-    return () => {
-      isRunning = false;
-      clearTimeout(timer);
-      clearTimeout(initialPairTimer);
-      document.removeEventListener('visibilitychange', handleVisibility);
-      confetti.reset();
-    };
-  }, []);
-
-  return null;
 }
