@@ -15,7 +15,7 @@ export default function ParallaxTextSection() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full overflow-hidden bg-[#fafafa] py-16 md:py-24 border-y border-slate-200/60 z-10"
+      className="relative w-full overflow-hidden bg-transparent py-16 md:py-24 border-y border-slate-200/60 z-10"
     >
       {/* 2 Parallax Animated Rows */}
       <div className="flex flex-col gap-6 sm:gap-10 md:gap-16 w-full relative z-10">

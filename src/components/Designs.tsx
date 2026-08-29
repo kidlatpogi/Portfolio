@@ -1,7 +1,6 @@
 ﻿import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ShapeGrid from './ShapeGrid.tsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -87,7 +86,6 @@ export default function Designs() {
       });
     }, containerRef);
 
-    // Refresh ScrollTrigger after a slight delay to ensure all DOM dimensions and fonts are settled
     const timeout = setTimeout(() => {
       ScrollTrigger.refresh();
     }, 200);
@@ -99,36 +97,36 @@ export default function Designs() {
   }, []);
 
   return (
-    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8] pt-4 pb-12 md:pt-0 z-20">
+    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-transparent pt-4 pb-12 md:pt-0 z-20">
       {/* Centering calculations, adaptive widths, and scrollbar hiding scoped to Designs section */}
       <style>{`
         #designs {
-          --card-width: 420px; /* default xl card width */
+          --card-width: 360px; /* default xl card width */
         }
         @media (min-width: 768px) and (max-width: 1023px) {
           #designs {
-            --card-width: 320px; /* md card width */
+            --card-width: 280px; /* md card width */
           }
         }
         @media (min-width: 1024px) and (max-width: 1279px) {
           #designs {
-            --card-width: 360px; /* lg card width */
+            --card-width: 320px; /* lg card width */
           }
         }
         /* Height-based corrections for smaller laptops */
         @media (min-width: 1024px) and (max-height: 800px) {
           #designs {
-            --card-width: 290px;
+            --card-width: 260px;
           }
         }
         @media (min-width: 1280px) and (max-height: 800px) {
           #designs {
-            --card-width: 330px;
+            --card-width: 290px;
           }
         }
         @media (min-width: 1536px) and (max-height: 900px) {
           #designs {
-            --card-width: 380px;
+            --card-width: 340px;
           }
         }
 
@@ -159,7 +157,7 @@ export default function Designs() {
           padding-bottom: 3rem;
         }
         #designs .designs-header {
-          margin-bottom: 3rem;
+          margin-bottom: 2rem;
         }
         @media (max-height: 800px) {
           #designs .designs-container {
@@ -175,24 +173,11 @@ export default function Designs() {
         }
       `}</style>
 
-      {/* Interactive Background ShapeGrid */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <ShapeGrid
-          speed={0}
-          squareSize={55}
-          borderColor="rgba(51, 65, 85, 0.05)"
-          hoverFillColor="rgba(51, 65, 85, 0.12)"
-          shape="square"
-          hoverTrailAmount={6}
-          gradientColor="#f8f8f8"
-        />
-      </div>
-
       {/* On Desktop: Sticky full-screen view via GSAP pin. On Mobile: static relative view */}
       <div className="designs-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-10">
 
         {/* Section Header */}
-        <div className="designs-header w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-12 flex flex-col items-start z-10 flex-shrink-0">
+        <div className="designs-header w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-8 flex flex-col items-start z-10 flex-shrink-0">
           <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
             Creative Showcase
           </span>
@@ -207,7 +192,7 @@ export default function Designs() {
         {/* Cards container: 3x2 grid on mobile viewports, horizontal flex on desktop */}
         <div
           ref={scrollSectionRef}
-          className="designs-track grid grid-cols-2 grid-rows-3 gap-4 max-sm:gap-3 md:flex md:flex-row md:gap-16 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
+          className="designs-track grid grid-cols-2 grid-rows-3 gap-4 max-sm:gap-3 md:flex md:flex-row md:gap-14 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
         >
           {designsData.map((item, index) => {
             const num = String(index + 1).padStart(2, '0');
@@ -216,8 +201,8 @@ export default function Designs() {
                 key={item.title}
                 className="designs-card flex-shrink-0 w-full md:w-[var(--card-width)] flex flex-col group cursor-target select-none"
               >
-                {/* 1:1 Aspect Ratio Card Image */}
-                <div className="relative aspect-square w-full rounded-2xl md:rounded-3xl overflow-hidden bg-white/80 border border-slate-200/80 shadow-md group-hover:shadow-xl group-hover:border-accent/40 transition-all duration-300">
+                {/* 4:5 Aspect Ratio Rectangular Poster Card */}
+                <div className="relative aspect-[4/5] w-full rounded-2xl md:rounded-3xl overflow-hidden bg-white/80 border border-slate-200/80 shadow-md group-hover:shadow-xl group-hover:border-accent/40 transition-all duration-300">
                   <img
                     src={item.image}
                     alt={item.title}
@@ -239,7 +224,7 @@ export default function Designs() {
                 {/* Card Meta Details */}
                 <div className="mt-3 md:mt-4 flex items-center justify-between px-1">
                   <div className="flex flex-col">
-                    <span className="font-clash-semibold text-sm md:text-lg font-bold text-slate-800 tracking-tight group-hover:text-accent transition-colors">
+                    <span className="font-clash-semibold text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight group-hover:text-accent transition-colors">
                       {item.title}
                     </span>
                     <span className="font-mono text-[10px] md:text-xs text-slate-400 uppercase tracking-wider">

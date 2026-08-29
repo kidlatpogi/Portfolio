@@ -7,7 +7,7 @@ const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/
 
 export default function About() {
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden bg-[#f8f8f8] z-10" id="about">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden bg-transparent z-10" id="about">
       {/* Anchor targets for sub-navigation scroll links */}
       <div id="about-me" className="absolute top-0" />
 
