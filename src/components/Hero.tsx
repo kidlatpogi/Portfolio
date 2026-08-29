@@ -141,6 +141,7 @@ export default function Hero() {
                 Socials:
               </span>
               <div className="flex flex-wrap items-center gap-8">
+                {/* 1. Resume */}
                 <a
                   href="/Zeus_Angelo_Bautista_Resume.pdf"
                   target="_blank"
@@ -160,6 +161,8 @@ export default function Hero() {
                   </svg>
                   Resume
                 </a>
+
+                {/* 2. Linkedin */}
                 <a
                   href="https://www.linkedin.com/in/zeus-angelo-bautista/"
                   target="_blank"
@@ -173,6 +176,8 @@ export default function Hero() {
                   </svg>
                   Linkedin
                 </a>
+
+                {/* 3. Github */}
                 <a
                   href="https://github.com/kidlatpogi"
                   target="_blank"
@@ -184,6 +189,18 @@ export default function Hero() {
                     <path d="M9 18c-4.51 2-5-2-7-2" />
                   </svg>
                   Github
+                </a>
+
+                {/* 4. Email */}
+                <a
+                  href="mailto:bautistaangelozeus17@gmail.com"
+                  className="flex items-center gap-2.5 text-[#334155] hover:text-accent font-mono text-sm md:text-base uppercase tracking-wider transition-colors cursor-pointer group"
+                >
+                  <svg className="w-5 h-5 text-[#334155] group-hover:text-accent transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="20" height="16" x="2" y="4" rx="2" />
+                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                  </svg>
+                  Email
                 </a>
               </div>
             </div>

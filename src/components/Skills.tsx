@@ -5,25 +5,24 @@ interface Skill {
   logo: string;
   category: 'Frontend' | 'Backend & DB' | 'Tools & DevOps';
   level?: string;
-  projects?: string;
 }
 
 const allSkills: Skill[] = [
   // Frontend
-  { name: 'JavaScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg', category: 'Frontend', level: 'Advanced', projects: 'TalkTics, Linny' },
-  { name: 'TypeScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg', category: 'Frontend', level: 'Proficient', projects: 'Gnosis, Portfolio' },
-  { name: 'React', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg', category: 'Frontend', level: 'Advanced', projects: 'TalkTics, Linny' },
-  { name: 'Tailwind CSS', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg', category: 'Frontend', level: 'Advanced', projects: 'All Projects' },
+  { name: 'JavaScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg', category: 'Frontend', level: 'Advanced' },
+  { name: 'TypeScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg', category: 'Frontend', level: 'Proficient' },
+  { name: 'React', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg', category: 'Frontend', level: 'Advanced' },
+  { name: 'Tailwind CSS', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg', category: 'Frontend', level: 'Advanced' },
   { name: 'HTML5', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg', category: 'Frontend', level: 'Mastery' },
   { name: 'CSS3', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg', category: 'Frontend', level: 'Mastery' },
-  { name: 'Electron', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/electron/electron-original.svg', category: 'Frontend', level: 'Intermediate', projects: 'Safelink' },
+  { name: 'Electron', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/electron/electron-original.svg', category: 'Frontend', level: 'Intermediate' },
 
   // Backend & DB
-  { name: 'Node.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg', category: 'Backend & DB', level: 'Proficient', projects: 'Linny, Backend API' },
-  { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg', category: 'Backend & DB', level: 'Advanced', projects: 'TalkTics, YOLOv8' },
-  { name: 'MySQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg', category: 'Backend & DB', level: 'Proficient', projects: 'Silang Database' },
-  { name: 'Firebase', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg', category: 'Backend & DB', level: 'Intermediate', projects: 'Gnosis' },
-  { name: 'Supabase', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg', category: 'Backend & DB', level: 'Intermediate', projects: 'Modern Cloud Apps' },
+  { name: 'Node.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg', category: 'Backend & DB', level: 'Proficient' },
+  { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg', category: 'Backend & DB', level: 'Advanced' },
+  { name: 'MySQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg', category: 'Backend & DB', level: 'Proficient' },
+  { name: 'Firebase', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg', category: 'Backend & DB', level: 'Intermediate' },
+  { name: 'Supabase', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg', category: 'Backend & DB', level: 'Intermediate' },
 
   // Tools & DevOps
   { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg', category: 'Tools & DevOps', level: 'Advanced' },
@@ -39,7 +38,6 @@ const categories = ['All', 'Frontend', 'Backend & DB', 'Tools & DevOps'] as cons
 
 export default function Skills() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
   const filteredSkills = useMemo(() => {
     if (selectedCategory === 'All') return allSkills;
@@ -80,14 +78,12 @@ export default function Skills() {
           })}
         </div>
 
-        {/* Interactive Skills Centered Flex Matrix (3-Cols on Mobile, Centered Trailing Items like Figma) */}
+        {/* Interactive Skills Centered Flex Matrix */}
         <div className="w-full max-w-[1600px] flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-5 mx-auto">
           {filteredSkills.map(skill => {
             return (
               <div
                 key={skill.name}
-                onMouseEnter={() => setHoveredSkill(skill.name)}
-                onMouseLeave={() => setHoveredSkill(null)}
                 className="w-[calc((100%-1.5rem)/3)] sm:w-[calc((100%-2rem)/3)] md:w-[calc((100%-3.75rem)/4)] lg:w-[calc((100%-5rem)/5)] xl:w-[calc((100%-6.25rem)/6)] max-w-[240px] group relative border-2 border-slate-200/80 bg-white p-3 sm:p-5 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center gap-2 sm:gap-3 transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.12)] cursor-target overflow-hidden"
               >
                 {/* Tech Logo */}
@@ -110,13 +106,6 @@ export default function Skills() {
                 <span className="font-mono text-[8px] sm:text-[10px] text-slate-400 uppercase font-semibold px-1.5 sm:px-2 py-0.5 bg-slate-50 border border-slate-100 rounded-md truncate max-w-full">
                   {skill.category}
                 </span>
-
-                {/* Optional Project Highlight on Hover */}
-                {skill.projects && (
-                  <div className="absolute inset-x-0 bottom-0 py-0.5 bg-accent/95 text-white font-mono text-[8px] sm:text-[9px] font-bold text-center tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    {skill.projects}
-                  </div>
-                )}
               </div>
             );
           })}
