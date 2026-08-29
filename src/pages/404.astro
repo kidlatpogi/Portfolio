@@ -8,7 +8,7 @@ import ShapeGrid from '../components/ShapeGrid.tsx';
   <!-- Background Interactive Grid -->
   <div class="fixed inset-0 z-0 pointer-events-none">
     <ShapeGrid 
-      client:load 
+      client:idle 
       speed={0} 
       squareSize={55} 
       borderColor="rgba(51, 65, 85, 0.05)" 
@@ -19,7 +19,7 @@ import ShapeGrid from '../components/ShapeGrid.tsx';
     />
   </div>
 
-  <TargetCursor client:only="react" targetSelector="a, button, .cursor-target" />
+  <TargetCursor client:idle targetSelector="a, button, .cursor-target" />
 
   <div class="relative z-10 w-full min-h-screen flex flex-col justify-between px-6 py-8 md:px-16 lg:px-24 max-w-[1600px] mx-auto overflow-x-hidden">
     

@@ -2,7 +2,7 @@ import React from 'react';
 import ScrollReveal from './ScrollReveal.tsx';
 import { Cpu, Sparkles } from 'lucide-react';
 
-const profileImage = "https://zeusbautista.site/Common/Bautista%20Zeus%20Angelo%20V..webp";
+const profileImage = "/Common/Bautista%20Zeus%20Angelo%20V..webp";
 const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Bautista%20Zeus%20Angelo%20V..webp";
 
 export default function About() {

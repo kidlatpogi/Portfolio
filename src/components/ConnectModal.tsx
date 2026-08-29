@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
-import emailjs from '@emailjs/browser';
 
 export interface ConnectModalProps {
   isOpen: boolean;
@@ -115,6 +114,7 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
         title: projectDesc,
       };
 
+      const emailjs = (await import('@emailjs/browser')).default;
       await emailjs.send(
         import.meta.env.PUBLIC_EMAILJS_SERVICE_ID,
         import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID,

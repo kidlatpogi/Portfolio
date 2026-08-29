@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getHolidaySeason, type HolidaySeason } from '../utils/seasonal';
 
-const profileImage = "https://zeusbautista.site/Common/Profile%20Picture.webp";
+const profileImage = "/Common/Profile%20Picture.webp";
 const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Profile%20Picture.webp";
-const profileImageHover = "https://zeusbautista.site/Common/Bautista%20Zeus%20Angelo%20V..webp";
+const profileImageHover = "/Common/Bautista%20Zeus%20Angelo%20V..webp";
 const profileImageHoverBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Bautista%20Zeus%20Angelo%20V..webp";
 
 export default function Hero() {
@@ -21,14 +21,14 @@ export default function Hero() {
     if (isPreloaderGone) {
       const timer = setTimeout(() => {
         setStartStrikethrough(true);
-      }, 400);
+      }, 150);
       return () => clearTimeout(timer);
     }
 
     const handlePreloaderRemoved = () => {
       setTimeout(() => {
         setStartStrikethrough(true);
-      }, 400);
+      }, 150);
     };
 
     window.addEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
