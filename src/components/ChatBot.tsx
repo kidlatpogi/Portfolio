@@ -157,7 +157,7 @@ const getClientFootprintMessage = async (): Promise<string> => {
     } catch {}
   }
 
-  return `### That's so unkind of you to try that! 👻\n\nNice try on the prompt injection! Anyway, here is your digital footprint:\n- **Public IP**: ${ip}\n- **Internet Service Provider (ISP)**: ${isp}\n- **Approximate Location**: ${location}\n- **Timezone**: ${timezone}\n- **Operating System**: ${os}\n- **Browser**: ${browser}\n- **Device Specs**: ${cpu} • ${ram}\n- **Screen Resolution**: ${screenRes}\n- **Preferred Language**: ${language}\n\n*Think before you click, and always remember to be kind! ✨*`;
+  return `### That's so unkind of you to try that!\n\nNice try on the prompt injection! Anyway, here is your digital footprint:\n- **Public IP**: ${ip}\n- **Internet Service Provider (ISP)**: ${isp}\n- **Approximate Location**: ${location}\n- **Timezone**: ${timezone}\n- **Operating System**: ${os}\n- **Browser**: ${browser}\n- **Device Specs**: ${cpu} • ${ram}\n- **Screen Resolution**: ${screenRes}\n- **Preferred Language**: ${language}\n\n*Think before you click, and always remember to be kind!*`;
 };
 
 interface Message {
@@ -176,21 +176,51 @@ const TOPICS = [
   { label: 'Contact', query: 'How can I contact or hire Zeus?' }
 ];
 
-// Helper to format inline markdown (links, bold, code)
-const renderInlineMarkdown = (text: string) => {
-  const clean = stripEmojis(text);
+// Inline formatting helper supporting bold, italics, inline code, and links
+const parseInlineFormatting = (text: string): React.ReactNode[] => {
+  const pattern = /(`.*?`|\*\*.*?\*\*|\*[^*]+?\*)/g;
+  const parts = text.split(pattern);
+
+  return parts.map((part, i) => {
+    if (part.startsWith('`') && part.endsWith('`') && part.length >= 2) {
+      return (
+        <code key={i} className="font-mono text-[11px] bg-slate-100 text-[#C44900] px-1.5 py-0.5 rounded border border-slate-200/60">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
+      return (
+        <strong key={i} className="font-bold text-slate-900">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    if (part.startsWith('*') && part.endsWith('*') && part.length >= 2) {
+      return (
+        <em key={i} className="italic text-slate-600 font-medium">
+          {part.slice(1, -1).trim()}
+        </em>
+      );
+    }
+    return part;
+  });
+};
+
+const renderInlineMarkdown = (rawText: string): React.ReactNode => {
+  const clean = stripEmojis(rawText);
   const linkRegex = /\[(.*?)\]\((.*?)\)/g;
-  const parts: React.ReactNode[] = [];
+  const nodes: React.ReactNode[] = [];
   let lastIndex = 0;
   let match;
 
   while ((match = linkRegex.exec(clean)) !== null) {
     if (match.index > lastIndex) {
-      parts.push(renderBoldAndCode(clean.substring(lastIndex, match.index)));
+      nodes.push(...parseInlineFormatting(clean.substring(lastIndex, match.index)));
     }
     const linkText = match[1];
     const linkUrl = match[2];
-    parts.push(
+    nodes.push(
       <a
         key={`link-${match.index}`}
         href={linkUrl}
@@ -206,26 +236,10 @@ const renderInlineMarkdown = (text: string) => {
   }
 
   if (lastIndex < clean.length) {
-    parts.push(renderBoldAndCode(clean.substring(lastIndex)));
+    nodes.push(...parseInlineFormatting(clean.substring(lastIndex)));
   }
 
-  return parts.length > 0 ? parts : clean;
-};
-
-// Helper for bold and inline code
-const renderBoldAndCode = (text: string) => {
-  const boldParts = text.split(/(\*\*.*?\*\*)/g);
-  return boldParts.map((part, idx) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      const boldText = part.slice(2, -2);
-      return (
-        <strong key={idx} className="font-bold text-slate-900">
-          {boldText}
-        </strong>
-      );
-    }
-    return part;
-  });
+  return nodes.length > 0 ? nodes : clean;
 };
 
 // Structured ATS / Pretty Markdown Formatter Component
@@ -248,8 +262,8 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
         // Heading 3
         if (trimmed.startsWith('### ')) {
           return (
-            <h3 key={index} className="font-clash-bold text-sm sm:text-base text-slate-900 mt-2 mb-0.5 tracking-tight">
-              {renderBoldAndCode(trimmed.slice(4))}
+            <h3 key={index} className="font-clash-bold text-sm sm:text-base text-slate-900 mt-2 mb-0.5 tracking-tight font-bold">
+              {renderInlineMarkdown(trimmed.slice(4))}
             </h3>
           );
         }
@@ -257,8 +271,8 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
         // Heading 2
         if (trimmed.startsWith('## ')) {
           return (
-            <h2 key={index} className="font-clash-bold text-base sm:text-lg text-slate-900 mt-2.5 mb-1 tracking-tight">
-              {renderBoldAndCode(trimmed.slice(3))}
+            <h2 key={index} className="font-clash-bold text-base sm:text-lg text-slate-900 mt-2.5 mb-1 tracking-tight font-bold">
+              {renderInlineMarkdown(trimmed.slice(3))}
             </h2>
           );
         }
@@ -287,6 +301,15 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
                 {renderInlineMarkdown(numberedMatch[2])}
               </span>
             </div>
+          );
+        }
+
+        // Italic note / footer (e.g. *Think before you click...*)
+        if ((trimmed.startsWith('*') && trimmed.endsWith('*')) || (trimmed.startsWith('_') && trimmed.endsWith('_'))) {
+          return (
+            <p key={index} className="text-slate-500 italic text-xs mt-2 border-t border-slate-100 pt-2 leading-normal">
+              {renderInlineMarkdown(trimmed)}
+            </p>
           );
         }
 
