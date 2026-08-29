@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+﻿import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ShapeGrid from './ShapeGrid.tsx';
@@ -76,7 +76,7 @@ export default function Designs() {
               pin: true,
               scrub: 1,
               start: 'top top',
-              end: () => `+=${(scrollWidth - window.innerWidth) * 1.6}`,
+              end: () => `+=${(scrollWidth - window.innerWidth) * 1.1}`,
               invalidateOnRefresh: true
             },
           }

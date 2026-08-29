@@ -158,23 +158,24 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
         >
           {/* Top Bar */}
           <div className="w-full flex items-center justify-between max-w-4xl mx-auto flex-shrink-0">
-            <div className="flex items-center gap-3">
+            {/* Left: Title & Audio Toggle */}
+            <div className="flex items-center gap-3 sm:gap-4">
               <span className="font-mono text-xs uppercase tracking-[0.2em] font-bold text-[#C44900]">
                 TYPING TEST
               </span>
-            </div>
 
-            {/* Audio Toggle */}
-            <div className="flex items-center gap-3">
               <button
                 onClick={handleToggleMute}
-                className="cursor-target flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-slate-400 text-slate-600 text-xs font-mono transition-colors cursor-pointer shadow-2xs"
+                className="cursor-target flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-[#C44900] text-slate-600 hover:text-[#C44900] text-xs font-mono transition-colors cursor-pointer shadow-2xs"
                 title={isMuted ? 'Unmute keyboard audio' : 'Mute keyboard audio'}
               >
                 {isMuted ? <VolumeX size={14} className="text-red-500" /> : <Volume2 size={14} className="text-[#C44900]" />}
-                <span className="hidden sm:inline">{isMuted ? 'Muted' : 'Audio'}</span>
+                <span>{isMuted ? 'Muted' : 'Audio'}</span>
               </button>
+            </div>
 
+            {/* Right: ESC Hint & Close Button */}
+            <div className="flex items-center gap-3 sm:gap-4">
               <span className="hidden md:inline-block font-mono text-[11px] text-slate-400">
                 Press <kbd className="px-1.5 py-0.5 bg-white border border-slate-300 rounded text-slate-600 shadow-2xs">ESC</kbd> to close
               </span>
