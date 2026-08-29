@@ -17,8 +17,8 @@ const {
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" type="image/webp" href="/Common/Bautista%20Zeus%20Angelo%20V..webp" />
+		<link rel="shortcut icon" href="/Common/Bautista%20Zeus%20Angelo%20V..webp" />
 		<link rel="apple-touch-icon" href="/Common/Bautista%20Zeus%20Angelo%20V..webp" />
 		<meta name="generator" content={Astro.generator} />
 		
@@ -89,6 +89,7 @@ const {
 				function finishPreloader() {
 					if (isFinished) return;
 					isFinished = true;
+					window.__preloaderFinished = true;
 					document.documentElement.classList.remove('preloading');
 					const textContainer = document.getElementById('preloader-text-container');
 					if (textContainer) {
@@ -210,8 +211,10 @@ const {
 	// Stop scroll initially while preloader is active
 	lenis.stop();
 
-	// Animate reveal of navigation and main sections once preloader is finished
-	window.addEventListener('preloaderFinished', () => {
+	let sweepTriggered = false;
+	const startSweep = () => {
+		if (sweepTriggered) return;
+		sweepTriggered = true;
 		lenis.start();
 
 		// Sync scroll position instantly behind the preloader curtain if there is a hash
@@ -298,5 +301,12 @@ const {
 				);
 			}
 		}
-	});
+	};
+
+	window.addEventListener('preloaderFinished', startSweep);
+
+	// In case preloader already finished before this script was initialized
+	if ((window as any).__preloaderFinished) {
+		startSweep();
+	}
 </script>
