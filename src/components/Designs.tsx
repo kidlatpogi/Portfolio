@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -208,7 +208,7 @@ export default function Designs() {
                   <img
                     src={item.image}
                     alt={item.title}
-                    loading={index < 2 ? "eager" : "lazy"}
+                    loading="lazy"
                     decoding="async"
                     onLoad={() => ScrollTrigger.refresh()}
                     onError={(e) => {

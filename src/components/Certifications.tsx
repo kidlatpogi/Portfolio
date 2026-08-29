@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, X } from 'lucide-react';
@@ -652,7 +652,7 @@ export default function Certifications() {
                   src={badge.image}
                   fallbackSrc={badge.backupImage}
                   alt={`${badge.name} badge`}
-                  loading={index < 4 ? "eager" : "lazy"}
+                  loading="lazy"
                   className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                 />
               </div>

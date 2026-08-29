@@ -1,4 +1,4 @@
-﻿---
+---
 import '../styles/global.css';
 
 interface Props {
@@ -17,8 +17,9 @@ const {
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/webp" href="https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Bautista%20Zeus%20Angelo%20V..webp" />
-		<link rel="apple-touch-icon" href="https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Bautista%20Zeus%20Angelo%20V..webp" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<link rel="apple-touch-icon" href="/Common/Bautista%20Zeus%20Angelo%20V..webp" />
 		<meta name="generator" content={Astro.generator} />
 		
 		<!-- Primary SEO Meta Tags -->
@@ -36,13 +37,25 @@ const {
 		<meta property="twitter:title" content={title} />
 		<meta property="twitter:description" content={description} />
  
-		<!-- Google Fonts & Icons -->
+		<!-- Preconnects for CDN, Fonts, and Critical Assets -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+		<link rel="preconnect" href="https://zeusbautista.site" crossorigin>
+		<link rel="preconnect" href="https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev" crossorigin>
+
+		<!-- Google Fonts (Non-render-blocking with swap) -->
+		<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;600;700&display=swap" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+		<noscript>
+			<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@400;500;600;700&display=swap" />
+		</noscript>
+
+		<!-- Local Critical Fonts Preloading -->
+		<link rel="preload" href="/fonts/Array-Semibold.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/ClashDisplay-Semibold.woff2" as="font" type="font/woff2" crossorigin />
 		
 		<!-- Image Preloading for critical hero avatar asset -->
-		<link rel="preload" href="https://zeusbautista.site/Common/Profile%20Picture.webp" as="image" fetchpriority="high" />
+		<link rel="preload" href="/Common/Profile%20Picture.webp" as="image" fetchpriority="high" />
 	</head>
 	<body class="bg-[#f8f8f8] text-black antialiased selection:bg-[#DF2935]/20 selection:text-black overflow-x-hidden min-h-screen">
 		<!-- Preloader Overlay (good-fella.com style) -->
@@ -56,9 +69,9 @@ const {
 			<div id="preloader-text-container" class="fixed inset-0 flex items-center justify-center z-[99999] pointer-events-auto">
 				<div class="relative font-mono font-bold text-[6vw] sm:text-[4vw] md:text-[3vw] lg:text-[2.2vw] xl:text-[1.8vw] tracking-[0.25em] uppercase select-none">
 					<!-- Glitch shadow in burnt orange -->
-					<div class="absolute inset-0 text-[#C44900] opacity-35 blur-[2.5px] pointer-events-none select-none glitch-text translate-x-[2px] translate-y-[1px]"></div>
+					<div class="absolute inset-0 text-[#C44900] opacity-35 blur-[2.5px] pointer-events-none select-none glitch-text translate-x-[2px] translate-y-[1px]">LOADING</div>
 					<!-- Main white text -->
-					<div id="preloader-text" class="relative text-white z-10"></div>
+					<div id="preloader-text" class="relative text-white z-10">LOADING</div>
 				</div>
 			</div>
 		</div>
@@ -72,26 +85,42 @@ const {
 
 				if (!textEl) return;
 
+				let isFinished = false;
+				function finishPreloader() {
+					if (isFinished) return;
+					isFinished = true;
+					document.documentElement.classList.remove('preloading');
+					const textContainer = document.getElementById('preloader-text-container');
+					if (textContainer) {
+						textContainer.style.transition = 'opacity 0.15s ease';
+						textContainer.style.opacity = '0';
+						window.dispatchEvent(new CustomEvent('preloaderFinished'));
+						setTimeout(() => textContainer.remove(), 150);
+					} else {
+						window.dispatchEvent(new CustomEvent('preloaderFinished'));
+					}
+				}
+
 				class Scrambler {
 					constructor(el, shadowEl) {
 						this.el = el;
 						this.shadowEl = shadowEl;
 						this.frame = 0;
 						this.queue = [];
-						this.resolve = null;
 					}
 					scramble(text) {
-						const promise = new Promise((r) => this.resolve = r);
-						this.queue = [];
-						for (let i = 0; i < text.length; i++) {
-							const to = text[i];
-							const start = Math.floor(Math.random() * 15);
-							const end = start + Math.floor(Math.random() * 20) + 8;
-							this.queue.push({ to, start, end, char: '' });
-						}
-						this.frame = 0;
-						this.tick();
-						return promise;
+						return new Promise((resolve) => {
+							this.resolve = resolve;
+							this.queue = [];
+							for (let i = 0; i < text.length; i++) {
+								const to = text[i];
+								const start = Math.floor(Math.random() * 2);
+								const end = start + Math.floor(Math.random() * 4) + 2;
+								this.queue.push({ to, start, end, char: '' });
+							}
+							this.frame = 0;
+							this.tick();
+						});
 					}
 					tick() {
 						let output = '';
@@ -106,10 +135,9 @@ const {
 									char = chars[Math.floor(Math.random() * chars.length)];
 									this.queue[i].char = char;
 								}
-								// Our burnt orange color for the scramble character
 								output += `<span style="color: #C44900;">${char}</span>`;
 							} else {
-								output += '';
+								output += to;
 							}
 						}
 						this.el.innerHTML = output;
@@ -127,44 +155,9 @@ const {
 				}
 
 				const scrambler = new Scrambler(textEl, shadowEl);
-				scrambler.scramble(targetText);
+				scrambler.scramble(targetText).then(finishPreloader);
 
-				let isLoaded = false;
-				let isMinTimeElapsed = false;
-
-				// Remove preloading class as soon as page resources are ready so layout/hydration settles in the background
-				window.addEventListener('load', () => {
-					isLoaded = true;
-					document.documentElement.classList.remove('preloading');
-					checkRemoval();
-				});
-
-				// Fallback: Force start rendering/hydration after 300ms
-				setTimeout(() => {
-					document.documentElement.classList.remove('preloading');
-				}, 300);
-
-				setTimeout(() => {
-					isMinTimeElapsed = true;
-					checkRemoval();
-				}, 900);
-
-				function checkRemoval() {
-					if (isLoaded && isMinTimeElapsed) {
-						const textContainer = document.getElementById('preloader-text-container');
-						if (textContainer) {
-							textContainer.style.transition = 'opacity 0.35s ease';
-							textContainer.style.opacity = '0';
-							
-							// Dispatch finish event right when text starts fading so background sweep overlays nicely
-							window.dispatchEvent(new CustomEvent('preloaderFinished'));
-							
-							setTimeout(() => {
-								textContainer.remove();
-							}, 350);
-						}
-					}
-				}
+				setTimeout(finishPreloader, 250);
 			})();
 		</script>
 
@@ -237,11 +230,7 @@ const {
 		// Recalculate GSAP ScrollTrigger offsets once the preloading layout shifts have settled
 		setTimeout(() => {
 			ScrollTrigger.refresh();
-		}, 400);
-
-		setTimeout(() => {
-			ScrollTrigger.refresh();
-		}, 1000);
+		}, 200);
 
 		window.addEventListener('load', () => {
 			ScrollTrigger.refresh();
@@ -257,24 +246,24 @@ const {
 		// Sweep black layer (to local translateY 120% which is off-screen down-right)
 		tl.to('#preloader-black', {
 			yPercent: 120,
-			duration: 1.1,
+			duration: 0.5,
 			ease: 'power3.inOut'
 		});
 
 		// Sweep orange layer with slight delay and slightly longer/offset timeline
 		tl.to('#preloader-orange', {
 			yPercent: 120,
-			duration: 1.25,
+			duration: 0.55,
 			ease: 'power3.inOut'
-		}, 0.08); // starts 80ms after the black layer starts
+		}, 0.03);
 
 		// Reveal Hero content container if it exists
 		const homeEl = document.getElementById('home');
 		if (homeEl) {
 			tl.fromTo(homeEl, 
-				{ opacity: 0.8 },
-				{ opacity: 1, duration: 0.3 },
-				'-=0.8'
+				{ opacity: 0.95 },
+				{ opacity: 1, duration: 0.2 },
+				'-=0.45'
 			);
 		}
 
@@ -282,9 +271,9 @@ const {
 		const heroElements = document.querySelectorAll('.hero-subtitle, .hero-title-1, .hero-title-2, .hero-title-3, .hero-socials');
 		if (heroElements.length > 0) {
 			tl.fromTo(Array.from(heroElements),
-				{ opacity: 0.4, y: 25 },
-				{ opacity: 1, y: 0, duration: 0.9, ease: 'power4.out', stagger: 0.08 },
-				'-=0.8'
+				{ opacity: 0.9, y: 10 },
+				{ opacity: 1, y: 0, duration: 0.35, ease: 'power3.out', stagger: 0.03 },
+				'-=0.45'
 			);
 		}
 
@@ -292,9 +281,9 @@ const {
 		const navEl = document.querySelector('.fixed.top-6');
 		if (navEl) {
 			tl.fromTo(navEl, 
-				{ opacity: 0, y: -30 },
-				{ opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
-				'-=0.7'
+				{ opacity: 0, y: -15 },
+				{ opacity: 1, y: 0, duration: 0.35, ease: 'power3.out' },
+				'-=0.4'
 			);
 		}
 
@@ -303,9 +292,9 @@ const {
 			const subpageElements = document.querySelectorAll('nav, header, main');
 			if (subpageElements.length > 0) {
 				tl.fromTo(Array.from(subpageElements),
-					{ opacity: 0, y: 25 },
-					{ opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08 },
-					'-=0.8'
+					{ opacity: 0.85, y: 15 },
+					{ opacity: 1, y: 0, duration: 0.5, ease: 'power3.out', stagger: 0.04 },
+					'-=0.55'
 				);
 			}
 		}
