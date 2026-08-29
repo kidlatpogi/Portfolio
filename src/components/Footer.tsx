@@ -24,10 +24,17 @@ const socials = [
 export default function Footer() {
   return (
     <footer id="contact" className="w-full bg-[#C44900] min-h-screen flex flex-col justify-between pt-20 pb-8 relative overflow-hidden border-t border-[#C44900]/20">
+      {/* Massive Watermark display text positioned behind top headline area */}
+      <div className="absolute top-8 md:top-14 left-0 w-full overflow-hidden select-none pointer-events-none flex justify-center z-0">
+        <h3 className="font-clash-semibold text-[15vw] xl:text-[180px] 2xl:text-[220px] font-black text-black/[0.04] leading-none tracking-tighter text-center uppercase whitespace-nowrap">
+          GETINTOUCH
+        </h3>
+      </div>
+
       <div className="w-[95%] md:w-[95%] max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col justify-between h-full relative z-10">
         
         {/* Top Split Section */}
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-24 mb-10 w-full">
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-24 mb-6 w-full">
           
           {/* Left Column: Headline & Bio */}
           <div className="flex flex-col items-start max-w-[500px]">
@@ -74,11 +81,11 @@ export default function Footer() {
 
         </div>
 
-        {/* Live White World Map Section (Cloudflare Visitor Analytics) */}
+        {/* Live Plain White World Map (Full Width Centerpiece) */}
         <WorldMap />
 
         {/* Bottom Metadata Bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-6 border-t border-white/20 pt-8 w-full">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-6 border-t border-white/20 pt-8 w-full mt-4">
           {/* Left: Copyright */}
           <span className="font-mono text-[10px] md:text-xs text-orange-200/80 uppercase tracking-wider text-center sm:text-left">
             &copy; {new Date().getFullYear()} Zeus Angelo Bautista. All rights reserved.
@@ -93,13 +100,6 @@ export default function Footer() {
           </a>
         </div>
 
-      </div>
-
-      {/* Massive Watermark display text */}
-      <div className="absolute bottom-16 md:bottom-20 left-0 w-full overflow-hidden select-none pointer-events-none flex justify-center z-0">
-        <h3 className="font-clash-semibold text-[15vw] xl:text-[180px] 2xl:text-[220px] font-black text-black/[0.04] leading-none tracking-tighter text-center uppercase whitespace-nowrap">
-          GETINTOUCH
-        </h3>
       </div>
     </footer>
   );
