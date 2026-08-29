@@ -291,16 +291,14 @@ export function generateKnowledgeResponses() {
 **Professional Summary**:
 ${profile.professionalSummary}`;
 
-  // 2. Experience (ONLY Current Experience)
-  const currentExp = experiences.find(e => e.isCurrent) || experiences[0];
-  const experienceText = `### CURRENT PROFESSIONAL EXPERIENCE
-
-#### ${currentExp.role}
-- **Organization**: ${currentExp.company}
-- **Period**: ${currentExp.period}
-- **Location**: ${currentExp.location}
+  // 2. Experience (Complete Professional Work & OJT Experience)
+  const experienceText = `### WORK EXPERIENCE & INTERNSHIPS\n\n` +
+    experiences.map(exp => `#### ${exp.role} (${exp.isCurrent ? 'Current' : exp.period})
+- **Organization**: ${exp.company}
+- **Location**: ${exp.location}
+- **Period**: ${exp.period}
 - **Key Responsibilities & Accomplishments**:
-${currentExp.responsibilities.map(r => `  - ${r}`).join('\n')}`;
+${exp.responsibilities.map(r => `  - ${r}`).join('\n')}`).join('\n\n');
 
   // 3. Tech Stack (Current Tech Stack)
   const techStackText = `### CURRENT TECH STACK & SKILLS
@@ -347,6 +345,7 @@ ${certifications.map((c, idx) => `- **${c.title}** (${c.issuer}${c.badgePlatform
     about: aboutText,
     experience: experienceText,
     skills: techStackText,
+    techStack: techStackText,
     projects: projectsText,
     certifications: certsText,
     contact: contactText

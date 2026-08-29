@@ -82,7 +82,7 @@ const getClientFootprintMessage = async (): Promise<string> => {
   const { os, browser } = getBrowserAndOS();
   const timezone = typeof Intl !== 'undefined' ? (Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Manila') : 'Asia/Manila';
   const screenRes = typeof window !== 'undefined' ? `${window.screen.width}x${window.screen.height} (${window.screen.colorDepth}-bit)` : '1920x1080 (24-bit)';
-  const cpu = typeof navigator !== 'undefined' && navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Cores / Threads` : 'Undisclosed';
+  const cpu = typeof navigator !== 'undefined' && navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Logical Cores` : 'Undisclosed';
   const ram = typeof navigator !== 'undefined' && (navigator as any).deviceMemory ? `~${(navigator as any).deviceMemory} GB RAM` : 'Protected by browser';
   const language = typeof navigator !== 'undefined' ? (navigator.language || 'en-US') : 'en-US';
 
@@ -123,8 +123,8 @@ interface Message {
 
 const TOPICS = [
   { label: 'About Zeus', query: 'Tell me about Zeus Angelo Bautista' },
-  { label: 'Experience', query: 'What is Zeus\'s current work experience?' },
-  { label: 'Tech Stack', query: 'What is Zeus\'s current tech stack and skillset?' },
+  { label: 'Experience', query: 'What is Zeus\'s work and internship experience?' },
+  { label: 'Tech Stack', query: 'What is Zeus\'s tech stack and skills?' },
   { label: 'Projects', query: 'Can you give me a full overview of Zeus\'s projects?' },
   { label: 'Certifications', query: 'What verified certifications does Zeus have?' },
   { label: 'Contact', query: 'How can I contact or hire Zeus?' }
@@ -277,7 +277,8 @@ export const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isTypingTestOpen, setIsTypingTestOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
+  const [isThinking, setIsThinking] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [cooldownRemaining, setCooldownRemaining] = useState(0);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
@@ -374,7 +375,7 @@ export const ChatBot: React.FC = () => {
     };
   }, [isOpen]);
 
-  // Scroll to bottom whenever messages change or typing state changes
+  // Scroll to bottom whenever messages change, thinking changes, or streaming changes
   useEffect(() => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({
@@ -382,64 +383,54 @@ export const ChatBot: React.FC = () => {
         behavior: 'smooth'
       });
     }
-  }, [messages, isTyping]);
+  }, [messages, isThinking, isStreaming]);
+
+  // Smooth typewriter streamer
+  const streamTextIntoBotMessage = async (botMsgId: string, fullText: string) => {
+    setIsStreaming(true);
+
+    // Initial empty message placeholder
+    setMessages(prev => [
+      ...prev,
+      {
+        id: botMsgId,
+        sender: 'bot',
+        text: '',
+        timestamp: new Date()
+      }
+    ]);
+
+    const totalLength = fullText.length;
+    // Chunk size: higher for long markdown texts to keep typing under ~1.5s
+    const chunkSize = totalLength > 800 ? 14 : totalLength > 400 ? 8 : totalLength > 150 ? 4 : 2;
+    const tickInterval = 16; // ~60fps smooth progression
+
+    let currentLength = 0;
+
+    return new Promise<void>((resolve) => {
+      const interval = setInterval(() => {
+        currentLength += chunkSize;
+        if (currentLength >= totalLength) {
+          clearInterval(interval);
+          setMessages(prev =>
+            prev.map(m => m.id === botMsgId ? { ...m, text: fullText } : m)
+          );
+          setIsStreaming(false);
+          resolve();
+        } else {
+          const partial = fullText.slice(0, currentLength);
+          setMessages(prev =>
+            prev.map(m => m.id === botMsgId ? { ...m, text: partial } : m)
+          );
+        }
+      }, tickInterval);
+    });
+  };
 
   const handleSend = async (textToSend: string) => {
-    if (!textToSend.trim() || isTyping || cooldownRemaining > 0) return;
+    if (!textToSend.trim() || isThinking || isStreaming || cooldownRemaining > 0) return;
 
     const cleanText = textToSend.trim();
-
-    // 1. Check for bad words, adult content, or keyboard mash client-side
-    if (containsBadContent(cleanText) || containsKeyboardMash(cleanText)) {
-      const userMsg: Message = {
-        id: `user-${Date.now()}`,
-        sender: 'user',
-        text: cleanText,
-        timestamp: new Date()
-      };
-      setMessages(prev => [
-        ...prev,
-        userMsg,
-        {
-          id: `bot-warn-${Date.now()}`,
-          sender: 'bot',
-          text: "The use of bad words, curse words, profanity, or inappropriate content is not allowed. Please keep our conversation professional and respectful.",
-          timestamp: new Date()
-        }
-      ]);
-      setInputValue('');
-      activateCooldown(COOLDOWN_SECONDS);
-      return;
-    }
-
-    // 2. Check for Prompt Injection / System Prompt Extraction
-    if (containsPromptInjection(cleanText)) {
-      const userMsg: Message = {
-        id: `user-${Date.now()}`,
-        sender: 'user',
-        text: cleanText,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, userMsg]);
-      setInputValue('');
-      setIsTyping(true);
-      activateCooldown(COOLDOWN_SECONDS);
-
-      const footprintReply = await getClientFootprintMessage();
-      setIsTyping(false);
-      setMessages(prev => [
-        ...prev,
-        {
-          id: `bot-shield-${Date.now()}`,
-          sender: 'bot',
-          text: footprintReply,
-          timestamp: new Date()
-        }
-      ]);
-      return;
-    }
-
-    // 3. Valid user query
     const userMsg: Message = {
       id: `user-${Date.now()}`,
       sender: 'user',
@@ -447,74 +438,98 @@ export const ChatBot: React.FC = () => {
       timestamp: new Date()
     };
 
+    // 1. Check for bad words, adult content, or keyboard mash client-side
+    // FLOW: Validate -> Thinking (0.5s) -> Reply (Typing Effect)
+    if (containsBadContent(cleanText) || containsKeyboardMash(cleanText)) {
+      setMessages(prev => [...prev, userMsg]);
+      setInputValue('');
+      setIsThinking(true);
+      activateCooldown(COOLDOWN_SECONDS);
+
+      await new Promise(r => setTimeout(r, 500));
+      setIsThinking(false);
+
+      const botMsgId = `bot-warn-${Date.now()}`;
+      await streamTextIntoBotMessage(
+        botMsgId,
+        "The use of bad words, curse words, profanity, or inappropriate content is not allowed. Please keep our conversation professional and respectful."
+      );
+      return;
+    }
+
+    // 2. Check for Prompt Injection / System Prompt Extraction
+    // FLOW: Validate -> Thinking (1.0s) -> Reply (Typing Effect)
+    if (containsPromptInjection(cleanText)) {
+      setMessages(prev => [...prev, userMsg]);
+      setInputValue('');
+      setIsThinking(true);
+      activateCooldown(COOLDOWN_SECONDS);
+
+      const [footprintReply] = await Promise.all([
+        getClientFootprintMessage(),
+        new Promise(r => setTimeout(r, 1000))
+      ]);
+
+      setIsThinking(false);
+
+      const botMsgId = `bot-shield-${Date.now()}`;
+      await streamTextIntoBotMessage(botMsgId, footprintReply);
+      return;
+    }
+
+    // 3. Valid user query
+    // FLOW: Validate -> Thinking (0.5s min) -> Reply (Typing Effect)
     const updatedMessages = [...messages, userMsg];
     setMessages(updatedMessages);
-    setIsTyping(true);
     setInputValue('');
+    setIsThinking(true);
     activateCooldown(COOLDOWN_SECONDS);
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          messages: updatedMessages.map(m => ({
-            sender: m.sender,
-            text: m.text
-          }))
-        })
-      });
+      const [response] = await Promise.all([
+        fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: updatedMessages.map(m => ({
+              sender: m.sender,
+              text: m.text
+            }))
+          })
+        }),
+        new Promise(r => setTimeout(r, 500))
+      ]);
 
       const data = await response.json();
+      setIsThinking(false);
+
+      const botMsgId = `bot-${Date.now()}`;
 
       if (response.ok && data.response) {
-        setMessages(prev => [
-          ...prev,
-          {
-            id: `bot-${Date.now()}`,
-            sender: 'bot',
-            text: data.response,
-            timestamp: new Date()
-          }
-        ]);
+        await streamTextIntoBotMessage(botMsgId, data.response);
       } else if (response.status === 400 && data.isBlocked) {
-        setMessages(prev => [
-          ...prev,
-          {
-            id: `bot-warn-${Date.now()}`,
-            sender: 'bot',
-            text: data.response || "The use of bad words, curse words, profanity, or inappropriate content is not allowed. Please keep our conversation professional and respectful.",
-            timestamp: new Date()
-          }
-        ]);
+        await streamTextIntoBotMessage(
+          botMsgId,
+          data.response || "The use of bad words, curse words, profanity, or inappropriate content is not allowed. Please keep our conversation professional and respectful."
+        );
       } else {
-        setMessages(prev => [
-          ...prev,
-          {
-            id: `bot-err-${Date.now()}`,
-            sender: 'bot',
-            text: data.response || data.error || "Sorry, I could not process your request right now. Please try again later.",
-            timestamp: new Date()
-          }
-        ]);
+        await streamTextIntoBotMessage(
+          botMsgId,
+          data.response || data.error || "Sorry, I could not process your request right now. Please try again later."
+        );
       }
     } catch (err) {
       console.error("Chat Error:", err);
-      setMessages(prev => [
-        ...prev,
-        {
-          id: `bot-err-${Date.now()}`,
-          sender: 'bot',
-          text: "I am having trouble connecting right now. Please feel free to reach Zeus directly at bautistaangelozeus17@gmail.com!",
-          timestamp: new Date()
-        }
-      ]);
-    } finally {
-      setIsTyping(false);
+      setIsThinking(false);
+      const botMsgId = `bot-err-${Date.now()}`;
+      await streamTextIntoBotMessage(
+        botMsgId,
+        "I am having trouble connecting right now. Please feel free to reach Zeus directly at bautistaangelozeus17@gmail.com!"
+      );
     }
   };
+
+  const isInputDisabled = isThinking || isStreaming || cooldownRemaining > 0;
 
   return (
     <>
@@ -584,12 +599,12 @@ export const ChatBot: React.FC = () => {
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Type a question or choose below..."}
-                      disabled={isTyping || cooldownRemaining > 0}
+                      disabled={isInputDisabled}
                       className="w-full text-lg sm:text-2xl md:text-3xl font-sans text-slate-900 bg-transparent border-b-2 border-slate-300 focus:border-[#C44900] pb-3 pr-12 focus:outline-none transition-colors duration-200 placeholder:text-slate-400/70"
                     />
                     <button
                       type="submit"
-                      disabled={isTyping || !inputValue.trim() || cooldownRemaining > 0}
+                      disabled={isInputDisabled || !inputValue.trim()}
                       className="cursor-target absolute right-0 bottom-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
                       aria-label="Submit query"
                     >
@@ -607,8 +622,9 @@ export const ChatBot: React.FC = () => {
                         <button
                           key={idx}
                           type="button"
+                          disabled={isInputDisabled}
                           onClick={() => handleSend(t.query)}
-                          className="cursor-target font-mono text-xs font-semibold rounded-full border border-slate-300 hover:border-[#C44900] bg-white hover:bg-orange-50 px-4 py-2 text-slate-700 hover:text-[#C44900] transition-all duration-200 shadow-2xs cursor-pointer flex items-center gap-1.5"
+                          className="cursor-target font-mono text-xs font-semibold rounded-full border border-slate-300 hover:border-[#C44900] bg-white hover:bg-orange-50 disabled:opacity-50 px-4 py-2 text-slate-700 hover:text-[#C44900] transition-all duration-200 shadow-2xs cursor-pointer flex items-center gap-1.5"
                         >
                           <span>{t.label}</span>
                           <ArrowRight size={12} className="opacity-60" />
@@ -619,10 +635,10 @@ export const ChatBot: React.FC = () => {
                 </motion.div>
               </div>
             ) : (
-              /* Conversation View: Compact & Attached directly to input box without dead space */
+              /* Conversation View: Messages + Typing + Input Box */
               <div className="w-full max-w-3xl mx-auto flex flex-col justify-center my-auto py-2">
                 <div className="flex flex-col w-full">
-                  {/* Messages Feed with natural height */}
+                  {/* Messages Feed */}
                   <div
                     ref={scrollContainerRef}
                     data-lenis-prevent
@@ -641,7 +657,7 @@ export const ChatBot: React.FC = () => {
                           )}
                         </div>
 
-                        {/* Text bubble: Fit-content for short user queries, max-w-2xl for bot responses */}
+                        {/* Text bubble */}
                         <div
                           className={`p-4 sm:p-5 rounded-2xl border ${
                             msg.sender === 'user'
@@ -654,8 +670,8 @@ export const ChatBot: React.FC = () => {
                       </div>
                     ))}
 
-                    {/* Typing Indicator */}
-                    {isTyping && (
+                    {/* Thinking Indicator (Bouncing Dots) */}
+                    {isThinking && (
                       <div className="flex flex-col gap-1.5 items-start">
                         <span className="font-mono text-[10px] uppercase tracking-wider text-[#C44900] font-bold px-1">
                           Zeus's Assistant
@@ -670,7 +686,7 @@ export const ChatBot: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Bottom Input Bar: Positioned directly beneath message list */}
+                  {/* Bottom Input Bar */}
                   <div className="flex flex-col gap-2.5 pt-3 border-t border-slate-200/80 flex-shrink-0">
                     <form
                       onSubmit={(e) => {
@@ -684,12 +700,12 @@ export const ChatBot: React.FC = () => {
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                         placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Ask a follow-up question..."}
-                        disabled={isTyping || cooldownRemaining > 0}
+                        disabled={isInputDisabled}
                         className="w-full text-sm sm:text-base font-sans text-slate-900 bg-white border border-slate-300 focus:border-[#C44900] rounded-xl px-4 py-2.5 pr-10 focus:outline-none transition-colors duration-200 shadow-2xs"
                       />
                       <button
                         type="submit"
-                        disabled={isTyping || !inputValue.trim() || cooldownRemaining > 0}
+                        disabled={isInputDisabled || !inputValue.trim()}
                         className="cursor-target absolute right-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
                         aria-label="Submit follow-up query"
                       >
@@ -703,8 +719,9 @@ export const ChatBot: React.FC = () => {
                         <button
                           key={idx}
                           type="button"
+                          disabled={isInputDisabled}
                           onClick={() => handleSend(t.query)}
-                          className="cursor-target font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#C44900] bg-white hover:bg-orange-50 px-3 py-1 text-slate-700 hover:text-[#C44900] transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
+                          className="cursor-target font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#C44900] bg-white hover:bg-orange-50 disabled:opacity-50 px-3 py-1 text-slate-700 hover:text-[#C44900] transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
                         >
                           {t.label}
                         </button>
