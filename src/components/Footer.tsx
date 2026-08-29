@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { WorldMap } from './WorldMap';
 
 const socials = [
   {
@@ -22,11 +23,11 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer id="contact" className="w-full bg-[#C44900] md:h-screen md:min-h-screen flex flex-col justify-between pt-20 pb-8 relative overflow-hidden border-t border-[#C44900]/20">
-      <div className="w-[95%] md:w-[95%] max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col justify-between h-full min-h-[calc(100vh-140px)] md:min-h-0 relative z-10">
+    <footer id="contact" className="w-full bg-[#C44900] min-h-screen flex flex-col justify-between pt-20 pb-8 relative overflow-hidden border-t border-[#C44900]/20">
+      <div className="w-[95%] md:w-[95%] max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col justify-between h-full relative z-10">
         
         {/* Top Split Section */}
-        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-24 mb-16 w-full">
+        <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-24 mb-10 w-full">
           
           {/* Left Column: Headline & Bio */}
           <div className="flex flex-col items-start max-w-[500px]">
@@ -72,6 +73,9 @@ export default function Footer() {
           </div>
 
         </div>
+
+        {/* Live White World Map Section (Cloudflare Visitor Analytics) */}
+        <WorldMap />
 
         {/* Bottom Metadata Bar */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-6 border-t border-white/20 pt-8 w-full">
