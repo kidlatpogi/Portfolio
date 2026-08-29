@@ -16,9 +16,9 @@ This repository contains the official portfolio website of **Zeus Angelo Bautist
 - **Frontend Islands:** React 19 interactive components hydrated using Astro client directives (`client:load`, `client:visible`, `client:only="react"`).
 - **Design System:** High-contrast editorial layout utilizing custom typography (`Clash Display`, `Array`, `Geist Mono`), custom canvas background simulations (`ShapeGrid`), and the signature **"Future Developer" accent color (`#C44900`)**.
 - **Interactive Showcase Runways:** Pinned horizontal scrolling powered by GSAP ScrollTrigger for rich multi-card showcases (`Projects`, `Designs`, `Certifications`), paired with fluid natural scrolling for narrative sections (`About`, `Skills`, `Experience`) and section dividers (`ParallaxTextSection`, `GithubHeatmap`).
-- **AI Portfolio Assistant:** Full-screen interactive modal powered by Cloudflare Workers AI (`@cf/meta/llama-3.2-3b-instruct`), protected with client/server prompt-injection shields, client-side permissionless telemetry defense, profanity/NSFW interceptors, thinking indicator, and typewriter streaming effect.
+- **AI Portfolio Assistant:** Full-screen interactive modal powered by Cloudflare Workers AI (`@cf/meta/llama-3.1-8b-instruct`), trained on `ChatBot.txt`, protected with client/server prompt-injection shields, client-side permissionless telemetry defense, profanity/NSFW interceptors, thinking indicator, and typewriter streaming effect.
 - **Interactive Typing Test:** Fullscreen speed-typing modal featuring 100 rotated software engineering quotes, real-time WPM/accuracy tracking, interactive virtual keyboard lighting, and Web Audio API synthesized mechanical keyboard switch sounds (Thock, Clicky, Linear, Tactile).
-- **Data Centralization:** Single-source-of-truth knowledge base (`src/data/portfolioData.ts`) providing scalable synchronized data for both the website UI and the AI assistant.
+- **Data Centralization:** Single-source-of-truth knowledge base (`src/data/portfolioData.ts` and `ChatBot.txt`) providing scalable synchronized data for both the website UI and the AI assistant.
 
 ---
 
@@ -32,7 +32,7 @@ This repository contains the official portfolio website of **Zeus Angelo Bautist
 | **Animation** | [Framer Motion](https://www.framer.com/motion/) & [GSAP](https://gsap.com/) | Micro-interactions, ScrollTrigger horizontal pinned runways, and modal transitions |
 | **Audio Engine** | Web Audio API | Zero-latency synthetic mechanical switch sound generator |
 | **Smooth Scroll** | [@studio-freight/lenis](https://github.com/darkroomengineering/lenis) | Momentum-based smooth page scrolling |
-| **AI Runtime** | [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/) | Serverless Llama 3.2 3B LLM inference on the Cloudflare Edge |
+| **AI Runtime** | [Cloudflare Workers AI](https://developers.cloudflare.com/workers-ai/) | Serverless Llama 3.1 8B LLM inference on the Cloudflare Edge |
 | **Icons** | [Lucide React](https://lucide.dev/) | Minimalist UI vector icons |
 | **Deployment** | [Cloudflare Pages](https://pages.cloudflare.com/) | Global edge distribution, asset CDN, and serverless functions |
 
@@ -54,7 +54,7 @@ Portfolio/
 │   │   ├── fonts/               # Custom font definitions (Clash Display, Array)
 │   │   └── background.svg       # Geometric background textures
 │   ├── components/
-│   │   ├── About.tsx            # Kaizen philosophy, BSIT-MWA bio, and bento cards
+│   │   ├── About.tsx            # Kaizen (改善) philosophy, BSIT-MWA bio, and bento cards
 │   │   ├── CardNav.tsx          # Sticky top navigation bar
 │   │   ├── Certifications.tsx   # Verified certs horizontal scroll & Badges showcase
 │   │   ├── ChatBot.tsx          # Full-screen immersive AI assistant & bottom-left triggers
@@ -75,6 +75,7 @@ Portfolio/
 │   │   ├── TargetCursor.tsx     # Custom animated cursor
 │   │   └── TypingTest.tsx       # Interactive Speed Typing Test overlay
 │   ├── data/
+│   │   ├── ChatBot.txt          # Complete training instructions & prompt knowledge base
 │   │   ├── portfolioData.ts     # Single source of truth for all projects, skills, and certs
 │   │   └── typingSentences.ts   # 100 curated quotes and engineering sentences
 │   ├── utils/
@@ -90,6 +91,7 @@ Portfolio/
 │   │   └── projects.astro       # Full project archive directory
 │   └── styles/
 │       └── global.css           # Tailwind base styles, font-face rules, and keyframes
+├── ChatBot.txt                  # Root AI assistant knowledge instructions
 ├── wrangler.jsonc               # Cloudflare Pages/Workers binding configuration
 ├── astro.config.mjs             # Astro build & Cloudflare adapter configuration
 ├── package.json                 # Dependencies and npm scripts
@@ -98,9 +100,9 @@ Portfolio/
 
 ---
 
-## 4. Single Source of Truth Data Architecture (`src/data/portfolioData.ts`)
+## 4. Single Source of Truth Data Architecture (`src/data/portfolioData.ts` & `ChatBot.txt`)
 
-To prevent discrepancies between the website's static cards and the AI assistant's answers, all data is centrally defined in `src/data/portfolioData.ts`.
+To prevent discrepancies between the website's static cards and the AI assistant's answers, all data is centrally defined in `src/data/portfolioData.ts` and mirrored in `ChatBot.txt`.
 
 ### Data Models:
 1. **`profile`**:
@@ -109,7 +111,7 @@ To prevent discrepancies between the website's static cards and the AI assistant
    - Education: **Bachelor of Science in Information Technology Major in Mobile and Web Applications (BSIT-MWA, 4th Year)**
    - Institution: **National University Dasmariñas**
    - Location: **Silang, Cavite, Philippines**
-   - Philosophy: **Kaizen** (Constant, small tweaks to how I live, learn, and build; showing up daily, refining habits, and compounding capabilities).
+   - Philosophy: **Kaizen (改善)** (Constant, small tweaks to how I live, learn, and build; showing up daily, refining habits, and compounding capabilities).
 2. **`experiences`**:
    - *IT Helper (Freelance)* at *Municipality of Silang, Cavite* (Civil registry & population birth records digitalization).
    - *Registrar Assistant (OJT)* at *Bulihan Integrated National High School* (Student records and cloud archival).
@@ -133,75 +135,34 @@ To prevent discrepancies between the website's static cards and the AI assistant
 ### 1. About (`About.tsx`)
 - **ScrollReveal Narrative:** Immersive word-by-word reveal formatted with clean left-aligned typography, inline profile thumbnail, CPU pulse icon, and pattern recognition sparkles.
 - **Bento Overview:**
-  - **Philosophy (Kaizen):** Constant, small tweaks to living, learning, and building—showing up daily and being slightly more capable today than yesterday.
+  - **Philosophy: Kaizen (改善):** Constant, small tweaks to living, learning, and building—showing up daily and being slightly more capable today than yesterday.
   - **Background:** Pursuing a Bachelor of Science in Information Technology, majoring in Mobile and Web Applications at National University Dasmariñas. Focused on building practical web apps, mobile tools, and exploring applied AI.
   - **Key Accomplishments:** Highlights `12+` Verified Badges & Certifications and `8+` Featured Projects Built.
 
 ### 2. Skills (`Skills.tsx`)
 - **Filterable Category Tabs:** Real-time filter pills (`All`, `Frontend`, `Backend & DB`, `Tools & DevOps`).
-- **Interactive Cards:** Hover elevation with smooth logo scaling and bottom accent highlight banner displaying relevant projects.
+- **Centered Responsive Grid:** Responsive 3-column layout on mobile, with trailing items (e.g. Figma) gracefully centered.
 
 ### 3. Experience (`Experience.tsx`)
 - **Standard ATS Format:** Clean resume-ready layout with distinct role title, organization, dates, location, and action-oriented bullet points.
 - **Vertical Timeline Indicator:** Sleek accent gradient trace and glowing marker nodes.
 
 ### 4. Section Dividers & Showcase Spacing
-- **Parallax Text Marquee (`ParallaxTextSection.tsx`):** Clean typography marquee divider bridging Hero and About without redundant grid overlays.
+- **Parallax Text Marquee (`ParallaxTextSection.tsx`):** Clean typography marquee divider bridging Hero and About.
 - **Contributions Heatmap (`GithubHeatmap.tsx`):** Natural-height GitHub commit activity visualization bridging Designs and Certifications.
 - **Spacious Section Flow:** Consistent vertical separation across all showcase blocks.
 
 ### 5. Pinned Showcases (`Projects.tsx`, `Designs.tsx`, `Certifications.tsx`)
 - **Projects:** Pinned horizontal scroll stack displaying featured software applications.
 - **Designs:** Horizontal scrolling runway with modal preview.
-- **Certifications & Badges:** GSAP pinned dual-row certificate scroll alongside a dedicated Badges showcase.
+- **Certifications & Badges:** GSAP pinned dual-row certificate scroll alongside a dedicated 2-column mobile grid and desktop Badges showcase.
 
 ---
 
 ## 6. AI Assistant & Edge API Integration (`ChatBot.tsx` & `api/chat.ts`)
 
-### 1. Immersive Full-Screen UI/UX
-- **Overlay:** High-blur frosted backdrop (`backdrop-blur-2xl bg-[#f8f8f8]/85`) creating a distraction-free conversational canvas.
-- **Minimalist Prompt:** Features `"what do you want to ask?"` in `font-clash-semibold` with an auto-focused borderless input line.
-- **Simulated Thinking & Typewriter Output:**
-  - Includes a brief thinking state (`Thinking...`) followed by smooth typewriter text streaming.
-- **Scrollbar-Free Clean Feed:** Custom CSS rules (`scrollbar-none [&::-webkit-scrollbar]:hidden`) ensure smooth vertical scrolling without distracting native scrollbars.
-
-### 2. Multi-Tier Security & Anti-Abuse System
-- **Zero Token Waste Guard (Client & Server):** Detects profanities, curse words, adult domains, NSFW keywords, and keyboard mashing before sending requests.
-- **Prompt Injection Shield & Client Telemetry Defense:** Blocks attempts to leak system instructions, API keys, or switch personas. When triggered, the assistant utilizes permissionless browser inspection (`deviceMemory`, `hardwareConcurrency`, `screen resolution`, `timezone`, `user agent`, `network info`) to return an informative deterrent response directly without consuming Worker AI inference tokens.
-- **Persistent 30-Second Cooldown:** Stored in `localStorage` (`zeus_chatbot_cooldown_expiry`).
-
----
-
-## 7. Interactive Speed Typing Test (`TypingTest.tsx` & `keyboardAudio.ts`)
-
-- **Rotation Pool:** Random selection from 100 curated software engineering and computing quotes (`src/data/typingSentences.ts`).
-- **Live Performance Telemetry:** Real-time calculation of Gross WPM, Accuracy (%), and Elapsed Time (s).
-- **Visual Feedback:** Character-level accuracy coloring (black for correct, soft red background for errors) with an active `#C44900` vertical cursor bar.
-- **Virtual Keyboard Visualizer:** Highlighting on active keydown for QWERTY rows and spacebar.
-- **Synthetic Mechanical Switch Audio Engine (`keyboardAudio.ts`):**
-  - Powered by native browser Web Audio API (zero audio file downloads).
-  - Selectable sound profiles:
-    1. **Thock:** Deep, creamy low-pass acoustic resonance.
-    2. **Clicky:** Sharp dual-peak metallic click.
-    3. **Linear:** Smooth, dampened soft clack.
-    4. **Tactile:** Medium frequency tactile bump.
-    5. **Mute:** Silent mode.
-
----
-
-## 8. Floating Action Stack (Bottom-Left)
-
-Both quick-action triggers are positioned at `fixed bottom-6 left-6 z-50`:
-1. **Top Button:** `Typing Test` (Keyboard Icon $\rightarrow$ reveals label on hover).
-2. **Bottom Button:** `Ask AI` (Bot Icon $\rightarrow$ reveals label on hover).
-Both buttons smoothly expand on hover and collapse to compact round icons when unhovered.
-
----
-
-## 9. Build, Scripts & Deployment
-
-### NPM Scripts:
-- `npm run dev`: Starts the local Astro development server at `http://localhost:4321`.
-- `npm run build`: Compiles SSR entrypoints, client assets, and static pages into `dist/`.
-- `npm run preview`: Previews the production build locally.
+### 1. Training & Knowledge Integration
+- Trained on `ChatBot.txt` containing full context on Zeus's background, education, projects, skills, certifications, and contact channels.
+- Backed by **Cloudflare Workers AI** running `@cf/meta/llama-3.1-8b-instruct`.
+- Robust multi-intent fallback routing for instant, accurate answers on composite queries (e.g. combining background and work experience).
+- Strict out-of-scope & roleplay guards preventing hallucination and prompt leaks.

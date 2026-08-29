@@ -34,14 +34,13 @@ export const PORTFOLIO_DATA = {
     education: "Bachelor of Science in Information Technology Major in Mobile and Web Applications (BSIT-MWA, 4th Year)",
     institution: "National University Dasmariñas",
     location: "Silang, Cavite, Philippines",
-    // Only Professional Summary for About
-    professionalSummary: "Zeus Angelo Bautista is a results-driven IT Developer and AI Engineer driven by the Kaizen philosophy of continuous compounding improvement. With a strong aptitude for pattern recognition, rapid technology adoption, and full-stack software architecture, he specializes in designing responsive web applications, cross-platform mobile solutions, and intelligent AI-integrated systems that solve practical, real-world problems."
+    professionalSummary: "Zeus Angelo Bautista is a results-driven IT Developer and AI Engineer driven by the Kaizen (改善) philosophy of continuous compounding improvement. With a strong aptitude for pattern recognition, rapid technology adoption, and full-stack software architecture, he specializes in designing responsive web applications, cross-platform mobile solutions, and intelligent AI-integrated systems that solve practical, real-world problems."
   },
 
   // Current Experience (and historical archive)
   experiences: [
     {
-      role: "IT Helper (Freelance)",
+      role: "IT Helper",
       company: "Municipality of Silang, Cavite",
       period: "December 2024 – January 2025",
       location: "Bulihan, Silang, Cavite",
@@ -53,7 +52,7 @@ export const PORTFOLIO_DATA = {
       ]
     },
     {
-      role: "Registrar Assistant (OJT)",
+      role: "Registrar Assistant",
       company: "Bulihan Integrated National High School",
       period: "April 2023",
       location: "Bulihan, Silang, Cavite",
@@ -281,7 +280,7 @@ export function generateKnowledgeResponses() {
   const about = `**${profile.fullName}** — ${profile.role}
 - **Education**: ${profile.education} at ${profile.institution}
 - **Location**: ${profile.location}
-- **Philosophy (Kaizen)**: Dedicated to continuous improvement and rapid pattern mastery.
+- **Philosophy**: Kaizen (改善) — Dedicated to continuous improvement and rapid pattern mastery.
 
 ${profile.professionalSummary}`;
 
