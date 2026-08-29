@@ -85,8 +85,8 @@ const {
 						this.queue = [];
 						for (let i = 0; i < text.length; i++) {
 							const to = text[i];
-							const start = Math.floor(Math.random() * 20);
-							const end = start + Math.floor(Math.random() * 25) + 10;
+							const start = Math.floor(Math.random() * 15);
+							const end = start + Math.floor(Math.random() * 20) + 8;
 							this.queue.push({ to, start, end, char: '' });
 						}
 						this.frame = 0;
@@ -139,21 +139,21 @@ const {
 					checkRemoval();
 				});
 
-				// Fallback: Force start rendering/hydration after 500ms even if heavy images are slow to trigger window load
+				// Fallback: Force start rendering/hydration after 300ms
 				setTimeout(() => {
 					document.documentElement.classList.remove('preloading');
-				}, 500);
+				}, 300);
 
 				setTimeout(() => {
 					isMinTimeElapsed = true;
 					checkRemoval();
-				});
+				}, 900);
 
 				function checkRemoval() {
 					if (isLoaded && isMinTimeElapsed) {
 						const textContainer = document.getElementById('preloader-text-container');
 						if (textContainer) {
-							textContainer.style.transition = 'opacity 0.4s ease';
+							textContainer.style.transition = 'opacity 0.35s ease';
 							textContainer.style.opacity = '0';
 							
 							// Dispatch finish event right when text starts fading so background sweep overlays nicely
@@ -161,7 +161,7 @@ const {
 							
 							setTimeout(() => {
 								textContainer.remove();
-							}, 400);
+							}, 350);
 						}
 					}
 				}
@@ -188,20 +188,6 @@ const {
 	html.preloading body {
 		overflow: hidden !important;
 		height: 100% !important;
-	}
-
-	html.preloading nav,
-	html.preloading header,
-	html.preloading main {
-		opacity: 0 !important;
-	}
-
-	.hero-subtitle,
-	.hero-title-1,
-	.hero-title-2,
-	.hero-title-3,
-	.hero-socials {
-		opacity: 0;
 	}
 </style>
 
@@ -251,11 +237,11 @@ const {
 		// Recalculate GSAP ScrollTrigger offsets once the preloading layout shifts have settled
 		setTimeout(() => {
 			ScrollTrigger.refresh();
-		}, 800);
+		}, 400);
 
 		setTimeout(() => {
 			ScrollTrigger.refresh();
-		}, 1800);
+		}, 1000);
 
 		window.addEventListener('load', () => {
 			ScrollTrigger.refresh();
@@ -271,24 +257,24 @@ const {
 		// Sweep black layer (to local translateY 120% which is off-screen down-right)
 		tl.to('#preloader-black', {
 			yPercent: 120,
-			duration: 1.5,
+			duration: 1.1,
 			ease: 'power3.inOut'
 		});
 
 		// Sweep orange layer with slight delay and slightly longer/offset timeline
 		tl.to('#preloader-orange', {
 			yPercent: 120,
-			duration: 1.7,
+			duration: 1.25,
 			ease: 'power3.inOut'
-		}, 0.12); // starts 120ms after the black layer starts
+		}, 0.08); // starts 80ms after the black layer starts
 
 		// Reveal Hero content container if it exists
 		const homeEl = document.getElementById('home');
 		if (homeEl) {
 			tl.fromTo(homeEl, 
-				{ opacity: 0 },
-				{ opacity: 1, duration: 0.1 },
-				'-=1.1'
+				{ opacity: 0.8 },
+				{ opacity: 1, duration: 0.3 },
+				'-=0.8'
 			);
 		}
 
@@ -296,9 +282,9 @@ const {
 		const heroElements = document.querySelectorAll('.hero-subtitle, .hero-title-1, .hero-title-2, .hero-title-3, .hero-socials');
 		if (heroElements.length > 0) {
 			tl.fromTo(Array.from(heroElements),
-				{ opacity: 0, y: 40 },
-				{ opacity: 1, y: 0, duration: 1.4, ease: 'power4.out', stagger: 0.12 },
-				'-=1.1'
+				{ opacity: 0.4, y: 25 },
+				{ opacity: 1, y: 0, duration: 0.9, ease: 'power4.out', stagger: 0.08 },
+				'-=0.8'
 			);
 		}
 
@@ -306,9 +292,9 @@ const {
 		const navEl = document.querySelector('.fixed.top-6');
 		if (navEl) {
 			tl.fromTo(navEl, 
-				{ opacity: 0, y: -40 },
-				{ opacity: 1, y: 0, duration: 1.1, ease: 'power3.out' },
-				'-=0.9'
+				{ opacity: 0, y: -30 },
+				{ opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
+				'-=0.7'
 			);
 		}
 
@@ -317,9 +303,9 @@ const {
 			const subpageElements = document.querySelectorAll('nav, header, main');
 			if (subpageElements.length > 0) {
 				tl.fromTo(Array.from(subpageElements),
-					{ opacity: 0, y: 35 },
-					{ opacity: 1, y: 0, duration: 1.2, ease: 'power3.out', stagger: 0.12 },
-					'-=1.2'
+					{ opacity: 0, y: 25 },
+					{ opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.08 },
+					'-=0.8'
 				);
 			}
 		}
