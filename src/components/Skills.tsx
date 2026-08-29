@@ -1,5 +1,8 @@
-﻿import React, { useState, useMemo } from 'react';
-import ScrollReveal from './ScrollReveal.tsx';
+﻿import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface Skill {
   name: string;
@@ -39,8 +42,37 @@ const allSkills: Skill[] = [
 const categories = ['All', 'Frontend', 'Backend & DB', 'Tools & DevOps'] as const;
 
 export default function Skills() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+
+  useEffect(() => {
+    const island = containerRef.current?.parentElement;
+    if (island?.tagName === 'ASTRO-ISLAND') {
+      island.style.display = 'block';
+      island.style.width = '100%';
+    }
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      // Desktop layout: pin at top to create scroll stop effect
+      mm.add("(min-width: 768px)", () => {
+        if (!containerRef.current) return;
+
+        ScrollTrigger.create({
+          trigger: containerRef.current,
+          pin: true,
+          start: 'top top',
+          end: '+=500',
+          pinSpacing: true,
+          invalidateOnRefresh: true,
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const filteredSkills = useMemo(() => {
     if (selectedCategory === 'All') return allSkills;
@@ -48,7 +80,7 @@ export default function Skills() {
   }, [selectedCategory]);
 
   return (
-    <section className="min-h-screen md:h-screen md:min-h-screen w-full flex flex-col items-center justify-center px-4 py-12 md:py-6 relative overflow-hidden" id="skills">
+    <section ref={containerRef} className="min-h-screen md:h-screen md:min-h-screen w-full flex flex-col items-center justify-center px-4 py-12 md:py-6 relative overflow-hidden bg-[#f8f8f8]" id="skills">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10 my-auto">
 
         {/* Subheading */}
