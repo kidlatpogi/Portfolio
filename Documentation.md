@@ -54,9 +54,9 @@ Portfolio/
 │   │   ├── fonts/               # Custom font definitions (Clash Display, Array)
 │   │   └── background.svg       # Geometric background textures
 │   ├── components/
-│   │   ├── About.tsx            # Kaizen in IT philosophy, BSIT-MWA bio, and bento cards
+│   │   ├── About.tsx            # Kaizen philosophy, BSIT-MWA bio, and bento cards
 │   │   ├── CardNav.tsx          # Sticky top navigation bar
-│   │   ├── Certifications.tsx   # Verified certs horizontal scroll & 100vh Badges showcase
+│   │   ├── Certifications.tsx   # Verified certs horizontal scroll & Badges showcase
 │   │   ├── ChatBot.tsx          # Full-screen immersive AI assistant & bottom-left triggers
 │   │   ├── ConnectModal.tsx     # Contact & inquiry modal
 │   │   ├── Designs.tsx          # UI/UX design horizontal pinned runway
@@ -109,7 +109,7 @@ To prevent discrepancies between the website's static cards and the AI assistant
    - Education: **Bachelor of Science in Information Technology Major in Mobile and Web Applications (BSIT-MWA, 4th Year)**
    - Institution: **National University Dasmariñas**
    - Location: **Silang, Cavite, Philippines**
-   - Philosophy: **Kaizen in IT** (Continuous compounding self-improvement, pattern mastery, and code modernization).
+   - Philosophy: **Kaizen** (Constant, small tweaks to how I live, learn, and build; showing up daily, refining habits, and compounding capabilities).
 2. **`experiences`**:
    - *IT Helper (Freelance)* at *Municipality of Silang, Cavite* (Civil registry & population birth records digitalization).
    - *Registrar Assistant (OJT)* at *Bulihan Integrated National High School* (Student records and cloud archival).
@@ -133,8 +133,8 @@ To prevent discrepancies between the website's static cards and the AI assistant
 ### 1. About (`About.tsx`)
 - **ScrollReveal Narrative:** Immersive word-by-word reveal formatted with clean left-aligned typography, inline profile thumbnail, CPU pulse icon, and pattern recognition sparkles.
 - **Bento Overview:**
-  - **Philosophy (Kaizen in IT):** Continuous self-improvement applied to software engineering, codebase refinement, and architecture modernization.
-  - **Background:** Pursuing a Bachelor of Science in Information Technology Major in Mobile and Web Applications (BSIT-MWA) at National University Dasmariñas.
+  - **Philosophy (Kaizen):** Constant, small tweaks to living, learning, and building—showing up daily and being slightly more capable today than yesterday.
+  - **Background:** Pursuing a Bachelor of Science in Information Technology, majoring in Mobile and Web Applications at National University Dasmariñas. Focused on building practical web apps, mobile tools, and exploring applied AI.
   - **Key Accomplishments:** Highlights `12+` Verified Badges & Certifications and `8+` Featured Projects Built.
 
 ### 2. Skills (`Skills.tsx`)
@@ -145,14 +145,15 @@ To prevent discrepancies between the website's static cards and the AI assistant
 - **Standard ATS Format:** Clean resume-ready layout with distinct role title, organization, dates, location, and action-oriented bullet points.
 - **Vertical Timeline Indicator:** Sleek accent gradient trace and glowing marker nodes.
 
-### 4. Natural Section Dividers (`ParallaxTextSection.tsx` & `GithubHeatmap.tsx`)
-- **Parallax Text Marquee:** Slim horizontal typography divider bridging Hero and About.
-- **Contributions Heatmap:** Natural-height GitHub commit activity visualization bridging Designs and Certifications.
+### 4. Section Dividers & Showcase Spacing
+- **Parallax Text Marquee (`ParallaxTextSection.tsx`):** Clean typography marquee divider bridging Hero and About without redundant grid overlays.
+- **Contributions Heatmap (`GithubHeatmap.tsx`):** Natural-height GitHub commit activity visualization bridging Designs and Certifications.
+- **Spacious Section Flow:** Consistent vertical separation across all showcase blocks.
 
 ### 5. Pinned Showcases (`Projects.tsx`, `Designs.tsx`, `Certifications.tsx`)
 - **Projects:** Pinned horizontal scroll stack displaying featured software applications.
 - **Designs:** Horizontal scrolling runway with modal preview.
-- **Certifications & Badges:** GSAP pinned dual-row certificate scroll alongside a dedicated 100vh Badges showcase.
+- **Certifications & Badges:** GSAP pinned dual-row certificate scroll alongside a dedicated Badges showcase.
 
 ---
 
