@@ -107,66 +107,60 @@ export default function Hero() {
                   onMouseEnter={() => setIsProfileHovered(true)}
                   onMouseLeave={() => setIsProfileHovered(false)}
                 >
-                  {/* High-Definition Realistic Santa Hat */}
+                  {/* Authentic Classic Santa Hat */}
                   <AnimatePresence>
                     {isChristmas && (
                       <motion.div
-                        initial={{ scale: 0, rotate: -15, y: -12, opacity: 0 }}
-                        animate={{ scale: 1, rotate: -8, y: 0, opacity: 1 }}
+                        initial={{ scale: 0, rotate: -15, y: -8, opacity: 0 }}
+                        animate={{ scale: 1, rotate: -6, y: 0, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                         transition={{ type: 'spring', stiffness: 280, damping: 18 }}
-                        className="absolute -top-5 -left-3.5 sm:-top-7 sm:-left-5 md:-top-11 md:-left-7 lg:-top-13 lg:-left-8 xl:-top-15 xl:-left-9 z-30 pointer-events-none select-none w-12 sm:w-16 md:w-24 lg:w-28 xl:w-32 drop-shadow-xl"
+                        className="absolute -top-3.5 -left-1 sm:-top-5 sm:-left-2 md:-top-8 md:-left-3 lg:-top-9 lg:-left-4 xl:-top-10 xl:-left-4 z-30 pointer-events-none select-none w-11 sm:w-16 md:w-24 lg:w-28 xl:w-32 drop-shadow-lg"
                       >
-                        <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
-                          {/* Soft shadow underneath hat on head */}
-                          <ellipse cx="50" cy="72" rx="40" ry="6" fill="#000000" opacity="0.22" />
-
-                          {/* Main Red Velvet Cone Body */}
+                        <svg viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
+                          {/* Hat Red Velvet Body */}
                           <path
-                            d="M22 68 C24 45 42 18 68 8 C88 2 108 14 112 34 C114 42 110 50 104 54 C98 57 92 52 93 42 C95 28 85 18 72 18 C52 18 36 42 32 68 Z"
+                            d="M 18 58 C 22 36 38 14 62 8 C 76 5 88 12 92 24 C 94 32 90 40 85 45 C 80 49 74 46 76 38 C 78 28 72 20 62 18 C 44 18 30 38 26 58 Z"
                             fill="#DC2626"
                           />
-                          {/* Inner Crease Shadow */}
+                          {/* Shadow on bottom left fold */}
                           <path
-                            d="M26 67 C30 48 45 28 66 18 C61 24 57 34 56 46 C55 58 52 65 48 68 Z"
-                            fill="#991B1B"
+                            d="M 20 58 C 24 40 36 24 54 16 C 48 24 40 38 38 58 Z"
+                            fill="#B91C1C"
                           />
-                          {/* Velvet Highlight Arc */}
+                          {/* Velvet highlight fold */}
                           <path
-                            d="M68 9 C84 6 100 16 106 32 C104 26 96 16 80 14 C74 13 69 11 68 9 Z"
+                            d="M 62 9 C 74 7 84 14 88 24 C 84 18 76 13 65 12 Z"
                             fill="#F87171"
                           />
-                          {/* Drooping Tip Tail */}
+                          {/* Tip dangling down */}
                           <path
-                            d="M106 36 C112 42 114 52 108 60 C104 65 96 64 96 58 C96 52 100 46 104 40 Z"
-                            fill="#991B1B"
+                            d="M 88 28 C 94 34 94 44 87 50 C 83 53 78 48 82 42 C 84 38 86 34 88 28 Z"
+                            fill="#B91C1C"
                           />
 
-                          {/* White Fur Pom-Pom with 3D Depth */}
-                          <circle cx="98" cy="64" r="10" fill="#CBD5E1" />
-                          <circle cx="97" cy="63" r="9.5" fill="#FFFFFF" />
-                          <circle cx="95" cy="61" r="5" fill="#FFFFFF" opacity="0.95" />
-                          <circle cx="92" cy="64" r="4.5" fill="#F8FAFC" />
-                          <circle cx="103" cy="60" r="4" fill="#F1F5F9" />
-                          <circle cx="102" cy="67" r="4.5" fill="#E2E8F0" />
+                          {/* Pom-Pom on tip */}
+                          <circle cx="85" cy="52" r="8" fill="#E2E8F0" />
+                          <circle cx="84" cy="51" r="7.5" fill="#FFFFFF" />
+                          <circle cx="82" cy="49" r="3" fill="#FFFFFF" />
 
-                          {/* Thick Fluffy White Fur Brim (Bumps and clouds) */}
-                          <rect x="12" y="60" width="76" height="20" rx="10" fill="#CBD5E1" />
-                          <rect x="14" y="59" width="72" height="19" rx="9.5" fill="#FFFFFF" />
+                          {/* White Fur Brim */}
+                          <rect x="8" y="52" width="70" height="18" rx="9" fill="#E2E8F0" />
+                          <rect x="10" y="51" width="66" height="17" rx="8.5" fill="#FFFFFF" />
 
-                          {/* Fluffy rounded puffs across the brim */}
-                          <circle cx="20" cy="68" r="8" fill="#FFFFFF" />
-                          <circle cx="32" cy="68" r="9" fill="#FFFFFF" />
-                          <circle cx="46" cy="67" r="9.5" fill="#FFFFFF" />
-                          <circle cx="60" cy="68" r="9" fill="#FFFFFF" />
-                          <circle cx="74" cy="68" r="8" fill="#FFFFFF" />
+                          {/* Fluffy Cloud Bumps */}
+                          <circle cx="16" cy="59" r="8" fill="#FFFFFF" />
+                          <circle cx="28" cy="59" r="9" fill="#FFFFFF" />
+                          <circle cx="43" cy="59" r="9.5" fill="#FFFFFF" />
+                          <circle cx="58" cy="59" r="9" fill="#FFFFFF" />
+                          <circle cx="70" cy="59" r="8" fill="#FFFFFF" />
 
-                          {/* Soft bottom shading on fur puffs */}
-                          <ellipse cx="20" cy="73" rx="6" ry="2" fill="#94A3B8" opacity="0.5" />
-                          <ellipse cx="32" cy="74" rx="7" ry="2" fill="#94A3B8" opacity="0.5" />
-                          <ellipse cx="46" cy="74" rx="7" ry="2" fill="#94A3B8" opacity="0.5" />
-                          <ellipse cx="60" cy="74" rx="7" ry="2" fill="#94A3B8" opacity="0.5" />
-                          <ellipse cx="74" cy="73" rx="6" ry="2" fill="#94A3B8" opacity="0.5" />
+                          {/* Subtle bottom shadow on fur puffs */}
+                          <ellipse cx="16" cy="64" rx="5" ry="2" fill="#CBD5E1" opacity="0.6" />
+                          <ellipse cx="28" cy="65" rx="6" ry="2" fill="#CBD5E1" opacity="0.6" />
+                          <ellipse cx="43" cy="65" rx="7" ry="2" fill="#CBD5E1" opacity="0.6" />
+                          <ellipse cx="58" cy="65" rx="6" ry="2" fill="#CBD5E1" opacity="0.6" />
+                          <ellipse cx="70" cy="64" rx="5" ry="2" fill="#CBD5E1" opacity="0.6" />
                         </svg>
                       </motion.div>
                     )}
