@@ -1,6 +1,5 @@
 ﻿import React, { useState, useMemo } from 'react';
 import ScrollReveal from './ScrollReveal.tsx';
-import { Layers, Sparkles } from 'lucide-react';
 
 interface Skill {
   name: string;
@@ -52,15 +51,10 @@ export default function Skills() {
     <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="skills">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
-        {/* Chapter Index + Subheading */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="font-mono text-xs font-bold text-accent uppercase tracking-[0.25em]">
-            02 //
-          </span>
-          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center">
-            My Tech Arsenal
-          </span>
-        </div>
+        {/* Subheading */}
+        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
+          My Tech Arsenal
+        </span>
 
         {/* "Skills" Heading */}
         <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.25rem] 2xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-8">
@@ -90,7 +84,6 @@ export default function Skills() {
         {/* Interactive Skills Bento Grid */}
         <div className="w-[95%] md:w-[95%] max-w-[1600px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 mx-auto">
           {filteredSkills.map(skill => {
-            const isHovered = hoveredSkill === skill.name;
             return (
               <div
                 key={skill.name}
