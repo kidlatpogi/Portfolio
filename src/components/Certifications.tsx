@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, X } from 'lucide-react';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import ShapeGrid from './ShapeGrid.tsx';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -44,9 +43,7 @@ const badgeVerifyUrls = {
 };
 
 const certificationsData: Certificate[] = [
-  // ==========================================
   // 1. Cisco Networking Academy
-  // ==========================================
   {
     title: "HTML Essentials",
     issuer: "Cisco Networking Academy",
@@ -84,9 +81,7 @@ const certificationsData: Certificate[] = [
     verifyUrl: badgeVerifyUrls.javascriptEssentials2
   },
 
-  // ==========================================
-  // 2. IT Specialist
-  // ==========================================
+  // 2. IT Specialist & IBM
   {
     title: "Web Development Fundamentals",
     issuer: "IBM SkillsBuild",
@@ -115,9 +110,7 @@ const certificationsData: Certificate[] = [
     verifyUrl: badgeVerifyUrls.databases
   },
 
-  // ==========================================
   // 3. Simplilearn SkillUp
-  // ==========================================
   {
     title: "Git Training",
     issuer: "Simplilearn SkillUp",
@@ -145,9 +138,8 @@ const certificationsData: Certificate[] = [
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/DevOps.webp",
     verifyUrl: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true"
   },
-  // ==========================================
-  // 4. Freecode Camps
-  // ==========================================
+
+  // 4. FreeCodeCamp
   {
     title: "Responsive Web Design",
     issuer: "Web Design Certification",
@@ -253,9 +245,6 @@ const badgesData: Badge[] = [
   }
 ];
 
-const credentialDescription =
-  "This credential links to the official verification page when available and uses the hosted artwork from Cloudflare R2 for the portfolio preview.";
-
 function CredentialImage({
   src,
   fallbackSrc,
@@ -275,6 +264,7 @@ function CredentialImage({
       alt={alt}
       loading={loading}
       decoding="async"
+      onLoad={() => ScrollTrigger.refresh()}
       onError={(event) => {
         const image = event.currentTarget;
         if (image.src !== fallbackSrc) {
@@ -355,12 +345,13 @@ export default function Certifications() {
 
         const tl = gsap.timeline({
           scrollTrigger: {
-            trigger: containerRef.current,
+            trigger: certScrollPinnedContainerRef.current,
             pin: true,
             scrub: 1,
             start: 'top top',
             end: () => `+=${getScrollAmt()}`,
-            invalidateOnRefresh: true
+            invalidateOnRefresh: true,
+            anticipatePin: 1
           }
         });
 
@@ -393,16 +384,55 @@ export default function Certifications() {
       );
     }, containerRef);
 
-    return () => ctx.revert();
+    const timeout = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 250);
+
+    return () => {
+      clearTimeout(timeout);
+      ctx.revert();
+    };
   }, []);
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-24 md:py-0 z-30">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-12 md:py-0 z-10">
       <style>{`
         #certifications {
           --cert-card-width: 340px;
         }
-        @media (min-width: 768px) and (max-width: 1023px) {\n          #certifications { --cert-card-width: 250px; }\n        }\n        @media (min-width: 1024px) and (max-width: 1279px) {\n          #certifications { --cert-card-width: 275px; }\n        }\n        @media (min-width: 1280px) and (max-width: 1535px) {\n          #certifications { --cert-card-width: 300px; }\n        }\n        /* Height-based corrections for smaller laptops */\n        @media (min-width: 768px) and (max-height: 800px) {\n          #certifications { --cert-card-width: 240px; }\n        }\n        @media (min-width: 1024px) and (max-height: 800px) {\n          #certifications { --cert-card-width: 250px; }\n        }\n        @media (min-width: 1280px) and (max-height: 800px) {\n          #certifications { --cert-card-width: 270px; }\n        }\n        @media (min-width: 1536px) and (max-height: 900px) {\n          #certifications { --cert-card-width: 300px; }\n        }\n\n        #certifications,\n        #certifications * {\n          scrollbar-width: none !important;\n          -ms-overflow-style: none !important;\n        }\n        #certifications::-webkit-scrollbar,\n        #certifications *::-webkit-scrollbar {\n          display: none !important;\n        }\n      `}</style>
+        @media (min-width: 768px) and (max-width: 1023px) {
+          #certifications { --cert-card-width: 250px; }
+        }
+        @media (min-width: 1024px) and (max-width: 1279px) {
+          #certifications { --cert-card-width: 275px; }
+        }
+        @media (min-width: 1280px) and (max-width: 1535px) {
+          #certifications { --cert-card-width: 300px; }
+        }
+        /* Height-based corrections for smaller laptops */
+        @media (min-width: 768px) and (max-height: 800px) {
+          #certifications { --cert-card-width: 240px; }
+        }
+        @media (min-width: 1024px) and (max-height: 800px) {
+          #certifications { --cert-card-width: 250px; }
+        }
+        @media (min-width: 1280px) and (max-height: 800px) {
+          #certifications { --cert-card-width: 270px; }
+        }
+        @media (min-width: 1536px) and (max-height: 900px) {
+          #certifications { --cert-card-width: 300px; }
+        }
+
+        #certifications,
+        #certifications * {
+          scrollbar-width: none !important;
+          -ms-overflow-style: none !important;
+        }
+        #certifications::-webkit-scrollbar,
+        #certifications *::-webkit-scrollbar {
+          display: none !important;
+        }
+      `}</style>
       
       <div className="absolute inset-0 z-0 pointer-events-none">
         <ShapeGrid
@@ -417,7 +447,7 @@ export default function Certifications() {
       </div>
 
       {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
-      <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 md:py-6 z-30">
+      <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 md:py-6 z-10">
         <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16 md:mb-8 flex-shrink-0">
           <span className="font-array-semibold text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-1.5">
             Milestones & Credentials
@@ -595,7 +625,7 @@ export default function Certifications() {
         </div>
       </div>
 
-      <div ref={badgesContainerRef} className="relative z-10 w-full min-h-screen md:h-screen md:min-h-screen flex flex-col justify-center items-center py-12 md:py-6 overflow-hidden">
+      <div ref={badgesContainerRef} className="relative z-10 w-full min-h-screen md:h-screen md:min-h-screen flex flex-col justify-center items-center py-16 md:py-8 mt-12 md:mt-20 overflow-hidden">
         <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-8 md:mb-6 flex-shrink-0">
           <span className="font-array-semibold text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-1.5">
             Skill Endorsements
@@ -648,76 +678,55 @@ export default function Certifications() {
       </div>
 
       {selectedItem && typeof document !== 'undefined' && createPortal(
-        <div
-          className="fixed inset-0 z-[9995] flex items-center justify-center p-4 md:p-8 bg-black/40 backdrop-blur-md transition-all duration-300"
-          onClick={() => setSelectedItem(null)}
-        >
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
           <div
-            style={{ background: `radial-gradient(circle, ${selectedItem.color}15 0%, transparent 70%)` }}
-            className="absolute inset-0 pointer-events-none opacity-80 blur-3xl"
-          />
-
-          <div
-            className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto bg-[#FAFAFA] border border-[#334155]/20 rounded-3xl p-6 md:p-10 text-slate-800 shadow-2xl flex flex-col md:flex-row items-center gap-8 md:gap-12 animate-in fade-in zoom-in-95 duration-200"
-            onClick={(event) => event.stopPropagation()}
+            className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setSelectedItem(null)}
-              className="absolute top-5 right-5 text-zinc-400 hover:text-black transition-colors p-1.5 rounded-full hover:bg-zinc-100 cursor-pointer z-20"
-              aria-label="Close modal"
+              className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
             >
-              <X size={20} />
+              <X className="w-5 h-5" />
             </button>
 
-            <div className="w-full md:w-[56%] flex items-center justify-center">
-              <div className={selectedItem.type === 'cert' ? "w-full rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-lg" : "w-full max-w-[320px] rounded-3xl border border-slate-200 bg-white p-6 shadow-lg"}>
-                <CredentialImage
-                  src={selectedItem.image}
-                  fallbackSrc={selectedItem.backupImage}
-                  alt={`${selectedItem.type === 'cert' ? selectedItem.title : selectedItem.name} preview`}
-                  loading="eager"
-                  className={selectedItem.type === 'cert' ? "w-full h-auto object-contain" : "w-full h-auto object-contain"}
-                />
-              </div>
+            <div className="w-48 sm:w-56 aspect-square rounded-2xl overflow-hidden mb-5 border border-slate-100 shadow-sm flex items-center justify-center bg-slate-50 p-2">
+              <CredentialImage
+                src={selectedItem.image}
+                fallbackSrc={selectedItem.backupImage}
+                alt={selectedItem.type === 'cert' ? selectedItem.title : selectedItem.name}
+                className="w-full h-full object-contain"
+              />
             </div>
 
-            <div className="w-full md:w-[44%] flex flex-col justify-center">
-              <span style={{ color: selectedItem.color }} className="font-mono text-xs md:text-sm font-bold uppercase tracking-widest mb-1">
-                {selectedItem.issuer}
-              </span>
+            <span
+              style={{ color: selectedItem.color }}
+              className="font-mono text-xs uppercase font-bold tracking-wider mb-1.5"
+            >
+              {selectedItem.issuer}
+            </span>
 
-              <h3 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-black tracking-tight leading-tight mb-4">
-                {selectedItem.type === 'cert' ? selectedItem.title : selectedItem.name}
-              </h3>
+            <h3 className="font-clash-semibold text-xl sm:text-2xl font-bold text-slate-900 mb-2 leading-snug">
+              {selectedItem.type === 'cert' ? selectedItem.title : selectedItem.name}
+            </h3>
 
-              <div className="flex gap-4 mb-6">
-                <div className="flex flex-col bg-white border border-[#E5E7EB] px-4 py-2 rounded-xl">
-                  <span className="text-[9px] text-[#334155]/60 font-bold font-mono uppercase tracking-wider">Status</span>
-                  <span className="text-sm font-semibold text-slate-700">{selectedItem.date}</span>
-                </div>
-              </div>
+            <p className="font-sans text-xs sm:text-sm text-slate-500 mb-6 leading-relaxed">
+              Official credential verification powered by Credly, Certiport, Cisco, or issuing institute.
+            </p>
 
-              <p className="text-sm md:text-base text-[#334155] leading-relaxed mb-8">
-                {credentialDescription}
-              </p>
-
-              <a
-                href={selectedItem.verifyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-accent text-[#FAFAFA] font-mono font-semibold tracking-wider transition-colors duration-250 cursor-pointer text-sm hover:opacity-90 w-full md:w-auto"
-              >
-                <span className="w-2 h-2 bg-[#FAFAFA] rounded-full" />
-                <span>{selectedItem.type === 'cert' ? selectedItem.actionLabel || "Verify Credential" : "Verify Badge"}</span>
-                <ExternalLink className="w-4 h-4 text-[#FAFAFA]" />
-              </a>
-            </div>
+            <a
+              href={selectedItem.verifyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3 px-6 bg-accent hover:bg-accent/90 text-white rounded-xl font-sans text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md shadow-accent/20"
+            >
+              <span>Verify on Official Portal</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
           </div>
         </div>,
         document.body
       )}
-
-      <div id="connect" className="absolute bottom-0" />
     </section>
   );
 }

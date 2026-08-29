@@ -7,7 +7,7 @@ const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/
 
 export default function About() {
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="about">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden bg-[#f8f8f8] z-10" id="about">
       {/* Anchor targets for sub-navigation scroll links */}
       <div id="about-me" className="absolute top-0" />
 
@@ -70,7 +70,7 @@ export default function About() {
         {/* 3-Card Bento Showcase (Clean, No Icons, No Footers) */}
         <div className="w-[95%] md:w-[95%] max-w-[1600px] grid grid-cols-1 md:grid-cols-3 gap-6 mx-auto">
           
-          {/* Card 1: Philosophy - Kaizen in IT */}
+          {/* Card 1: Philosophy */}
           <div className="border-2 border-slate-200/80 bg-white p-7 md:p-8 rounded-3xl flex flex-col justify-start gap-3 hover:border-accent hover:shadow-[0_12px_28px_-8px_rgba(196,73,0,0.1)] transition-all duration-300 group cursor-target">
             <span className="font-mono text-xs uppercase tracking-wider text-slate-400 font-bold">
               Philosophy
@@ -79,11 +79,11 @@ export default function About() {
               Kaizen
             </h3>
             <p className="font-sans text-sm text-slate-600 leading-relaxed mt-1">
-              Embracing continuous improvement within software engineering—systematically refining code quality, modernizing architectures, and mastering new developer tooling with every sprint.
+              Constant, small tweaks to how I live, learn, and build. I focus on showing up daily, refining my habits, and being slightly more capable today than I was yesterday.
             </p>
           </div>
 
-          {/* Card 2: Background - BSIT-MWA */}
+          {/* Card 2: Background */}
           <div className="border-2 border-slate-200/80 bg-white p-7 md:p-8 rounded-3xl flex flex-col justify-start gap-3 hover:border-accent hover:shadow-[0_12px_28px_-8px_rgba(196,73,0,0.1)] transition-all duration-300 group cursor-target">
             <span className="font-mono text-xs uppercase tracking-wider text-slate-400 font-bold">
               Background
@@ -92,7 +92,7 @@ export default function About() {
               National University Dasmariñas
             </h3>
             <p className="font-sans text-sm text-slate-600 leading-relaxed mt-1">
-              Pursuing a Bachelor of Science in Information Technology Major in Mobile and Web Applications (BSIT-MWA), focused on engineering high-performance web systems, mobile apps, and AI solutions.
+              Pursuing a Bachelor of Science in Information Technology, majoring in Mobile and Web Applications. Focused on building practical web apps, mobile tools, and exploring applied AI.
             </p>
           </div>
 

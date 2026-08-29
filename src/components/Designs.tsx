@@ -62,33 +62,44 @@ export default function Designs() {
       mm.add("(min-width: 768px)", () => {
         if (!scrollSectionRef.current || !containerRef.current) return;
 
-        const scrollWidth = scrollSectionRef.current.scrollWidth;
-        const totalTranslation = -(scrollWidth - window.innerWidth);
+        const getScrollDistance = () => {
+          if (!scrollSectionRef.current) return 0;
+          return scrollSectionRef.current.scrollWidth - window.innerWidth;
+        };
 
         gsap.fromTo(
           scrollSectionRef.current,
           { x: 0 },
           {
-            x: totalTranslation,
+            x: () => -getScrollDistance(),
             ease: 'none',
             scrollTrigger: {
               trigger: containerRef.current,
               pin: true,
               scrub: 1,
               start: 'top top',
-              end: () => `+=${(scrollWidth - window.innerWidth) * 1.1}`,
-              invalidateOnRefresh: true
+              end: () => `+=${getScrollDistance() * 1.1}`,
+              invalidateOnRefresh: true,
+              anticipatePin: 1,
             },
           }
         );
       });
     }, containerRef);
 
-    return () => ctx.revert();
+    // Refresh ScrollTrigger after a slight delay to ensure all DOM dimensions and fonts are settled
+    const timeout = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+
+    return () => {
+      clearTimeout(timeout);
+      ctx.revert();
+    };
   }, []);
 
   return (
-    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8] pt-4 pb-12 md:pt-0">
+    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-[#f8f8f8] pt-4 pb-12 md:pt-0 z-20">
       {/* Centering calculations, adaptive widths, and scrollbar hiding scoped to Designs section */}
       <style>{`
         #designs {
@@ -178,7 +189,7 @@ export default function Designs() {
       </div>
 
       {/* On Desktop: Sticky full-screen view via GSAP pin. On Mobile: static relative view */}
-      <div className="designs-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-30">
+      <div className="designs-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-10">
 
         {/* Section Header */}
         <div className="designs-header w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-12 flex flex-col items-start z-10 flex-shrink-0">
@@ -198,38 +209,51 @@ export default function Designs() {
           ref={scrollSectionRef}
           className="designs-track grid grid-cols-2 grid-rows-3 gap-4 max-sm:gap-3 md:flex md:flex-row md:gap-16 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
         >
-          {designsData.map((design, index) => (
-            <div
-              key={index}
-              className="w-full md:w-[var(--card-width)] flex-shrink-0 aspect-[1080/1350] relative group overflow-hidden border border-slate-200/50 rounded-xl shadow-sm hover:shadow-lg transition-shadow duration-300 cursor-pointer"
-            >
-              <img
-                src={design.image}
-                alt={`${design.title} poster design`}
-                loading={index < 2 ? "eager" : "lazy"}
-                decoding="async"
-                onError={(event) => {
-                  const image = event.currentTarget;
-                  if (image.src !== design.backupImage) {
-                    image.src = design.backupImage;
-                  }
-                }}
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 select-none"
-              />
+          {designsData.map((item, index) => {
+            const num = String(index + 1).padStart(2, '0');
+            return (
+              <div
+                key={item.title}
+                className="designs-card flex-shrink-0 w-full md:w-[var(--card-width)] flex flex-col group cursor-target select-none"
+              >
+                {/* 1:1 Aspect Ratio Card Image */}
+                <div className="relative aspect-square w-full rounded-2xl md:rounded-3xl overflow-hidden bg-white/80 border border-slate-200/80 shadow-md group-hover:shadow-xl group-hover:border-accent/40 transition-all duration-300">
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    loading={index < 2 ? "eager" : "lazy"}
+                    decoding="async"
+                    onLoad={() => ScrollTrigger.refresh()}
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      if (img.src !== item.backupImage) {
+                        img.src = item.backupImage;
+                      }
+                    }}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Subtle Inner Border Gradient Overlay */}
+                  <div className="absolute inset-0 rounded-2xl md:rounded-3xl pointer-events-none ring-1 ring-inset ring-black/5" />
+                </div>
 
-              {/* Gradient Hover Info Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 md:p-8">
-                <span className="text-accent font-mono text-xs md:text-sm uppercase tracking-wider font-bold mb-1">
-                  {design.category}
-                </span>
-                <h3 className="text-white font-sans text-lg md:text-xl font-bold tracking-tight">
-                  {design.title}
-                </h3>
+                {/* Card Meta Details */}
+                <div className="mt-3 md:mt-4 flex items-center justify-between px-1">
+                  <div className="flex flex-col">
+                    <span className="font-clash-semibold text-sm md:text-lg font-bold text-slate-800 tracking-tight group-hover:text-accent transition-colors">
+                      {item.title}
+                    </span>
+                    <span className="font-mono text-[10px] md:text-xs text-slate-400 uppercase tracking-wider">
+                      {item.category}
+                    </span>
+                  </div>
+                  <span className="font-mono text-xs md:text-sm font-bold text-slate-300 group-hover:text-accent/60 transition-colors">
+                    {num}
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
-
       </div>
     </section>
   );
