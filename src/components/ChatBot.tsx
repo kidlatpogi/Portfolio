@@ -58,32 +58,78 @@ const containsPromptInjection = (text: string): boolean => {
   return CLIENT_INJECTION_KEYWORDS.some(term => lowerText.includes(term));
 };
 
-const getBrowserAndOS = () => {
+const getBrowserAndOS = async (): Promise<{ os: string; browser: string }> => {
   if (typeof navigator === 'undefined') return { os: 'Unknown OS', browser: 'Unknown Browser' };
   const ua = navigator.userAgent;
-  let os = 'Unknown OS';
-  if (ua.includes('Win')) os = 'Windows';
-  else if (ua.includes('Mac')) os = 'macOS';
-  else if (ua.includes('Linux')) os = 'Linux';
-  else if (ua.includes('Android')) os = 'Android';
-  else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
 
+  // Accurate OS Detection (Checking Android and iOS touch devices before generic Linux/Mac)
+  let os = 'Unknown OS';
+  if (/Android/i.test(ua)) {
+    os = 'Android';
+  } else if (/iPhone|iPod/i.test(ua) || /iPad/i.test(ua) || (ua.includes('Macintosh') && typeof navigator.maxTouchPoints === 'number' && navigator.maxTouchPoints > 1)) {
+    os = 'iOS';
+  } else if (/Windows|Win32|Win64/i.test(ua)) {
+    os = 'Windows';
+  } else if (/Macintosh|Mac OS X/i.test(ua)) {
+    os = 'macOS';
+  } else if (/CrOS/i.test(ua)) {
+    os = 'ChromeOS';
+  } else if (/Linux/i.test(ua)) {
+    os = 'Linux';
+  }
+
+  // Accurate Browser Detection (Brave API, Arc CSS variables, Edge, Opera, Vivaldi, etc.)
   let browser = 'Unknown Browser';
-  if (ua.includes('Edg/')) browser = 'Microsoft Edge';
-  else if (ua.includes('Chrome/')) browser = 'Google Chrome';
-  else if (ua.includes('Safari/') && !ua.includes('Chrome')) browser = 'Apple Safari';
-  else if (ua.includes('Firefox/')) browser = 'Mozilla Firefox';
-  else if (ua.includes('OPR/') || ua.includes('Opera/')) browser = 'Opera';
+  let isBrave = false;
+  try {
+    if ((navigator as any).brave && typeof (navigator as any).brave.isBrave === 'function') {
+      isBrave = await (navigator as any).brave.isBrave();
+    }
+  } catch {}
+
+  const isArc = typeof window !== 'undefined' && ((window as any).arc !== undefined || (typeof getComputedStyle === 'function' && getComputedStyle(document.documentElement).getPropertyValue('--arc-palette-title') !== ''));
+
+  if (isBrave) {
+    browser = 'Brave Browser';
+  } else if (isArc) {
+    browser = 'Arc Browser';
+  } else if (ua.includes('Edg/')) {
+    browser = 'Microsoft Edge';
+  } else if (ua.includes('OPR/') || ua.includes('Opera/')) {
+    browser = 'Opera';
+  } else if (ua.includes('Vivaldi/')) {
+    browser = 'Vivaldi';
+  } else if (ua.includes('SamsungBrowser/')) {
+    browser = 'Samsung Internet';
+  } else if (ua.includes('Chrome/')) {
+    browser = 'Google Chrome';
+  } else if (ua.includes('Safari/') && !ua.includes('Chrome')) {
+    browser = 'Apple Safari';
+  } else if (ua.includes('Firefox/')) {
+    browser = 'Mozilla Firefox';
+  }
 
   return { os, browser };
 };
 
 const getClientFootprintMessage = async (): Promise<string> => {
-  const { os, browser } = getBrowserAndOS();
+  const { os, browser } = await getBrowserAndOS();
   const timezone = typeof Intl !== 'undefined' ? (Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Manila') : 'Asia/Manila';
-  const screenRes = typeof window !== 'undefined' ? `${window.screen.width}x${window.screen.height} (${window.screen.colorDepth}-bit)` : '1920x1080 (24-bit)';
+  
+  let screenRes = '1920x1080 (24-bit)';
+  if (typeof window !== 'undefined' && window.screen) {
+    const depth = window.screen.colorDepth || 24;
+    screenRes = `${window.screen.width}x${window.screen.height} (${depth}-bit)`;
+  }
+
   const cpu = typeof navigator !== 'undefined' && navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Logical Cores` : 'Undisclosed';
-  const ram = typeof navigator !== 'undefined' && (navigator as any).deviceMemory ? `~${(navigator as any).deviceMemory} GB RAM` : 'Protected by browser';
+  
+  let ram = 'Protected by browser';
+  if (typeof navigator !== 'undefined' && (navigator as any).deviceMemory) {
+    const mem = (navigator as any).deviceMemory;
+    ram = mem >= 8 ? `≥8 GB RAM (Browser Cap)` : `~${mem} GB RAM`;
+  }
+
   const language = typeof navigator !== 'undefined' ? (navigator.language || 'en-US') : 'en-US';
 
   let ip = 'Undisclosed';
@@ -199,72 +245,54 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
           return <div key={index} className="h-1" />;
         }
 
-        // Section Title: ### Title
+        // Heading 3
         if (trimmed.startsWith('### ')) {
           return (
-            <div
-              key={index}
-              className="font-clash-bold text-xs md:text-sm font-bold text-[#C44900] uppercase tracking-wider mt-2 mb-0.5 pb-1 border-b border-[#C44900]/20 flex items-center gap-2"
-            >
-              <span className="w-2 h-2 rounded-[2px] bg-[#C44900] shrink-0" />
-              <span>{trimmed.replace(/^###\s+/, '')}</span>
-            </div>
+            <h3 key={index} className="font-clash-bold text-sm sm:text-base text-slate-900 mt-2 mb-0.5 tracking-tight">
+              {renderBoldAndCode(trimmed.slice(4))}
+            </h3>
           );
         }
 
-        // Subheading: #### Subtitle
-        if (trimmed.startsWith('#### ')) {
+        // Heading 2
+        if (trimmed.startsWith('## ')) {
           return (
-            <div
-              key={index}
-              className="font-bold text-xs md:text-[13px] text-slate-900 mt-2 mb-0.5 flex items-center gap-2"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C44900] shrink-0" />
-              <span>{renderInlineMarkdown(trimmed.replace(/^####\s+/, ''))}</span>
-            </div>
+            <h2 key={index} className="font-clash-bold text-base sm:text-lg text-slate-900 mt-2.5 mb-1 tracking-tight">
+              {renderBoldAndCode(trimmed.slice(3))}
+            </h2>
           );
         }
 
-        // Nested List Item
-        if (/^(\s{2,}|\t)[-*]\s+/.test(line)) {
-          const itemText = line.replace(/^\s*[-*]\s+/, '');
-          return (
-            <div key={index} className="flex items-start gap-2 ml-5 my-0.5 text-slate-600">
-              <span className="w-1 h-1 rounded-full bg-slate-400 mt-2 shrink-0" />
-              <div className="flex-1">{renderInlineMarkdown(itemText)}</div>
-            </div>
-          );
-        }
-
-        // Primary List Item
+        // Bullet point
         if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-          const itemText = trimmed.replace(/^[-*]\s+/, '');
           return (
-            <div key={index} className="flex items-start gap-2.5 ml-1.5 my-0.5 text-slate-800">
-              <span className="w-1.5 h-1.5 rounded-[1.5px] bg-[#C44900] mt-2 shrink-0" />
-              <div className="flex-1">{renderInlineMarkdown(itemText)}</div>
+            <div key={index} className="flex items-start gap-2 pl-1.5 my-0.5">
+              <span className="text-[#C44900] font-bold text-xs mt-0.5 select-none">•</span>
+              <span className="flex-1 text-slate-800 leading-normal">
+                {renderInlineMarkdown(trimmed.slice(2))}
+              </span>
             </div>
           );
         }
 
-        // Numbered List Item
-        if (/^\d+\.\s+/.test(trimmed)) {
-          const match = trimmed.match(/^(\d+)\.\s+(.*)/);
-          if (match) {
-            return (
-              <div key={index} className="flex items-start gap-2.5 ml-1.5 my-0.5 text-slate-800">
-                <span className="font-mono text-[11px] font-bold text-[#C44900] bg-orange-50 border border-[#C44900]/30 rounded px-1.5 py-0.2 shrink-0">
-                  {match[1]}
-                </span>
-                <div className="flex-1">{renderInlineMarkdown(match[2])}</div>
-              </div>
-            );
-          }
+        // Numbered list item (e.g. 1. 2. 3.)
+        const numberedMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+        if (numberedMatch) {
+          return (
+            <div key={index} className="flex items-start gap-2 pl-1.5 my-0.5">
+              <span className="font-mono text-[11px] font-bold text-[#C44900] mt-0.5 select-none min-w-[14px]">
+                {numberedMatch[1]}.
+              </span>
+              <span className="flex-1 text-slate-800 leading-normal">
+                {renderInlineMarkdown(numberedMatch[2])}
+              </span>
+            </div>
+          );
         }
 
         // Regular Paragraph
         return (
-          <p key={index} className="my-0.5 text-slate-700">
+          <p key={index} className="text-slate-800 my-0.5 leading-normal">
             {renderInlineMarkdown(trimmed)}
           </p>
         );
@@ -275,98 +303,83 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
 
 export const ChatBot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isTypingTestOpen, setIsTypingTestOpen] = useState(false);
+  const [inputValue, setInputValue] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
-  const [inputValue, setInputValue] = useState('');
   const [cooldownRemaining, setCooldownRemaining] = useState(0);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const [isTypingTestOpen, setIsTypingTestOpen] = useState(false);
 
-  // Detect footer visibility to hide bottom-left floating action buttons
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Restore cooldown state from localStorage
   useEffect(() => {
-    const handleScroll = () => {
-      const footerEl = document.getElementById('contact');
-      const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
-      let footerInView = isNearBottom;
-      if (!footerInView && footerEl) {
-        const rect = footerEl.getBoundingClientRect();
-        footerInView = rect.top < window.innerHeight - 80;
+    const expiry = localStorage.getItem(COOLDOWN_KEY);
+    if (expiry) {
+      const remaining = Math.ceil((parseInt(expiry, 10) - Date.now()) / 1000);
+      if (remaining > 0) {
+        setCooldownRemaining(remaining);
+      } else {
+        localStorage.removeItem(COOLDOWN_KEY);
       }
-      setIsFooterVisible(footerInView);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  // Restore persistent 30s cooldown from localStorage across page refreshes
-  useEffect(() => {
-    try {
-      const savedExpiry = localStorage.getItem(COOLDOWN_KEY);
-      if (savedExpiry) {
-        const remaining = Math.ceil((parseInt(savedExpiry, 10) - Date.now()) / 1000);
-        if (remaining > 0) {
-          setCooldownRemaining(remaining);
-        } else {
-          localStorage.removeItem(COOLDOWN_KEY);
-        }
-      }
-    } catch {}
+    }
   }, []);
 
   // Cooldown countdown timer
   useEffect(() => {
-    if (cooldownRemaining <= 0) {
-      try {
-        localStorage.removeItem(COOLDOWN_KEY);
-      } catch {}
-      return;
-    }
-    const timer = setTimeout(() => {
-      setCooldownRemaining(prev => {
-        const next = prev - 1;
-        if (next <= 0) {
-          try {
-            localStorage.removeItem(COOLDOWN_KEY);
-          } catch {}
+    if (cooldownRemaining <= 0) return;
+    const timer = setInterval(() => {
+      setCooldownRemaining((prev) => {
+        if (prev <= 1) {
+          localStorage.removeItem(COOLDOWN_KEY);
+          return 0;
         }
-        return Math.max(0, next);
+        return prev - 1;
       });
     }, 1000);
-    return () => clearTimeout(timer);
+    return () => clearInterval(timer);
   }, [cooldownRemaining]);
 
-  const activateCooldown = (seconds = COOLDOWN_SECONDS) => {
-    const expiry = Date.now() + seconds * 1000;
-    try {
-      localStorage.setItem(COOLDOWN_KEY, expiry.toString());
-    } catch {}
+  const activateCooldown = (seconds: number) => {
+    const expiryTime = Date.now() + seconds * 1000;
+    localStorage.setItem(COOLDOWN_KEY, expiryTime.toString());
     setCooldownRemaining(seconds);
   };
 
-  // Keyboard shortcut listener (ESC to close)
+  // Footer visibility detector
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        setIsOpen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen]);
+    const footer = document.querySelector('footer');
+    if (!footer) return;
 
-  // Auto-focus input when opened
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFooterVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
+
+  // Auto-scroll to bottom of conversation
+  const scrollToBottom = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isThinking]);
+
+  // Focus input when modal opens
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
       setTimeout(() => inputRef.current?.focus(), 150);
+      document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
     }
@@ -375,62 +388,51 @@ export const ChatBot: React.FC = () => {
     };
   }, [isOpen]);
 
-  // Scroll to bottom whenever messages change, thinking changes, or streaming changes
+  // Escape key to close modal
   useEffect(() => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTo({
-        top: scrollContainerRef.current.scrollHeight,
-        behavior: 'smooth'
-      });
-    }
-  }, [messages, isThinking, isStreaming]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (isTypingTestOpen) {
+          setIsTypingTestOpen(false);
+        } else if (isOpen) {
+          setIsOpen(false);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isTypingTestOpen]);
 
-  // Smooth typewriter streamer
+  // Text streaming simulator helper
   const streamTextIntoBotMessage = async (botMsgId: string, fullText: string) => {
     setIsStreaming(true);
+    setMessages(prev => [...prev, { id: botMsgId, sender: 'bot', text: '', timestamp: new Date() }]);
 
-    // Initial empty message placeholder
-    setMessages(prev => [
-      ...prev,
-      {
-        id: botMsgId,
-        sender: 'bot',
-        text: '',
-        timestamp: new Date()
-      }
-    ]);
+    const chunkSize = Math.max(1, Math.floor(fullText.length / 45));
+    let currentIdx = 0;
 
-    const totalLength = fullText.length;
-    // Chunk size: higher for long markdown texts to keep typing under ~1.5s
-    const chunkSize = totalLength > 800 ? 14 : totalLength > 400 ? 8 : totalLength > 150 ? 4 : 2;
-    const tickInterval = 16; // ~60fps smooth progression
+    while (currentIdx < fullText.length) {
+      currentIdx = Math.min(fullText.length, currentIdx + chunkSize);
+      const displayedText = fullText.slice(0, currentIdx);
 
-    let currentLength = 0;
+      setMessages(prev =>
+        prev.map(m => (m.id === botMsgId ? { ...m, text: displayedText } : m))
+      );
 
-    return new Promise<void>((resolve) => {
-      const interval = setInterval(() => {
-        currentLength += chunkSize;
-        if (currentLength >= totalLength) {
-          clearInterval(interval);
-          setMessages(prev =>
-            prev.map(m => m.id === botMsgId ? { ...m, text: fullText } : m)
-          );
-          setIsStreaming(false);
-          resolve();
-        } else {
-          const partial = fullText.slice(0, currentLength);
-          setMessages(prev =>
-            prev.map(m => m.id === botMsgId ? { ...m, text: partial } : m)
-          );
-        }
-      }, tickInterval);
-    });
+      scrollToBottom();
+      await new Promise(r => setTimeout(r, 16));
+    }
+
+    setIsStreaming(false);
   };
 
-  const handleSend = async (textToSend: string) => {
-    if (!textToSend.trim() || isThinking || isStreaming || cooldownRemaining > 0) return;
+  // Main Send Handler
+  const handleSend = async (textToSend?: string) => {
+    const query = textToSend || inputValue;
+    const cleanText = query.trim();
 
-    const cleanText = textToSend.trim();
+    if (!cleanText || isThinking || isStreaming || cooldownRemaining > 0) return;
+
     const userMsg: Message = {
       id: `user-${Date.now()}`,
       sender: 'user',
@@ -438,7 +440,7 @@ export const ChatBot: React.FC = () => {
       timestamp: new Date()
     };
 
-    // 1. Check for bad words, adult content, or keyboard mash client-side
+    // 1. Check for Profanity / Bad Words / NSFW / Slurs / Keyboard Mash
     // FLOW: Validate -> Thinking (0.5s) -> Reply (Typing Effect)
     if (containsBadContent(cleanText) || containsKeyboardMash(cleanText)) {
       setMessages(prev => [...prev, userMsg]);
@@ -446,7 +448,7 @@ export const ChatBot: React.FC = () => {
       setIsThinking(true);
       activateCooldown(COOLDOWN_SECONDS);
 
-      await new Promise(r => setTimeout(r, 500));
+      await new Promise(r => setTimeout(r, 600));
       setIsThinking(false);
 
       const botMsgId = `bot-warn-${Date.now()}`;
