@@ -1,0 +1,46 @@
+# Cloudflare Pages Cache & Security Headers
+
+# Immutable cache for Astro bundled assets (hashed filenames)
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Immutable cache for static images and media
+/Common/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/Designs/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/Project%20Overview/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/Badges/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+
+# PDF Resume
+/Zeus_Angelo_Bautista_Resume.pdf
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# HTML / Dynamic routes
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
