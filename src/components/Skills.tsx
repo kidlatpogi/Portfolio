@@ -1,277 +1,133 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import ScrollReveal from './ScrollReveal.tsx';
+import { Layers, Sparkles } from 'lucide-react';
 
 interface Skill {
   name: string;
   logo: string;
+  category: 'Frontend' | 'Backend & DB' | 'Tools & DevOps';
+  level?: string;
+  projects?: string;
 }
 
-interface SkillCategory {
-  title: string;
-  skills: Skill[];
-}
+const allSkills: Skill[] = [
+  // Frontend
+  { name: 'JavaScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg', category: 'Frontend', level: 'Advanced', projects: 'TalkTics, Linny' },
+  { name: 'TypeScript', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg', category: 'Frontend', level: 'Proficient', projects: 'Gnosis, Portfolio' },
+  { name: 'React', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg', category: 'Frontend', level: 'Advanced', projects: 'TalkTics, Linny' },
+  { name: 'Tailwind CSS', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg', category: 'Frontend', level: 'Advanced', projects: 'All Projects' },
+  { name: 'HTML5', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg', category: 'Frontend', level: 'Mastery' },
+  { name: 'CSS3', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg', category: 'Frontend', level: 'Mastery' },
+  { name: 'Electron', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/electron/electron-original.svg', category: 'Frontend', level: 'Intermediate', projects: 'Safelink' },
 
-const categorizedSkills: SkillCategory[] = [
-  {
-    title: 'Frontend',
-    skills: [
-      {
-        name: 'JavaScript',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg'
-      },
-      {
-        name: 'TypeScript',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg'
-      },
-      {
-        name: 'React',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg'
-      },
-      {
-        name: 'Tailwind CSS',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg'
-      },
-      {
-        name: 'HTML5',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg'
-      },
-      {
-        name: 'CSS3',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg'
-      },
-      {
-        name: 'Electron',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/electron/electron-original.svg'
-      }
-    ]
-  },
-  {
-    title: 'Backend & Database',
-    skills: [
-      {
-        name: 'Node.js',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg'
-      },
-      {
-        name: 'Python',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg'
-      },
-      {
-        name: 'MySQL',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg'
-      },
-      {
-        name: 'Firebase',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg'
-      },
-      {
-        name: 'Supabase',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg'
-      }
-    ]
-  },
-  {
-    title: 'Tools',
-    skills: [
-      {
-        name: 'Git',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg'
-      },
-      {
-        name: 'GitHub',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg'
-      },
-      {
-        name: 'Docker',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg'
-      },
-      {
-        name: 'VS Code',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg'
-      },
-      {
-        name: 'Linux',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg'
-      },
-      {
-        name: 'Photoshop',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg'
-      },
-      {
-        name: 'Figma',
-        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg'
-      }
-    ]
-  }
+  // Backend & DB
+  { name: 'Node.js', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg', category: 'Backend & DB', level: 'Proficient', projects: 'Linny, Backend API' },
+  { name: 'Python', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg', category: 'Backend & DB', level: 'Advanced', projects: 'TalkTics, YOLOv8' },
+  { name: 'MySQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg', category: 'Backend & DB', level: 'Proficient', projects: 'Silang Database' },
+  { name: 'Firebase', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original.svg', category: 'Backend & DB', level: 'Intermediate', projects: 'Gnosis' },
+  { name: 'Supabase', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/supabase/supabase-original.svg', category: 'Backend & DB', level: 'Intermediate', projects: 'Modern Cloud Apps' },
+
+  // Tools & DevOps
+  { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg', category: 'Tools & DevOps', level: 'Advanced' },
+  { name: 'GitHub', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg', category: 'Tools & DevOps', level: 'Advanced' },
+  { name: 'Docker', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg', category: 'Tools & DevOps', level: 'Intermediate' },
+  { name: 'VS Code', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg', category: 'Tools & DevOps', level: 'Daily Driver' },
+  { name: 'Linux', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg', category: 'Tools & DevOps', level: 'Proficient' },
+  { name: 'Photoshop', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg', category: 'Tools & DevOps', level: 'Creative UI' },
+  { name: 'Figma', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg', category: 'Tools & DevOps', level: 'UI / Wireframing' }
 ];
 
-const allSkills: Skill[] = categorizedSkills.flatMap(c => c.skills);
-
-// Mobile Viewport: 5 per row -> 3 rows of 5 and 1 row of 4 (Total 19 skills)
-const mobileRows: Skill[][] = [
-  allSkills.slice(0, 5),   // Row 1: JavaScript, TypeScript, React, Tailwind CSS, HTML5
-  allSkills.slice(5, 10),  // Row 2: CSS3, Electron, Node.js, Python, MySQL
-  allSkills.slice(10, 15), // Row 3: Firebase, Supabase, Git, GitHub, Docker
-  allSkills.slice(15, 19)  // Row 4: VS Code, Linux, Photoshop, Figma
-];
+const categories = ['All', 'Frontend', 'Backend & DB', 'Tools & DevOps'] as const;
 
 export default function Skills() {
-  const [activeSkill, setActiveSkill] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
-  useEffect(() => {
-    const handleGlobalClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      if (!target.closest('#skills')) {
-        setActiveSkill(null);
-      }
-    };
-    document.addEventListener('click', handleGlobalClick);
-    return () => {
-      document.removeEventListener('click', handleGlobalClick);
-    };
-  }, []);
-
-  const handleSkillTap = (name: string) => {
-    setActiveSkill(prev => (prev === name ? null : name));
-  };
+  const filteredSkills = useMemo(() => {
+    if (selectedCategory === 'All') return allSkills;
+    return allSkills.filter(s => s.category === selectedCategory);
+  }, [selectedCategory]);
 
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden" id="skills">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="skills">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
-        {/* Headings inside ScrollReveal */}
-        <ScrollReveal
-          baseOpacity={0.08}
-          enableBlur={false}
-          baseRotation={2}
-          blurStrength={12}
-          as="div"
-          containerClassName="flex flex-col items-center w-full mb-12"
-        >
-          {/* Subheading */}
-          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
-            Technical
+        {/* Chapter Index + Subheading */}
+        <div className="flex items-center gap-2 mb-3">
+          <span className="font-mono text-xs font-bold text-accent uppercase tracking-[0.25em]">
+            02 //
           </span>
-
-          {/* Heading */}
-          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.25rem] 2xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center">
-            Skills
-          </h2>
-        </ScrollReveal>
-
-        {/* Desktop Categorized Skills Section (3 rows) */}
-        <div className="hidden md:flex flex-col gap-4 sm:gap-6 w-[95%] max-w-[1600px] mx-auto relative z-10">
-          {categorizedSkills.map((category) => (
-            <ScrollReveal
-              key={category.title}
-              baseOpacity={0.08}
-              enableBlur={false}
-              baseRotation={1}
-              blurStrength={8}
-              as="div"
-              containerClassName="flex flex-col items-center justify-center pb-5 md:pb-6 border-b border-slate-300/20 last:border-b-0 last:pb-0 w-full skills-parallax-row"
-              wordAnimationEnd="top 50%"
-              simpleReveal={true}
-            >
-              <div className="w-full flex flex-wrap items-center justify-center gap-3 sm:gap-4 reveal-item skills-badges-col parallax-y">
-                {category.skills.map((skill) => {
-                  const isActive = activeSkill === skill.name;
-                  return (
-                    <div
-                      key={skill.name}
-                      className="group relative flex flex-col items-center cursor-pointer cursor-target"
-                      onClick={() => handleSkillTap(skill.name)}
-                      onMouseEnter={() => setActiveSkill(skill.name)}
-                      onMouseLeave={() => setActiveSkill(null)}
-                    >
-                      <div
-                        className={`absolute bottom-[125%] left-1/2 -translate-x-1/2 bg-black text-white text-xs md:text-sm font-mono uppercase tracking-wider py-1.5 px-3.5 rounded-md shadow-md whitespace-nowrap pointer-events-none transition-all duration-300 ease-out z-30 ${
-                          isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0'
-                        }`}
-                      >
-                        {skill.name}
-                        <div className="absolute top-[99%] left-1/2 -translate-x-1/2 w-2 h-2 bg-black rotate-45" />
-                      </div>
-
-                      <div
-                        className={`w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 bg-white flex items-center justify-center shadow-sm transition-all duration-500 ease-out ${
-                          isActive
-                            ? 'scale-110 border-accent shadow-[0_12px_24px_-8px_rgba(196,73,0,0.2)] rotate-3'
-                            : 'border-slate-200/80 md:group-hover:scale-110 md:group-hover:border-accent md:group-hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.2)] md:group-hover:rotate-3'
-                        }`}
-                      >
-                        <img
-                          src={skill.logo}
-                          alt={`${skill.name} logo`}
-                          className="w-9 h-9 sm:w-12 sm:h-12 object-contain transition-all duration-500 ease-out"
-                          loading="lazy"
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </ScrollReveal>
-          ))}
+          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center">
+            My Tech Arsenal
+          </span>
         </div>
 
-        {/* Mobile Viewport Skills Section (5 per row: 3 rows of 5, 1 row of 4) */}
-        <div className="flex md:hidden flex-col items-center w-full max-w-[480px] mx-auto relative z-10">
-          <ScrollReveal
-            baseOpacity={0.08}
-            enableBlur={false}
-            baseRotation={1}
-            blurStrength={8}
-            as="div"
-            containerClassName="w-full flex flex-col items-center justify-center gap-3 sm:gap-4"
-            simpleReveal={true}
-          >
-            {mobileRows.map((row, rowIdx) => (
-              <div
-                key={rowIdx}
-                className="flex items-center justify-center gap-2 min-[360px]:gap-2.5 min-[390px]:gap-3.5 sm:gap-4 w-full"
-              >
-                {row.map((skill) => {
-                  const isActive = activeSkill === skill.name;
-                  return (
-                    <div
-                      key={skill.name}
-                      className="group relative flex flex-col items-center cursor-pointer cursor-target"
-                      onClick={() => handleSkillTap(skill.name)}
-                      onMouseEnter={() => setActiveSkill(skill.name)}
-                      onMouseLeave={() => setActiveSkill(null)}
-                    >
-                      {/* Tooltip */}
-                      <div
-                        className={`absolute bottom-[125%] left-1/2 -translate-x-1/2 bg-black text-white text-[11px] font-mono uppercase tracking-wider py-1 px-2.5 rounded-md shadow-md whitespace-nowrap pointer-events-none transition-all duration-300 ease-out z-30 ${
-                          isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-                        }`}
-                      >
-                        {skill.name}
-                        <div className="absolute top-[99%] left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-black rotate-45" />
-                      </div>
+        {/* "Skills" Heading */}
+        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.25rem] 2xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-8">
+          Skills
+        </h2>
 
-                      {/* Badge Circular Container */}
-                      <div
-                        className={`w-12 h-12 min-[360px]:w-[52px] min-[360px]:h-[52px] min-[390px]:w-14 min-[390px]:h-14 sm:w-16 sm:h-16 rounded-full border-2 bg-white flex items-center justify-center shadow-sm transition-all duration-500 ease-out flex-shrink-0 ${
-                          isActive
-                            ? 'scale-110 border-accent shadow-[0_12px_24px_-8px_rgba(196,73,0,0.2)] rotate-3'
-                            : 'border-slate-200/80'
-                        }`}
-                      >
-                        <img
-                          src={skill.logo}
-                          alt={`${skill.name} logo`}
-                          className="w-6 h-6 min-[360px]:w-7 min-[360px]:h-7 min-[390px]:w-8 min-[390px]:h-8 sm:w-9 sm:h-9 object-contain transition-all duration-500 ease-out"
-                          loading="lazy"
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+        {/* Interactive Category Filter Pills */}
+        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 mb-12">
+          {categories.map(cat => {
+            const isActive = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 rounded-full font-mono text-xs md:text-sm font-bold tracking-wide transition-all duration-300 cursor-target ${
+                  isActive
+                    ? 'bg-accent text-white shadow-md shadow-accent/20 scale-105'
+                    : 'bg-white border-2 border-slate-200/80 text-slate-600 hover:border-accent hover:text-accent'
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Interactive Skills Bento Grid */}
+        <div className="w-[95%] md:w-[95%] max-w-[1600px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 mx-auto">
+          {filteredSkills.map(skill => {
+            const isHovered = hoveredSkill === skill.name;
+            return (
+              <div
+                key={skill.name}
+                onMouseEnter={() => setHoveredSkill(skill.name)}
+                onMouseLeave={() => setHoveredSkill(null)}
+                className="group relative border-2 border-slate-200/80 bg-white p-5 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.12)] cursor-target overflow-hidden"
+              >
+                {/* Tech Logo */}
+                <div className="w-12 h-12 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110">
+                  <img
+                    src={skill.logo}
+                    alt={skill.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-10 h-10 object-contain drop-shadow-sm"
+                  />
+                </div>
+
+                {/* Skill Name */}
+                <span className="font-clash-semibold text-sm md:text-base font-bold text-slate-800 text-center relative z-10 group-hover:text-accent transition-colors duration-300">
+                  {skill.name}
+                </span>
+
+                {/* Skill Category Pill */}
+                <span className="font-mono text-[10px] text-slate-400 uppercase font-semibold px-2 py-0.5 bg-slate-50 border border-slate-100 rounded-md">
+                  {skill.category}
+                </span>
+
+                {/* Optional Project Highlight on Hover */}
+                {skill.projects && (
+                  <div className="absolute inset-x-0 bottom-0 py-1 bg-accent/95 text-white font-mono text-[9px] font-bold text-center tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    {skill.projects}
+                  </div>
+                )}
               </div>
-            ))}
-          </ScrollReveal>
+            );
+          })}
         </div>
 
       </div>
