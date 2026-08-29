@@ -76,7 +76,7 @@ export default function About() {
               Philosophy
             </span>
             <h3 className="font-clash-semibold text-lg sm:text-xl md:text-2xl font-bold text-slate-900 leading-tight group-hover:text-accent transition-colors">
-              Kaizen
+              Kaizen (改善)
             </h3>
             <p className="font-sans text-xs sm:text-sm text-slate-600 leading-relaxed mt-0.5 sm:mt-1">
               Constant, small tweaks to how I live, learn, and build. I focus on showing up daily, refining my habits, and being slightly more capable today than I was yesterday.
