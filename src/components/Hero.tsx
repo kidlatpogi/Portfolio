@@ -49,15 +49,15 @@ export default function Hero() {
             4th year College Student
           </span>
 
-          <div className="flex flex-col items-start w-full">
-            {/* Row 1: Zeus Angelo + Dotted line + Profile Picture */}
-            <div className="flex items-center justify-between sm:justify-start gap-2 sm:gap-3 md:gap-4 lg:gap-6 w-full">
-              <h1 className="hero-title-1 font-sans text-[8.5vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+          <div className="flex flex-col items-start w-fit max-w-full">
+            {/* Row 1: Zeus Angelo + Dotted line + Profile Picture (Snug inline-flex flow) */}
+            <div className="inline-flex items-center">
+              <h1 className="hero-title-1 font-sans text-[9vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
                 Zeus Angelo
               </h1>
 
-              {/* Profile picture on the right side */}
-              <div className="flex items-center z-20 flex-shrink-0 w-[4.5rem] sm:w-[8rem] md:w-[12rem] lg:w-[13rem] xl:w-[16rem] 2xl:w-[18rem]">
+              {/* Profile picture directly attached to Zeus Angelo */}
+              <div className="inline-flex items-center z-20 flex-shrink-0 ml-1.5 sm:ml-3 md:ml-4 lg:ml-6 w-[4.25rem] sm:w-[8rem] md:w-[12rem] lg:w-[13rem] xl:w-[16rem] 2xl:w-[18rem]">
                 {/* Playful Dotted Line */}
                 <div className="relative flex-grow h-6 sm:h-14 md:h-20 overflow-visible">
                   <svg
@@ -196,12 +196,12 @@ export default function Hero() {
             </div>
 
             {/* Row 2: Bautista */}
-            <h1 className="hero-title-2 font-sans text-[8.5vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="hero-title-2 font-sans text-[9vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-black text-black tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               Bautista
             </h1>
 
             {/* Row 3: Future Developer */}
-            <h1 className="hero-title-3 font-clash-semibold text-[8.5vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
+            <h1 className="hero-title-3 font-clash-semibold text-[9vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               <span className="relative inline-block italic mr-[0.25em]">
                 <span>Future</span>
                 <motion.span
