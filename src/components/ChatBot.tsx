@@ -21,13 +21,16 @@ const CLIENT_BAD_WORDS = [
 // Client-side Prompt Injection & Extraction Patterns
 const CLIENT_INJECTION_KEYWORDS = [
   'system prompt', 'system instructions', 'initial prompt', 'base prompt', 'hidden prompt',
-  'prompt text', 'reveal prompt', 'reveal instructions', 'leak prompt', 'ignore previous',
-  'disregard previous', 'ignore all previous', 'forget all instructions', 'ignore your instructions',
-  'disregard instructions', 'new instructions', 'override instructions', '.env', 'dotenv',
-  'api_key', 'apikey', 'api key', 'secret_key', 'cloudflare_token', 'cloudflare token', 'auth token',
-  'jwt secret', 'password', 'credentials', 'jailbreak', 'dan mode', 'developer mode',
-  'unrestricted mode', 'bypass filter', 'bypass safety', 'repeat everything above',
-  'what are your instructions', 'reveal your system instructions', 'output initialization'
+  'prompt text', 'internal instructions', 'reveal prompt', 'reveal instructions', 'leak prompt',
+  'ignore previous', 'disregard previous', 'ignore all previous', 'forget all instructions',
+  'ignore your instructions', 'disregard instructions', 'new instructions', 'override instructions',
+  '.env', 'dotenv', 'api_key', 'apikey', 'api key', 'secret_key', 'cloudflare_token', 'cloudflare token',
+  'auth token', 'jwt secret', 'password', 'credentials', 'private key', 'env variable', 'process.env',
+  'jailbreak', 'dan mode', 'developer mode', 'unrestricted mode', 'bypass filter', 'bypass safety',
+  'pretend you are an unrestricted', 'roleplay as godmode', 'repeat everything above',
+  'print everything before', 'what are your instructions', 'reveal your system instructions',
+  'output initialization', 'print context', 'show context', 'drop table', 'dump database',
+  'who made your prompt', 'what is your prompt', 'tell me your prompt', 'show me your prompt', 'give me your prompt'
 ];
 
 // Strip emojis helper
@@ -53,6 +56,62 @@ const containsBadContent = (text: string): boolean => {
 const containsPromptInjection = (text: string): boolean => {
   const lowerText = text.toLowerCase().trim();
   return CLIENT_INJECTION_KEYWORDS.some(term => lowerText.includes(term));
+};
+
+const getBrowserAndOS = () => {
+  if (typeof navigator === 'undefined') return { os: 'Unknown OS', browser: 'Unknown Browser' };
+  const ua = navigator.userAgent;
+  let os = 'Unknown OS';
+  if (ua.includes('Win')) os = 'Windows';
+  else if (ua.includes('Mac')) os = 'macOS';
+  else if (ua.includes('Linux')) os = 'Linux';
+  else if (ua.includes('Android')) os = 'Android';
+  else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+
+  let browser = 'Unknown Browser';
+  if (ua.includes('Edg/')) browser = 'Microsoft Edge';
+  else if (ua.includes('Chrome/')) browser = 'Google Chrome';
+  else if (ua.includes('Safari/') && !ua.includes('Chrome')) browser = 'Apple Safari';
+  else if (ua.includes('Firefox/')) browser = 'Mozilla Firefox';
+  else if (ua.includes('OPR/') || ua.includes('Opera/')) browser = 'Opera';
+
+  return { os, browser };
+};
+
+const getClientFootprintMessage = async (): Promise<string> => {
+  const { os, browser } = getBrowserAndOS();
+  const timezone = typeof Intl !== 'undefined' ? (Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Manila') : 'Asia/Manila';
+  const screenRes = typeof window !== 'undefined' ? `${window.screen.width}x${window.screen.height} (${window.screen.colorDepth}-bit)` : '1920x1080 (24-bit)';
+  const cpu = typeof navigator !== 'undefined' && navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} Cores / Threads` : 'Undisclosed';
+  const ram = typeof navigator !== 'undefined' && (navigator as any).deviceMemory ? `~${(navigator as any).deviceMemory} GB RAM` : 'Protected by browser';
+  const language = typeof navigator !== 'undefined' ? (navigator.language || 'en-US') : 'en-US';
+
+  let ip = 'Undisclosed';
+  let isp = 'Local Service Provider';
+  let location = 'Cavite, Philippines';
+
+  try {
+    const res = await fetch('https://ipwho.is/', { signal: AbortSignal.timeout(2000) });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.success !== false) {
+        ip = data.ip || ip;
+        isp = data.connection?.isp || data.connection?.org || isp;
+        const locParts = [data.city, data.region, data.country].filter(Boolean);
+        if (locParts.length > 0) location = locParts.join(', ');
+      }
+    }
+  } catch {
+    try {
+      const fb = await fetch('https://api.ipify.org?format=json', { signal: AbortSignal.timeout(1500) });
+      if (fb.ok) {
+        const fbData = await fb.json();
+        ip = fbData.ip || ip;
+      }
+    } catch {}
+  }
+
+  return `### That's so unkind of you to try that! 👻\n\nNice try on the prompt injection! Anyway, here is your digital footprint:\n- **Public IP**: ${ip}\n- **Internet Service Provider (ISP)**: ${isp}\n- **Approximate Location**: ${location}\n- **Timezone**: ${timezone}\n- **Operating System**: ${os}\n- **Browser**: ${browser}\n- **Device Specs**: ${cpu} • ${ram}\n- **Screen Resolution**: ${screenRes}\n- **Preferred Language**: ${language}\n\n*Think before you click, and always remember to be kind! ✨*`;
 };
 
 interface Message {
@@ -179,7 +238,7 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
 
         // Primary List Item
         if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-          const itemText = trimmed.replace(/^[-*]\\s+/, '');
+          const itemText = trimmed.replace(/^[-*]\s+/, '');
           return (
             <div key={index} className="flex items-start gap-2.5 ml-1.5 my-0.5 text-slate-800">
               <span className="w-1.5 h-1.5 rounded-[1.5px] bg-[#C44900] mt-2 shrink-0" />
@@ -361,18 +420,22 @@ export const ChatBot: React.FC = () => {
         text: cleanText,
         timestamp: new Date()
       };
+      setMessages(prev => [...prev, userMsg]);
+      setInputValue('');
+      setIsTyping(true);
+      activateCooldown(COOLDOWN_SECONDS);
+
+      const footprintReply = await getClientFootprintMessage();
+      setIsTyping(false);
       setMessages(prev => [
         ...prev,
-        userMsg,
         {
           id: `bot-shield-${Date.now()}`,
           sender: 'bot',
-          text: "I can only answer questions related to Zeus's portfolio, professional background, projects, certifications, and tech stack.",
+          text: footprintReply,
           timestamp: new Date()
         }
       ]);
-      setInputValue('');
-      activateCooldown(COOLDOWN_SECONDS);
       return;
     }
 
