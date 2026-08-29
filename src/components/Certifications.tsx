@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, X } from 'lucide-react';
-import ShapeGrid from './ShapeGrid.tsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -395,7 +394,7 @@ export default function Certifications() {
   }, []);
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-[#f8f8f8] py-12 md:py-0 z-10">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-transparent py-12 md:py-0 z-10">
       <style>{`
         #certifications {
           --cert-card-width: 340px;
@@ -433,18 +432,6 @@ export default function Certifications() {
           display: none !important;
         }
       `}</style>
-      
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <ShapeGrid
-          speed={0}
-          squareSize={55}
-          borderColor="rgba(51, 65, 85, 0.05)"
-          hoverFillColor="rgba(51, 65, 85, 0.12)"
-          shape="square"
-          hoverTrailAmount={6}
-          gradientColor="#f8f8f8"
-        />
-      </div>
 
       {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
       <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 md:py-6 z-10">
