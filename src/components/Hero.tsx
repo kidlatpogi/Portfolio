@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getHolidaySeason, type HolidaySeason } from '../utils/seasonal';
 
@@ -107,42 +107,66 @@ export default function Hero() {
                   onMouseEnter={() => setIsProfileHovered(true)}
                   onMouseLeave={() => setIsProfileHovered(false)}
                 >
-                  {/* Santa Hat (Shown during Christmas / Sept 1 - Dec 30) */}
+                  {/* High-Definition Realistic Santa Hat */}
                   <AnimatePresence>
                     {isChristmas && (
                       <motion.div
-                        initial={{ scale: 0, rotate: -25, y: -10, opacity: 0 }}
-                        animate={{ scale: 1, rotate: -12, y: 0, opacity: 1 }}
+                        initial={{ scale: 0, rotate: -15, y: -12, opacity: 0 }}
+                        animate={{ scale: 1, rotate: -8, y: 0, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                         transition={{ type: 'spring', stiffness: 280, damping: 18 }}
-                        className="absolute -top-3.5 -left-3 sm:-top-5 sm:-left-4 md:-top-9 md:-left-7 lg:-top-11 lg:-left-8 xl:-top-13 xl:-left-9 z-30 pointer-events-none select-none w-10 sm:w-14 md:w-20 lg:w-24 xl:w-28 drop-shadow-md"
+                        className="absolute -top-5 -left-3.5 sm:-top-7 sm:-left-5 md:-top-11 md:-left-7 lg:-top-13 lg:-left-8 xl:-top-15 xl:-left-9 z-30 pointer-events-none select-none w-12 sm:w-16 md:w-24 lg:w-28 xl:w-32 drop-shadow-xl"
                       >
-                        <svg viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
-                          {/* Hat Red Velvet Body */}
+                        <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
+                          {/* Soft shadow underneath hat on head */}
+                          <ellipse cx="50" cy="72" rx="40" ry="6" fill="#000000" opacity="0.22" />
+
+                          {/* Main Red Velvet Cone Body */}
                           <path
-                            d="M16 64 C22 35 48 10 78 12 C86 22 88 38 82 52 C78 60 70 64 64 64 Z"
+                            d="M22 68 C24 45 42 18 68 8 C88 2 108 14 112 34 C114 42 110 50 104 54 C98 57 92 52 93 42 C95 28 85 18 72 18 C52 18 36 42 32 68 Z"
                             fill="#DC2626"
                           />
-                          {/* Shading / Highlight */}
+                          {/* Inner Crease Shadow */}
                           <path
-                            d="M20 62 C26 38 48 16 75 14 C70 30 50 50 20 62 Z"
-                            fill="#EF4444"
-                            opacity="0.65"
+                            d="M26 67 C30 48 45 28 66 18 C61 24 57 34 56 46 C55 58 52 65 48 68 Z"
+                            fill="#991B1B"
                           />
-                          {/* Drooping Tip */}
+                          {/* Velvet Highlight Arc */}
                           <path
-                            d="M76 13 C88 16 94 28 92 38 C90 42 85 44 82 40 C80 34 84 24 76 13 Z"
-                            fill="#B91C1C"
+                            d="M68 9 C84 6 100 16 106 32 C104 26 96 16 80 14 C74 13 69 11 68 9 Z"
+                            fill="#F87171"
                           />
-                          {/* Pom-Pom */}
-                          <circle cx="89" cy="42" r="7.5" fill="#FFFFFF" />
-                          <circle cx="89" cy="42" r="6" fill="#F8FAFC" />
-                          <circle cx="87.5" cy="40.5" r="2.5" fill="#FFFFFF" />
-                          {/* Fluffy Brim */}
-                          <rect x="8" y="58" width="62" height="15" rx="7.5" fill="#FFFFFF" />
-                          <ellipse cx="20" cy="65.5" rx="8" ry="6" fill="#F1F5F9" />
-                          <ellipse cx="38" cy="65.5" rx="9" ry="6" fill="#FFFFFF" />
-                          <ellipse cx="56" cy="65.5" rx="8" ry="6" fill="#F1F5F9" />
+                          {/* Drooping Tip Tail */}
+                          <path
+                            d="M106 36 C112 42 114 52 108 60 C104 65 96 64 96 58 C96 52 100 46 104 40 Z"
+                            fill="#991B1B"
+                          />
+
+                          {/* White Fur Pom-Pom with 3D Depth */}
+                          <circle cx="98" cy="64" r="10" fill="#CBD5E1" />
+                          <circle cx="97" cy="63" r="9.5" fill="#FFFFFF" />
+                          <circle cx="95" cy="61" r="5" fill="#FFFFFF" opacity="0.95" />
+                          <circle cx="92" cy="64" r="4.5" fill="#F8FAFC" />
+                          <circle cx="103" cy="60" r="4" fill="#F1F5F9" />
+                          <circle cx="102" cy="67" r="4.5" fill="#E2E8F0" />
+
+                          {/* Thick Fluffy White Fur Brim (Bumps and clouds) */}
+                          <rect x="12" y="60" width="76" height="20" rx="10" fill="#CBD5E1" />
+                          <rect x="14" y="59" width="72" height="19" rx="9.5" fill="#FFFFFF" />
+
+                          {/* Fluffy rounded puffs across the brim */}
+                          <circle cx="20" cy="68" r="8" fill="#FFFFFF" />
+                          <circle cx="32" cy="68" r="9" fill="#FFFFFF" />
+                          <circle cx="46" cy="67" r="9.5" fill="#FFFFFF" />
+                          <circle cx="60" cy="68" r="9" fill="#FFFFFF" />
+                          <circle cx="74" cy="68" r="8" fill="#FFFFFF" />
+
+                          {/* Soft bottom shading on fur puffs */}
+                          <ellipse cx="20" cy="73" rx="6" ry="2" fill="#94A3B8" opacity="0.5" />
+                          <ellipse cx="32" cy="74" rx="7" ry="2" fill="#94A3B8" opacity="0.5" />
+                          <ellipse cx="46" cy="74" rx="7" ry="2" fill="#94A3B8" opacity="0.5" />
+                          <ellipse cx="60" cy="74" rx="7" ry="2" fill="#94A3B8" opacity="0.5" />
+                          <ellipse cx="74" cy="73" rx="6" ry="2" fill="#94A3B8" opacity="0.5" />
                         </svg>
                       </motion.div>
                     )}
