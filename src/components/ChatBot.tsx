@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Bot, Keyboard, ExternalLink, ArrowRight, CornerDownLeft } from 'lucide-react';
 import { TypingTest } from './TypingTest';
@@ -366,20 +366,27 @@ export const ChatBot: React.FC = () => {
     setCooldownRemaining(seconds);
   };
 
-  // Footer visibility detector
+  // Footer visibility detector matching SocialsSidebar
   useEffect(() => {
-    const footer = document.querySelector('footer');
-    if (!footer) return;
+    const handleScroll = () => {
+      const footerEl = document.getElementById('contact') || document.querySelector('footer');
+      const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+      let footerVisible = isNearBottom;
+      if (!footerVisible && footerEl) {
+        const rect = footerEl.getBoundingClientRect();
+        // Hide if top of footer is in viewport
+        footerVisible = rect.top < window.innerHeight - 80;
+      }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsFooterVisible(entry.isIntersecting);
-      },
-      { threshold: 0.1 }
-    );
+      setIsFooterVisible(footerVisible);
+    };
 
-    observer.observe(footer);
-    return () => observer.disconnect();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   // Auto-scroll to bottom of conversation
