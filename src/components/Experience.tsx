@@ -1,5 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Calendar, MapPin, CheckCircle2 } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface ExperienceItem {
   role: string;
@@ -35,8 +39,38 @@ const experiences: ExperienceItem[] = [
 ];
 
 export default function Experience() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const island = containerRef.current?.parentElement;
+    if (island?.tagName === 'ASTRO-ISLAND') {
+      island.style.display = 'block';
+      island.style.width = '100%';
+    }
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      // Desktop layout: pin at top to create scroll stop effect
+      mm.add("(min-width: 768px)", () => {
+        if (!containerRef.current) return;
+
+        ScrollTrigger.create({
+          trigger: containerRef.current,
+          pin: true,
+          start: 'top top',
+          end: '+=500',
+          pinSpacing: true,
+          invalidateOnRefresh: true,
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="min-h-screen md:h-screen md:min-h-screen w-full flex flex-col items-center justify-center px-4 py-12 md:py-6 relative overflow-hidden" id="experience">
+    <section ref={containerRef} className="min-h-screen md:h-screen md:min-h-screen w-full flex flex-col items-center justify-center px-4 py-12 md:py-6 relative overflow-hidden bg-[#f8f8f8]" id="experience">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10 my-auto">
 
         {/* Subheading */}

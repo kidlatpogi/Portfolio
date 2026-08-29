@@ -1,13 +1,47 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import ScrollReveal from './ScrollReveal.tsx';
 import { Cpu, Sparkles } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const profileImage = "https://zeusbautista.site/Common/Bautista%20Zeus%20Angelo%20V..webp";
 const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Bautista%20Zeus%20Angelo%20V..webp";
 
 export default function About() {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const island = containerRef.current?.parentElement;
+    if (island?.tagName === 'ASTRO-ISLAND') {
+      island.style.display = 'block';
+      island.style.width = '100%';
+    }
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      // Desktop layout: pin at top to create scroll stop effect
+      mm.add("(min-width: 768px)", () => {
+        if (!containerRef.current) return;
+
+        ScrollTrigger.create({
+          trigger: containerRef.current,
+          pin: true,
+          start: 'top top',
+          end: '+=500',
+          pinSpacing: true,
+          invalidateOnRefresh: true,
+        });
+      });
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="min-h-screen md:h-screen md:min-h-screen w-full flex flex-col items-center justify-center px-4 py-12 md:py-6 relative overflow-hidden" id="about">
+    <section ref={containerRef} className="min-h-screen md:h-screen md:min-h-screen w-full flex flex-col items-center justify-center px-4 py-12 md:py-6 relative overflow-hidden bg-[#f8f8f8]" id="about">
       {/* Anchor targets for sub-navigation scroll links */}
       <div id="about-me" className="absolute top-0" />
 
@@ -23,14 +57,14 @@ export default function About() {
           About
         </h2>
 
-        {/* Main Narrative Paragraph with ScrollReveal */}
+        {/* Main Narrative Paragraph with ScrollReveal (Left-aligned, not justified) */}
         <div className="w-[95%] md:w-[95%] max-w-[2000px] flex justify-center mx-auto mb-8 md:mb-10">
           <ScrollReveal
             baseOpacity={0.08}
             enableBlur={false}
             baseRotation={2}
             blurStrength={12}
-            textClassName="text-black font-sans text-left md:text-justify tracking-normal leading-relaxed text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl"
+            textClassName="text-black font-sans text-left tracking-normal leading-relaxed text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl"
             wordAnimationEnd="top 55%"
           >
             Hi, I’m{' '}
@@ -70,7 +104,7 @@ export default function About() {
         {/* 3-Card Bento Showcase (Clean, No Icons, No Footers) */}
         <div className="w-[95%] md:w-[95%] max-w-[1600px] grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 mx-auto">
           
-          {/* Card 1: Philosophy - Kaizen */}
+          {/* Card 1: Philosophy - Kaizen in IT */}
           <div className="border-2 border-slate-200/80 bg-white p-6 md:p-8 rounded-3xl flex flex-col justify-start gap-2.5 hover:border-accent hover:shadow-[0_12px_28px_-8px_rgba(196,73,0,0.1)] transition-all duration-300 group cursor-target">
             <span className="font-mono text-xs uppercase tracking-wider text-slate-400 font-bold">
               Philosophy
@@ -79,7 +113,7 @@ export default function About() {
               Kaizen
             </h3>
             <p className="font-sans text-xs md:text-sm text-slate-600 leading-relaxed mt-0.5">
-              Dedicated to continuous, compounding improvement. Breaking down complex architectures and iterating relentlessly to craft faster, cleaner, and more resilient digital experiences.
+              Embracing the principle of continuous improvement within software engineering—refining codebases, optimizing architectural patterns, and constantly expanding technical capabilities with every sprint.
             </p>
           </div>
 
@@ -92,7 +126,7 @@ export default function About() {
               National University Dasmariñas
             </h3>
             <p className="font-sans text-xs md:text-sm text-slate-600 leading-relaxed mt-0.5">
-              Bachelor of Science in Information Technology Major in Mobile and Web Applications (BSIT-MWA). Based in Cavite, Philippines—focused on building production-ready mobile/web apps and AI solutions.
+              Pursuing a Bachelor of Science in Information Technology Major in Mobile and Web Applications (BSIT-MWA), focused on engineering high-performance web systems, responsive mobile applications, and intelligent AI tools.
             </p>
           </div>
 

@@ -8,7 +8,7 @@ export default function GithubHeatmap() {
   };
 
   return (
-    <section className="min-h-screen md:h-screen md:min-h-screen w-full flex flex-col items-center justify-center px-6 md:px-16 lg:px-24 max-w-[1400px] mx-auto py-12 md:py-6 select-none" id="github-activity">
+    <section className="w-full px-6 md:px-16 lg:px-24 max-w-[1400px] mx-auto py-16 md:py-20 mb-8 select-none" id="github-activity">
       
       {/* Centered Section Header */}
       <div className="flex flex-col items-center text-center mb-8 md:mb-10">
