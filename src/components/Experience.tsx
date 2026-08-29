@@ -1,46 +1,40 @@
 import React from 'react';
-import { Briefcase, Calendar, MapPin, CheckCircle2, Database, Cloud } from 'lucide-react';
-import ScrollReveal from './ScrollReveal.tsx';
+import { Calendar, MapPin, CheckCircle2 } from 'lucide-react';
 
 interface ExperienceItem {
   role: string;
   company: string;
   type: string;
-  description: string;
-  highlights: string[];
+  description?: string;
+  bullets: string[];
   duration: string;
   location: string;
-  tags: string[];
 }
 
 const experiences: ExperienceItem[] = [
   {
     role: 'IT Helper (Freelance)',
     company: 'Municipality of Silang, Cavite',
-    type: 'Freelance Government Tech',
-    description: 'Spearheaded the municipal birth records digitalization initiative, converting thousands of physical registry archives into high-speed searchable electronic records and integrating them into the civil registry database.',
-    highlights: [
-      'Digitalized Silang population civil and birth registry records with high data accuracy',
-      'Normalized schema records and integrated data into department relational database',
-      'Accelerated document lookup and retrieval efficiency for public civil officers'
+    type: 'Contract / Freelance',
+    bullets: [
+      'Spearheaded the municipal birth records digitalization initiative, converting physical written registry archives into standardized digital records.',
+      'Normalized data schema and integrated records into the municipal civil registry database to ensure high integrity and searchability.',
+      'Optimized document lookup times for administrative civil officers through structured database indexing.'
     ],
-    duration: 'Dec 2024 – Jan 2025',
-    location: 'Bulihan, Silang, Cavite',
-    tags: ['Database Architecture', 'Data Normalization', 'Data Integrity', 'Public Sector IT']
+    duration: 'December 2024 – January 2025',
+    location: 'Bulihan, Silang, Cavite'
   },
   {
     role: 'Registrar Assistant (OJT)',
-    company: 'Bulihan Integrated National Highschool',
-    type: 'Academic IT Operations',
-    description: 'Modernized the institutional academic filing infrastructure by transforming historical student transcripts and records into structured digital repositories with cloud-backed disaster recovery.',
-    highlights: [
-      'Processed and indexed high-volume student academic cumulative records',
-      'Deployed cloud storage workflows for rapid departmental search and record retrieval',
-      'Ensured student privacy compliance and organized digital folder taxonomy'
+    company: 'Bulihan Integrated National High School',
+    type: 'Internship / On-the-Job Training',
+    bullets: [
+      'Digitalized cumulative student academic records into organized, searchable electronic repositories.',
+      'Integrated institutional records with departmental cloud storage systems for secure, centralized access and disaster recovery.',
+      'Maintained student data privacy and adhered to organizational taxonomy standards for record classification.'
     ],
-    duration: 'April 2023 (OJT)',
-    location: 'Bulihan, Silang, Cavite',
-    tags: ['Cloud Storage', 'Records Management', 'Document Indexing', 'Workflow Optimization']
+    duration: 'April 2023',
+    location: 'Bulihan, Silang, Cavite'
   }
 ];
 
@@ -49,15 +43,10 @@ export default function Experience() {
     <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="experience">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
-        {/* Chapter Index + Subheading */}
-        <div className="flex items-center gap-2 mb-3">
-          <span className="font-mono text-xs font-bold text-accent uppercase tracking-[0.25em]">
-            03 //
-          </span>
-          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center">
-            My Career Journey
-          </span>
-        </div>
+        {/* Subheading */}
+        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
+          My Journey
+        </span>
 
         {/* "Experience" Heading */}
         <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.25rem] 2xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-16">
@@ -78,23 +67,24 @@ export default function Experience() {
               {/* Glowing Timeline Marker Node */}
               <div className="absolute left-4 md:left-[23px] top-8 w-5 h-5 rounded-full bg-white border-4 border-accent shadow-md shadow-accent/40 group-hover:scale-125 group-hover:bg-accent transition-all duration-300 hidden sm:block z-10" />
 
-              {/* Experience Milestone Card */}
+              {/* Experience Milestone Card - Proper ATS Structured */}
               <div className="w-full border-2 border-slate-200/80 bg-white p-7 md:p-10 rounded-3xl flex flex-col justify-between gap-6 transition-all duration-300 hover:border-accent hover:shadow-[0_16px_36px_-12px_rgba(196,73,0,0.12)] cursor-target">
 
-                {/* Top Row: Role, Company & Metadata */}
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-slate-100 pb-6">
+                {/* Top ATS Header: Role, Company, Employment Type & Date */}
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-slate-100 pb-5">
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-mono text-[11px] uppercase tracking-wider text-accent font-bold px-2.5 py-0.5 bg-orange-50 rounded-full border border-accent/20">
-                        {exp.type}
-                      </span>
-                    </div>
                     <h3 className="font-clash-semibold text-2xl md:text-3xl font-bold text-slate-900 group-hover:text-accent transition-colors duration-300">
                       {exp.role}
                     </h3>
-                    <p className="font-sans text-lg text-accent font-semibold mt-1">
-                      {exp.company}
-                    </p>
+                    <div className="flex flex-wrap items-center gap-2.5 mt-1.5">
+                      <p className="font-sans text-base md:text-lg text-accent font-semibold">
+                        {exp.company}
+                      </p>
+                      <span className="text-slate-300 hidden sm:inline">•</span>
+                      <span className="font-mono text-xs text-slate-500 font-semibold px-2 py-0.5 bg-slate-100 rounded-md">
+                        {exp.type}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex flex-wrap sm:flex-col gap-2 md:items-end flex-shrink-0">
@@ -109,34 +99,15 @@ export default function Experience() {
                   </div>
                 </div>
 
-                {/* Description & Key Highlights */}
-                <div className="flex flex-col gap-4">
-                  <p className="font-sans text-slate-700 text-sm md:text-base leading-relaxed">
-                    {exp.description}
-                  </p>
-
-                  {/* Bullet Highlights */}
-                  <div className="flex flex-col gap-2.5 mt-2">
-                    {exp.highlights.map((item, hIdx) => (
-                      <div key={hIdx} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-1" />
-                        <span className="font-sans text-sm text-slate-600 leading-relaxed">
-                          {item}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Tech Tags */}
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-100">
-                  {exp.tags.map((tag, tIdx) => (
-                    <span
-                      key={tIdx}
-                      className="font-mono text-xs text-slate-600 bg-slate-50 border border-slate-200/80 px-3 py-1 rounded-xl font-medium group-hover:border-accent/30 transition-colors"
-                    >
-                      {tag}
-                    </span>
+                {/* ATS Bullet Points */}
+                <div className="flex flex-col gap-3">
+                  {exp.bullets.map((bullet, bIdx) => (
+                    <div key={bIdx} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-1" />
+                      <p className="font-sans text-sm md:text-base text-slate-700 leading-relaxed">
+                        {bullet}
+                      </p>
+                    </div>
                   ))}
                 </div>
 

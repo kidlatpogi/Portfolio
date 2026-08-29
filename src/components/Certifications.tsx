@@ -402,39 +402,7 @@ export default function Certifications() {
         #certifications {
           --cert-card-width: 340px;
         }
-        @media (min-width: 768px) and (max-width: 1023px) {
-          #certifications { --cert-card-width: 250px; }
-        }
-        @media (min-width: 1024px) and (max-width: 1279px) {
-          #certifications { --cert-card-width: 275px; }
-        }
-        @media (min-width: 1280px) and (max-width: 1535px) {
-          #certifications { --cert-card-width: 300px; }
-        }
-        /* Height-based corrections for smaller laptops */
-        @media (min-width: 768px) and (max-height: 800px) {
-          #certifications { --cert-card-width: 240px; }
-        }
-        @media (min-width: 1024px) and (max-height: 800px) {
-          #certifications { --cert-card-width: 250px; }
-        }
-        @media (min-width: 1280px) and (max-height: 800px) {
-          #certifications { --cert-card-width: 270px; }
-        }
-        @media (min-width: 1536px) and (max-height: 900px) {
-          #certifications { --cert-card-width: 300px; }
-        }
-
-        #certifications,
-        #certifications * {
-          scrollbar-width: none !important;
-          -ms-overflow-style: none !important;
-        }
-        #certifications::-webkit-scrollbar,
-        #certifications *::-webkit-scrollbar {
-          display: none !important;
-        }
-      `}</style>
+        @media (min-width: 768px) and (max-width: 1023px) {\n          #certifications { --cert-card-width: 250px; }\n        }\n        @media (min-width: 1024px) and (max-width: 1279px) {\n          #certifications { --cert-card-width: 275px; }\n        }\n        @media (min-width: 1280px) and (max-width: 1535px) {\n          #certifications { --cert-card-width: 300px; }\n        }\n        /* Height-based corrections for smaller laptops */\n        @media (min-width: 768px) and (max-height: 800px) {\n          #certifications { --cert-card-width: 240px; }\n        }\n        @media (min-width: 1024px) and (max-height: 800px) {\n          #certifications { --cert-card-width: 250px; }\n        }\n        @media (min-width: 1280px) and (max-height: 800px) {\n          #certifications { --cert-card-width: 270px; }\n        }\n        @media (min-width: 1536px) and (max-height: 900px) {\n          #certifications { --cert-card-width: 300px; }\n        }\n\n        #certifications,\n        #certifications * {\n          scrollbar-width: none !important;\n          -ms-overflow-style: none !important;\n        }\n        #certifications::-webkit-scrollbar,\n        #certifications *::-webkit-scrollbar {\n          display: none !important;\n        }\n      `}</style>
       
       <div className="absolute inset-0 z-0 pointer-events-none">
         <ShapeGrid
@@ -627,17 +595,17 @@ export default function Certifications() {
         </div>
       </div>
 
-      <div ref={badgesContainerRef} className="relative z-10 w-full flex flex-col items-center pt-12 pb-24 md:py-24">
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-16">
-          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
+      <div ref={badgesContainerRef} className="relative z-10 w-full min-h-screen md:h-screen md:min-h-screen flex flex-col justify-center items-center py-12 md:py-6 overflow-hidden">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-8 md:mb-6 flex-shrink-0">
+          <span className="font-array-semibold text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-1.5">
             Skill Endorsements
           </span>
-          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[4rem] 2xl:text-[4.5rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
+          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-5xl lg:text-[2.75rem] xl:text-[3.25rem] 2xl:text-[3.75rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
             Badges
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 md:gap-8 justify-center items-stretch w-full max-w-[1300px] mx-auto px-6 md:px-24">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 justify-center items-stretch w-full max-w-[1300px] mx-auto px-6 md:px-24">
           {badgesData.map((badge, index) => (
             <div
               key={badge.name}
