@@ -179,7 +179,7 @@ export default function Hero() {
                     <img
                       src={profileImageHover}
                       alt="Zeus Angelo Bautista smiling"
-                      loading="eager"
+                      loading="lazy"
                       decoding="async"
                       onError={(event) => {
                         const image = event.currentTarget;
