@@ -72,14 +72,15 @@ export default function Designs() {
           {
             x: () => -getScrollDistance(),
             ease: 'none',
+            force3D: true,
             scrollTrigger: {
               trigger: containerRef.current,
               pin: true,
-              scrub: 1,
+              scrub: 0.3,
               start: 'top top',
-              end: () => `+=${getScrollDistance() * 1.1}`,
+              end: () => `+=${getScrollDistance()}`,
               invalidateOnRefresh: true,
-              anticipatePin: 1,
+              anticipatePin: 0,
             },
           }
         );
@@ -97,7 +98,7 @@ export default function Designs() {
   }, []);
 
   return (
-    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-transparent pt-4 pb-12 md:pt-0 z-20">
+    <section ref={containerRef} id="designs" className="relative w-full overflow-hidden bg-transparent pt-4 pb-12 md:pt-0 md:pb-0 z-20">
       {/* Centering calculations, adaptive widths, and scrollbar hiding scoped to Designs section */}
       <style>{`
         #designs {
@@ -174,7 +175,7 @@ export default function Designs() {
       `}</style>
 
       {/* On Desktop: Sticky full-screen view via GSAP pin. On Mobile: static relative view */}
-      <div className="designs-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 z-10">
+      <div className="designs-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 md:py-0 z-10">
 
         {/* Section Header */}
         <div className="designs-header w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-8 flex flex-col items-start z-10 flex-shrink-0">
@@ -193,6 +194,7 @@ export default function Designs() {
         <div
           ref={scrollSectionRef}
           className="designs-track grid grid-cols-2 grid-rows-3 gap-4 max-sm:gap-3 md:flex md:flex-row md:gap-14 items-center w-full md:w-max will-change-transform flex-grow md:flex-grow-0 z-10"
+          style={{ transform: 'translate3d(0, 0, 0)', backfaceVisibility: 'hidden' }}
         >
           {designsData.map((item, index) => {
             const num = String(index + 1).padStart(2, '0');
@@ -202,7 +204,7 @@ export default function Designs() {
                 className="designs-card flex-shrink-0 w-full md:w-[var(--card-width)] flex flex-col group cursor-target select-none"
               >
                 {/* 4:5 Aspect Ratio Rectangular Poster Card */}
-                <div className="relative aspect-[4/5] w-full rounded-2xl md:rounded-3xl overflow-hidden bg-white/80 border border-slate-200/80 shadow-md group-hover:shadow-xl group-hover:border-accent/40 transition-all duration-300">
+                <div className="relative aspect-[4/5] w-full rounded-2xl md:rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-md group-hover:shadow-xl group-hover:border-accent/40 transition-all duration-300">
                   <img
                     src={item.image}
                     alt={item.title}

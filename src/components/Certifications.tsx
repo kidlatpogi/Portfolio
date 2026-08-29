@@ -1,192 +1,194 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ExternalLink, X } from 'lucide-react';
+import { ExternalLink, Award, CheckCircle2, ShieldCheck, X } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-type Certificate = {
-  title: string;
-  issuer: string;
-  date: string;
-  color: string;
-  image: string;
-  backupImage: string;
-  verifyUrl: string;
-  actionLabel?: string;
-};
-
-type Badge = {
-  name: string;
-  issuer: string;
-  date: string;
-  initials: string;
-  color: string;
-  image: string;
-  backupImage: string;
-  verifyUrl: string;
-};
-
-type SelectedItem = ({ type: 'cert' } & Certificate) | ({ type: 'badge' } & Badge);
-
 const badgeVerifyUrls = {
-  databases: "https://www.credly.com/badges/ec097417-e36a-4642-b03b-df96919ae380/public_url",
-  htmlAndCss: "https://www.credly.com/badges/0d6ce002-6844-49de-976f-df4cd26edea0/public_url",
-  webDevelopmentFundamentals: "https://www.credly.com/badges/1cce4817-3dd9-4fd5-b508-594add0cb399/public_url",
-  htmlEssentials: "https://www.credly.com/badges/b67c1cd5-ad38-4666-89fd-f4cdcf974d8c/public_url",
-  cssEssentials: "https://www.credly.com/badges/c1acd1ec-2db1-4b12-923b-0841a1668f38/public_url",
-  javascriptEssentials1: "https://www.credly.com/badges/6dac7d87-44c6-49fa-a6cf-6c7d55904935/public_url",
-  javascriptEssentials2: "https://www.credly.com/badges/83527a67-c83a-4711-a666-da79ab09933b/public_url",
-  vertexAiPromptDesign: "https://www.credly.com/badges/7276c4e4-eedb-48d6-b445-bc68aa49fcd4/public_url"
+  webDevelopmentFundamentals: "https://www.credly.com/badges/61fe2198-4c4b-4a50-b46a-7f61c3608ca4/public_url",
+  htmlEssentials: "https://www.credly.com/badges/c181fe6c-0331-41ee-8267-2704db662491/public_url",
+  cssEssentials: "https://www.credly.com/badges/1aebcc96-3fa1-4963-bfa5-7cf05f935f1a/public_url",
+  javascriptEssentials1: "https://www.credly.com/badges/1fe5fb6c-cb23-42e6-9fd6-cbfe88719ce3/public_url",
+  javascriptEssentials2: "https://www.credly.com/badges/e8838ee2-78d1-4db8-8422-799ffb738e4a/public_url",
+  vertexAiPromptDesign: "https://www.cloudskillsboost.google/public_profiles/80e9275a-4b9d-47be-a56e-6fe130fe300c/badges/14841961",
+  ciscoAcademyYear: "https://www.credly.com/organizations/cisco/badges",
+  devOps101: "https://simpli-web.app.link/e/E14x8Xg6bRb",
+  introCloudComputing: "https://simpli-web.app.link/e/Gf8Zq0wcbRb",
+  gitTraining: "https://simpli-web.app.link/e/i0i5iC0hbRb",
+  htmlCssSpecialist: "https://www.credly.com/badges/632488a0-7b56-4c9f-b98f-07e03aaec46c/public_url",
+  databasesSpecialist: "https://www.credly.com/badges/e05b5efb-6401-4475-b695-177ee13bbf7a/public_url",
+  responsiveWebDesign: "https://www.freecodecamp.org/certification/Zeus_Angelo_Bautista/responsive-web-design"
 };
 
-const certificationsData: Certificate[] = [
-  // 1. Cisco Networking Academy
+const certificationsData = [
+  {
+    title: "Web Development Fundamentals",
+    issuer: "IBM SkillsBuild",
+    date: "Dec 2024",
+    skills: ["Client-Server Architecture", "Web Protocols", "Frontend Development"],
+    color: "#0891b2",
+    image: "https://zeusbautista.site/Certifications/Web%20Development%20Fundamentals%20Certificate.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Web%20Development%20Fundamentals%20Certificate.webp",
+    verifyUrl: badgeVerifyUrls.webDevelopmentFundamentals
+  },
   {
     title: "HTML Essentials",
     issuer: "Cisco Networking Academy",
-    date: "Verified",
+    date: "Aug 2024",
+    skills: ["HTML5", "Document Structure", "Web Accessibility", "SEO Basics"],
     color: "#dc2626",
-    image: "https://zeusbautista.site/Certifications/Html%20Essentials.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Html%20Essentials.webp",
+    image: "https://zeusbautista.site/Certifications/HTML%20Essentials%20Certificate.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/HTML%20Essentials%20Certificate.webp",
     verifyUrl: badgeVerifyUrls.htmlEssentials
   },
   {
     title: "CSS Essentials",
     issuer: "Cisco Networking Academy",
-    date: "Verified",
+    date: "Aug 2024",
+    skills: ["CSS3", "Flexbox & Grid", "Responsive Design", "Animations"],
     color: "#0ea5e9",
-    image: "https://zeusbautista.site/Certifications/CSS%20Essentials.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/CSS%20Essentials.webp",
+    image: "https://zeusbautista.site/Certifications/CSS%20Essentials%20Certificate.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/CSS%20Essentials%20Certificate.webp",
     verifyUrl: badgeVerifyUrls.cssEssentials
   },
   {
     title: "JavaScript Essentials 1",
     issuer: "Cisco Networking Academy",
-    date: "Verified",
+    date: "Aug 2024",
+    skills: ["JS Basics", "Control Flow", "Functions", "DOM Manipulation"],
     color: "#ca8a04",
-    image: "https://zeusbautista.site/Certifications/JS%20Essentials%201.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/JS%20Essentials%201.webp",
+    image: "https://zeusbautista.site/Certifications/JavaScript%20Essentials%201%20Certificate.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/JavaScript%20Essentials%201%20Certificate.webp",
     verifyUrl: badgeVerifyUrls.javascriptEssentials1
   },
   {
     title: "JavaScript Essentials 2",
     issuer: "Cisco Networking Academy",
-    date: "Verified",
+    date: "Sep 2024",
+    skills: ["OOP", "Async JS", "Promises & APIs", "Error Handling"],
     color: "#eab308",
-    image: "https://zeusbautista.site/Certifications/JS%20Essentials%202.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/JS%20Essentials%202.webp",
+    image: "https://zeusbautista.site/Certifications/JavaScript%20Essentials%202%20Certificate.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/JavaScript%20Essentials%202%20Certificate.webp",
     verifyUrl: badgeVerifyUrls.javascriptEssentials2
   },
-
-  // 2. IT Specialist & IBM
   {
-    title: "Web Development Fundamentals",
-    issuer: "IBM SkillsBuild",
-    date: "Verified",
-    color: "#0891b2",
-    image: "https://zeusbautista.site/Certifications/Web%20Development%20Fundamentals.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Web%20Development%20Fundamentals.webp",
-    verifyUrl: badgeVerifyUrls.webDevelopmentFundamentals
+    title: "Prompt Design in Vertex AI",
+    issuer: "Google Cloud Skills Boost",
+    date: "Feb 2025",
+    skills: ["Vertex AI", "Prompt Engineering", "LLM Evaluation", "GenAI"],
+    color: "#4285f4",
+    image: "https://zeusbautista.site/Certifications/Prompt%20Design%20in%20Vertex%20AI%20Skill%20Badge%20Certificate.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Prompt%20Design%20in%20Vertex%20AI%20Skill%20Badge%20Certificate.webp",
+    verifyUrl: badgeVerifyUrls.vertexAiPromptDesign
   },
   {
-    title: "HTML and CSS",
-    issuer: "IT Specialist",
-    date: "Verified",
-    color: "#f97316",
-    image: "https://zeusbautista.site/Certifications/HTML%20and%20CSS.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/HTML%20and%20CSS.webp",
-    verifyUrl: badgeVerifyUrls.htmlAndCss
+    title: "DevOps 101",
+    issuer: "Simplilearn SkillUp",
+    date: "Feb 2025",
+    skills: ["DevOps Lifecycle", "CI/CD Concepts", "Automation"],
+    color: "#ea580c",
+    image: "https://zeusbautista.site/Certifications/DevOps%20101%20Certificate.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/DevOps%20101%20Certificate.webp",
+    verifyUrl: badgeVerifyUrls.devOps101,
+    actionLabel: "Verify Certificate"
   },
   {
-    title: "Database",
-    issuer: "IT Specialist",
-    date: "Verified",
-    color: "#2563eb",
-    image: "https://zeusbautista.site/Certifications/Database.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Database.webp",
-    verifyUrl: badgeVerifyUrls.databases
+    title: "Introduction to Cloud Computing",
+    issuer: "Simplilearn SkillUp",
+    date: "Feb 2025",
+    skills: ["Cloud Concepts", "IaaS / PaaS / SaaS", "Virtualization"],
+    color: "#0284c7",
+    image: "https://zeusbautista.site/Certifications/Introduction%20to%20Cloud%20Computing%20Certificate.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Introduction%20to%20Cloud%20Computing%20Certificate.webp",
+    verifyUrl: badgeVerifyUrls.introCloudComputing,
+    actionLabel: "Verify Certificate"
   },
-
-  // 3. Simplilearn SkillUp
   {
     title: "Git Training",
     issuer: "Simplilearn SkillUp",
-    date: "Verified",
-    color: "#ef4444",
-    image: "https://zeusbautista.site/Certifications/Git%20Training.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Git%20Training.webp",
-    verifyUrl: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true"
-  },
-  {
-    title: "Cloud Computing",
-    issuer: "Simplilearn SkillUp",
-    date: "Verified",
+    date: "Feb 2025",
+    skills: ["Git", "Version Control", "GitHub Workflows", "Branching"],
     color: "#f97316",
-    image: "https://zeusbautista.site/Certifications/Cloud%20Computing.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Cloud%20Computing.webp",
-    verifyUrl: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true"
+    image: "https://zeusbautista.site/Certifications/Git%20Training%20Certificate.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Git%20Training%20Certificate.webp",
+    verifyUrl: badgeVerifyUrls.gitTraining,
+    actionLabel: "Verify Certificate"
   },
   {
-    title: "DevOps",
-    issuer: "Simplilearn SkillUp",
-    date: "Verified",
-    color: "#7c3aed",
-    image: "https://zeusbautista.site/Certifications/DevOps.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/DevOps.webp",
-    verifyUrl: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true"
+    title: "HTML and CSS",
+    issuer: "IT Specialist (Certiport)",
+    date: "Aug 2024",
+    skills: ["Modern HTML5", "Responsive CSS3", "Web Layouts"],
+    color: "#059669",
+    image: "https://zeusbautista.site/Certifications/Information%20Technology%20Specialist%20-%20HTML%20and%20CSS.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Information%20Technology%20Specialist%20-%20HTML%20and%20CSS.webp",
+    verifyUrl: badgeVerifyUrls.htmlCssSpecialist
   },
-
-  // 4. FreeCodeCamp
+  {
+    title: "Databases",
+    issuer: "IT Specialist (Certiport)",
+    date: "Aug 2024",
+    skills: ["Database Design", "SQL Queries", "Relational Models", "Indexes"],
+    color: "#7c3aed",
+    image: "https://zeusbautista.site/Certifications/Information%20Technology%20Specialist%20-%20Databases.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Information%20Technology%20Specialist%20-%20Databases.webp",
+    verifyUrl: badgeVerifyUrls.databasesSpecialist
+  },
   {
     title: "Responsive Web Design",
-    issuer: "Web Design Certification",
-    date: "Verified",
-    color: "#10b981",
-    image: "https://zeusbautista.site/Certifications/Responsive%20Web%20Design.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Responsive%20Web%20Design.webp",
-    verifyUrl: "https://zeusbautista.site/Certifications/Responsive%20Web%20Design.webp",
-    actionLabel: "View Credential"
-  },
-  {
-    title: "Coming Soon",
-    issuer: "Future Certification",
-    date: "TBD",
-    color: "#64748b",
-    image: "",
-    backupImage: "",
-    verifyUrl: "#",
-    actionLabel: "Coming Soon"
+    issuer: "freeCodeCamp",
+    date: "Feb 2024",
+    skills: ["HTML5", "CSS3", "Flexbox", "CSS Grid", "Responsive Design"],
+    color: "#0a0a23",
+    image: "https://zeusbautista.site/Certifications/Responsive%20Web%20Design%20Certificate.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Responsive%20Web%20Design%20Certificate.webp",
+    verifyUrl: badgeVerifyUrls.responsiveWebDesign,
+    actionLabel: "Verify Certificate"
   }
 ];
 
-const badgesData: Badge[] = [
+interface SelectedItem {
+  type: 'cert' | 'badge';
+  title?: string;
+  name?: string;
+  issuer: string;
+  date?: string;
+  skills?: string[];
+  color: string;
+  image?: string;
+  backupImage?: string;
+  verifyUrl: string;
+  actionLabel?: string;
+  description?: string;
+}
+
+const badgesData = [
   {
-    name: "IT Specialist - Databases",
+    name: "Information Technology Specialist - HTML and CSS",
+    issuer: "Certiport",
+    date: "Verified",
+    initials: "HTML",
+    color: "#059669",
+    image: "https://zeusbautista.site/Badges/information-technology-specialist-html-and-css.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/information-technology-specialist-html-and-css.webp",
+    verifyUrl: badgeVerifyUrls.htmlCssSpecialist
+  },
+  {
+    name: "Information Technology Specialist - Databases",
     issuer: "Certiport",
     date: "Verified",
     initials: "DB",
-    color: "#2563eb",
-    image: "https://zeusbautista.site/Badges/it-specialist-databases.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/it-specialist-databases.webp",
-    verifyUrl: badgeVerifyUrls.databases
-  },
-  {
-    name: "IT Specialist - HTML and CSS",
-    issuer: "Certiport",
-    date: "Verified",
-    initials: "HC",
-    color: "#f97316",
-    image: "https://zeusbautista.site/Badges/it-specialist-html-and-css.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/it-specialist-html-and-css.webp",
-    verifyUrl: badgeVerifyUrls.htmlAndCss
+    color: "#7c3aed",
+    image: "https://zeusbautista.site/Badges/information-technology-specialist-databases.webp",
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/information-technology-specialist-databases.webp",
+    verifyUrl: badgeVerifyUrls.databasesSpecialist
   },
   {
     name: "Web Development Fundamentals",
     issuer: "IBM SkillsBuild",
     date: "Verified",
-    initials: "WD",
+    initials: "WEB",
     color: "#0891b2",
     image: "https://zeusbautista.site/Badges/web-development-fundamentals.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/web-development-fundamentals.webp",
@@ -346,22 +348,24 @@ export default function Certifications() {
           scrollTrigger: {
             trigger: certScrollPinnedContainerRef.current,
             pin: true,
-            scrub: 1,
+            scrub: 0.3,
             start: 'top top',
             end: () => `+=${getScrollAmt()}`,
             invalidateOnRefresh: true,
-            anticipatePin: 1
+            anticipatePin: 0
           }
         });
 
         tl.to(row1Ref.current, {
           x: () => -getScrollAmt(),
-          ease: 'none'
+          ease: 'none',
+          force3D: true
         }, 0);
 
         tl.to(row2Ref.current, {
           x: () => getScrollAmt(),
-          ease: 'none'
+          ease: 'none',
+          force3D: true
         }, 0);
       });
 
@@ -394,7 +398,7 @@ export default function Certifications() {
   }, []);
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-transparent py-12 md:py-0 z-10">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-transparent py-6 md:py-0 z-10">
       <style>{`
         #certifications {
           --cert-card-width: 340px;
@@ -422,8 +426,7 @@ export default function Certifications() {
           #certifications { --cert-card-width: 300px; }
         }
 
-        #certifications,
-        #certifications * {
+        #certifications,\n        #certifications * {
           scrollbar-width: none !important;
           -ms-overflow-style: none !important;
         }
@@ -433,9 +436,9 @@ export default function Certifications() {
         }
       `}</style>
 
-      {/* On Desktop: Sticky full-screen view. On Mobile: static relative view */}
-      <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 md:py-6 z-10">
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-10 sm:mb-16 md:mb-8 flex-shrink-0">
+      {/* On Desktop: Sticky full-screen view (100vh). On Mobile: static relative view */}
+      <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 md:py-4 z-10">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-10 sm:mb-16 md:mb-6 flex-shrink-0">
           <span className="font-array-semibold text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-1.5">
             Milestones & Credentials
           </span>
@@ -451,7 +454,7 @@ export default function Certifications() {
               <div
                 key={`mobile-${cert.title}`}
                 onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-                className="cert-grid-item w-full relative group overflow-hidden border border-slate-200 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-3 sm:p-5 cursor-pointer"
+                className="cert-grid-item w-full relative group overflow-hidden border border-slate-200 bg-white rounded-xl sm:rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-3 sm:p-5 cursor-pointer"
               >
                 <div className="cursor-target w-full aspect-[1.6/1] relative rounded-lg sm:rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-2.5 sm:mb-4 bg-white flex items-center justify-center">
                   {cert.image ? (
@@ -499,17 +502,18 @@ export default function Certifications() {
         </div>
 
         {/* Scroll rows - Desktop */}
-        <div className="hidden md:flex flex-col gap-6 w-full overflow-hidden">
+        <div className="hidden md:flex flex-col gap-5 w-full overflow-hidden">
           {/* Row 1 - scrolling left */}
           <div
             ref={row1Ref}
             className="flex items-center gap-8 will-change-transform pl-[10vw] pr-[10vw] w-max"
+            style={{ transform: 'translate3d(0, 0, 0)', backfaceVisibility: 'hidden' }}
           >
             {certificationsData.slice(0, 6).map((cert) => (
               <div
                 key={`desktop-row1-${cert.title}`}
                 onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-                className="cert-grid-item w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer"
+                className="cert-grid-item w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200/90 bg-white rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer"
               >
                 <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-3 bg-white flex items-center justify-center">
                   {cert.image ? (
@@ -559,12 +563,13 @@ export default function Certifications() {
           <div
             ref={row2Ref}
             className="flex items-center gap-8 will-change-transform pl-[10vw] pr-[10vw] w-max self-end"
+            style={{ transform: 'translate3d(0, 0, 0)', backfaceVisibility: 'hidden' }}
           >
             {certificationsData.slice(6, 12).map((cert) => (
               <div
                 key={`desktop-row2-${cert.title}`}
                 onClick={() => setSelectedItem({ type: 'cert', ...cert })}
-                className="cert-grid-item w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200 bg-white/75 backdrop-blur-sm rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer"
+                className="cert-grid-item w-[var(--cert-card-width)] flex-shrink-0 relative group overflow-hidden border border-slate-200/90 bg-white rounded-2xl shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 flex flex-col p-4 cursor-pointer"
               >
                 <div className="cursor-target w-full aspect-[1.6/1] relative rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.04)] border border-slate-200/70 mb-3 bg-white flex items-center justify-center">
                   {cert.image ? (
@@ -612,8 +617,9 @@ export default function Certifications() {
         </div>
       </div>
 
-      <div ref={badgesContainerRef} className="relative z-10 w-full min-h-screen md:h-screen md:min-h-screen flex flex-col justify-center items-center py-16 md:py-8 mt-12 md:mt-20 overflow-hidden">
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-8 md:mb-6 flex-shrink-0">
+      {/* Badges Section directly follows Certifications with natural clean spacing */}
+      <div ref={badgesContainerRef} className="relative z-10 w-full flex flex-col justify-center items-center py-12 md:py-16 md:min-h-screen overflow-hidden">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-8 md:mb-8 flex-shrink-0">
           <span className="font-array-semibold text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-1.5">
             Skill Endorsements
           </span>
@@ -627,7 +633,7 @@ export default function Certifications() {
             <div
               key={badge.name}
               onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-              className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-between bg-white/75 border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 backdrop-blur-sm cursor-pointer p-4 sm:p-5 rounded-2xl min-h-[210px] text-center"
+              className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-between bg-white border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer p-4 sm:p-5 rounded-2xl min-h-[210px] text-center"
             >
               <a
                 href={badge.verifyUrl}
@@ -651,11 +657,11 @@ export default function Certifications() {
                 />
               </div>
 
-              <div className="w-full">
-                <span style={{ color: badge.color }} className="font-mono text-[9px] md:text-[10px] font-bold uppercase tracking-wider">
+              <div className="flex flex-col items-center w-full mt-auto">
+                <span style={{ color: badge.color }} className="font-mono text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-1">
                   {badge.issuer}
                 </span>
-                <h3 className="font-sans text-xs md:text-sm font-bold text-slate-700 mt-1 leading-snug">
+                <h3 className="font-sans text-xs sm:text-[13px] font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors line-clamp-2">
                   {badge.name}
                 </h3>
               </div>
@@ -664,55 +670,77 @@ export default function Certifications() {
         </div>
       </div>
 
-      {selectedItem && typeof document !== 'undefined' && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md">
+      {/* Verification & Detail Modal */}
+      {selectedItem && (
+        <div
+          onClick={() => setSelectedItem(null)}
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+        >
           <div
-            className="relative w-full max-w-lg bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in-95 duration-200"
           >
             <button
               onClick={() => setSelectedItem(null)}
-              className="absolute top-4 right-4 p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+              aria-label="Close modal"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <div className="w-48 sm:w-56 aspect-square rounded-2xl overflow-hidden mb-5 border border-slate-100 shadow-sm flex items-center justify-center bg-slate-50 p-2">
-              <CredentialImage
-                src={selectedItem.image}
-                fallbackSrc={selectedItem.backupImage}
-                alt={selectedItem.type === 'cert' ? selectedItem.title : selectedItem.name}
-                className="w-full h-full object-contain"
-              />
+            <div className="flex flex-col items-center text-center">
+              {selectedItem.image && (
+                <div className={`w-full ${selectedItem.type === 'badge' ? 'max-w-[180px] aspect-square' : 'aspect-[1.6/1]'} rounded-xl overflow-hidden mb-5 border border-slate-100 shadow-sm flex items-center justify-center bg-slate-50`}>
+                  <img
+                    src={selectedItem.image}
+                    alt={selectedItem.title || selectedItem.name || 'Credential'}
+                    className={`w-full h-full ${selectedItem.type === 'badge' ? 'object-contain' : 'object-cover'}`}
+                  />
+                </div>
+              )}
+
+              <span
+                style={{ color: selectedItem.color }}
+                className="font-mono text-xs font-bold uppercase tracking-wider mb-1"
+              >
+                {selectedItem.issuer}
+              </span>
+
+              <h3 className="font-sans text-lg sm:text-xl font-bold text-slate-900 mb-2">
+                {selectedItem.title || selectedItem.name}
+              </h3>
+
+              {selectedItem.date && (
+                <span className="font-mono text-xs text-slate-400 mb-4">
+                  Issued: {selectedItem.date}
+                </span>
+              )}
+
+              {selectedItem.skills && selectedItem.skills.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 justify-center mb-6">
+                  {selectedItem.skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="font-mono text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full font-medium"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <a
+                href={selectedItem.verifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-accent hover:bg-accent/90 text-white font-sans font-semibold rounded-xl transition-colors shadow-sm"
+              >
+                <span>{selectedItem.actionLabel || "Verify on Official Issuer"}</span>
+                <ExternalLink className="w-4 h-4" />
+              </a>
             </div>
-
-            <span
-              style={{ color: selectedItem.color }}
-              className="font-mono text-xs uppercase font-bold tracking-wider mb-1.5"
-            >
-              {selectedItem.issuer}
-            </span>
-
-            <h3 className="font-clash-semibold text-xl sm:text-2xl font-bold text-slate-900 mb-2 leading-snug">
-              {selectedItem.type === 'cert' ? selectedItem.title : selectedItem.name}
-            </h3>
-
-            <p className="font-sans text-xs sm:text-sm text-slate-500 mb-6 leading-relaxed">
-              Official credential verification powered by Credly, Certiport, Cisco, or issuing institute.
-            </p>
-
-            <a
-              href={selectedItem.verifyUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-3 px-6 bg-accent hover:bg-accent/90 text-white rounded-xl font-sans text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-md shadow-accent/20"
-            >
-              <span>Verify on Official Portal</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
           </div>
-        </div>,
-        document.body
+        </div>
       )}
     </section>
   );
