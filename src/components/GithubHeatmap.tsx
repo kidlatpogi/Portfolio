@@ -8,23 +8,23 @@ export default function GithubHeatmap() {
   };
 
   return (
-    <section className="w-full px-6 md:px-16 lg:px-24 max-w-[1400px] mx-auto mb-12 select-none" id="github-activity">
+    <section className="min-h-screen md:h-screen md:min-h-screen w-full flex flex-col items-center justify-center px-6 md:px-16 lg:px-24 max-w-[1400px] mx-auto py-12 md:py-6 select-none" id="github-activity">
       
-      {/* Centered Section Header (matching Designs.tsx style but centered and outside the card) */}
-      <div className="flex flex-col items-center text-center mb-12">
+      {/* Centered Section Header */}
+      <div className="flex flex-col items-center text-center mb-8 md:mb-10">
         <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
           Code Activity
         </span>
-        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4rem] 2xl:text-[4.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none">
+        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[3.75rem] 2xl:text-[4.25rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none">
           Contributions
         </h2>
-        <p className="font-sans text-sm md:text-base text-slate-500 leading-relaxed max-w-[420px] mt-4">
+        <p className="font-sans text-xs md:text-sm text-slate-500 leading-relaxed max-w-[440px] mt-3">
           Active open-source development contributions and commit history fetched live from GitHub.
         </p>
       </div>
 
       {/* Card container containing only the Heatmap graph and bottom actions */}
-      <div className="flex flex-col gap-8 p-6 md:p-10 rounded-2xl bg-white border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <div className="w-full flex flex-col gap-6 md:gap-8 p-6 md:p-8 rounded-3xl bg-white border-2 border-slate-200/80 shadow-sm hover:shadow-md transition-shadow duration-300">
         
         {/* Heatmap graph container */}
         <div className="w-full overflow-x-auto flex justify-center py-2 scrollbar-hide data-lenis-prevent">
