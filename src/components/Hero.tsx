@@ -1,5 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { getHolidaySeason, type HolidaySeason } from '../utils/seasonal';
 
 const profileImage = "https://zeusbautista.site/Common/Profile%20Picture.webp";
 const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Profile%20Picture.webp";
@@ -7,10 +8,17 @@ const profileImageHover = "https://zeusbautista.site/Common/Bautista%20Zeus%20An
 const profileImageHoverBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Bautista%20Zeus%20Angelo%20V..webp";
 
 export default function Hero() {
-  const [startStrikethrough, setStartStrikethrough] = React.useState(false);
-  const [isProfileHovered, setIsProfileHovered] = React.useState(false);
+  const [startStrikethrough, setStartStrikethrough] = useState(false);
+  const [isProfileHovered, setIsProfileHovered] = useState(false);
+  const [season, setSeason] = useState<HolidaySeason>('none');
+  const [override, setOverride] = useState<HolidaySeason | null>(null);
 
-  React.useEffect(() => {
+  const activeSeason = override ?? season;
+  const isChristmas = activeSeason === 'christmas';
+
+  useEffect(() => {
+    setSeason(getHolidaySeason());
+
     const isPreloaderGone = typeof document !== 'undefined' && !document.getElementById('preloader');
     if (isPreloaderGone) {
       const timer = setTimeout(() => {
@@ -25,11 +33,30 @@ export default function Hero() {
       }, 400);
     };
 
+    const handleSeasonalOverride = (e: Event) => {
+      const customEvent = e as CustomEvent<HolidaySeason | 'auto'>;
+      if (customEvent.detail === 'auto') {
+        setOverride(null);
+      } else {
+        setOverride(customEvent.detail);
+      }
+    };
+
     window.addEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
+    window.addEventListener('setSeasonalOverride', handleSeasonalOverride);
+
     return () => {
       window.removeEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
+      window.removeEventListener('setSeasonalOverride', handleSeasonalOverride);
     };
   }, []);
+
+  const triggerSimulation = (targetSeason: HolidaySeason) => {
+    const nextVal = override === targetSeason ? 'auto' : targetSeason;
+    const finalSeason = nextVal === 'auto' ? null : targetSeason;
+    setOverride(finalSeason);
+    window.dispatchEvent(new CustomEvent('setSeasonalOverride', { detail: nextVal }));
+  };
 
   return (
     <section className="min-h-screen w-full flex items-center justify-center px-4 py-12 md:p-12 relative overflow-hidden" id="home">
@@ -76,38 +103,82 @@ export default function Hero() {
                 </div>
 
                 <div
-                  className="relative w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-[9.5rem] xl:h-[9.5rem] 2xl:w-40 2xl:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10 cursor-pointer overflow-hidden"
+                  className="relative w-14 h-14 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-[9.5rem] xl:h-[9.5rem] 2xl:w-40 2xl:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10 cursor-pointer"
                   onMouseEnter={() => setIsProfileHovered(true)}
                   onMouseLeave={() => setIsProfileHovered(false)}
                 >
-                  <img
-                    src={profileImage}
-                    alt="Zeus Angelo Bautista"
-                    loading="eager"
-                    decoding="async"
-                    onError={(event) => {
-                      const image = event.currentTarget;
-                      if (image.src !== profileImageBackup) {
-                        image.src = profileImageBackup;
-                      }
-                    }}
-                    className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 ease-out"
-                    style={{ opacity: isProfileHovered ? 0 : 1 }}
-                  />
-                  <img
-                    src={profileImageHover}
-                    alt="Zeus Angelo Bautista smiling"
-                    loading="eager"
-                    decoding="async"
-                    onError={(event) => {
-                      const image = event.currentTarget;
-                      if (image.src !== profileImageHoverBackup) {
-                        image.src = profileImageHoverBackup;
-                      }
-                    }}
-                    className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 ease-out"
-                    style={{ opacity: isProfileHovered ? 1 : 0 }}
-                  />
+                  {/* Santa Hat (Shown during Christmas / Sept 1 - Dec 30) */}
+                  <AnimatePresence>
+                    {isChristmas && (
+                      <motion.div
+                        initial={{ scale: 0, rotate: -25, y: -10, opacity: 0 }}
+                        animate={{ scale: 1, rotate: -12, y: 0, opacity: 1 }}
+                        exit={{ scale: 0, opacity: 0 }}
+                        transition={{ type: 'spring', stiffness: 280, damping: 18 }}
+                        className="absolute -top-3.5 -left-3 sm:-top-5 sm:-left-4 md:-top-9 md:-left-7 lg:-top-11 lg:-left-8 xl:-top-13 xl:-left-9 z-30 pointer-events-none select-none w-10 sm:w-14 md:w-20 lg:w-24 xl:w-28 drop-shadow-md"
+                      >
+                        <svg viewBox="0 0 100 85" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
+                          {/* Hat Red Velvet Body */}
+                          <path
+                            d="M16 64 C22 35 48 10 78 12 C86 22 88 38 82 52 C78 60 70 64 64 64 Z"
+                            fill="#DC2626"
+                          />
+                          {/* Shading / Highlight */}
+                          <path
+                            d="M20 62 C26 38 48 16 75 14 C70 30 50 50 20 62 Z"
+                            fill="#EF4444"
+                            opacity="0.65"
+                          />
+                          {/* Drooping Tip */}
+                          <path
+                            d="M76 13 C88 16 94 28 92 38 C90 42 85 44 82 40 C80 34 84 24 76 13 Z"
+                            fill="#B91C1C"
+                          />
+                          {/* Pom-Pom */}
+                          <circle cx="89" cy="42" r="7.5" fill="#FFFFFF" />
+                          <circle cx="89" cy="42" r="6" fill="#F8FAFC" />
+                          <circle cx="87.5" cy="40.5" r="2.5" fill="#FFFFFF" />
+                          {/* Fluffy Brim */}
+                          <rect x="8" y="58" width="62" height="15" rx="7.5" fill="#FFFFFF" />
+                          <ellipse cx="20" cy="65.5" rx="8" ry="6" fill="#F1F5F9" />
+                          <ellipse cx="38" cy="65.5" rx="9" ry="6" fill="#FFFFFF" />
+                          <ellipse cx="56" cy="65.5" rx="8" ry="6" fill="#F1F5F9" />
+                        </svg>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Profile Images with overflow containment */}
+                  <div className="w-full h-full rounded-full overflow-hidden relative">
+                    <img
+                      src={profileImage}
+                      alt="Zeus Angelo Bautista"
+                      loading="eager"
+                      decoding="async"
+                      onError={(event) => {
+                        const image = event.currentTarget;
+                        if (image.src !== profileImageBackup) {
+                          image.src = profileImageBackup;
+                        }
+                      }}
+                      className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 ease-out"
+                      style={{ opacity: isProfileHovered ? 0 : 1 }}
+                    />
+                    <img
+                      src={profileImageHover}
+                      alt="Zeus Angelo Bautista smiling"
+                      loading="eager"
+                      decoding="async"
+                      onError={(event) => {
+                        const image = event.currentTarget;
+                        if (image.src !== profileImageHoverBackup) {
+                          image.src = profileImageHoverBackup;
+                        }
+                      }}
+                      className="absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-300 ease-out"
+                      style={{ opacity: isProfileHovered ? 1 : 0 }}
+                    />
+                  </div>
                 </div>
               </div>
             </h1>
@@ -135,7 +206,7 @@ export default function Hero() {
           </div>
 
           {/* Social / Resume Links */}
-          <div className="hero-socials mt-8 flex items-center justify-start w-auto">
+          <div className="hero-socials mt-8 flex flex-col items-start justify-start w-auto gap-4">
             <div className="flex flex-col gap-4">
               <span className="font-mono text-sm md:text-base uppercase tracking-wider text-[#334155]/60 font-bold">
                 Socials:
@@ -205,7 +276,47 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Desktop profile removed per request */}
+            {/* Simulation Preview Buttons for Holiday Effects */}
+            <div className="flex flex-wrap items-center gap-2.5 pt-2 border-t border-slate-200/60">
+              <span className="font-mono text-[10px] md:text-xs uppercase tracking-wider text-slate-400 font-semibold select-none">
+                Holiday Sim:
+              </span>
+              <button
+                type="button"
+                onClick={() => triggerSimulation('christmas')}
+                className={`cursor-target font-mono text-[11px] font-bold px-3 py-1 rounded-full border transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+                  activeSeason === 'christmas'
+                    ? 'bg-red-600 border-red-600 text-white shadow-sm'
+                    : 'bg-white border-slate-200 text-slate-600 hover:border-red-500 hover:text-red-600'
+                }`}
+              >
+                <span>❄️ Snow & Hat</span>
+                {activeSeason === 'christmas' && <span className="text-[9px] bg-white/20 px-1 rounded">ON</span>}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => triggerSimulation('newyear')}
+                className={`cursor-target font-mono text-[11px] font-bold px-3 py-1 rounded-full border transition-all duration-200 cursor-pointer flex items-center gap-1.5 ${
+                  activeSeason === 'newyear'
+                    ? 'bg-[#C44900] border-[#C44900] text-white shadow-sm'
+                    : 'bg-white border-slate-200 text-slate-600 hover:border-[#C44900] hover:text-[#C44900]'
+                }`}
+              >
+                <span>🎆 Fireworks</span>
+                {activeSeason === 'newyear' && <span className="text-[9px] bg-white/20 px-1 rounded">ON</span>}
+              </button>
+
+              {override !== null && (
+                <button
+                  type="button"
+                  onClick={() => triggerSimulation('none')}
+                  className="cursor-target font-mono text-[10px] text-slate-400 hover:text-slate-700 underline transition-colors cursor-pointer px-1"
+                >
+                  Reset
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
