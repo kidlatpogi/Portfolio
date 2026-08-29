@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import confetti from 'canvas-confetti';
 import { getHolidaySeason, getMsUntilNextBoundary, type HolidaySeason } from '../utils/seasonal';
 
 export default function SeasonalEffects() {
@@ -44,7 +45,7 @@ export default function SeasonalEffects() {
   }
 
   if (activeSeason === 'newyear') {
-    return <FireworksCanvas />;
+    return <FireworksLibraryEffect />;
   }
 
   return null;
@@ -97,12 +98,11 @@ function SnowCanvas() {
       opacity: Math.random() * 0.45 + 0.55,
       swing: Math.random() * Math.PI * 2,
       swingSpeed: Math.random() * 0.025 + 0.012,
-      isCrystal: i % 4 === 0, // 25% are detailed 6-point star crystals
+      isCrystal: i % 4 === 0,
       rotation: Math.random() * Math.PI * 2,
       rotationSpeed: (Math.random() - 0.5) * 0.03
     }));
 
-    // Draw a single 6-pointed ice crystal snowflake
     const drawCrystal = (x: number, y: number, size: number, rot: number, alpha: number) => {
       ctx.save();
       ctx.translate(x, y);
@@ -115,7 +115,6 @@ function SnowCanvas() {
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(0, -size);
-        // Small side branch
         ctx.moveTo(0, -size * 0.55);
         ctx.lineTo(-size * 0.35, -size * 0.8);
         ctx.moveTo(0, -size * 0.55);
@@ -124,7 +123,6 @@ function SnowCanvas() {
         ctx.rotate(Math.PI / 3);
       }
 
-      // Bright white central glint
       ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.95})`;
       ctx.beginPath();
       ctx.arc(0, 0, size * 0.25, 0, Math.PI * 2);
@@ -155,14 +153,11 @@ function SnowCanvas() {
         if (f.isCrystal) {
           drawCrystal(f.x, f.y, f.radius * 2.2, f.rotation, f.opacity);
         } else {
-          // Soft frosty pellet with icy outer contrast rim & bright core
-          // Outer subtle icy shadow rim
           ctx.beginPath();
           ctx.arc(f.x, f.y, f.radius + 1.2, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(148, 175, 210, ${f.opacity * 0.45})`;
           ctx.fill();
 
-          // Bright frosty center
           ctx.beginPath();
           ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(240, 248, 255, ${f.opacity * 0.95})`;
@@ -194,243 +189,89 @@ function SnowCanvas() {
 }
 
 /**
- * Enhanced Celebratory Fireworks Canvas
- * Dynamic multi-burst rockets, sparkles & 60fps capped particle system
+ * 60fps Zero-Lag Fireworks using canvas-confetti library
+ * High-performance, celebratory, smooth multi-origin bursts
  */
-function FireworksCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
+function FireworksLibraryEffect() {
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    let isRunning = true;
+    let timer: ReturnType<typeof setTimeout>;
 
-    const ctx = canvas.getContext('2d', { alpha: true });
-    if (!ctx) return;
+    const colors = [
+      '#C44900', // Signature Orange
+      '#FF8A3D', // Amber Glow
+      '#FFD700', // Festive Gold
+      '#EF4444', // New Year Crimson
+      '#10B981', // Emerald Green
+      '#06B6D4', // Cyan Sky
+      '#A855F7', // Electric Violet
+      '#FFFFFF'  // Diamond Flash
+    ];
 
-    let animId: number;
-    let isVisible = true;
+    const launchBurst = () => {
+      if (!isRunning || (typeof document !== 'undefined' && document.hidden)) return;
+
+      // Random origin in the upper sky
+      const x = Math.random() * 0.8 + 0.1;
+      const y = Math.random() * 0.4 + 0.15;
+
+      confetti({
+        particleCount: Math.floor(Math.random() * 25) + 30,
+        spread: 360,
+        startVelocity: Math.random() * 12 + 20,
+        decay: 0.93,
+        scalar: 0.9,
+        ticks: 80,
+        gravity: 0.75,
+        colors,
+        origin: { x, y },
+        zIndex: 30,
+        disableForReducedMotion: true
+      });
+
+      // Staggered double spark pop
+      if (Math.random() > 0.4) {
+        setTimeout(() => {
+          if (!isRunning || document.hidden) return;
+          confetti({
+            particleCount: 15,
+            spread: 360,
+            startVelocity: 14,
+            decay: 0.94,
+            scalar: 0.7,
+            ticks: 50,
+            gravity: 0.6,
+            colors: ['#FFD700', '#FFFFFF', '#C44900'],
+            origin: { x: x + (Math.random() - 0.5) * 0.06, y: y + (Math.random() - 0.5) * 0.06 },
+            zIndex: 30
+          });
+        }, 150);
+      }
+
+      // Schedule next burst (every 600ms to 1200ms)
+      const nextDelay = Math.random() * 600 + 600;
+      timer = setTimeout(launchBurst, nextDelay);
+    };
+
+    // Initial pair of launches
+    launchBurst();
+    const initialPairTimer = setTimeout(launchBurst, 350);
 
     const handleVisibility = () => {
-      isVisible = !document.hidden;
-      if (isVisible) {
-        lastTime = performance.now();
-        animId = requestAnimationFrame(render);
+      if (!document.hidden && isRunning) {
+        launchBurst();
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);
 
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', handleResize, { passive: true });
-
-    interface Particle {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      alpha: number;
-      decay: number;
-      color: string;
-      radius: number;
-      hasTrail?: boolean;
-    }
-
-    interface Rocket {
-      x: number;
-      y: number;
-      targetY: number;
-      vy: number;
-      color: string;
-      type: 'classic' | 'double' | 'ring';
-    }
-
-    const particles: Particle[] = [];
-    const rockets: Rocket[] = [];
-
-    const PALETTES = [
-      ['#C44900', '#FF8A3D', '#FFD166'], // Warm Sunset & Gold
-      ['#EF4444', '#F43F5E', '#FFE4E6'], // Crimson & Rose
-      ['#10B981', '#34D399', '#A7F3D0'], // Emerald & Mint
-      ['#06B6D4', '#38BDF8', '#E0F2FE'], // Cyan & Sky
-      ['#8B5CF6', '#D946EF', '#FDF4FF'], // Purple & Magenta
-      ['#F59E0B', '#EAB308', '#FEF08A']  // Brilliant Gold
-    ];
-
-    const spawnRocket = (forcedX?: number) => {
-      const palette = PALETTES[Math.floor(Math.random() * PALETTES.length)];
-      const color = palette[0];
-      const types: ('classic' | 'double' | 'ring')[] = ['classic', 'double', 'ring'];
-      const type = types[Math.floor(Math.random() * types.length)];
-
-      rockets.push({
-        x: forcedX ?? Math.random() * (width * 0.85) + width * 0.075,
-        y: height + 10,
-        targetY: Math.random() * (height * 0.5) + height * 0.12,
-        vy: -(Math.random() * 4 + 9.5),
-        color,
-        type
-      });
-    };
-
-    const explodeRocket = (x: number, y: number, type: 'classic' | 'double' | 'ring') => {
-      if (particles.length > 550) return;
-
-      const palette = PALETTES[Math.floor(Math.random() * PALETTES.length)];
-      const count = type === 'ring' ? 36 : Math.floor(Math.random() * 20) + 40;
-
-      for (let i = 0; i < count; i++) {
-        let angle = (Math.PI * 2 * i) / count;
-        let speed = Math.random() * 4.8 + 1.8;
-
-        if (type === 'ring') {
-          speed = 3.8;
-        } else {
-          angle += (Math.random() - 0.5) * 0.3;
-        }
-
-        particles.push({
-          x,
-          y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          alpha: 1,
-          decay: Math.random() * 0.016 + 0.011,
-          color: palette[Math.floor(Math.random() * palette.length)],
-          radius: Math.random() * 2.2 + 1.2,
-          hasTrail: Math.random() > 0.6
-        });
-      }
-
-      if (type === 'double') {
-        setTimeout(() => {
-          if (particles.length < 500) {
-            for (let i = 0; i < 24; i++) {
-              const angle = Math.random() * Math.PI * 2;
-              const speed = Math.random() * 2.5 + 0.8;
-              particles.push({
-                x: x + (Math.random() - 0.5) * 15,
-                y: y + (Math.random() - 0.5) * 15,
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed,
-                alpha: 1,
-                decay: Math.random() * 0.02 + 0.015,
-                color: '#FFFFFF',
-                radius: 1.5
-              });
-            }
-          }
-        }, 120);
-      }
-    };
-
-    // Initial flurry of 2 rockets
-    spawnRocket(width * 0.3);
-    spawnRocket(width * 0.7);
-
-    let launchTimer = 0;
-    let lastTime = performance.now();
-
-    const render = (time: number) => {
-      if (!isVisible) return;
-
-      const dt = Math.min((time - lastTime) / 1000, 0.1);
-      lastTime = time;
-
-      launchTimer += dt;
-      if (launchTimer > 0.85) {
-        launchTimer = 0;
-        spawnRocket();
-        if (Math.random() > 0.4) {
-          setTimeout(() => spawnRocket(), 200);
-        }
-      }
-
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.22)';
-      ctx.fillRect(0, 0, width, height);
-      ctx.globalCompositeOperation = 'lighter';
-
-      // Update & Draw Rockets with Spark Trails
-      for (let i = rockets.length - 1; i >= 0; i--) {
-        const r = rockets[i];
-        r.y += r.vy;
-        r.vy += 0.06;
-
-        ctx.beginPath();
-        ctx.arc(r.x, r.y, 2.8, 0, Math.PI * 2);
-        ctx.fillStyle = r.color;
-        ctx.shadowColor = r.color;
-        ctx.shadowBlur = 8;
-        ctx.fill();
-
-        // Rocket ember spark
-        if (Math.random() > 0.3 && particles.length < 550) {
-          particles.push({
-            x: r.x + (Math.random() - 0.5) * 2,
-            y: r.y + 4,
-            vx: (Math.random() - 0.5) * 0.8,
-            vy: Math.random() * 1.5 + 0.5,
-            alpha: 0.8,
-            decay: 0.05,
-            color: '#FEF08A',
-            radius: 1.2
-          });
-        }
-
-        if (r.y <= r.targetY || r.vy >= 0) {
-          explodeRocket(r.x, r.y, r.type);
-          rockets.splice(i, 1);
-        }
-      }
-
-      // Update & Draw Explosion Particles
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        p.vy += 0.075; // Gravity
-        p.vx *= 0.978; // Air drag
-        p.alpha -= p.decay;
-
-        if (p.alpha <= 0) {
-          particles.splice(i, 1);
-          continue;
-        }
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.alpha;
-        ctx.shadowColor = p.color;
-        ctx.shadowBlur = 6;
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      }
-
-      animId = requestAnimationFrame(render);
-    };
-
-    animId = requestAnimationFrame(render);
-
     return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', handleResize);
+      isRunning = false;
+      clearTimeout(timer);
+      clearTimeout(initialPairTimer);
       document.removeEventListener('visibilitychange', handleVisibility);
+      confetti.reset();
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className="fixed inset-0 pointer-events-none z-30 w-full h-full"
-    />
-  );
+  return null;
 }
