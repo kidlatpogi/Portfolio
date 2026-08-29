@@ -47,7 +47,7 @@ export default function Skills() {
   }, [selectedCategory]);
 
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="skills">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden bg-transparent z-10" id="skills">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
         {/* Subheading */}
@@ -68,7 +68,7 @@ export default function Skills() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-5 py-2 rounded-full font-mono text-xs md:text-sm font-bold tracking-wide transition-all duration-300 cursor-target ${
+                className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full font-mono text-xs md:text-sm font-bold tracking-wide transition-all duration-300 cursor-target ${
                   isActive
                     ? 'bg-accent text-white shadow-md shadow-accent/20 scale-105'
                     : 'bg-white border-2 border-slate-200/80 text-slate-600 hover:border-accent hover:text-accent'
@@ -80,40 +80,40 @@ export default function Skills() {
           })}
         </div>
 
-        {/* Interactive Skills Bento Grid */}
-        <div className="w-[95%] md:w-[95%] max-w-[1600px] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-5 mx-auto">
+        {/* Interactive Skills Centered Flex Matrix (3-Cols on Mobile, Centered Trailing Items like Figma) */}
+        <div className="w-full max-w-[1600px] flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-5 mx-auto">
           {filteredSkills.map(skill => {
             return (
               <div
                 key={skill.name}
                 onMouseEnter={() => setHoveredSkill(skill.name)}
                 onMouseLeave={() => setHoveredSkill(null)}
-                className="group relative border-2 border-slate-200/80 bg-white p-5 rounded-2xl flex flex-col items-center justify-center gap-3 transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.12)] cursor-target overflow-hidden"
+                className="w-[calc((100%-1.5rem)/3)] sm:w-[calc((100%-2rem)/3)] md:w-[calc((100%-3.75rem)/4)] lg:w-[calc((100%-5rem)/5)] xl:w-[calc((100%-6.25rem)/6)] max-w-[240px] group relative border-2 border-slate-200/80 bg-white p-3 sm:p-5 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center gap-2 sm:gap-3 transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.12)] cursor-target overflow-hidden"
               >
                 {/* Tech Logo */}
-                <div className="w-11 h-11 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110">
+                <div className="w-8 h-8 sm:w-11 sm:h-11 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110">
                   <img
                     src={skill.logo}
                     alt={skill.name}
                     loading="lazy"
                     decoding="async"
-                    className="w-10 h-10 object-contain drop-shadow-sm"
+                    className="w-7 h-7 sm:w-10 sm:h-10 object-contain drop-shadow-sm"
                   />
                 </div>
 
                 {/* Skill Name */}
-                <span className="font-clash-semibold text-sm font-bold text-slate-800 text-center relative z-10 group-hover:text-accent transition-colors duration-300">
+                <span className="font-clash-semibold text-xs sm:text-sm font-bold text-slate-800 text-center relative z-10 group-hover:text-accent transition-colors duration-300 truncate max-w-full">
                   {skill.name}
                 </span>
 
                 {/* Skill Category Pill */}
-                <span className="font-mono text-[10px] text-slate-400 uppercase font-semibold px-2 py-0.5 bg-slate-50 border border-slate-100 rounded-md">
+                <span className="font-mono text-[8px] sm:text-[10px] text-slate-400 uppercase font-semibold px-1.5 sm:px-2 py-0.5 bg-slate-50 border border-slate-100 rounded-md truncate max-w-full">
                   {skill.category}
                 </span>
 
                 {/* Optional Project Highlight on Hover */}
                 {skill.projects && (
-                  <div className="absolute inset-x-0 bottom-0 py-0.5 bg-accent/95 text-white font-mono text-[9px] font-bold text-center tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="absolute inset-x-0 bottom-0 py-0.5 bg-accent/95 text-white font-mono text-[8px] sm:text-[9px] font-bold text-center tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     {skill.projects}
                   </div>
                 )}
