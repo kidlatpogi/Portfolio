@@ -24,7 +24,7 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
   const [activeKey, setActiveKey] = useState<string | null>(null);
   const [isMuted, setIsMuted] = useState(false);
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Pick a random sentence from 100 quotes
   const loadNewSentence = useCallback(() => {

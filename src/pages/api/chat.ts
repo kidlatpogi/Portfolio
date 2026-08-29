@@ -1,6 +1,6 @@
 ﻿import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
-import { generateKnowledgeResponses, PORTFOLIO_DATA } from '../../data/portfolioData';
+import { generateKnowledgeResponses } from '../../data/portfolioData';
 
 export const prerender = false;
 
@@ -98,24 +98,53 @@ Your primary objective is to represent Zeus professionally, accurately answering
 - Portfolio: https://zeusbautista.site
 `;
 
-export const POST: APIRoute = async ({ request, locals }) => {
+// Helper to safely get environment bindings without throwing errors
+function getEnvBinding(key: string): any {
   try {
-    const body = await request.json();
-    const messages = body.messages;
+    if (typeof env !== 'undefined' && env && typeof env === 'object') {
+      return (env as any)[key];
+    }
+  } catch {
+    // env proxy access fallback
+  }
+  try {
+    return (import.meta.env as any)?.[key];
+  } catch {
+    return undefined;
+  }
+}
 
-    if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      return new Response(JSON.stringify({ error: "Invalid messages array" }), { status: 400 });
+export const POST: APIRoute = async ({ request }) => {
+  try {
+    let body: any;
+    try {
+      body = await request.json();
+    } catch {
+      return new Response(JSON.stringify({ error: "Invalid JSON payload" }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
-    const lastMessage = messages[messages.length - 1]?.text || "";
+    const messages = body?.messages;
+    if (!messages || !Array.isArray(messages) || messages.length === 0) {
+      return new Response(JSON.stringify({ error: "Invalid messages array" }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    const lastMessage = typeof messages[messages.length - 1]?.text === 'string'
+      ? messages[messages.length - 1].text
+      : "";
     const lowerLastMessage = lastMessage.toLowerCase().trim();
 
     // -------------------------------------------------------------
     // GUARD 1: Profanity, Adult Content, Porn Sites, NSFW Detection
     // -------------------------------------------------------------
-    const customBadWordsStr = ((env as any)?.CHAT_BAD_WORDS || import.meta.env.CHAT_BAD_WORDS || '') as string;
+    const customBadWordsStr = (getEnvBinding('CHAT_BAD_WORDS') || '') as string;
     const customBadWords = customBadWordsStr
-      ? customBadWordsStr.split(',').map((w: string) => w.trim().toLowerCase())
+      ? customBadWordsStr.split(',').map((w: string) => w.trim().toLowerCase()).filter(Boolean)
       : [];
     const allBadWords = Array.from(new Set([...DEFAULT_BAD_WORDS, ...customBadWords]));
 
@@ -194,13 +223,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // -------------------------------------------------------------
     // WORKERS AI INFERENCE ENGINE (Cloudflare Workers AI Llama-3.1)
     // -------------------------------------------------------------
-    const aiBinding = (locals as any)?.runtime?.env?.AI || (env as any)?.AI;
+    const aiBinding = getEnvBinding('AI');
 
     if (aiBinding && typeof aiBinding.run === 'function') {
       try {
         const conversationHistory = messages.slice(-5).map((m: any) => ({
           role: m.sender === 'bot' ? 'assistant' : 'user',
-          content: m.text
+          content: typeof m.text === 'string' ? m.text : ''
         }));
 
         const aiResponse = await aiBinding.run('@cf/meta/llama-3.1-8b-instruct', {

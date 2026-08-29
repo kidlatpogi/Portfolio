@@ -15,6 +15,10 @@ declare module 'meshline' {
   export const MeshLineMaterial: any;
 }
 
+declare module 'cloudflare:workers' {
+  export const env: any;
+}
+
 declare global {
   namespace JSX {
     interface IntrinsicElements {
