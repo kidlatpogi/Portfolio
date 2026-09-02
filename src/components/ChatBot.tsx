@@ -766,8 +766,8 @@ export const ChatBot: React.FC = () => {
       <div className={`fixed bottom-6 left-6 z-50 flex flex-col gap-3 items-start transition-all duration-300 ${
         isFooterVisible ? 'opacity-0 pointer-events-none translate-y-4' : 'opacity-100 pointer-events-auto translate-y-0'
       }`}>
-        {/* 1. Typing Test Button (Top) */}
-        <div className="group relative flex items-center">
+        {/* 1. Typing Test Button (Top - Desktop only) */}
+        <div className="hidden md:flex group relative items-center">
           <button
             onClick={() => setIsTypingTestOpen(true)}
             className="cursor-target flex items-center h-12 rounded-full bg-black hover:bg-[#C44900] text-[#FAFAFA] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[200px] px-3.5 group-hover:pr-5 group-hover:pl-4"
