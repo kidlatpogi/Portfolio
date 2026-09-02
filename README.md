@@ -1,6 +1,6 @@
 <div align="center">
 
-# Zeus Angelo Bautista — Engineering Portfolio
+# Zeus Angelo Bautista — Portfolio
 ### Modern Editorial Web Application & Edge AI Assistant
 
 A high-performance, design-centric personal portfolio built on modern web standards, featuring Server-Side Rendering on Cloudflare Edge, React 19 interactive component islands, GSAP horizontal pinned runways, and an integrated Cloudflare Workers AI portfolio assistant.
@@ -23,8 +23,6 @@ A high-performance, design-centric personal portfolio built on modern web standa
 - [Key Features & Engineering Highlights](#key-features--engineering-highlights)
 - [Technology Stack](#technology-stack)
 - [Repository Structure](#repository-structure)
-- [Local Development Setup](#local-development-setup)
-- [Edge Deployment & Cloudflare Bindings](#edge-deployment--cloudflare-bindings)
 - [Performance & Security Engineering](#performance--security-engineering)
 - [License](#license)
 
@@ -174,76 +172,6 @@ Portfolio/
 ├── tsconfig.json                   # TypeScript configuration
 └── README.md                       # Project documentation
 ```
-
----
-
-## Local Development Setup
-
-### Prerequisites
-- **Node.js**: `v18.17.0` or higher (Node.js 20+ recommended)
-- **Package Manager**: `npm` (v9+) or `pnpm`
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/kidlatpogi/Portfolio.git
-   cd Portfolio
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Configure environment variables (optional for local mock AI):
-   Create a `.env` file in the project root:
-   ```env
-   # Cloudflare Workers AI credentials (optional in local dev mode)
-   CF_ACCOUNT_ID=your_cloudflare_account_id
-   CF_AI_API_TOKEN=your_cloudflare_ai_token
-   ```
-
-4. Start the local development server:
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:4321](http://localhost:4321) in your browser.
-
-5. Validate production build:
-   ```bash
-   npm run build
-   ```
-
-6. Preview Cloudflare Pages locally:
-   ```bash
-   npm run preview
-   ```
-
----
-
-## Edge Deployment & Cloudflare Bindings
-
-This application is optimized for deployment on **Cloudflare Pages** using the `@astrojs/cloudflare` adapter in SSR mode.
-
-### Wrangler Configuration (`wrangler.jsonc`)
-```jsonc
-{
-  "name": "portfolio",
-  "compatibility_date": "2024-09-23",
-  "compatibility_flags": ["nodejs_compat"],
-  "pages_build_output_dir": "dist",
-  "ai": {
-    "binding": "AI"
-  }
-}
-```
-
-### Production Build Command
-```bash
-npm run build
-```
-Output directory: `dist/`
 
 ---
 

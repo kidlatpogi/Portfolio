@@ -1,0 +1,17 @@
+# Zeus Angelo Bautista — Portfolio
+
+> Personal portfolio and software engineering showcase of Zeus Angelo Bautista, IT Developer and AI Engineer.
+
+## Overview
+- Developer: Zeus Angelo Bautista
+- Role: IT Developer & AI Engineer
+- Education: Bachelor of Science in Information Technology, Major in Mobile and Web Applications (BSIT-MWA)
+- Philosophy: Kaizen (改善) — Continuous improvement in habits, code, and systems.
+
+## Featured Projects
+- TalkTics: Multimodal AI public speaking coach with real-time MediaPipe vision mesh and Librosa acoustic analytics (https://bigkas.site/)
+- L.I.N.N.Y: Enterprise-grade Python desktop voice assistant and smart home IoT suite (https://github.com/kidlatpogi/L.I.N.N.Y)
+- Saddle Ranch: Enterprise restaurant platform with real-time KDS, POS, and QR ordering (https://saddle-ranch-web.onrender.com/)
+- WhatDayIsIt: Lightweight, ambient Windows desktop calendar widget connected to Google Calendar (https://github.com/kidlatpogi/WhatDayIsIt)
+- Web-Tools: Curated developer arsenal and CS student toolkit (https://wtoolz.vercel.app/)
+- Olympus: Centralized algorithmic vault and multi-language code repository (https://github.com/kidlatpogi/Olympus)
