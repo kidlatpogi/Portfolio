@@ -525,6 +525,8 @@ export default function Projects() {
                             {project.github && (
                               <a 
                                 href={project.github} 
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-black/30 hover:bg-black/50 border border-white/30 hover:border-white/50 text-white transition-all cursor-target font-mono text-[10px] md:text-xs uppercase tracking-wider font-bold shadow-sm"
                                 aria-label="GitHub Repository"
                               >
@@ -538,6 +540,8 @@ export default function Projects() {
                             {project.link && (
                               <a 
                                 href={project.link} 
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-black/30 hover:bg-black/50 border border-white/30 hover:border-white/50 text-white transition-all cursor-target font-mono text-[10px] md:text-xs uppercase tracking-wider font-bold shadow-sm"
                                 aria-label={project.actionLabel || "Visit Website"}
                               >

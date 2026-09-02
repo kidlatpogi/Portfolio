@@ -1,21 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Share2, X } from 'lucide-react';
 
 export default function SocialsSidebar() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const footerEl = document.getElementById('contact');
       const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
-      let isFooterVisible = isNearBottom;
-      if (!isFooterVisible && footerEl) {
+      let footerInView = isNearBottom;
+      if (!footerInView && footerEl) {
         const rect = footerEl.getBoundingClientRect();
         // Hide if top of footer is in viewport
-        isFooterVisible = rect.top < window.innerHeight - 80;
+        footerInView = rect.top < window.innerHeight - 80;
       }
 
+      setIsFooterVisible(footerInView);
+
       // Show sidebar when scrolled down more than 150px AND footer is not visible
-      if (window.scrollY > 150 && !isFooterVisible) {
+      if (window.scrollY > 150 && !footerInView) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
@@ -23,11 +29,18 @@ export default function SocialsSidebar() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    // Initial check in case page starts scrolled
     handleScroll();
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setIsMobileOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -82,39 +95,103 @@ export default function SocialsSidebar() {
   ];
 
   return (
-    <div 
-      className={`fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3.5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        isVisible 
-          ? 'opacity-100 translate-x-0 pointer-events-auto' 
-          : 'opacity-0 translate-x-6 pointer-events-none'
-      }`}
-    >
-      {socials.map((social) => {
-        const isResume = social.name === 'Resume';
-        return (
-          <a
-            key={social.name}
-            href={social.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={isResume ? (e) => {
-              e.preventDefault();
-              window.dispatchEvent(new CustomEvent('openResumePreview'));
-            } : undefined}
-            aria-label={social.ariaLabel}
-            className="group relative w-11 h-11 rounded-full bg-black flex items-center justify-center text-white hover:bg-accent hover:scale-110 active:scale-95 transition-all duration-300 ease-out cursor-target"
-          >
-            {social.icon}
-            
-            {/* Hover Tooltip/Title (positioned to the left) */}
-            <div className="absolute right-[125%] top-1/2 -translate-y-1/2 bg-black text-white text-xs font-mono uppercase tracking-wider py-1.5 px-3 rounded-md shadow-md whitespace-nowrap pointer-events-none opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out z-30">
-              {social.name}
-              {/* Small triangle arrow on the right pointing to the button */}
-              <div className="absolute left-[99%] top-1/2 -translate-y-1/2 w-2 h-2 bg-black rotate-45" />
-            </div>
-          </a>
-        );
-      })}
-    </div>
+    <>
+      {/* DESKTOP VIEW (Right Sidebar) */}
+      <div 
+        className={`hidden md:flex fixed right-4 sm:right-6 top-1/2 -translate-y-1/2 z-40 flex-col gap-3.5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          isVisible 
+            ? 'opacity-100 translate-x-0 pointer-events-auto' 
+            : 'opacity-0 translate-x-6 pointer-events-none'
+        }`}
+      >
+        {socials.map((social) => {
+          const isResume = social.name === 'Resume';
+          return (
+            <a
+              key={social.name}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={isResume ? (e) => {
+                e.preventDefault();
+                window.dispatchEvent(new CustomEvent('openResumePreview'));
+              } : undefined}
+              aria-label={social.ariaLabel}
+              className="group relative w-11 h-11 rounded-full bg-black flex items-center justify-center text-white hover:bg-accent hover:scale-110 active:scale-95 transition-all duration-300 ease-out cursor-target"
+            >
+              {social.icon}
+              
+              {/* Hover Tooltip/Title */}
+              <div className="absolute right-[125%] top-1/2 -translate-y-1/2 bg-black text-white text-xs font-mono uppercase tracking-wider py-1.5 px-3 rounded-md shadow-md whitespace-nowrap pointer-events-none opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-out z-30">
+                {social.name}
+                <div className="absolute left-[99%] top-1/2 -translate-y-1/2 w-2 h-2 bg-black rotate-45" />
+              </div>
+            </a>
+          );
+        })}
+      </div>
+
+      {/* MOBILE VIEW (Bottom-Left Circle Menu) */}
+      <div 
+        ref={menuRef}
+        className={`md:hidden fixed bottom-[144px] left-6 z-50 flex flex-col items-start transition-all duration-300 ${
+          isFooterVisible ? 'opacity-0 pointer-events-none translate-y-4' : 'opacity-100 pointer-events-auto translate-y-0'
+        }`}
+      >
+        {/* Expanded Social Icons Stack (Pops up above the button) */}
+        <div 
+          className={`flex flex-col gap-2.5 mb-3 transition-all duration-300 ease-out ${
+            isMobileOpen 
+              ? 'opacity-100 translate-y-0 pointer-events-auto scale-100' 
+              : 'opacity-0 translate-y-4 pointer-events-none scale-90 h-0 overflow-hidden'
+          }`}
+        >
+          {socials.map((social) => {
+            const isResume = social.name === 'Resume';
+            return (
+              <a
+                key={social.name}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => {
+                  if (isResume) {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent('openResumePreview'));
+                  }
+                  setIsMobileOpen(false);
+                }}
+                aria-label={social.ariaLabel}
+                className="flex items-center gap-3 px-3.5 py-2 rounded-full bg-black/95 text-white border border-white/20 shadow-xl backdrop-blur-md active:bg-[#C44900] transition-colors"
+              >
+                <div className="w-5 h-5 flex items-center justify-center text-white shrink-0">
+                  {social.icon}
+                </div>
+                <span className="font-mono text-xs uppercase tracking-wider font-bold pr-2">
+                  {social.name}
+                </span>
+              </a>
+            );
+          })}
+        </div>
+
+        {/* Mobile Circle Menu Toggle Button */}
+        <button
+          type="button"
+          onClick={() => setIsMobileOpen((prev) => !prev)}
+          className={`cursor-target flex items-center justify-center w-12 h-12 rounded-full text-white shadow-xl border border-white/10 transition-all duration-300 active:scale-95 cursor-pointer ${
+            isMobileOpen ? 'bg-[#C44900]' : 'bg-black hover:bg-[#C44900]'
+          }`}
+          aria-label={isMobileOpen ? 'Close socials menu' : 'Open socials menu'}
+          aria-expanded={isMobileOpen}
+        >
+          {isMobileOpen ? (
+            <X size={20} className="text-white transition-transform duration-200" />
+          ) : (
+            <Share2 size={19} className="text-white" />
+          )}
+        </button>
+      </div>
+    </>
   );
 }
