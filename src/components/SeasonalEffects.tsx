@@ -60,13 +60,22 @@ function SnowCanvas() {
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    let animId: number;
-    let isVisible = true;
+    let animId: number | null = null;
+    let isVisible = !document.hidden;
+    let lastTime = performance.now();
 
     const handleVisibility = () => {
       isVisible = !document.hidden;
       if (isVisible) {
-        animId = requestAnimationFrame(render);
+        lastTime = performance.now();
+        if (animId === null) {
+          animId = requestAnimationFrame(render);
+        }
+      } else {
+        if (animId !== null) {
+          cancelAnimationFrame(animId);
+          animId = null;
+        }
       }
     };
     document.addEventListener('visibilitychange', handleVisibility);
@@ -126,17 +135,25 @@ function SnowCanvas() {
       ctx.restore();
     };
 
-    const render = () => {
-      if (!isVisible) return;
+    const render = (currentTime: number) => {
+      if (!isVisible) {
+        animId = null;
+        return;
+      }
+
+      // Delta time normalized to 60fps (16.67ms per frame), capped to prevent jump
+      const deltaMs = Math.min(currentTime - lastTime, 64);
+      lastTime = currentTime;
+      const timeScale = deltaMs > 0 ? deltaMs / 16.667 : 1;
 
       ctx.clearRect(0, 0, width, height);
 
       for (let i = 0; i < flakes.length; i++) {
         const f = flakes[i];
-        f.swing += f.swingSpeed;
-        f.x += f.speedX + Math.sin(f.swing) * 0.6;
-        f.y += f.speedY;
-        f.rotation += f.rotationSpeed;
+        f.swing += f.swingSpeed * timeScale;
+        f.x += (f.speedX + Math.sin(f.swing) * 0.6) * timeScale;
+        f.y += f.speedY * timeScale;
+        f.rotation += f.rotationSpeed * timeScale;
 
         if (f.y > height + 10) {
           f.y = -10;
@@ -165,10 +182,13 @@ function SnowCanvas() {
       animId = requestAnimationFrame(render);
     };
 
+    lastTime = performance.now();
     animId = requestAnimationFrame(render);
 
     return () => {
-      cancelAnimationFrame(animId);
+      if (animId !== null) {
+        cancelAnimationFrame(animId);
+      }
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibility);
     };

@@ -1,4 +1,4 @@
-﻿import type { APIRoute } from 'astro';
+import type { APIRoute } from 'astro';
 import { env } from 'cloudflare:workers';
 import { generateKnowledgeResponses } from '../../data/portfolioData';
 
@@ -60,11 +60,9 @@ Your primary objective is to represent Zeus professionally, accurately answering
 - Philosophy: Kaizen (改善) — Constant, small tweaks to how I live, learn, and build. Focused on continuous improvement in habits and engineering.
 
 ## 4. TECHNICAL ARSENAL & SKILLS
-- Frontend: JavaScript (ES6+), TypeScript, React.js, Astro, Tailwind CSS, HTML5, CSS3, Electron
-- Backend & APIs: Node.js, Python, FastAPI, PHP, RESTful APIs
-- Databases & Cloud: MySQL, Supabase, Firebase, Cloudflare (D1, KV, R2, Pages, Workers AI)
-- AI & Computer Vision: MediaPipe (facial & posture tracking), Librosa (audio analysis), Google Cloud Vertex AI, Cloudflare Workers AI
-- Tools & DevOps: Git, GitHub, Docker, Linux, VS Code, Figma, Adobe Photoshop
+- Frontend & Mobile: JavaScript, TypeScript, Dart, Flutter, React, Tailwind CSS, HTML5, CSS3, Electron
+- Backend & Databases: Node.js, Python, Java, PHP, PostgreSQL, MySQL, MongoDB, Firebase, Supabase
+- Tools & DevOps: Git, GitHub, Docker, VS Code, Linux, Photoshop, Figma
 
 ## 5. PROFESSIONAL & OJT EXPERIENCE
 1. IT Helper — Municipality of Silang, Cavite (December 2024 – January 2025)
@@ -75,13 +73,15 @@ Your primary objective is to represent Zeus professionally, accurately answering
    - Uploaded and organized digital archives across cloud storage infrastructure.
 
 ## 6. FEATURED PROJECTS
-1. TalkTics / Bigkas Capstone (2025): AI-driven public speaking simulator and speech analysis platform using React JS, Python, MediaPipe, Librosa, Supabase. (Live: https://bigkas.site/)
-2. L.I.N.N.Y (2024/2025): Voice-controlled personal AI assistant inspired by J.A.R.V.I.S using Python, SpeechRecognition, PyTTSx3, Kasa Smart API.
-3. SafeLink Mobile (2024/2025): Cross-platform family safety and disaster emergency response app with React Native, Expo, Firebase.
-4. Calendar Widget (2024): Lightweight Windows desktop calendar widget with Electron, JavaScript, HTML5/CSS3.
-5. MyPC E-Commerce Shop (2024): Full-stack hardware component e-commerce platform using PHP, MySQL, Apache, Tailwind CSS. (Live: https://mypcinfosec.vercel.app)
-6. Gnosis (2024): Collaborative study habit optimization tool with interactive flashcards and study heatmap using React JS, Firebase. (Live: https://gnosis-study.vercel.app/)
-7. Web Tools (2024): Curated developer resource catalog using React JS, Tailwind CSS. (Live: https://wtoolz.vercel.app/)
+1. TalkTics (2025): Multimodal AI public speaking coach with real-time MediaPipe vision mesh and Librosa acoustic analytics. (Live: https://bigkas.site/ | GitHub: https://github.com/kidlatpogi/talktics-capstone)
+2. L.I.N.N.Y (2025): Enterprise-grade Python desktop voice assistant unifying multi-model AI reasoning (Groq/Gemini), neural TTS, Tapo/Kasa IoT, and Windows OS automation. (GitHub: https://github.com/kidlatpogi/L.I.N.N.Y)
+3. Saddle Ranch (2025): Enterprise restaurant ecosystem for Saddle Ranch Roadhouse with real-time Kitchen Display (KDS), POS, QR table dining, and delivery logistics. (Live: https://saddle-ranch-web.onrender.com/ | GitHub: https://github.com/kidlatpogi/Saddle-Ranch-Web)
+4. WhatDayIsIt (2024): Lightweight, transparent Windows desktop calendar overlay synchronized with Google Calendar via local-first privacy architecture. (GitHub: https://github.com/kidlatpogi/WhatDayIsIt)
+5. Web-Tools (2024): Curated developer arsenal and CS student toolkit compiling 139+ essential developer utilities, AI tools, and certifications. (Live: https://wtoolz.vercel.app/ | GitHub: https://github.com/kidlatpogi/Web-tools)
+6. Olympus (2024): Centralized algorithmic vault and multi-language code repository in C++ and JavaScript. (GitHub: https://github.com/kidlatpogi/Olympus)
+7. SafeLink Mobile (2024): Cross-platform family safety and disaster emergency response app with React Native and Firebase.
+8. MyPC E-Commerce Shop (2024): Full-stack hardware component e-commerce platform using PHP and MySQL. (Live: https://mypcinfosec.vercel.app)
+9. Gnosis (2024): Collaborative study habit optimization tool with interactive flashcards and study heatmap using React JS and Firebase. (Live: https://gnosis-study.vercel.app/)
 
 ## 7. VERIFIED CERTIFICATIONS & BADGES (12+ Verified)
 - Cisco Networking Academy: HTML Essentials, CSS Essentials, JavaScript Essentials 1, JavaScript Essentials 2
@@ -262,7 +262,7 @@ export const POST: APIRoute = async ({ request }) => {
     const hasAboutIntent = text.includes('about') || text.includes('who is') || text.includes('summary') || text.includes('profile') || text.includes('who are you') || text.includes('introduce');
     const hasExperienceIntent = text.includes('experience') || text.includes('work') || text.includes('job') || text.includes('ojt') || text.includes('silang') || text.includes('registrar');
     const hasSkillsIntent = text.includes('skill') || text.includes('stack') || text.includes('technolog') || text.includes('tool') || text.includes('frontend') || text.includes('backend');
-    const hasProjectsIntent = text.includes('project') || text.includes('built') || text.includes('talktics') || text.includes('bigkas') || text.includes('linny') || text.includes('safelink') || text.includes('mypc') || text.includes('gnosis');
+    const hasProjectsIntent = text.includes('project') || text.includes('built') || text.includes('talktics') || text.includes('bigkas') || text.includes('linny') || text.includes('saddle') || text.includes('whatday') || text.includes('web-tools') || text.includes('olympus') || text.includes('safelink') || text.includes('mypc') || text.includes('gnosis');
     const hasCertIntent = text.includes('cert') || text.includes('badge') || text.includes('credential') || text.includes('cisco') || text.includes('ibm') || text.includes('simplilearn');
     const hasContactIntent = text.includes('contact') || text.includes('hire') || text.includes('email') || text.includes('reach') || text.includes('social') || text.includes('linkedin') || text.includes('github');
 

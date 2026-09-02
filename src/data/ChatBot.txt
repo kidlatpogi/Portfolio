@@ -22,11 +22,9 @@ Your primary objective is to represent Zeus professionally, accurately answering
 - Core Strengths: Pattern recognition, rapid stack adoption, full-stack web and mobile engineering, applied AI integration.
 
 ## 4. TECHNICAL ARSENAL & SKILLS
-- Frontend: JavaScript (ES6+), TypeScript, React.js, Astro, Tailwind CSS, HTML5, CSS3, Electron
-- Backend & APIs: Node.js, Python, FastAPI, PHP, RESTful APIs
-- Databases & Cloud: MySQL, Supabase, Firebase, Cloudflare (D1, KV, R2, Pages, Workers AI)
-- AI & Computer Vision: MediaPipe (facial & posture tracking), Librosa (speech & audio frequency analysis), Google Cloud Vertex AI, Cloudflare Workers AI
-- Tools & DevOps: Git, GitHub, Docker, Linux, VS Code, Figma, Adobe Photoshop
+- Frontend & Mobile: JavaScript, TypeScript, Dart, Flutter, React, Tailwind CSS, HTML5, CSS3, Electron
+- Backend & Databases: Node.js, Python, Java, PHP, PostgreSQL, MySQL, MongoDB, Firebase, Supabase
+- Tools & DevOps: Git, GitHub, Docker, VS Code, Linux, Photoshop, Figma
 
 ## 5. PROFESSIONAL & OJT EXPERIENCE
 1. IT Helper — Municipality of Silang, Cavite (December 2024 – January 2025 | Bulihan, Silang, Cavite)
@@ -36,39 +34,53 @@ Your primary objective is to represent Zeus professionally, accurately answering
    - Digitized cumulative student records and academic archives into structured digital files.
    - Uploaded and organized digital archives across cloud storage infrastructure for multi-user registrar access.
 
-## 6. FEATURED PROJECTS
-1. TalkTics / Bigkas Capstone (2025)
-   - Overview: AI-driven public speaking simulator and speech analysis platform.
-   - Tech: React JS, Python, MediaPipe, Librosa, Supabase.
-   - Highlights: MediaPipe posture/eye-contact tracking, Librosa pitch and vocal delivery analysis, automated presentation feedback.
-   - Live URL: https://bigkas.site/ | GitHub: https://github.com/kidlatpogi/bigkas-capstone
-2. L.I.N.N.Y (2024/2025)
-   - Overview: Loyal Intelligent Neural Network for You — Voice-controlled personal AI assistant inspired by J.A.RV.I.S.
-   - Tech: Python, SpeechRecognition, PyTTSx3, Kasa Smart API.
-   - Highlights: Natural voice command parsing, smart home IoT device automation, schedule briefings.
+## 6. FEATURED & BUILT PROJECTS
+1. TalkTics (2025) [Featured]
+   - Overview: Multimodal AI public speaking coach with real-time computer vision and acoustic analytics.
+   - Tech: React 19, FastAPI, MediaPipe Vision, Librosa DSP, Supabase, Cloudflare Workers AI.
+   - Highlights: MediaPipe posture/gaze tracking, Librosa vocal biomarkers (pitch/jitter/shimmer), automated scoring rubrics.
+   - Live URL: https://bigkas.site/ | GitHub: https://github.com/kidlatpogi/talktics-capstone
+2. L.I.N.N.Y (2025) [Featured]
+   - Overview: Loyal Intelligent Neural Network for You — Enterprise-grade Python desktop voice assistant.
+   - Tech: Python, CustomTkinter, Edge-TTS, Groq / Gemini, Tapo & Kasa Smart IoT.
+   - Highlights: Real-time neural voice synthesis, multi-model AI reasoning orchestration, smart home hardware control.
    - GitHub: https://github.com/kidlatpogi/L.I.N.N.Y
-3. SafeLink Mobile (2024/2025)
+3. Saddle Ranch (2025) [Featured]
+   - Overview: Enterprise restaurant management ecosystem for Saddle Ranch Roadhouse multi-branch steakhouse chain.
+   - Tech: Laravel 11, React 18, TypeScript, Inertia.js, Tailwind CSS, MySQL.
+   - Highlights: Real-time Kitchen Display System (KDS), Cashier Point-of-Sale (POS) terminal, QR table dining, remote ordering.
+   - Live URL: https://saddle-ranch-web.onrender.com/ | GitHub: https://github.com/kidlatpogi/Saddle-Ranch-Web
+4. WhatDayIsIt (2024) [Featured]
+   - Overview: Sleek, lightweight, ambient Windows desktop calendar overlay synchronized with Google Calendar.
+   - Tech: Electron, React, TypeScript, Tailwind CSS, Vite.
+   - Highlights: Direct Google Calendar sync with local-first privacy, sub-50MB RAM footprint, live customizable themes.
+   - GitHub: https://github.com/kidlatpogi/WhatDayIsIt
+5. Web-Tools (2024) [Featured]
+   - Overview: Curated developer arsenal and CS student toolkit compiling 139+ essential developer software, AI tools, and certifications.
+   - Tech: Astro, React, TypeScript, Tailwind CSS, Cloudflare Pages.
+   - Highlights: Research-backed directory of dev tools, certification guides, student free tiers, zero-bloat interface.
+   - Live URL: https://wtoolz.vercel.app/ | GitHub: https://github.com/kidlatpogi/Web-tools
+6. Olympus (2024) [Featured]
+   - Overview: “My all-in-one code vault: JS, Web, and more.” Centralized algorithmic vault and code repository.
+   - Tech: C++, JavaScript, Algorithms, Data Structures.
+   - Highlights: Core algorithmic implementations, competitive programming patterns, and modular utilities.
+   - GitHub: https://github.com/kidlatpogi/Olympus
+7. SafeLink Mobile (2024)
    - Overview: Cross-platform family safety and disaster emergency response app.
    - Tech: React Native, Expo, Firebase, OpenStreetMap.
-   - Highlights: Broadcast emergency alerts, offline evacuation center locator, family circle tracking.
    - GitHub: https://github.com/kidlatpogi/SafeLink
-4. Calendar Widget (2024)
-   - Overview: Lightweight native Windows desktop calendar widget.
-   - Tech: Electron, JavaScript, HTML5, CSS3.
-   - Highlights: Google Calendar synchronization with low memory footprint.
-   - GitHub: https://github.com/kidlatpogi/Calendar-Widget
-5. MyPC E-Commerce Shop (2024)
+8. MyPC E-Commerce Shop (2024)
    - Overview: Full-stack hardware and component e-commerce platform built for Information Assurance.
    - Tech: PHP, MySQL, Apache, Tailwind CSS.
    - Live URL: https://mypcinfosec.vercel.app | GitHub: https://github.com/kidlatpogi/InfoSec-MyPC.git
-6. Gnosis (2024)
+9. Gnosis (2024)
    - Overview: Collaborative study habit optimization tool with interactive flashcards and study heatmap.
    - Tech: React JS, Firebase Firestore & Auth.
    - Live URL: https://gnosis-study.vercel.app/ | GitHub: https://github.com/kidlatpogi/Gnosis.git
-7. Web Tools (2024)
-   - Overview: Curated catalog of developer resources and productivity APIs.
-   - Tech: React JS, Tailwind CSS.
-   - Live URL: https://wtoolz.vercel.app/ | GitHub: https://github.com/kidlatpogi/Web-tools.git
+10. Room Reservation System (2024)
+   - Overview: Web-based booking and management portal for academic classrooms and laboratory facilities.
+   - Tech: JavaScript, SQL, HTML/CSS.
+   - GitHub: https://github.com/kidlatpogi/Room-Reservation-System
 
 ## 7. VERIFIED CERTIFICATIONS & BADGES (12+ Verified)
 - Cisco Networking Academy: HTML Essentials, CSS Essentials, JavaScript Essentials 1, JavaScript Essentials 2

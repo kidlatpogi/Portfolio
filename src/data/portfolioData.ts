@@ -1,4 +1,4 @@
-﻿export interface ProjectItem {
+export interface ProjectItem {
   id: string;
   title: string;
   year: string;
@@ -66,49 +66,106 @@ export const PORTFOLIO_DATA = {
 
   // Current Tech Stack & Categorized Skills
   techStack: {
-    frontend: ["JavaScript (ES6+)", "TypeScript", "React.js", "Astro", "Tailwind CSS", "HTML5", "CSS3", "Electron"],
-    backend: ["Python", "FastAPI", "Node.js", "PHP", "RESTful APIs"],
-    databasesAndCloud: ["MySQL", "Supabase", "Firebase", "Cloudflare D1 / KV / R2", "Cloudflare Pages"],
-    aiAndVision: ["MediaPipe (Facial & Posture Tracking)", "Librosa (Audio Analysis)", "Google Cloud Vertex AI", "Cloudflare Workers AI"],
-    tools: ["Git", "GitHub", "Docker", "Linux", "VS Code", "Figma", "Adobe Photoshop"]
+    frontendAndMobile: ["JavaScript", "TypeScript", "Dart", "Flutter", "React", "Tailwind CSS", "HTML5", "CSS3", "Electron"],
+    backendAndDatabases: ["Node.js", "Python", "Java", "PHP", "PostgreSQL", "MySQL", "MongoDB", "Firebase", "Supabase"],
+    toolsAndDevOps: ["Git", "GitHub", "Docker", "VS Code", "Linux", "Photoshop", "Figma"]
   },
 
   // Projects
   projects: [
     {
       id: "talktics",
-      title: "TalkTics / Bigkas Capstone",
+      title: "TalkTics",
       year: "2025",
       isFeatured: true,
-      overview: "An AI-powered public speaking simulator and speech analysis platform.",
-      techStack: ["React JS", "Python", "MediaPipe", "Librosa", "Supabase"],
+      overview: "Multimodal AI public speaking & speech analysis platform using MediaPipe vision mesh and Librosa acoustic analytics to deliver real-time feedback on posture, vocal delivery, and presentation metrics.",
+      techStack: ["React 19", "FastAPI", "MediaPipe", "Librosa", "Supabase", "Cloudflare AI"],
       features: [
-        "Librosa audio frequency and pitch metrics to analyze vocal delivery.",
-        "MediaPipe real-time computer vision for facial orientation and posture tracking.",
-        "Automated scoring metrics and actionable feedback to elevate presentation delivery."
+        "Librosa DSP audio analysis extracting pitch, jitter, and shimmer acoustic biomarkers.",
+        "MediaPipe on-device computer vision for real-time facial mesh and posture tracking.",
+        "Edge NLP intelligence and automated rubric scoring to elevate presentation delivery."
       ],
       liveUrl: "https://bigkas.site/",
-      githubUrl: "https://github.com/kidlatpogi/bigkas-capstone"
+      githubUrl: "https://github.com/kidlatpogi/talktics-capstone"
     },
     {
       id: "linny",
       title: "L.I.N.N.Y",
-      year: "2024/2025",
+      year: "2025",
       isFeatured: true,
-      overview: "Loyal Intelligent Neural Network for You — a personal voice-controlled AI assistant inspired by J.A.R.V.I.S.",
-      techStack: ["Python", "SpeechRecognition", "PyTTSx3", "Kasa Smart API"],
+      overview: "An enterprise-grade, low-latency Python desktop voice assistant unifying multi-model AI reasoning, neural TTS, IoT, and native Windows automation.",
+      techStack: ["Python", "CustomTkinter", "Edge-TTS", "Groq / Gemini", "Tapo IoT"],
       features: [
-        "Real-time conversational voice interaction and natural language command parsing.",
-        "Automated scheduling, calendar management, and live weather briefings.",
-        "Direct IoT smart home automation integrated with Tapo and Kasa hardware devices."
+        "Real-time voice interaction with Microsoft Edge Neural text-to-speech synthesis.",
+        "Multi-model AI reasoning orchestration leveraging Groq, Google Gemini, and Perplexity.",
+        "Direct Tapo and Kasa smart home IoT hardware control and Google Calendar schedule briefing."
       ],
+      liveUrl: "https://github.com/kidlatpogi/L.I.N.N.Y/releases/latest",
       githubUrl: "https://github.com/kidlatpogi/L.I.N.N.Y"
+    },
+    {
+      id: "saddle-ranch",
+      title: "Saddle Ranch",
+      year: "2025",
+      isFeatured: true,
+      overview: "Enterprise restaurant management ecosystem engineered for Saddle Ranch Roadhouse multi-branch steakhouse chain, featuring real-time Kitchen Display (KDS), POS terminals, QR table dining, and cascading delivery logistics.",
+      techStack: ["Laravel 11", "React 18", "TypeScript", "Inertia.js", "Tailwind CSS", "MySQL"],
+      features: [
+        "Real-time Kitchen Display System (KDS) and Cashier Point-of-Sale (POS) terminal workflow.",
+        "In-house QR table dining ordering and remote delivery routing.",
+        "Multi-branch administrative management and analytics dashboard across Cavite branches."
+      ],
+      liveUrl: "https://saddle-ranch-web.onrender.com/",
+      githubUrl: "https://github.com/kidlatpogi/Saddle-Ranch-Web"
+    },
+    {
+      id: "whatdayisit",
+      title: "WhatDayIsIt",
+      year: "2024",
+      isFeatured: true,
+      overview: "A sleek and lightweight Windows Calendar Widget seamlessly connected to Google Calendar without relying on any external databases or APIs.",
+      techStack: ["Electron", "React", "TypeScript", "Tailwind CSS", "Vite"],
+      features: [
+        "Direct local-first Google Calendar synchronization with sub-50MB RAM footprint.",
+        "Ambient, always-visible transparent desktop overlay with live custom themes.",
+        "Zero external database or cloud server dependency for 100% privacy."
+      ],
+      liveUrl: "https://github.com/kidlatpogi/WhatDayIsIt/releases/latest",
+      githubUrl: "https://github.com/kidlatpogi/WhatDayIsIt"
+    },
+    {
+      id: "webtools",
+      title: "Web-Tools",
+      year: "2024",
+      isFeatured: true,
+      overview: "Curated developer arsenal and CS student toolkit compiling 139+ essential developer software, frontier AI coding assistants, design repositories, and verified certification pathways.",
+      techStack: ["Astro", "React", "TypeScript", "Tailwind CSS", "Cloudflare Pages"],
+      features: [
+        "Categorized index of 139+ developer utilities, UI frameworks, AI agents, and hosting providers.",
+        "Free verified certification guides, student perks, and developer discounts.",
+        "High-performance static site architecture deployed on Cloudflare Pages."
+      ],
+      liveUrl: "https://wtoolz.vercel.app/",
+      githubUrl: "https://github.com/kidlatpogi/Web-tools"
+    },
+    {
+      id: "olympus",
+      title: "Olympus",
+      year: "2024",
+      isFeatured: true,
+      overview: "“My all-in-one code vault: JS, Web, and more.” A centralized algorithmic vault housing core data structures, algorithms, utilities, and foundational software engineering implementations.",
+      techStack: ["C++", "JavaScript", "Algorithms", "Web", "Data Structures"],
+      features: [
+        "Comprehensive collection of algorithmic patterns, data structure implementations, and competitive programming solutions.",
+        "Reusable web development utilities and snippet modules in JavaScript and C++."
+      ],
+      githubUrl: "https://github.com/kidlatpogi/Olympus"
     },
     {
       id: "safelink",
       title: "SafeLink Mobile",
-      year: "2024/2025",
-      isFeatured: true,
+      year: "2024",
+      isFeatured: false,
       overview: "A cross-platform family safety and disaster response mobile application.",
       techStack: ["React Native", "Expo", "Firebase", "OpenStreetMap"],
       features: [
@@ -119,24 +176,10 @@ export const PORTFOLIO_DATA = {
       githubUrl: "https://github.com/kidlatpogi/SafeLink"
     },
     {
-      id: "calendar-widget",
-      title: "Calendar Widget",
-      year: "2024",
-      isFeatured: true,
-      overview: "A lightweight, minimal Windows desktop calendar widget.",
-      techStack: ["Electron", "JavaScript", "HTML5", "CSS3"],
-      features: [
-        "Direct synchronization with Google Calendar without reliance on external backend servers.",
-        "Native Windows desktop integration with low memory and CPU footprint."
-      ],
-      liveUrl: "https://github.com/kidlatpogi/Calendar-Widget/releases/latest",
-      githubUrl: "https://github.com/kidlatpogi/Calendar-Widget"
-    },
-    {
       id: "mypc",
       title: "MyPC E-Commerce Shop",
       year: "2024",
-      isFeatured: true,
+      isFeatured: false,
       overview: "Full-stack e-commerce platform developed for Information Assurance and Security.",
       techStack: ["PHP", "MySQL", "Apache", "Tailwind CSS"],
       features: [
@@ -160,19 +203,6 @@ export const PORTFOLIO_DATA = {
       ],
       liveUrl: "https://gnosis-study.vercel.app/",
       githubUrl: "https://github.com/kidlatpogi/Gnosis.git"
-    },
-    {
-      id: "webtools",
-      title: "Web Tools",
-      year: "2024",
-      isFeatured: false,
-      overview: "Curated developer resource catalog providing quick access to essential web engineering tools.",
-      techStack: ["React JS", "Tailwind CSS"],
-      features: [
-        "Categorized index of UI libraries, deployment services, APIs, and productivity utilities."
-      ],
-      liveUrl: "https://wtoolz.vercel.app/",
-      githubUrl: "https://github.com/kidlatpogi/Web-tools.git"
     },
     {
       id: "room-reservation",
@@ -292,15 +322,13 @@ ${exp.responsibilities.map(r => `- ${r}`).join('\n')}`).join('\n\n')}`;
 
   const techStackResp = `### Zeus's Tech Stack & Arsenal
 
-- **Frontend**: ${techStack.frontend.join(', ')}
-- **Backend & APIs**: ${techStack.backend.join(', ')}
-- **Databases & Cloud**: ${techStack.databasesAndCloud.join(', ')}
-- **AI & Computer Vision**: ${techStack.aiAndVision.join(', ')}
-- **Tools & DevOps**: ${techStack.tools.join(', ')}`;
+- **Frontend & Mobile**: ${techStack.frontendAndMobile.join(', ')}
+- **Backend & Databases**: ${techStack.backendAndDatabases.join(', ')}
+- **Tools & DevOps**: ${techStack.toolsAndDevOps.join(', ')}`;
 
   const projectsResp = `### Featured & Built Projects
 
-${projects.map(p => `**${p.title}** (${p.year})
+${projects.map(p => `**${p.title}** (${p.year})${p.isFeatured ? ' [Featured]' : ''}
 ${p.overview}
 - **Tech Stack**: ${p.techStack.join(', ')}
 ${p.features.map(f => `- ${f}`).join('\n')}${p.liveUrl ? `\n- **Live Demo**: ${p.liveUrl}` : ''}

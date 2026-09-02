@@ -1,82 +1,155 @@
-﻿import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ScrollStack, { ScrollStackItem } from './ScrollStack.tsx';
 import ScrollReveal from './ScrollReveal.tsx';
-import { ExternalLink, ArrowUpRight } from 'lucide-react';
+import { ExternalLink, ArrowUpRight, Download, ChevronLeft, ChevronRight, FolderCode } from 'lucide-react';
 
 const STACK_POSITION_RATIO = 0.15;
 const ITEM_STACK_DISTANCE = 30;
 const DESKTOP_QUERY = '(min-width: 1024px)';
 
-const projectsData = [
+interface ProjectItemData {
+  title: string;
+  platform: string;
+  year: string;
+  description: string;
+  tags: string[];
+  stack: string;
+  bgGradient: string;
+  accentColor: string;
+  link?: string;
+  github?: string;
+  actionLabel?: string;
+  actionType?: 'website' | 'download';
+  images?: string[];
+  image?: string;
+  backupImage?: string;
+  isFolder?: boolean;
+}
+
+const projectsData: ProjectItemData[] = [
   {
     title: "TalkTics",
     platform: "Web App",
     year: "2025",
-    description: "An AI-powered public speaking simulator and analysis platform. It leverages Librosa for advanced audio analysis and MediaPipe for real-time facial and posture tracking, providing speakers with automated metrics to refine and elevate their presentation skills.",
-    tags: ["React JS", "Python", "MediaPipe", "Librosa", "Supabase"],
-    stack: "[REACT JS] — [PYTHON]",
+    description: "Multimodal AI public speaking & speech analysis platform using MediaPipe vision mesh and Librosa acoustic analytics to deliver real-time feedback on posture, vocal delivery, and presentation metrics.",
+    tags: ["React 19", "FastAPI", "MediaPipe", "Librosa", "Supabase", "Cloudflare AI"],
+    stack: "[REACT 19] — [FASTAPI] — [MEDIAPIPE]",
     bgGradient: "bg-[#C44900]",
     accentColor: "from-white/15 to-transparent",
     link: "https://bigkas.site/",
-    github: "https://github.com/kidlatpogi/bigkas-capstone",
-    image: "https://zeusbautista.site/Project%20Overview/TalkTics.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/TalkTics.webp"
+    actionLabel: "Visit Website",
+    actionType: "website",
+    github: "https://github.com/kidlatpogi/talktics-capstone",
+    images: [
+      "https://raw.githubusercontent.com/kidlatpogi/talktics-capstone/main/docs/images/home-page.png",
+      "https://raw.githubusercontent.com/kidlatpogi/talktics-capstone/main/docs/images/learn.png",
+      "https://raw.githubusercontent.com/kidlatpogi/talktics-capstone/main/docs/images/journey-sample.png",
+      "https://raw.githubusercontent.com/kidlatpogi/talktics-capstone/main/docs/images/mediapipe-sample.png",
+      "https://raw.githubusercontent.com/kidlatpogi/talktics-capstone/main/docs/images/randomizer.png",
+      "https://raw.githubusercontent.com/kidlatpogi/talktics-capstone/main/docs/images/free-speech.png",
+      "https://raw.githubusercontent.com/kidlatpogi/talktics-capstone/main/docs/images/progress.png",
+      "https://raw.githubusercontent.com/kidlatpogi/talktics-capstone/main/docs/images/achievements.png"
+    ],
+    backupImage: "https://zeusbautista.site/Project%20Overview/TalkTics.webp"
   },
   {
     title: "L.I.N.N.Y",
-    platform: "AI Assistant",
+    platform: "AI Voice Assistant",
     year: "2025",
-    description: "Inspired by J.A.R.V.I.S., L.I.N.N.Y. (Loyal Intelligent Neural Network for You) is a personal AI assistant that provides real-time verbal responses, manages daily tasks like checking the time, weather, and schedule, and seamlessly connects to Tapo smart devices via Kasa for efficient home automation.",
-    tags: ["Python"],
-    stack: "[PYTHON]",
+    description: "An enterprise-grade, low-latency Python desktop voice assistant unifying multi-model AI reasoning (Groq, Gemini), neural TTS (Edge-TTS), Tapo & Kasa smart home IoT, and native Windows automation.",
+    tags: ["Python", "CustomTkinter", "Edge-TTS", "Groq / Gemini", "Tapo IoT"],
+    stack: "[PYTHON] — [NEURAL TTS] — [SMART IOT]",
     bgGradient: "bg-[#D65408]",
     accentColor: "from-white/15 to-transparent",
-    link: "",
+    link: "https://github.com/kidlatpogi/L.I.N.N.Y/releases/latest",
+    actionLabel: "Download for Windows",
+    actionType: "download",
     github: "https://github.com/kidlatpogi/L.I.N.N.Y",
-    image: "https://zeusbautista.site/Project%20Overview/Linny-1200.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/Linny-1200.webp"
+    images: [
+      "https://raw.githubusercontent.com/kidlatpogi/L.I.N.N.Y/main/assets/screenshots/overview.png",
+      "https://raw.githubusercontent.com/kidlatpogi/L.I.N.N.Y/main/assets/screenshots/ai_studio.png",
+      "https://raw.githubusercontent.com/kidlatpogi/L.I.N.N.Y/main/assets/screenshots/calendar.png",
+      "https://raw.githubusercontent.com/kidlatpogi/L.I.N.N.Y/main/assets/screenshots/smart_lighting.png",
+      "https://raw.githubusercontent.com/kidlatpogi/L.I.N.N.Y/main/assets/screenshots/app_shortcuts.png"
+    ],
+    backupImage: "https://zeusbautista.site/Project%20Overview/Linny-1200.webp"
   },
   {
-    title: "SafeLink Mobile",
-    platform: "Mobile App",
+    title: "Saddle Ranch",
+    platform: "Web App",
     year: "2025",
-    description: "SafeLink is a React Native/Expo app for family safety with emergency broadcasts and evacuation info using Firebase and OpenStreetMap.",
-    tags: ["React Native", "Firebase"],
-    stack: "[REACT NATIVE] — [FIREBASE]",
+    description: "Enterprise restaurant platform engineered for Saddle Ranch Roadhouse multi-branch steakhouse chain, featuring real-time Kitchen Display (KDS), POS terminals, QR table dining, and cascading delivery logistics.",
+    tags: ["Laravel 11", "React 18", "TypeScript", "Inertia.js", "Tailwind CSS", "MySQL"],
+    stack: "[LARAVEL 11] — [REACT 18] — [INERTIA.JS]",
     bgGradient: "bg-[#E86711]",
     accentColor: "from-white/15 to-transparent",
-    link: "",
-    github: "https://github.com/kidlatpogi/SafeLink",
-    image: "https://zeusbautista.site/Project%20Overview/SafeLink-1200.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/SafeLink-1200.webp"
+    link: "https://saddle-ranch-web.onrender.com/",
+    actionLabel: "Visit Website",
+    actionType: "website",
+    github: "https://github.com/kidlatpogi/Saddle-Ranch-Web",
+    images: [
+      "https://raw.githubusercontent.com/kidlatpogi/Saddle-Ranch-Web/master/docs/screenshots/LANDING%20PAGE.png",
+      "https://raw.githubusercontent.com/kidlatpogi/Saddle-Ranch-Web/master/docs/screenshots/Remote%20Ordering.png",
+      "https://raw.githubusercontent.com/kidlatpogi/Saddle-Ranch-Web/master/docs/screenshots/QR%20Ordering.png",
+      "https://raw.githubusercontent.com/kidlatpogi/Saddle-Ranch-Web/master/docs/screenshots/POS.png",
+      "https://raw.githubusercontent.com/kidlatpogi/Saddle-Ranch-Web/master/docs/screenshots/KDS.png",
+      "https://raw.githubusercontent.com/kidlatpogi/Saddle-Ranch-Web/master/docs/screenshots/Admin.png"
+    ],
+    backupImage: "https://raw.githubusercontent.com/kidlatpogi/Saddle-Ranch-Web/master/docs/screenshots/POS.png"
   },
   {
-    title: "MyPC E-Commerce Shop",
-    platform: "Web App",
-    year: "2024",
-    description: "MyPC is a web-based e-commerce platform developed for the Information Assurance and Security course. This emulates a real-world online store where users can browse, select, and purchase computer components and accessories.",
-    tags: ["PHP", "MySQL"],
-    stack: "[PHP] — [MYSQL]",
-    bgGradient: "bg-[#F57C20]",
-    accentColor: "from-white/15 to-transparent",
-    link: "https://mypcinfosec.vercel.app",
-    github: "https://github.com/kidlatpogi/InfoSec-MyPC.git",
-    image: "https://zeusbautista.site/Project%20Overview/MyPC-1200.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/MyPC-1200.webp"
-  },
-  {
-    title: "Calendar Widget",
+    title: "WhatDayIsIt",
     platform: "Desktop App",
     year: "2024",
-    description: "A sleek and lightweight Windows Calendar Widget seamlessly connected to Google Calendar — without relying on any external databases or APIs.",
-    tags: ["JavaScript", "Electron"],
-    stack: "[ELECTRON] — [JS]",
+    description: "A sleek and lightweight Windows Calendar Widget seamlessly connected to Google Calendar without relying on any external databases or APIs, featuring a sub-50MB RAM footprint.",
+    tags: ["Electron", "React", "TypeScript", "Tailwind CSS", "Vite"],
+    stack: "[ELECTRON] — [REACT] — [TYPESCRIPT]",
+    bgGradient: "bg-[#F57C20]",
+    accentColor: "from-white/15 to-transparent",
+    link: "https://github.com/kidlatpogi/WhatDayIsIt/releases/latest",
+    actionLabel: "Download for Windows",
+    actionType: "download",
+    github: "https://github.com/kidlatpogi/WhatDayIsIt",
+    images: [
+      "https://raw.githubusercontent.com/kidlatpogi/WhatDayIsIt/main/assets/Calendar-Desktop-Menu-Example.png",
+      "https://raw.githubusercontent.com/kidlatpogi/WhatDayIsIt/main/assets/Overview.png",
+      "https://raw.githubusercontent.com/kidlatpogi/WhatDayIsIt/main/assets/Customization.png",
+      "https://raw.githubusercontent.com/kidlatpogi/WhatDayIsIt/main/assets/Dragging.gif",
+      "https://raw.githubusercontent.com/kidlatpogi/WhatDayIsIt/main/assets/Customizing.gif",
+      "https://raw.githubusercontent.com/kidlatpogi/WhatDayIsIt/main/assets/Layout.gif"
+    ],
+    backupImage: "https://zeusbautista.site/Project%20Overview/CalendarWidget-1200.webp"
+  },
+  {
+    title: "Web-Tools",
+    platform: "Web Directory",
+    year: "2024",
+    description: "Curated developer arsenal and CS student toolkit compiling 139+ essential developer software, frontier AI coding assistants, design inspiration repositories, and verified certification pathways.",
+    tags: ["Astro", "React", "TypeScript", "Tailwind CSS", "Cloudflare Pages"],
+    stack: "[ASTRO] — [REACT] — [TAILWIND CSS]",
     bgGradient: "bg-[#FF9436]",
     accentColor: "from-white/15 to-transparent",
-    link: "https://github.com/kidlatpogi/Calendar-Widget/releases/latest",
-    github: "https://github.com/kidlatpogi/Calendar-Widget",
-    image: "https://zeusbautista.site/Project%20Overview/CalendarWidget-1200.webp",
-    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/CalendarWidget-1200.webp"
+    link: "https://wtoolz.vercel.app/",
+    actionLabel: "Visit Website",
+    actionType: "website",
+    github: "https://github.com/kidlatpogi/Web-tools",
+    images: [
+      "https://raw.githubusercontent.com/kidlatpogi/Web-tools/main/LandingPage.png"
+    ],
+    backupImage: "https://zeusbautista.site/Project%20Overview/WebToolz-1200.webp"
+  },
+  {
+    title: "Olympus",
+    platform: "Code Vault",
+    year: "2024",
+    description: "“My all-in-one code vault: JS, Web, and more.” A centralized algorithmic vault housing core data structures, algorithms, utilities, and foundational software engineering implementations.",
+    tags: ["C++", "JavaScript", "Algorithms", "Web", "Data Structures"],
+    stack: "[C++] — [JAVASCRIPT] — [ALGORITHMS]",
+    bgGradient: "bg-[#B43E00]",
+    accentColor: "from-white/15 to-transparent",
+    link: "",
+    github: "https://github.com/kidlatpogi/Olympus",
+    isFolder: true
   }
 ];
 
@@ -89,6 +162,21 @@ export default function Projects() {
   const sidebarPanelRef = useRef<HTMLDivElement>(null);
   const stackColumnRef = useRef<HTMLDivElement>(null);
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  const [currentImageIndices, setCurrentImageIndices] = useState<Record<number, number>>({});
+
+  const handlePrevImage = (projectIndex: number, total: number) => {
+    setCurrentImageIndices(prev => {
+      const current = prev[projectIndex] || 0;
+      return { ...prev, [projectIndex]: (current - 1 + total) % total };
+    });
+  };
+
+  const handleNextImage = (projectIndex: number, total: number) => {
+    setCurrentImageIndices(prev => {
+      const current = prev[projectIndex] || 0;
+      return { ...prev, [projectIndex]: (current + 1) % total };
+    });
+  };
 
   useEffect(() => {
     const island = sectionRef.current?.parentElement;
@@ -317,6 +405,9 @@ export default function Projects() {
             >
               {projectsData.map((project, index) => {
                 const isVisible = index >= activeProjectIndex;
+                const images = project.images && project.images.length > 0 ? project.images : (project.image ? [project.image] : []);
+                const currentImgIndex = (currentImageIndices[index] || 0) % (images.length || 1);
+                const currentImage = images[currentImgIndex];
 
                 return (
                   <ScrollStackItem
@@ -353,29 +444,64 @@ export default function Projects() {
                           </div>
 
                           {/* Mobile Mock Preview Device (Visible on Mobile) */}
-                          {project.image && (
-                            <div className="flex md:hidden flex-col w-full h-36 min-[380px]:h-44 sm:h-48 rounded-xl overflow-hidden border border-white/25 shadow-xl bg-black/40 my-1 flex-shrink-0">
+                          {project.isFolder ? (
+                            <div className="flex md:hidden flex-col w-full h-36 min-[380px]:h-44 sm:h-48 rounded-xl overflow-hidden border border-white/25 shadow-xl bg-black/40 my-1 flex-shrink-0 items-center justify-center">
+                              <FolderCode className="w-14 h-14 text-white drop-shadow-md" />
+                              <span className="font-mono text-[10px] text-white/90 font-bold uppercase tracking-widest mt-2">All-In-One Code Vault</span>
+                            </div>
+                          ) : currentImage ? (
+                            <div className="flex md:hidden flex-col w-full rounded-xl overflow-hidden border border-white/25 shadow-xl bg-black/40 my-1 flex-shrink-0">
                               <div className="h-4 w-full bg-white/15 border-b border-white/15 flex items-center px-2.5 gap-1 flex-shrink-0">
                                 <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
                                 <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
                                 <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
                               </div>
-                              <div className="w-full flex-1 min-h-0 overflow-hidden bg-slate-900">
+                              <div className="w-full h-32 min-[380px]:h-40 sm:h-44 overflow-hidden bg-slate-900 relative">
                                 <img
-                                  src={project.image}
-                                  alt={`${project.title} Preview`}
+                                  src={currentImage}
+                                  alt={`${project.title} Preview ${currentImgIndex + 1}`}
                                   className="w-full h-full object-cover object-top select-none pointer-events-none"
                                   loading="lazy"
                                   onError={(e) => {
                                     const img = e.currentTarget;
-                                    if (img.src !== project.backupImage) {
-                                      img.src = project.backupImage || "";
+                                    if (project.backupImage && img.src !== project.backupImage) {
+                                      img.src = project.backupImage;
                                     }
                                   }}
                                 />
                               </div>
+                              {/* Mobile Prev / Next Controls */}
+                              {images.length > 1 && (
+                                <div className="flex items-center justify-between px-3 py-1 bg-black/50 border-t border-white/15 backdrop-blur-sm">
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handlePrevImage(index, images.length);
+                                    }}
+                                    className="flex items-center gap-1 text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-white/15 active:bg-white/30 px-2.5 py-0.5 rounded cursor-target"
+                                  >
+                                    <ChevronLeft className="w-3 h-3" />
+                                    Prev
+                                  </button>
+                                  <span className="font-mono text-[10px] font-bold text-white/90">
+                                    {currentImgIndex + 1} / {images.length}
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleNextImage(index, images.length);
+                                    }}
+                                    className="flex items-center gap-1 text-[10px] font-mono font-bold uppercase tracking-wider text-white bg-white/15 active:bg-white/30 px-2.5 py-0.5 rounded cursor-target"
+                                  >
+                                    Next
+                                    <ChevronRight className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              )}
                             </div>
-                          )}
+                          ) : null}
 
                           {/* Technology Pills */}
                           <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -413,10 +539,14 @@ export default function Projects() {
                               <a 
                                 href={project.link} 
                                 className="flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-black/30 hover:bg-black/50 border border-white/30 hover:border-white/50 text-white transition-all cursor-target font-mono text-[10px] md:text-xs uppercase tracking-wider font-bold shadow-sm"
-                                aria-label="Live Demo"
+                                aria-label={project.actionLabel || "Visit Website"}
                               >
-                                <ExternalLink className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
-                                Visit Website
+                                {project.actionType === 'download' ? (
+                                  <Download className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
+                                ) : (
+                                  <ExternalLink className="w-3.5 h-3.5 text-white" strokeWidth={2.5} />
+                                )}
+                                {project.actionLabel || "Visit Website"}
                               </a>
                             )}
                           </div>
@@ -425,7 +555,16 @@ export default function Projects() {
 
                       {/* Desktop Mock Preview Device (Hidden on Mobile) */}
                       <div className="hidden md:flex md:col-span-6 h-[95%] self-center items-center justify-center min-w-0">
-                        {project.image ? (
+                        {project.isFolder ? (
+                          <div className="flex flex-col relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/25 shadow-2xl bg-black/40 group/folder items-center justify-center p-6">
+                            <div className="relative p-8 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md shadow-inner flex flex-col items-center justify-center transition-all duration-500 group-hover/folder:scale-105 group-hover/folder:bg-white/15">
+                              <FolderCode className="w-20 h-20 xl:w-24 xl:h-24 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover/folder:-translate-y-1" />
+                              <span className="font-mono text-xs text-white/90 font-bold uppercase tracking-widest mt-4 text-center">
+                                All-In-One Code Vault
+                              </span>
+                            </div>
+                          </div>
+                        ) : currentImage ? (
                           <div className="flex flex-col relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/25 shadow-2xl bg-black/30 group/browser">
                             {/* Browser top-bar */}
                             <div className="h-5 w-full bg-white/15 border-b border-white/15 flex items-center px-3 gap-1 flex-shrink-0">
@@ -434,19 +573,50 @@ export default function Projects() {
                               <span className="w-1.5 h-1.5 rounded-full bg-white/40" />
                             </div>
                             {/* Browser content */}
-                            <div className="w-full flex-1 min-h-0 overflow-hidden bg-slate-900">
+                            <div className="w-full flex-1 min-h-0 overflow-hidden bg-slate-900 relative">
                               <img 
-                                src={project.image} 
-                                alt={`${project.title} Preview`}
+                                key={currentImage}
+                                src={currentImage} 
+                                alt={`${project.title} Preview ${currentImgIndex + 1}`}
                                 className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700 select-none pointer-events-none"
                                 onError={(e) => {
                                   const img = e.currentTarget;
-                                  if (img.src !== project.backupImage) {
-                                    img.src = project.backupImage || "";
+                                  if (project.backupImage && img.src !== project.backupImage) {
+                                    img.src = project.backupImage;
                                   }
                                 }}
                               />
                             </div>
+                            {/* Desktop Prev / Next Navigation Controls */}
+                            {images.length > 1 && (
+                              <div className="flex items-center justify-between px-3.5 py-1.5 bg-black/40 border-t border-white/15 backdrop-blur-md">
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handlePrevImage(index, images.length);
+                                  }}
+                                  className="flex items-center gap-1 text-[11px] font-mono font-bold uppercase tracking-wider text-white/90 hover:text-white bg-white/10 hover:bg-white/25 px-3 py-1 rounded-md transition-all cursor-target shadow-sm"
+                                >
+                                  <ChevronLeft className="w-3.5 h-3.5" />
+                                  Prev
+                                </button>
+                                <span className="font-mono text-xs font-bold text-white/90 tracking-widest">
+                                  {currentImgIndex + 1} / {images.length}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleNextImage(index, images.length);
+                                  }}
+                                  className="flex items-center gap-1 text-[11px] font-mono font-bold uppercase tracking-wider text-white/90 hover:text-white bg-white/10 hover:bg-white/25 px-3 py-1 rounded-md transition-all cursor-target shadow-sm"
+                                >
+                                  Next
+                                  <ChevronRight className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            )}
                           </div>
                         ) : (
                           <div className="relative w-[70%] max-w-[200px] aspect-square rounded-full border border-white/15 bg-white/15 flex items-center justify-center shadow-inner hover:scale-105 transition-transform duration-500">
