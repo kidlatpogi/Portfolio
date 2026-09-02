@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Share2, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 
 export default function SocialsSidebar() {
   const [isVisible, setIsVisible] = useState(false);
@@ -131,16 +131,16 @@ export default function SocialsSidebar() {
         })}
       </div>
 
-      {/* MOBILE VIEW (Bottom-Left Circle Menu) */}
+      {/* MOBILE VIEW (Bottom-Right Circle Menu with Plus icon) */}
       <div 
         ref={menuRef}
-        className={`md:hidden fixed bottom-[144px] left-6 z-50 flex flex-col items-start transition-all duration-300 ${
+        className={`md:hidden fixed bottom-6 right-6 z-50 flex flex-col items-end transition-all duration-300 ${
           isFooterVisible ? 'opacity-0 pointer-events-none translate-y-4' : 'opacity-100 pointer-events-auto translate-y-0'
         }`}
       >
-        {/* Expanded Social Icons Stack (Pops up above the button) */}
+        {/* Expanded Social Icons Stack (Pops up above the button on the right) */}
         <div 
-          className={`flex flex-col gap-2.5 mb-3 transition-all duration-300 ease-out ${
+          className={`flex flex-col items-end gap-2.5 mb-3 transition-all duration-300 ease-out ${
             isMobileOpen 
               ? 'opacity-100 translate-y-0 pointer-events-auto scale-100' 
               : 'opacity-0 translate-y-4 pointer-events-none scale-90 h-0 overflow-hidden'
@@ -162,20 +162,20 @@ export default function SocialsSidebar() {
                   setIsMobileOpen(false);
                 }}
                 aria-label={social.ariaLabel}
-                className="flex items-center gap-3 px-3.5 py-2 rounded-full bg-black/95 text-white border border-white/20 shadow-xl backdrop-blur-md active:bg-[#C44900] transition-colors"
+                className="flex items-center gap-2.5 pl-3.5 pr-2.5 py-2 rounded-full bg-black/95 text-white border border-white/20 shadow-xl backdrop-blur-md active:bg-[#C44900] transition-colors"
               >
+                <span className="font-mono text-xs uppercase tracking-wider font-bold">
+                  {social.name}
+                </span>
                 <div className="w-5 h-5 flex items-center justify-center text-white shrink-0">
                   {social.icon}
                 </div>
-                <span className="font-mono text-xs uppercase tracking-wider font-bold pr-2">
-                  {social.name}
-                </span>
               </a>
             );
           })}
         </div>
 
-        {/* Mobile Circle Menu Toggle Button */}
+        {/* Mobile Circle Menu Toggle Button with Plus (+) icon */}
         <button
           type="button"
           onClick={() => setIsMobileOpen((prev) => !prev)}
@@ -188,7 +188,7 @@ export default function SocialsSidebar() {
           {isMobileOpen ? (
             <X size={20} className="text-white transition-transform duration-200" />
           ) : (
-            <Share2 size={19} className="text-white" />
+            <Plus size={22} className="text-white transition-transform duration-200" />
           )}
         </button>
       </div>
