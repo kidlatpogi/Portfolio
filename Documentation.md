@@ -1,4 +1,4 @@
-﻿# Portfolio Technical Documentation
+# Portfolio Technical Documentation
 **Author:** Zeus Angelo Bautista  
 **Role:** IT Developer & AI Engineer  
 **Repository:** [github.com/kidlatpogi/Portfolio](https://github.com/kidlatpogi/Portfolio)  
@@ -16,9 +16,9 @@ This repository contains the official portfolio website of **Zeus Angelo Bautist
 - **Frontend Islands:** React 19 interactive components hydrated using Astro client directives (`client:load`, `client:visible`, `client:only="react"`).
 - **Design System:** High-contrast editorial layout utilizing custom typography (`Clash Display`, `Array`, `Geist Mono`), custom canvas background simulations (`ShapeGrid`), and the signature **"Future Developer" accent color (`#C44900`)**.
 - **Interactive Showcase Runways:** Pinned horizontal scrolling powered by GSAP ScrollTrigger for rich multi-card showcases (`Projects`, `Designs`, `Certifications`), paired with fluid natural scrolling for narrative sections (`About`, `Skills`, `Experience`) and section dividers (`ParallaxTextSection`, `GithubHeatmap`).
-- **AI Portfolio Assistant:** Full-screen interactive modal powered by Cloudflare Workers AI (`@cf/meta/llama-3.1-8b-instruct`), trained on `ChatBot.txt`, protected with client/server prompt-injection shields, client-side permissionless telemetry defense, profanity/NSFW interceptors, thinking indicator, and typewriter streaming effect.
+- **AI Portfolio Assistant:** Full-screen interactive modal powered by Cloudflare Workers AI (`@cf/meta/llama-3.1-8b-instruct`) and server-side edge system instructions, protected with client/server prompt-injection shields, client-side permissionless telemetry defense, profanity/NSFW interceptors, thinking indicator, and typewriter streaming effect.
 - **Interactive Typing Test:** Fullscreen speed-typing modal featuring 100 rotated software engineering quotes, real-time WPM/accuracy tracking, interactive virtual keyboard lighting, and Web Audio API synthesized mechanical keyboard switch sounds (Thock, Clicky, Linear, Tactile).
-- **Data Centralization:** Single-source-of-truth knowledge base (`src/data/portfolioData.ts` and `ChatBot.txt`) providing scalable synchronized data for both the website UI and the AI assistant.
+- **Data Centralization:** Single-source-of-truth knowledge base (`src/data/portfolioData.ts`) providing scalable synchronized data for both the website UI and the AI assistant.
 
 ---
 
@@ -75,7 +75,6 @@ Portfolio/
 │   │   ├── TargetCursor.tsx     # Custom animated cursor
 │   │   └── TypingTest.tsx       # Interactive Speed Typing Test overlay
 │   ├── data/
-│   │   ├── ChatBot.txt          # Complete training instructions & prompt knowledge base
 │   │   ├── portfolioData.ts     # Single source of truth for all projects, skills, and certs
 │   │   └── typingSentences.ts   # 100 curated quotes and engineering sentences
 │   ├── utils/
@@ -91,7 +90,6 @@ Portfolio/
 │   │   └── projects.astro       # Full project archive directory
 │   └── styles/
 │       └── global.css           # Tailwind base styles, font-face rules, and keyframes
-├── ChatBot.txt                  # Root AI assistant knowledge instructions
 ├── wrangler.jsonc               # Cloudflare Pages/Workers binding configuration
 ├── astro.config.mjs             # Astro build & Cloudflare adapter configuration
 ├── package.json                 # Dependencies and npm scripts
@@ -100,9 +98,9 @@ Portfolio/
 
 ---
 
-## 4. Single Source of Truth Data Architecture (`src/data/portfolioData.ts` & `ChatBot.txt`)
+## 4. Single Source of Truth Data Architecture (`src/data/portfolioData.ts`)
 
-To prevent discrepancies between the website's static cards and the AI assistant's answers, all data is centrally defined in `src/data/portfolioData.ts` and mirrored in `ChatBot.txt`.
+To prevent discrepancies between the website's static cards and the AI assistant's answers, all data is centrally defined in `src/data/portfolioData.ts` and mirrored in the assistant's edge runtime instructions.
 
 ### Data Models:
 1. **`profile`**:
@@ -162,7 +160,7 @@ To prevent discrepancies between the website's static cards and the AI assistant
 ## 6. AI Assistant & Edge API Integration (`ChatBot.tsx` & `api/chat.ts`)
 
 ### 1. Training & Knowledge Integration
-- Trained on `ChatBot.txt` containing full context on Zeus's background, education, projects, skills, certifications, and contact channels.
+- Grounded on edge system instructions containing full context on Zeus's background, education, projects, skills, certifications, and contact channels.
 - Backed by **Cloudflare Workers AI** running `@cf/meta/llama-3.1-8b-instruct`.
 - Robust multi-intent fallback routing for instant, accurate answers on composite queries (e.g. combining background and work experience).
 - Strict out-of-scope & roleplay guards preventing hallucination and prompt leaks.

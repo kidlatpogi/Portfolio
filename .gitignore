@@ -27,4 +27,8 @@ pnpm-debug.log*
 .wrangler/
 
 # lockfiles (generated per OS build container)
-package-lock.json
+package-lock.json
+
+# prompt files & local assistant notes
+ChatBot.txt
+

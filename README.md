@@ -81,7 +81,7 @@ The application adopts an **Islands Architecture** pattern powered by Astro SSR 
 
 ### 2. Edge-Native AI Assistant (`ChatBot.tsx` & `/api/chat.ts`)
 - **Model Backbone**: Powered by `@cf/meta/llama-3.1-8b-instruct` running directly inside Cloudflare Workers AI edge environment.
-- **Single Source of Truth Knowledge Base**: Synchronized directly with `ChatBot.txt` and `portfolioData.ts`.
+- **Single Source of Truth Knowledge Base**: Synchronized directly with `portfolioData.ts` and edge API runtime.
 - **Security & Prompt Defense**: Multi-stage server-side guardrails intercepting jailbreaks, unauthorized system prompt extraction, profanity, and out-of-scope roleplay requests.
 - **User Experience**: Fullscreen immersive glassmorphic interface, dynamic thinking states, typewriter streaming effect, quick prompt suggestions, and automatic retry handling.
 
@@ -150,7 +150,6 @@ Portfolio/
 │   │   ├── TargetCursor.tsx        # Custom hardware-accelerated animated cursor
 │   │   └── TypingTest.tsx          # Speed typing suite with mechanical switch audio
 │   ├── data/
-│   │   ├── ChatBot.txt             # Primary AI assistant instruction knowledge base
 │   │   ├── portfolioData.ts        # Centralized data store for projects, skills, and certs
 │   │   └── typingSentences.ts      # 100 software engineering typing passages
 │   ├── layouts/
