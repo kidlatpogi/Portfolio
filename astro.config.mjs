@@ -8,6 +8,7 @@ import cloudflare from '@astrojs/cloudflare';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://www.zeusbautista.site',
   integrations: [react()],
 
   vite: {

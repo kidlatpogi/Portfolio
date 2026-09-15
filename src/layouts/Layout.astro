@@ -4,12 +4,21 @@ import '../styles/global.css';
 interface Props {
 	title?: string;
 	description?: string;
+	image?: string;
+	canonicalURL?: string;
+	type?: string;
 }
 
+const defaultImage = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Bautista%20Zeus%20Angelo%20V..webp";
+
 const { 
-	title = "Zeus Angelo Bautista", 
-	description = "Architecting high-fidelity digital experiences. Personal portfolio of Zeus Angelo Vargas Bautista, IT Developer & AI Engineer." 
+	title = "Zeus Angelo Bautista | IT Developer & AI Engineer", 
+	description = "Architecting high-fidelity digital experiences. Personal portfolio of Zeus Angelo Vargas Bautista, IT Developer & AI Engineer. Open for OJT & internship opportunities.",
+	image = defaultImage,
+	type = "website"
 } = Astro.props;
+
+const canonicalURL = Astro.props.canonicalURL || new URL(Astro.url.pathname, Astro.site || "https://www.zeusbautista.site").href;
 ---
 
 <!doctype html>
@@ -26,16 +35,47 @@ const {
 		<title>{title}</title>
 		<meta name="title" content={title} />
 		<meta name="description" content={description} />
- 
-		<!-- Open Graph / Facebook -->
-		<meta property="og:type" content="website" />
+		<link rel="canonical" href={canonicalURL} />
+		<meta name="author" content="Zeus Angelo Bautista" />
+
+		<!-- Open Graph / Facebook / Messenger / WhatsApp / LinkedIn -->
+		<meta property="og:type" content={type} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:site_name" content="Zeus Angelo Bautista Portfolio" />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
- 
-		<!-- Twitter -->
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content={description} />
+		<meta property="og:image" content={image} />
+		<meta property="og:image:secure_url" content={image} />
+		<meta property="og:image:type" content="image/webp" />
+		<meta property="og:image:alt" content="Zeus Angelo Bautista - Professional Profile" />
+		<meta property="og:locale" content="en_US" />
+
+		<!-- Twitter / X -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content={canonicalURL} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={image} />
+		<meta name="twitter:image:alt" content="Zeus Angelo Bautista - Professional Profile" />
+
+		<!-- JSON-LD Structured Data -->
+		<script type="application/ld+json" is:inline set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@type": "Person",
+			"name": "Zeus Angelo Bautista",
+			"url": canonicalURL,
+			"image": image,
+			"jobTitle": "IT Developer & AI Engineer",
+			"description": description,
+			"alumniOf": {
+				"@type": "EducationalOrganization",
+				"name": "National University Dasmariñas"
+			},
+			"sameAs": [
+				"https://github.com/kidlatpogi",
+				"https://www.linkedin.com/in/zeus-angelo-bautista"
+			]
+		})} />
  
 		<!-- Preconnects for CDN, Fonts, and Critical Assets -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
