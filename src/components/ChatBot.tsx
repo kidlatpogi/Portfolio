@@ -368,23 +368,37 @@ export const ChatBot: React.FC = () => {
 
   // Footer visibility detector matching SocialsSidebar
   useEffect(() => {
-    const handleScroll = () => {
-      const footerEl = document.getElementById('contact') || document.querySelector('footer');
-      const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
-      let footerVisible = isNearBottom;
-      if (!footerVisible && footerEl) {
-        const rect = footerEl.getBoundingClientRect();
-        // Hide if top of footer is in viewport
-        footerVisible = rect.top < window.innerHeight - 80;
-      }
+    let footerInView = false;
+    const footerEl = document.getElementById('contact') || document.querySelector('footer');
+    let observer: IntersectionObserver | null = null;
 
-      setIsFooterVisible(footerVisible);
+    if (footerEl && typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          footerInView = entry.isIntersecting;
+          setIsFooterVisible(footerInView);
+        },
+        { rootMargin: '0px 0px 80px 0px' }
+      );
+      observer.observe(footerEl);
+    }
+
+    let rafId: number | null = null;
+    const handleScroll = () => {
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+        setIsFooterVisible(footerInView || isNearBottom);
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
     return () => {
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+      if (observer) observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
@@ -574,8 +588,40 @@ export const ChatBot: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed inset-0 z-[100] flex flex-col justify-between bg-[#f8f8f8]/85 backdrop-blur-2xl px-6 py-8 sm:px-12 md:px-20 lg:px-28"
+            className="chatbot-modal-overlay fixed inset-0 z-[100] flex flex-col justify-between bg-[#f8f8f8]/85 backdrop-blur-2xl px-5 py-5 sm:px-10 sm:py-8 md:px-16 md:py-10 lg:px-24"
           >
+            {/* Height-aware responsive styling */}
+            <style>{`
+              @media (max-height: 800px) {
+                .chatbot-modal-overlay {
+                  padding-top: 1rem !important;
+                  padding-bottom: 1rem !important;
+                  padding-left: 1.5rem !important;
+                  padding-right: 1.5rem !important;
+                }
+                .chatbot-hero-title {
+                  font-size: clamp(1.75rem, 3.8vw, 2.75rem) !important;
+                  margin-bottom: 0.25rem !important;
+                }
+                .chatbot-input-large {
+                  font-size: 1.25rem !important;
+                  padding-bottom: 0.5rem !important;
+                }
+                .chatbot-suggestions {
+                  margin-top: 0.5rem !important;
+                  gap: 0.35rem !important;
+                }
+                .chatbot-messages-feed {
+                  max-height: 46vh !important;
+                  margin-bottom: 0.5rem !important;
+                }
+                .chatbot-bubble {
+                  padding: 0.75rem 1rem !important;
+                  font-size: 0.875rem !important;
+                }
+              }
+            `}</style>
+
             {/* Top Navigation Bar */}
             <div className="w-full flex items-center justify-between max-w-4xl mx-auto flex-shrink-0">
               <div className="flex items-center gap-3">
@@ -590,7 +636,7 @@ export const ChatBot: React.FC = () => {
                 </span>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="cursor-target w-10 h-10 rounded-full bg-black/5 hover:bg-black text-slate-700 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
+                  className="cursor-target w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/5 hover:bg-black text-slate-700 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
                   aria-label="Close ask modal"
                 >
                   <X size={18} />
@@ -601,14 +647,14 @@ export const ChatBot: React.FC = () => {
             {/* Main Interactive Content Area */}
             {messages.length === 0 ? (
               /* Initial State: Big Prominent Prompt */
-              <div className="w-full max-w-3xl mx-auto flex flex-col justify-center flex-grow py-4">
+              <div className="w-full max-w-3xl mx-auto flex flex-col justify-center flex-grow py-2 sm:py-4">
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="flex flex-col gap-6 my-auto"
+                  className="flex flex-col gap-4 sm:gap-6 my-auto"
                 >
-                  <h1 className="font-clash-semibold text-3xl sm:text-5xl md:text-6xl text-slate-900 tracking-tight leading-none lowercase select-none">
+                  <h1 className="chatbot-hero-title font-clash-semibold text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-slate-900 tracking-tight leading-none lowercase select-none">
                     what do you want to ask?
                   </h1>
 
@@ -627,31 +673,31 @@ export const ChatBot: React.FC = () => {
                       onChange={(e) => setInputValue(e.target.value)}
                       placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Type a question or choose below..."}
                       disabled={isInputDisabled}
-                      className="w-full text-lg sm:text-2xl md:text-3xl font-sans text-slate-900 bg-transparent border-b-2 border-slate-300 focus:border-[#C44900] pb-3 pr-12 focus:outline-none transition-colors duration-200 placeholder:text-slate-400/70"
+                      className="chatbot-input-large w-full text-base sm:text-xl md:text-2xl lg:text-3xl font-sans text-slate-900 bg-transparent border-b-2 border-slate-300 focus:border-[#C44900] pb-2.5 sm:pb-3 pr-10 sm:pr-12 focus:outline-none transition-colors duration-200 placeholder:text-slate-400/70"
                     />
                     <button
                       type="submit"
                       disabled={isInputDisabled || !inputValue.trim()}
-                      className="cursor-target absolute right-0 bottom-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
+                      className="cursor-target absolute right-0 bottom-2.5 sm:bottom-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
                       aria-label="Submit query"
                     >
-                      <CornerDownLeft size={24} />
+                      <CornerDownLeft size={22} />
                     </button>
                   </form>
 
                   {/* Suggestion Chips */}
-                  <div className="flex flex-col gap-2.5 mt-4">
+                  <div className="chatbot-suggestions flex flex-col gap-2 mt-2 sm:mt-4">
                     <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold">
                       Suggested Questions:
                     </span>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
                       {TOPICS.map((t, idx) => (
                         <button
                           key={idx}
                           type="button"
                           disabled={isInputDisabled}
                           onClick={() => handleSend(t.query)}
-                          className="cursor-target font-mono text-xs font-semibold rounded-full border border-slate-300 hover:border-[#C44900] bg-white hover:bg-orange-50 disabled:opacity-50 px-4 py-2 text-slate-700 hover:text-[#C44900] transition-all duration-200 shadow-2xs cursor-pointer flex items-center gap-1.5"
+                          className="cursor-target font-mono text-[11px] sm:text-xs font-semibold rounded-full border border-slate-300 hover:border-[#C44900] bg-white hover:bg-orange-50 disabled:opacity-50 px-3 sm:px-4 py-1.5 sm:py-2 text-slate-700 hover:text-[#C44900] transition-all duration-200 shadow-2xs cursor-pointer flex items-center gap-1.5"
                         >
                           <span>{t.label}</span>
                           <ArrowRight size={12} className="opacity-60" />
@@ -663,18 +709,18 @@ export const ChatBot: React.FC = () => {
               </div>
             ) : (
               /* Conversation View: Messages + Typing + Input Box */
-              <div className="w-full max-w-3xl mx-auto flex flex-col justify-center my-auto py-2">
+              <div className="w-full max-w-3xl mx-auto flex flex-col justify-center my-auto py-1 sm:py-2">
                 <div className="flex flex-col w-full">
                   {/* Messages Feed */}
                   <div
                     ref={scrollContainerRef}
                     data-lenis-prevent
-                    className="overflow-y-auto overscroll-contain flex flex-col gap-3.5 max-h-[52vh] mb-4 pr-1 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                    className="chatbot-messages-feed overflow-y-auto overscroll-contain flex flex-col gap-2.5 sm:gap-3.5 max-h-[46vh] sm:max-h-[52vh] mb-3 sm:mb-4 pr-1 scrollbar-none [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   >
                     {messages.map((msg) => (
                       <div
                         key={msg.id}
-                        className={`flex flex-col gap-1.5 ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+                        className={`flex flex-col gap-1 sm:gap-1.5 ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
                       >
                         <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-slate-400 px-1">
                           {msg.sender === 'user' ? (
@@ -686,7 +732,7 @@ export const ChatBot: React.FC = () => {
 
                         {/* Text bubble */}
                         <div
-                          className={`p-4 sm:p-5 rounded-2xl border ${
+                          className={`chatbot-bubble p-3.5 sm:p-5 rounded-2xl border ${
                             msg.sender === 'user'
                               ? 'w-fit max-w-[85%] sm:max-w-xl bg-black text-white border-black self-end'
                               : 'w-full max-w-2xl bg-white text-slate-800 border-slate-200/80 shadow-2xs'
@@ -699,11 +745,11 @@ export const ChatBot: React.FC = () => {
 
                     {/* Thinking Indicator (Bouncing Dots) */}
                     {isThinking && (
-                      <div className="flex flex-col gap-1.5 items-start">
+                      <div className="flex flex-col gap-1 sm:gap-1.5 items-start">
                         <span className="font-mono text-[10px] uppercase tracking-wider text-[#C44900] font-bold px-1">
                           Zeus's Assistant
                         </span>
-                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200/80 flex items-center gap-2 shadow-2xs">
+                        <div className="p-3 sm:p-3.5 rounded-2xl bg-white border border-slate-200/80 flex items-center gap-2 shadow-2xs">
                           <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '0ms' }} />
                           <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '150ms' }} />
                           <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -714,7 +760,7 @@ export const ChatBot: React.FC = () => {
                   </div>
 
                   {/* Bottom Input Bar */}
-                  <div className="flex flex-col gap-2.5 pt-3 border-t border-slate-200/80 flex-shrink-0">
+                  <div className="flex flex-col gap-2 pt-2.5 sm:pt-3 border-t border-slate-200/80 flex-shrink-0">
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
@@ -728,7 +774,7 @@ export const ChatBot: React.FC = () => {
                         onChange={(e) => setInputValue(e.target.value)}
                         placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Ask a follow-up question..."}
                         disabled={isInputDisabled}
-                        className="w-full text-sm sm:text-base font-sans text-slate-900 bg-white border border-slate-300 focus:border-[#C44900] rounded-xl px-4 py-2.5 pr-10 focus:outline-none transition-colors duration-200 shadow-2xs"
+                        className="w-full text-xs sm:text-sm md:text-base font-sans text-slate-900 bg-white border border-slate-300 focus:border-[#C44900] rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 pr-10 focus:outline-none transition-colors duration-200 shadow-2xs"
                       />
                       <button
                         type="submit"
@@ -748,7 +794,7 @@ export const ChatBot: React.FC = () => {
                           type="button"
                           disabled={isInputDisabled}
                           onClick={() => handleSend(t.query)}
-                          className="cursor-target font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#C44900] bg-white hover:bg-orange-50 disabled:opacity-50 px-3 py-1 text-slate-700 hover:text-[#C44900] transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
+                          className="cursor-target font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#C44900] bg-white hover:bg-orange-50 disabled:opacity-50 px-2.5 sm:px-3 py-1 text-slate-700 hover:text-[#C44900] transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
                         >
                           {t.label}
                         </button>
@@ -763,7 +809,7 @@ export const ChatBot: React.FC = () => {
       </AnimatePresence>
 
       {/* Floating Action Buttons Stack (Bottom-Left) - Hidden when reaching footer */}
-      <div className={`fixed bottom-6 left-6 z-50 flex flex-col gap-3 items-start transition-all duration-300 ${
+      <div className={`fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 flex flex-col gap-2.5 sm:gap-3 items-start transition-all duration-300 ${
         isFooterVisible ? 'opacity-0 pointer-events-none translate-y-4' : 'opacity-100 pointer-events-auto translate-y-0'
       }`}>
         {/* 1. Typing Test Button (Top - Desktop only) */}

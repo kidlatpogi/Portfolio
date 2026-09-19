@@ -78,9 +78,9 @@ export default function Designs() {
               pin: true,
               scrub: 0.3,
               start: 'top top',
-              end: () => `+=${getScrollDistance()}`,
+              end: () => `+=${getScrollDistance() * 1.1}`,
               invalidateOnRefresh: true,
-              anticipatePin: 0,
+              anticipatePin: 1,
             },
           }
         );
@@ -179,14 +179,14 @@ export default function Designs() {
 
         {/* Section Header */}
         <div className="designs-header w-full max-w-[1600px] mx-auto px-6 md:px-24 mb-8 flex flex-col items-start z-10 flex-shrink-0">
-          <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
-            Creative Showcase
+          <span className="font-array-semibold text-sm md:text-base font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
+            Creative & UI Lab
           </span>
-          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4rem] 2xl:text-[4.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none">
+          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[4rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none">
             Designs
           </h2>
-          <p className="font-sans text-sm md:text-base text-slate-500 leading-relaxed max-w-[360px] mt-3">
-            Multi-media graphic design posters crafted using Adobe Photoshop.
+          <p className="font-sans text-xs sm:text-sm md:text-base text-slate-500 leading-relaxed max-w-[480px] mt-2 sm:mt-3">
+            UI/UX Prototyping & Creative Direction — where engineering meets interface craft.
           </p>
         </div>
 

@@ -46,28 +46,41 @@ const CardNav: React.FC<CardNavProps> = ({
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   useEffect(() => {
+    let footerInView = false;
+    const footerEl = document.getElementById('contact');
+    let observer: IntersectionObserver | null = null;
+
+    if (footerEl && typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          footerInView = entry.isIntersecting;
+          setIsFooterVisible(window.scrollY >= 50 && footerInView);
+        },
+        { rootMargin: '0px 0px 80px 0px' }
+      );
+      observer.observe(footerEl);
+    }
+
+    let rafId: number | null = null;
     const handleScroll = () => {
-      const footerEl = document.getElementById('contact');
-      // If we are at the top of the page, the navigation bar must be visible
-      if (window.scrollY < 50) {
-        setIsFooterVisible(false);
-        return;
-      }
-      const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
-      if (isNearBottom) {
-        setIsFooterVisible(true);
-      } else if (footerEl) {
-        const rect = footerEl.getBoundingClientRect();
-        setIsFooterVisible(rect.top < window.innerHeight - 80);
-      } else {
-        setIsFooterVisible(false);
-      }
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        if (window.scrollY < 50) {
+          setIsFooterVisible(false);
+          return;
+        }
+        const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+        setIsFooterVisible(isNearBottom || footerInView);
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
     return () => {
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+      if (observer) observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);

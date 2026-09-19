@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { getHolidaySeason, type HolidaySeason } from '../utils/seasonal';
 
 const profileImage = "/Common/Profile%20Picture.webp";
@@ -39,12 +38,66 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="min-h-screen w-full flex items-center justify-center px-4 sm:px-6 md:p-12 relative overflow-hidden" id="home">
+    <section className="min-h-screen w-full flex items-center justify-center px-4 sm:px-6 md:px-12 py-6 md:py-12 relative overflow-hidden" id="home">
+      <style>{`
+        @media (max-height: 820px) {
+          #home {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+          }
+          #home .hero-container {
+            padding-top: 3.5rem !important;
+          }
+          #home .hero-subtitle {
+            font-size: 1.1rem !important;
+          }
+          #home .hero-title-1,
+          #home .hero-title-2,
+          #home .hero-title-3 {
+            font-size: clamp(2.5rem, 5.2vw, 4.5rem) !important;
+            line-height: 0.95 !important;
+          }
+          #home .hero-avatar-container {
+            width: clamp(7.5rem, 13vw, 11rem) !important;
+          }
+          #home .hero-avatar {
+            width: clamp(3.5rem, 5.5vw, 4.75rem) !important;
+            height: clamp(3.5rem, 5.5vw, 4.75rem) !important;
+          }
+          #home .hero-socials {
+            margin-top: 1rem !important;
+            gap: 0.5rem !important;
+          }
+        }
+        @media (max-height: 720px) {
+          #home .hero-container {
+            padding-top: 2.75rem !important;
+          }
+          #home .hero-subtitle {
+            font-size: 0.95rem !important;
+          }
+          #home .hero-title-1,
+          #home .hero-title-2,
+          #home .hero-title-3 {
+            font-size: clamp(2.25rem, 4.8vw, 3.85rem) !important;
+          }
+          #home .hero-avatar-container {
+            width: clamp(6.5rem, 11vw, 9.5rem) !important;
+          }
+          #home .hero-avatar {
+            width: clamp(3.25rem, 5vw, 4.25rem) !important;
+            height: clamp(3.25rem, 5vw, 4.25rem) !important;
+          }
+          #home .hero-socials {
+            margin-top: 0.65rem !important;
+          }
+        }
+      `}</style>
 
-      <div className="w-full max-w-[1400px] relative z-10 pt-20 flex justify-center">
+      <div className="hero-container w-full max-w-[1400px] relative z-10 pt-20 flex justify-center">
 
         {/* Typography — full-width block */}
-        <div className="flex flex-col items-start gap-4 sm:gap-5 text-left relative z-10 w-fit max-w-full">
+        <div className="flex flex-col items-start gap-3 sm:gap-4 md:gap-5 text-left relative z-10 w-fit max-w-full">
           <span className="hero-subtitle font-array-semibold text-[1.15rem] sm:text-[1.25rem] md:text-[1.5rem] lg:text-[1.75rem] 2xl:text-[2rem] font-semibold uppercase tracking-wider text-[#334155]">
             4th year College Student
           </span>
@@ -57,9 +110,9 @@ export default function Hero() {
               </h1>
 
               {/* Profile picture directly attached to Zeus Angelo */}
-              <div className="inline-flex items-center z-20 flex-shrink-0 ml-1.5 sm:ml-3 md:ml-4 lg:ml-6 w-[4.25rem] sm:w-[8rem] md:w-[12rem] lg:w-[13rem] xl:w-[16rem] 2xl:w-[18rem]">
+              <div className="hero-avatar-container inline-flex items-center z-20 flex-shrink-0 ml-1.5 sm:ml-3 md:ml-4 lg:ml-6 w-[4.25rem] sm:w-[8rem] md:w-[12rem] lg:w-[13rem] xl:w-[16rem] 2xl:w-[18rem]">
                 {/* Playful Dotted Line */}
-                <div className="relative flex-grow h-6 sm:h-14 md:h-20 overflow-visible">
+                <div className="relative flex-grow min-w-[2.5rem] sm:min-w-[3.5rem] md:min-w-[5rem] h-6 sm:h-12 md:h-16 overflow-visible">
                   <svg
                     className="absolute inset-0 w-full h-full text-accent pointer-events-none overflow-visible"
                     viewBox="0 0 160 80"
@@ -86,20 +139,15 @@ export default function Hero() {
                 </div>
 
                 <div
-                  className="relative w-12 h-12 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-[9.5rem] xl:h-[9.5rem] 2xl:w-40 2xl:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10 cursor-pointer"
+                  className="hero-avatar relative w-12 h-12 sm:w-20 sm:h-20 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-[9.5rem] xl:h-[9.5rem] 2xl:w-40 2xl:h-40 rounded-full border-[2px] sm:border-[3px] md:border-[5px] border-accent bg-[#E5E5E5] flex-shrink-0 ring-4 sm:ring-6 md:ring-[10px] ring-accent/10 cursor-pointer"
                   onMouseEnter={() => setIsProfileHovered(true)}
                   onMouseLeave={() => setIsProfileHovered(false)}
                 >
                   {/* Authentic Classic Santa Hat for Profile Avatar */}
-                  <AnimatePresence>
-                    {isChristmas && (
-                      <motion.div
-                        initial={{ scale: 0, rotate: -15, y: -8, opacity: 0 }}
-                        animate={{ scale: 1, rotate: -8, y: 0, opacity: 1 }}
-                        exit={{ scale: 0, opacity: 0 }}
-                        transition={{ type: 'spring', stiffness: 280, damping: 18 }}
-                        className="absolute -top-2.5 -left-1 sm:-top-5 sm:-left-2 md:-top-7 md:-left-3 lg:-top-8 lg:-left-3 xl:-top-9 xl:-left-4 z-30 pointer-events-none select-none w-10 sm:w-16 md:w-24 lg:w-28 xl:w-32 drop-shadow-xl"
-                      >
+                  {isChristmas && (
+                    <div
+                      className="absolute -top-[22%] left-[4%] w-[74%] sm:w-[76%] md:w-[78%] z-30 pointer-events-none select-none drop-shadow-lg -rotate-[6deg] transition-transform duration-500 ease-out"
+                    >
                         <svg viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
                           <defs>
                             <linearGradient id="santaRed" x1="20%" y1="100%" x2="80%" y2="0%">
@@ -156,9 +204,8 @@ export default function Hero() {
                           <ellipse cx="57" cy="59" rx="6" ry="2" fill="#CBD5E1" opacity="0.6" />
                           <ellipse cx="69" cy="58" rx="5" ry="2" fill="#CBD5E1" opacity="0.6" />
                         </svg>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                    </div>
+                  )}
 
                   {/* Profile Images with overflow containment */}
                   <div className="w-full h-full rounded-full overflow-hidden relative">
@@ -204,17 +251,9 @@ export default function Hero() {
             <h1 className="hero-title-3 font-clash-semibold text-[9vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[7rem] 2xl:text-[8.5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap">
               <span className="relative inline-block italic mr-[0.25em]">
                 <span>Future</span>
-                <motion.span
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: startStrikethrough ? 1 : 0 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 180,
-                    damping: 12,
-                    mass: 0.6
-                  }}
-                  style={{ originX: 0 }}
-                  className="absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[5px] lg:h-[6px] xl:h-[7px] 2xl:h-[8px] bg-black rounded-full pointer-events-none"
+                <span
+                  style={{ transformOrigin: '0% 50%' }}
+                  className={`absolute left-0 right-0 top-[55%] -translate-y-1/2 h-[3px] sm:h-[4px] md:h-[5px] lg:h-[6px] xl:h-[7px] 2xl:h-[8px] bg-black rounded-full pointer-events-none transition-transform duration-500 ease-out ${startStrikethrough ? 'scale-x-100' : 'scale-x-0'}`}
                 />
               </span>
               Developer
@@ -234,7 +273,10 @@ export default function Hero() {
                 rel="noopener noreferrer"
                 onClick={(e) => {
                   e.preventDefault();
-                  window.dispatchEvent(new CustomEvent('openResumePreview'));
+                  if (typeof window !== 'undefined') {
+                    (window as any).__resumePreviewRequested = true;
+                    window.dispatchEvent(new CustomEvent('openResumePreview'));
+                  }
                 }}
                 className="flex items-center gap-2 text-[#334155] hover:text-accent font-mono text-xs sm:text-sm md:text-base uppercase tracking-wider transition-colors cursor-pointer group"
               >

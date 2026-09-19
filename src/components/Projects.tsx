@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ScrollStack, { ScrollStackItem } from './ScrollStack.tsx';
 import ScrollReveal from './ScrollReveal.tsx';
-import { ExternalLink, ArrowUpRight, Download, ChevronLeft, ChevronRight, FolderCode } from 'lucide-react';
+import { ExternalLink, ArrowUpRight, Download, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const STACK_POSITION_RATIO = 0.15;
 const ITEM_STACK_DISTANCE = 30;
@@ -163,6 +163,18 @@ export default function Projects() {
   const stackColumnRef = useRef<HTMLDivElement>(null);
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [currentImageIndices, setCurrentImageIndices] = useState<Record<number, number>>({});
+  const [loadedProjectIndices, setLoadedProjectIndices] = useState<number[]>([0, 1]);
+
+  useEffect(() => {
+    setLoadedProjectIndices(prev => {
+      const needed = [activeProjectIndex, activeProjectIndex + 1, activeProjectIndex - 1].filter(
+        idx => idx >= 0 && idx < projectsData.length
+      );
+      const isMissing = needed.some(idx => !prev.includes(idx));
+      if (!isMissing) return prev;
+      return Array.from(new Set([...prev, ...needed]));
+    });
+  }, [activeProjectIndex]);
 
   const handlePrevImage = (projectIndex: number, total: number) => {
     setCurrentImageIndices(prev => {
@@ -405,6 +417,7 @@ export default function Projects() {
             >
               {projectsData.map((project, index) => {
                 const isVisible = index >= activeProjectIndex;
+                const isImageLoaded = loadedProjectIndices.includes(index);
                 const images = project.images && project.images.length > 0 ? project.images : (project.image ? [project.image] : []);
                 const currentImgIndex = (currentImageIndices[index] || 0) % (images.length || 1);
                 const currentImage = images[currentImgIndex];
@@ -420,7 +433,7 @@ export default function Projects() {
 
                      <div className={`w-full h-full grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-8 transition-opacity duration-300 z-10 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                       {/* Left Column / Mobile Unified Info */}
-                      <div className="md:col-span-6 flex flex-col justify-center h-full min-w-0">
+                      <div className={`${currentImage ? 'md:col-span-6' : 'md:col-span-12 max-w-2xl py-4 sm:py-6'} flex flex-col justify-center h-full min-w-0`}>
                         <div className="flex flex-col gap-3 sm:gap-4">
                           {/* Counter + Title Header */}
                           <div className="flex flex-col gap-1">
@@ -444,12 +457,7 @@ export default function Projects() {
                           </div>
 
                           {/* Mobile Mock Preview Device (Visible on Mobile) */}
-                          {project.isFolder ? (
-                            <div className="flex md:hidden flex-col w-full h-36 min-[380px]:h-44 sm:h-48 rounded-xl overflow-hidden border border-white/25 shadow-xl bg-black/40 my-1 flex-shrink-0 items-center justify-center">
-                              <FolderCode className="w-14 h-14 text-white drop-shadow-md" />
-                              <span className="font-mono text-[10px] text-white/90 font-bold uppercase tracking-widest mt-2">All-In-One Code Vault</span>
-                            </div>
-                          ) : currentImage ? (
+                          {currentImage ? (
                             <div className="flex md:hidden flex-col w-full rounded-xl overflow-hidden border border-white/25 shadow-xl bg-black/40 my-1 flex-shrink-0">
                               <div className="h-4 w-full bg-white/15 border-b border-white/15 flex items-center px-2.5 gap-1 flex-shrink-0">
                                 <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
@@ -457,18 +465,23 @@ export default function Projects() {
                                 <span className="w-1.5 h-1.5 rounded-full bg-white/50" />
                               </div>
                               <div className="w-full h-32 min-[380px]:h-40 sm:h-44 overflow-hidden bg-slate-900 relative">
-                                <img
-                                  src={currentImage}
-                                  alt={`${project.title} Preview ${currentImgIndex + 1}`}
-                                  className="w-full h-full object-cover object-top select-none pointer-events-none"
-                                  loading="lazy"
-                                  onError={(e) => {
-                                    const img = e.currentTarget;
-                                    if (project.backupImage && img.src !== project.backupImage) {
-                                      img.src = project.backupImage;
-                                    }
-                                  }}
-                                />
+                                {isImageLoaded ? (
+                                  <img
+                                    src={currentImage}
+                                    alt={`${project.title} Preview ${currentImgIndex + 1}`}
+                                    className="w-full h-full object-cover object-top select-none pointer-events-none"
+                                    loading="lazy"
+                                    decoding="async"
+                                    onError={(e) => {
+                                      const img = e.currentTarget;
+                                      if (project.backupImage && img.src !== project.backupImage) {
+                                        img.src = project.backupImage;
+                                      }
+                                    }}
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-slate-900" />
+                                )}
                               </div>
                               {/* Mobile Prev / Next Controls */}
                               {images.length > 1 && (
@@ -558,17 +571,8 @@ export default function Projects() {
                       </div>
 
                       {/* Desktop Mock Preview Device (Hidden on Mobile) */}
-                      <div className="hidden md:flex md:col-span-6 h-[95%] self-center items-center justify-center min-w-0">
-                        {project.isFolder ? (
-                          <div className="flex flex-col relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/25 shadow-2xl bg-black/40 group/folder items-center justify-center p-6">
-                            <div className="relative p-8 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md shadow-inner flex flex-col items-center justify-center transition-all duration-500 group-hover/folder:scale-105 group-hover/folder:bg-white/15">
-                              <FolderCode className="w-20 h-20 xl:w-24 xl:h-24 text-white drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)] transition-transform duration-500 group-hover/folder:-translate-y-1" />
-                              <span className="font-mono text-xs text-white/90 font-bold uppercase tracking-widest mt-4 text-center">
-                                All-In-One Code Vault
-                              </span>
-                            </div>
-                          </div>
-                        ) : currentImage ? (
+                      {currentImage ? (
+                        <div className="hidden md:flex md:col-span-6 h-[95%] self-center items-center justify-center min-w-0">
                           <div className="flex flex-col relative w-full aspect-[16/10] rounded-2xl overflow-hidden border border-white/25 shadow-2xl bg-black/30 group/browser">
                             {/* Browser top-bar */}
                             <div className="h-5 w-full bg-white/15 border-b border-white/15 flex items-center px-3 gap-1 flex-shrink-0">
@@ -578,18 +582,24 @@ export default function Projects() {
                             </div>
                             {/* Browser content */}
                             <div className="w-full flex-1 min-h-0 overflow-hidden bg-slate-900 relative">
-                              <img 
-                                key={currentImage}
-                                src={currentImage} 
-                                alt={`${project.title} Preview ${currentImgIndex + 1}`}
-                                className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700 select-none pointer-events-none"
-                                onError={(e) => {
-                                  const img = e.currentTarget;
-                                  if (project.backupImage && img.src !== project.backupImage) {
-                                    img.src = project.backupImage;
-                                  }
-                                }}
-                              />
+                              {isImageLoaded ? (
+                                <img 
+                                  key={currentImage}
+                                  src={currentImage} 
+                                  alt={`${project.title} Preview ${currentImgIndex + 1}`}
+                                  className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700 select-none pointer-events-none"
+                                  loading="lazy"
+                                  decoding="async"
+                                  onError={(e) => {
+                                    const img = e.currentTarget;
+                                    if (project.backupImage && img.src !== project.backupImage) {
+                                      img.src = project.backupImage;
+                                    }
+                                  }}
+                                />
+                              ) : (
+                                <div className="w-full h-full bg-slate-900" />
+                              )}
                             </div>
                             {/* Desktop Prev / Next Navigation Controls */}
                             {images.length > 1 && (
@@ -605,7 +615,7 @@ export default function Projects() {
                                   <ChevronLeft className="w-3.5 h-3.5" />
                                   Prev
                                 </button>
-                                <span className="font-mono text-xs font-bold text-white/90 tracking-widest">
+                                <span className="font-mono text-[11px] font-bold text-white/95">
                                   {currentImgIndex + 1} / {images.length}
                                 </span>
                                 <button
@@ -622,16 +632,8 @@ export default function Projects() {
                               </div>
                             )}
                           </div>
-                        ) : (
-                          <div className="relative w-[70%] max-w-[200px] aspect-square rounded-full border border-white/15 bg-white/15 flex items-center justify-center shadow-inner hover:scale-105 transition-transform duration-500">
-                            <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-white/10 to-transparent blur-md" />
-                            <span className="font-clash-bold text-5xl font-bold text-white/40 uppercase tracking-tighter select-none">
-                              {project.title.substring(0, 2)}
-                            </span>
-                            <div className="absolute w-2.5 h-2.5 bg-accent rounded-full animate-ping top-1/4 right-1/4" />
-                          </div>
-                        )}
-                      </div>
+                        </div>
+                      ) : null}
                     </div>
                   </ScrollStackItem>
                 );

@@ -36,21 +36,21 @@ const experiences: ExperienceItem[] = [
 
 export default function Experience() {
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-16 md:py-24 relative overflow-hidden" id="experience">
+    <section className="w-full flex flex-col items-center justify-center px-4 py-10 sm:py-14 md:py-20 relative overflow-hidden" id="experience">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
         {/* Subheading */}
-        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-3">
+        <span className="font-array-semibold text-sm md:text-base font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-2">
           My Journey
         </span>
 
         {/* "Experience" Heading */}
-        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.25rem] 2xl:text-[5rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-16">
+        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[4rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none whitespace-nowrap text-center mb-8 sm:mb-12">
           Experience
         </h2>
 
         {/* Experience Timeline Container */}
-        <div className="w-[95%] md:w-[95%] max-w-[1600px] flex flex-col gap-10 mx-auto relative">
+        <div className="w-[95%] md:w-[95%] max-w-[1500px] flex flex-col gap-6 sm:gap-8 mx-auto relative">
           
           {/* Vertical Glowing Accent Timeline Line */}
           <div className="absolute left-6 md:left-8 top-6 bottom-6 w-[3px] bg-gradient-to-b from-accent via-accent/40 to-transparent hidden sm:block rounded-full" />
@@ -58,31 +58,31 @@ export default function Experience() {
           {experiences.map((exp, index) => (
             <div
               key={index}
-              className="flex flex-col sm:flex-row gap-6 items-start relative group sm:pl-16 md:pl-20 w-full"
+              className="flex flex-col sm:flex-row gap-5 sm:gap-6 items-start relative group sm:pl-16 md:pl-20 w-full"
             >
               {/* Glowing Timeline Marker Node */}
-              <div className="absolute left-4 md:left-[23px] top-8 w-5 h-5 rounded-full bg-white border-4 border-accent shadow-md shadow-accent/40 group-hover:scale-125 group-hover:bg-accent transition-all duration-300 hidden sm:block z-10" />
+              <div className="absolute left-4 md:left-[23px] top-7 sm:top-8 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white border-4 border-accent shadow-md shadow-accent/40 group-hover:scale-125 group-hover:bg-accent transition-all duration-300 hidden sm:block z-10" />
 
               {/* Experience Milestone Card - Proper ATS Structured */}
-              <div className="w-full border-2 border-slate-200/80 bg-white p-7 md:p-10 rounded-3xl flex flex-col justify-between gap-6 transition-all duration-300 hover:border-accent hover:shadow-[0_16px_36px_-12px_rgba(196,73,0,0.12)] cursor-target">
+              <div className="w-full border-2 border-slate-200/80 bg-white p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-between gap-4 sm:gap-5 transition-all duration-300 hover:border-accent hover:shadow-[0_16px_36px_-12px_rgba(196,73,0,0.12)] cursor-target">
 
                 {/* Top ATS Header: Role, Company, Location & Date */}
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-slate-100 pb-5">
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 sm:gap-4 border-b border-slate-100 pb-4 sm:pb-5">
                   <div>
-                    <h3 className="font-clash-semibold text-2xl md:text-3xl font-bold text-slate-900 group-hover:text-accent transition-colors duration-300">
+                    <h3 className="font-clash-semibold text-lg sm:text-xl md:text-2xl font-bold text-slate-900 group-hover:text-accent transition-colors duration-300">
                       {exp.role}
                     </h3>
-                    <p className="font-sans text-base md:text-lg text-accent font-semibold mt-1">
+                    <p className="font-sans text-sm sm:text-base text-accent font-semibold mt-0.5 sm:mt-1">
                       {exp.company}
                     </p>
                   </div>
 
                   <div className="flex flex-wrap sm:flex-col gap-2 md:items-end flex-shrink-0">
-                    <span className="font-mono text-xs uppercase tracking-wider text-slate-700 font-bold bg-slate-100 px-3.5 py-1.5 rounded-full flex items-center gap-2">
+                    <span className="font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slate-700 font-bold bg-slate-100 px-3 py-1.5 rounded-full flex items-center gap-1.5 sm:gap-2">
                       <Calendar className="w-3.5 h-3.5 text-accent" />
                       {exp.duration}
                     </span>
-                    <span className="font-mono text-xs uppercase tracking-wider text-slate-400 font-medium flex items-center gap-1.5">
+                    <span className="font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slate-400 font-medium flex items-center gap-1.5">
                       <MapPin className="w-3.5 h-3.5 text-slate-400" />
                       {exp.location}
                     </span>
@@ -90,11 +90,11 @@ export default function Experience() {
                 </div>
 
                 {/* ATS Bullet Points */}
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-2.5">
                   {exp.bullets.map((bullet, bIdx) => (
-                    <div key={bIdx} className="flex items-start gap-3">
-                      <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-1" />
-                      <p className="font-sans text-sm md:text-base text-slate-700 leading-relaxed">
+                    <div key={bIdx} className="flex items-start gap-2.5 sm:gap-3">
+                      <CheckCircle2 className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                      <p className="font-sans text-xs sm:text-sm text-slate-700 leading-relaxed">
                         {bullet}
                       </p>
                     </div>

@@ -1,6 +1,43 @@
+import React, { useEffect, useRef } from 'react';
 import { GitHubCalendar } from 'react-github-calendar';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 export default function GithubHeatmap() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const calendarContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const island = sectionRef.current?.parentElement;
+    if (island?.tagName === 'ASTRO-ISLAND') {
+      island.style.display = 'block';
+      island.style.width = '100%';
+    }
+
+    // Automatically refresh ScrollTrigger whenever the GitHub calendar SVG finishes rendering or resizes
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && calendarContainerRef.current) {
+      resizeObserver = new ResizeObserver(() => {
+        if (typeof window !== 'undefined' && ScrollTrigger) {
+          ScrollTrigger.refresh();
+        }
+      });
+      resizeObserver.observe(calendarContainerRef.current);
+    }
+
+    const timer = setTimeout(() => {
+      if (typeof window !== 'undefined' && ScrollTrigger) {
+        ScrollTrigger.refresh();
+      }
+    }, 400);
+
+    return () => {
+      clearTimeout(timer);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+    };
+  }, []);
+
   // Brand color scheme: Slate-100 to Zeus's accent burnt orange (#C44900)
   const brandTheme = {
     light: ['#ebebeb', '#ffc199', '#ff934d', '#ff6600', '#C44900'],
@@ -8,14 +45,15 @@ export default function GithubHeatmap() {
   };
 
   return (
-    <section className="w-full px-6 md:px-16 lg:px-24 max-w-[1400px] mx-auto py-16 md:py-20 mb-8 select-none" id="github-activity">
+    <section ref={sectionRef} className="w-full py-16 md:py-20 select-none relative z-10" id="github-activity">
+      <div className="w-full px-6 md:px-16 lg:px-24 max-w-[1400px] mx-auto">
       
       {/* Centered Section Header */}
       <div className="flex flex-col items-center text-center mb-8 md:mb-10">
-        <span className="font-array-semibold text-base md:text-lg font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
+        <span className="font-array-semibold text-sm md:text-base font-semibold uppercase tracking-[0.2em] text-[#334155] mb-2">
           Code Activity
         </span>
-        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[3.75rem] 2xl:text-[4.25rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none">
+        <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[4rem] font-semibold text-accent tracking-tighter leading-[0.9] select-none">
           Contributions
         </h2>
         <p className="font-sans text-xs md:text-sm text-slate-500 leading-relaxed max-w-[440px] mt-3">
@@ -27,8 +65,8 @@ export default function GithubHeatmap() {
       <div className="w-full flex flex-col gap-6 md:gap-8 p-6 md:p-8 rounded-3xl bg-white border-2 border-slate-200/80 shadow-sm hover:shadow-md transition-shadow duration-300">
         
         {/* Heatmap graph container */}
-        <div className="w-full overflow-x-auto flex justify-center py-2 scrollbar-hide data-lenis-prevent">
-          <div className="min-w-[1000px] sm:min-w-0">
+        <div ref={calendarContainerRef} className="w-full overflow-x-auto flex justify-center py-2 scrollbar-hide data-lenis-prevent min-h-[160px]">
+          <div className="min-w-[1000px] sm:min-w-0 min-h-[160px] flex items-center justify-center">
             <GitHubCalendar
               username="kidlatpogi"
               theme={brandTheme}
@@ -56,6 +94,7 @@ export default function GithubHeatmap() {
           </a>
         </div>
 
+      </div>
       </div>
     </section>
   );

@@ -61,12 +61,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
       rect = canvas.getBoundingClientRect();
     };
 
-    const updateRect = () => {
-      rect = canvas.getBoundingClientRect();
-    };
-
     window.addEventListener('resize', resizeCanvas);
-    window.addEventListener('scroll', updateRect, { passive: true });
     resizeCanvas();
 
     const drawHex = (cx: number, cy: number, size: number) => {
@@ -236,6 +231,13 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
 
+    const startLoopIfNeeded = () => {
+      if (!isLoopRunning && isVisible && !isPreloaderActive) {
+        isLoopRunning = true;
+        requestRef.current = requestAnimationFrame(updateAnimation);
+      }
+    };
+
     const updateAnimation = () => {
       if (!isVisible || isPreloaderActive) {
         isLoopRunning = false;
@@ -270,6 +272,13 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
 
       updateCellOpacities();
       drawGrid();
+
+      // If speed is 0 and all cell opacities have settled with no hovered square, sleep the loop
+      if (speed === 0 && cellOpacities.current.size === 0 && !hoveredSquareRef.current) {
+        isLoopRunning = false;
+        return;
+      }
+
       requestRef.current = requestAnimationFrame(updateAnimation);
     };
 
@@ -407,6 +416,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
             if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
           }
           hoveredSquareRef.current = { x: col, y: row };
+          startLoopIfNeeded();
         }
       }
     };
@@ -417,6 +427,7 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
         if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
       }
       hoveredSquareRef.current = null;
+      startLoopIfNeeded();
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -449,7 +460,6 @@ const ShapeGrid: React.FC<ShapeGridProps> = ({
     return () => {
       observer.disconnect();
       window.removeEventListener('resize', resizeCanvas);
-      window.removeEventListener('scroll', updateRect);
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       window.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseleave', handleMouseLeave);

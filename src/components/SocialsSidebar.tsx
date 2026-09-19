@@ -8,24 +8,32 @@ export default function SocialsSidebar() {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let footerInView = false;
+    const footerEl = document.getElementById('contact');
+    let observer: IntersectionObserver | null = null;
+
+    if (footerEl && typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          footerInView = entry.isIntersecting;
+          setIsFooterVisible(footerInView);
+          setIsVisible(window.scrollY > 150 && !footerInView);
+        },
+        { rootMargin: '0px 0px 80px 0px' }
+      );
+      observer.observe(footerEl);
+    }
+
+    let rafId: number | null = null;
     const handleScroll = () => {
-      const footerEl = document.getElementById('contact');
-      const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
-      let footerInView = isNearBottom;
-      if (!footerInView && footerEl) {
-        const rect = footerEl.getBoundingClientRect();
-        // Hide if top of footer is in viewport
-        footerInView = rect.top < window.innerHeight - 80;
-      }
-
-      setIsFooterVisible(footerInView);
-
-      // Show sidebar when scrolled down more than 150px AND footer is not visible
-      if (window.scrollY > 150 && !footerInView) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      if (rafId !== null) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = null;
+        const isNearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+        const inView = footerInView || isNearBottom;
+        setIsFooterVisible(inView);
+        setIsVisible(window.scrollY > 150 && !inView);
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -39,6 +47,8 @@ export default function SocialsSidebar() {
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
+      if (rafId !== null) window.cancelAnimationFrame(rafId);
+      if (observer) observer.disconnect();
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -114,7 +124,10 @@ export default function SocialsSidebar() {
               rel="noopener noreferrer"
               onClick={isResume ? (e) => {
                 e.preventDefault();
-                window.dispatchEvent(new CustomEvent('openResumePreview'));
+                if (typeof window !== 'undefined') {
+                  (window as any).__resumePreviewRequested = true;
+                  window.dispatchEvent(new CustomEvent('openResumePreview'));
+                }
               } : undefined}
               aria-label={social.ariaLabel}
               className="group relative w-11 h-11 rounded-full bg-black flex items-center justify-center text-white hover:bg-accent hover:scale-110 active:scale-95 transition-all duration-300 ease-out cursor-target"
@@ -155,8 +168,9 @@ export default function SocialsSidebar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => {
-                  if (isResume) {
+                  if (isResume && typeof window !== 'undefined') {
                     e.preventDefault();
+                    (window as any).__resumePreviewRequested = true;
                     window.dispatchEvent(new CustomEvent('openResumePreview'));
                   }
                   setIsMobileOpen(false);

@@ -6,25 +6,61 @@ export default function ResumePreviewModal() {
   useEffect(() => {
     const handleOpen = () => setIsOpen(true);
     window.addEventListener('openResumePreview', handleOpen);
+    if (typeof window !== 'undefined' && (window as any).__resumePreviewRequested) {
+      setIsOpen(true);
+      (window as any).__resumePreviewRequested = false;
+    }
     return () => window.removeEventListener('openResumePreview', handleOpen);
   }, []);
 
-  // Prevent scroll when modal is open
+  // Prevent scroll and pause Lenis when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      window.dispatchEvent(new CustomEvent('modalStateChange', { detail: { isOpen: true } }));
     } else {
       document.body.style.overflow = '';
+      window.dispatchEvent(new CustomEvent('modalStateChange', { detail: { isOpen: false } }));
     }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
       document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+      window.dispatchEvent(new CustomEvent('modalStateChange', { detail: { isOpen: false } }));
     };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4 select-none">
+    <div className="fixed inset-0 z-[999999] flex items-center justify-center p-3 sm:p-4 select-none">
+      <style>{`
+        .resume-preview-body {
+          scrollbar-width: thin !important;
+          scrollbar-color: #C44900 #e2e8f0 !important;
+        }
+        .resume-preview-body::-webkit-scrollbar {
+          display: block !important;
+          width: 8px !important;
+        }
+        .resume-preview-body::-webkit-scrollbar-track {
+          background: #f1f5f9 !important;
+          border-radius: 4px !important;
+        }
+        .resume-preview-body::-webkit-scrollbar-thumb {
+          background: #C44900 !important;
+          border-radius: 4px !important;
+        }
+        .resume-preview-body::-webkit-scrollbar-thumb:hover {
+          background: #a33c00 !important;
+        }
+      `}</style>
+
       {/* Glassmorphic Backdrop */}
       <div 
         className="absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-300"
@@ -32,15 +68,15 @@ export default function ResumePreviewModal() {
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-[950px] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col z-10 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-[950px] h-[92vh] max-h-[92vh] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col z-10 animate-in fade-in zoom-in-95 duration-200">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+        <div className="flex items-center justify-between px-6 py-3.5 border-b border-slate-100 bg-slate-50/80 flex-shrink-0">
           <div className="flex flex-col">
             <span className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-[#334155]/60 font-bold">
               Resume Preview
             </span>
-            <h2 className="font-clash-bold text-lg md:text-xl font-bold text-slate-900 uppercase">
+            <h2 className="font-clash-bold text-base md:text-xl font-bold text-slate-900 uppercase">
               Zeus Angelo Bautista
             </h2>
           </div>
@@ -75,7 +111,11 @@ export default function ResumePreviewModal() {
         </div>
 
         {/* Modal Body / PDF Image Viewer */}
-        <div className="w-full h-[75vh] md:h-[80vh] bg-slate-100 relative overflow-y-auto overscroll-contain flex justify-center py-6 px-4 data-lenis-prevent">
+        <div 
+          className="resume-preview-body w-full flex-1 min-h-0 bg-slate-100 relative overflow-y-auto overscroll-contain flex justify-center items-start py-6 px-4 data-lenis-prevent"
+          onWheel={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+        >
           <div className="max-w-full w-auto shadow-md border border-slate-200/80 rounded-lg overflow-hidden bg-white select-text">
             <img 
               src="https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Zeus_Angelo_Bautista_Resume.webp" 

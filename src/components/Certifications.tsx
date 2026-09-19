@@ -351,7 +351,7 @@ export default function Certifications() {
             start: 'top top',
             end: () => `+=${getScrollAmt()}`,
             invalidateOnRefresh: true,
-            anticipatePin: 0
+            anticipatePin: 1
           }
         });
 
@@ -397,7 +397,7 @@ export default function Certifications() {
   }, []);
 
   return (
-    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden bg-transparent py-6 md:py-0 z-10">
+    <section ref={containerRef} id="certifications" className="relative w-full overflow-hidden py-6 md:py-0 z-10">
       <style>{`
         #certifications {
           --cert-card-width: 340px;
@@ -439,10 +439,10 @@ export default function Certifications() {
       {/* On Desktop: Sticky full-screen view (100vh). On Mobile: static relative view */}
       <div ref={certScrollPinnedContainerRef} className="certifications-desktop-container relative md:h-screen md:overflow-hidden flex flex-col justify-center py-12 md:py-4 z-10">
         <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-10 sm:mb-16 md:mb-6 flex-shrink-0">
-          <span className="font-array-semibold text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-1.5">
+          <span className="font-array-semibold text-sm md:text-base font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-1.5">
             Milestones & Credentials
           </span>
-          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-5xl lg:text-[2.75rem] xl:text-[3.25rem] 2xl:text-[3.75rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
+          <h2 className="font-clash-semibold text-4xl sm:text-5xl md:text-6xl lg:text-[3.25rem] xl:text-[4rem] font-semibold text-accent tracking-tight leading-[0.9] select-none text-center">
             Certifications
           </h2>
         </div>
@@ -647,13 +647,19 @@ export default function Certifications() {
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
 
-              <div className="w-full aspect-square max-w-[132px] sm:max-w-[148px] mb-3 flex items-center justify-center">
-                <CredentialImage
+              <div className="w-20 h-20 sm:w-24 sm:h-24 relative flex items-center justify-center my-auto transition-transform duration-300 group-hover:scale-110">
+                <img
                   src={badge.image}
-                  fallbackSrc={badge.backupImage}
-                  alt={`${badge.name} badge`}
-                  loading="lazy"
-                  className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
+                  alt={badge.name}
+                  loading={index < 4 ? "eager" : "lazy"}
+                  decoding="async"
+                  onError={(event) => {
+                    const image = event.currentTarget;
+                    if (image.src !== badge.backupImage) {
+                      image.src = badge.backupImage;
+                    }
+                  }}
+                  className="w-full h-full object-contain filter drop-shadow-sm select-none"
                 />
               </div>
 
@@ -670,74 +676,85 @@ export default function Certifications() {
         </div>
       </div>
 
-      {/* Verification & Detail Modal */}
+      {/* Verification & Detail Modal (80% screen width on desktop) */}
       {selectedItem && (
         <div
           onClick={() => setSelectedItem(null)}
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-8"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in-95 duration-200"
+            className="bg-white rounded-2xl sm:rounded-3xl w-[94vw] md:w-[80vw] max-w-[1600px] max-h-[88vh] overflow-y-auto p-6 sm:p-8 md:p-12 shadow-2xl border border-slate-200 relative animate-in fade-in zoom-in-95 duration-200"
           >
             <button
               onClick={() => setSelectedItem(null)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors z-20 cursor-pointer"
               aria-label="Close modal"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
 
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10">
+              {/* Left Column: Image Preview */}
               {selectedItem.image && (
-                <div className={`w-full ${selectedItem.type === 'badge' ? 'max-w-[180px] aspect-square' : 'aspect-[1.6/1]'} rounded-xl overflow-hidden mb-5 border border-slate-100 shadow-sm flex items-center justify-center bg-slate-50`}>
-                  <img
-                    src={selectedItem.image}
-                    alt={selectedItem.title || selectedItem.name || 'Credential'}
-                    className={`w-full h-full ${selectedItem.type === 'badge' ? 'object-contain' : 'object-cover'}`}
-                  />
+                <div className={`w-full ${selectedItem.type === 'badge' ? 'md:w-[42%] flex justify-center' : 'md:w-[58%]'} flex-shrink-0`}>
+                  <div className={`w-full ${selectedItem.type === 'badge' ? 'max-w-[260px] sm:max-w-[300px] md:max-w-[340px] aspect-square p-6 bg-slate-50 border border-slate-100' : 'aspect-[1.6/1] p-2 bg-white border border-slate-200'} rounded-xl sm:rounded-2xl overflow-hidden shadow-sm flex items-center justify-center`}>
+                    <img
+                      src={selectedItem.image}
+                      alt={selectedItem.title || selectedItem.name || 'Credential'}
+                      className={`w-full h-full ${selectedItem.type === 'badge' ? 'object-contain' : 'object-contain'}`}
+                    />
+                  </div>
                 </div>
               )}
 
-              <span
-                style={{ color: selectedItem.color }}
-                className="font-mono text-xs font-bold uppercase tracking-wider mb-1"
-              >
-                {selectedItem.issuer}
-              </span>
-
-              <h3 className="font-sans text-lg sm:text-xl font-bold text-slate-900 mb-2">
-                {selectedItem.title || selectedItem.name}
-              </h3>
-
-              {selectedItem.date && (
-                <span className="font-mono text-xs text-slate-400 mb-4">
-                  Issued: {selectedItem.date}
+              {/* Right Column: Metadata & Actions */}
+              <div className="flex flex-col items-start text-left w-full flex-grow">
+                <span
+                  style={{ color: selectedItem.color }}
+                  className="font-mono text-xs sm:text-sm font-bold uppercase tracking-wider mb-2"
+                >
+                  {selectedItem.issuer}
                 </span>
-              )}
 
-              {selectedItem.skills && selectedItem.skills.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 justify-center mb-6">
-                  {selectedItem.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="font-mono text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full font-medium"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              )}
+                <h3 className="font-clash-semibold text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 mb-3 leading-snug">
+                  {selectedItem.title || selectedItem.name}
+                </h3>
 
-              <a
-                href={selectedItem.verifyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 bg-accent hover:bg-accent/90 text-white font-sans font-semibold rounded-xl transition-colors shadow-sm"
-              >
-                <span>{selectedItem.actionLabel || "Verify on Official Issuer"}</span>
-                <ExternalLink className="w-4 h-4" />
-              </a>
+                {selectedItem.date && (
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-lg text-slate-600 font-mono text-xs mb-4">
+                    <span className="font-semibold text-slate-400 uppercase tracking-wider">Issued</span>
+                    <span>{selectedItem.date}</span>
+                  </div>
+                )}
+
+                <p className="font-sans text-xs sm:text-sm text-slate-500 mb-6 leading-relaxed">
+                  Official credential verification powered by Credly, Certiport, Cisco, or issuing institute.
+                </p>
+
+                {selectedItem.skills && selectedItem.skills.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {selectedItem.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="font-mono text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full font-medium"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                <a
+                  href={selectedItem.verifyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto px-6 py-3.5 bg-accent hover:bg-accent/90 text-white font-sans font-semibold rounded-xl flex items-center justify-center gap-2 transition-all shadow-md shadow-accent/20 hover:scale-[1.02] cursor-pointer mt-2"
+                >
+                  <span>{selectedItem.actionLabel || "Verify on Official Issuer"}</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              </div>
             </div>
           </div>
         </div>

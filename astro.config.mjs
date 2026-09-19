@@ -16,6 +16,21 @@ export default defineConfig({
     assetsInclude: ['**/*.glb'],
     resolve: {
       dedupe: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', 'react-dom/client', 'three', 'lenis']
+    },
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react-dom/client',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        'framer-motion',
+        'gsap',
+        'gsap/ScrollTrigger',
+        'lucide-react',
+        'lenis'
+      ],
+      exclude: ['react-github-calendar']
     }
   },
 
@@ -23,4 +38,3 @@ export default defineConfig({
     prerenderEnvironment: 'node'
   })
 });
-// Force restart dev server

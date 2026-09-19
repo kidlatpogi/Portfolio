@@ -197,19 +197,25 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     const moveHandler = (e: MouseEvent) => moveCursor(e.clientX, e.clientY);
     window.addEventListener('mousemove', moveHandler);
 
+    let scrollRafId: number | null = null;
     const scrollHandler = () => {
-      updateTargetRect();
       if (!activeTarget || !cursorRef.current) return;
-      const { x: offsetX, y: offsetY } = getOffset();
-      const mouseX = (gsap.getProperty(cursorRef.current, 'x') as number) + offsetX;
-      const mouseY = (gsap.getProperty(cursorRef.current, 'y') as number) + offsetY;
-      const elementUnderMouse = document.elementFromPoint(mouseX, mouseY);
-      const isStillOverTarget =
-        elementUnderMouse &&
-        (elementUnderMouse === activeTarget || elementUnderMouse.closest(targetSelector) === activeTarget);
-      if (!isStillOverTarget) {
-        currentLeaveHandler?.();
-      }
+      if (scrollRafId !== null) return;
+      scrollRafId = window.requestAnimationFrame(() => {
+        scrollRafId = null;
+        if (!activeTarget || !cursorRef.current) return;
+        updateTargetRect();
+        const { x: offsetX, y: offsetY } = getOffset();
+        const mouseX = (gsap.getProperty(cursorRef.current, 'x') as number) + offsetX;
+        const mouseY = (gsap.getProperty(cursorRef.current, 'y') as number) + offsetY;
+        const elementUnderMouse = document.elementFromPoint(mouseX, mouseY);
+        const isStillOverTarget =
+          elementUnderMouse &&
+          (elementUnderMouse === activeTarget || elementUnderMouse.closest(targetSelector) === activeTarget);
+        if (!isStillOverTarget) {
+          currentLeaveHandler?.();
+        }
+      });
     };
     window.addEventListener('scroll', scrollHandler, { passive: true });
 
@@ -346,6 +352,9 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
       }
       window.removeEventListener('mousemove', moveHandler);
       window.removeEventListener('mouseover', enterHandler as EventListener);
+      if (scrollRafId !== null) {
+        window.cancelAnimationFrame(scrollRafId);
+      }
       window.removeEventListener('scroll', scrollHandler);
       window.removeEventListener('resize', resizeHandler);
       window.removeEventListener('mousedown', mouseDownHandler);

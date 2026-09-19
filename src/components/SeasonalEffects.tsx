@@ -91,13 +91,13 @@ function SnowCanvas() {
 
     window.addEventListener('resize', handleResize, { passive: true });
 
-    // Diverse snowflake particle pool
-    const count = Math.min(85, Math.floor(window.innerWidth / 16));
+    // Diverse snowflake particle pool (balanced density for smooth 60fps animation)
+    const count = Math.min(48, Math.floor(window.innerWidth / 28));
     const flakes = Array.from({ length: count }, (_, i) => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      radius: Math.random() * 2.8 + 1.6,
-      speedY: Math.random() * 1.4 + 0.7,
+      radius: Math.random() * 2.6 + 1.5,
+      speedY: Math.random() * 1.3 + 0.7,
       speedX: (Math.random() - 0.5) * 0.6,
       opacity: Math.random() * 0.45 + 0.55,
       swing: Math.random() * Math.PI * 2,
@@ -115,17 +115,17 @@ function SnowCanvas() {
       ctx.lineWidth = 1.2;
       ctx.lineCap = 'round';
 
+      ctx.beginPath();
       for (let arm = 0; arm < 6; arm++) {
-        ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(0, -size);
         ctx.moveTo(0, -size * 0.55);
         ctx.lineTo(-size * 0.35, -size * 0.8);
         ctx.moveTo(0, -size * 0.55);
         ctx.lineTo(size * 0.35, -size * 0.8);
-        ctx.stroke();
         ctx.rotate(Math.PI / 3);
       }
+      ctx.stroke();
 
       ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.95})`;
       ctx.beginPath();
@@ -165,16 +165,22 @@ function SnowCanvas() {
         if (f.isCrystal) {
           drawCrystal(f.x, f.y, f.radius * 2.2, f.rotation, f.opacity);
         } else {
+          // Soft outer frosty glow
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, f.radius + 2.4, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(186, 215, 248, ${f.opacity * 0.3})`;
+          ctx.fill();
+
+          // Rim definition
           ctx.beginPath();
           ctx.arc(f.x, f.y, f.radius + 1.2, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(148, 175, 210, ${f.opacity * 0.45})`;
           ctx.fill();
 
+          // Bright inner core
           ctx.beginPath();
           ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(240, 248, 255, ${f.opacity * 0.95})`;
-          ctx.shadowColor = 'rgba(186, 215, 248, 0.7)';
-          ctx.shadowBlur = 4;
           ctx.fill();
         }
       }
@@ -182,10 +188,25 @@ function SnowCanvas() {
       animId = requestAnimationFrame(render);
     };
 
-    lastTime = performance.now();
-    animId = requestAnimationFrame(render);
+    const startSnow = () => {
+      if (animId === null && isVisible) {
+        lastTime = performance.now();
+        animId = requestAnimationFrame(render);
+      }
+    };
+
+    const isPreloaderGone = typeof document !== 'undefined' && !document.getElementById('preloader');
+    let startTimer: ReturnType<typeof setTimeout> | null = null;
+    if (isPreloaderGone) {
+      startTimer = setTimeout(startSnow, 200);
+    } else {
+      window.addEventListener('preloaderFullyRemoved', startSnow, { once: true });
+      startTimer = setTimeout(startSnow, 1200);
+    }
 
     return () => {
+      if (startTimer) clearTimeout(startTimer);
+      window.removeEventListener('preloaderFullyRemoved', startSnow);
       if (animId !== null) {
         cancelAnimationFrame(animId);
       }
