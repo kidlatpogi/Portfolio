@@ -8,37 +8,37 @@ const designsData = [
   {
     title: "Cloud 9",
     category: "Poster Design",
-    image: "https://zeusbautista.site/Designs/Cloud9-1200.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Cloud9-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Cloud9-1200.webp"
   },
   {
     title: "Papa Ketchup",
     category: "Poster Design",
-    image: "https://zeusbautista.site/Designs/Ketchup-1200.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Ketchup-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Ketchup-1200.webp"
   },
   {
     title: "Here With Me",
     category: "Poster Design",
-    image: "https://zeusbautista.site/Designs/Here-with-me-1200.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Here-with-me-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Here-with-me-1200.webp"
   },
   {
     title: "Multo",
     category: "Poster Design",
-    image: "https://zeusbautista.site/Designs/Multo-1200.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Multo-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Multo-1200.webp"
   },
   {
     title: "Let Down",
     category: "Poster Design",
-    image: "https://zeusbautista.site/Designs/Typography-1200.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Typography-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/Typography-1200.webp"
   },
   {
     title: "Podcast Poster",
     category: "Poster Design",
-    image: "https://zeusbautista.site/Designs/lamaw-1200.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/lamaw-1200.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Designs/lamaw-1200.webp"
   }
 ];

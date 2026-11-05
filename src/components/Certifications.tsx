@@ -28,7 +28,7 @@ const certificationsData = [
     date: "Dec 2024",
     skills: ["Client-Server Architecture", "Web Protocols", "Frontend Development"],
     color: "#0891b2",
-    image: "https://zeusbautista.site/Certifications/Web%20Development%20Fundamentals.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Web%20Development%20Fundamentals.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Web%20Development%20Fundamentals.webp",
     verifyUrl: badgeVerifyUrls.webDevelopmentFundamentals
   },
@@ -38,7 +38,7 @@ const certificationsData = [
     date: "Aug 2024",
     skills: ["HTML5", "Document Structure", "Web Accessibility", "SEO Basics"],
     color: "#dc2626",
-    image: "https://zeusbautista.site/Certifications/Html%20Essentials.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Html%20Essentials.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Html%20Essentials.webp",
     verifyUrl: badgeVerifyUrls.htmlEssentials
   },
@@ -48,7 +48,7 @@ const certificationsData = [
     date: "Aug 2024",
     skills: ["CSS3", "Flexbox & Grid", "Responsive Design", "Animations"],
     color: "#0ea5e9",
-    image: "https://zeusbautista.site/Certifications/CSS%20Essentials.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/CSS%20Essentials.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/CSS%20Essentials.webp",
     verifyUrl: badgeVerifyUrls.cssEssentials
   },
@@ -58,7 +58,7 @@ const certificationsData = [
     date: "Aug 2024",
     skills: ["JS Basics", "Control Flow", "Functions", "DOM Manipulation"],
     color: "#ca8a04",
-    image: "https://zeusbautista.site/Certifications/JS%20Essentials%201.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/JS%20Essentials%201.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/JS%20Essentials%201.webp",
     verifyUrl: badgeVerifyUrls.javascriptEssentials1
   },
@@ -68,7 +68,7 @@ const certificationsData = [
     date: "Sep 2024",
     skills: ["OOP", "Async JS", "Promises & APIs", "Error Handling"],
     color: "#eab308",
-    image: "https://zeusbautista.site/Certifications/JS%20Essentials%202.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/JS%20Essentials%202.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/JS%20Essentials%202.webp",
     verifyUrl: badgeVerifyUrls.javascriptEssentials2
   },
@@ -78,7 +78,7 @@ const certificationsData = [
     date: "Feb 2025",
     skills: ["Vertex AI", "Prompt Engineering", "LLM Evaluation", "GenAI"],
     color: "#4285f4",
-    image: "https://zeusbautista.site/Badges/prompt-design-in-vertex-ai-skill-badge.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/prompt-design-in-vertex-ai-skill-badge.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/prompt-design-in-vertex-ai-skill-badge.webp",
     verifyUrl: badgeVerifyUrls.vertexAiPromptDesign
   },
@@ -88,7 +88,7 @@ const certificationsData = [
     date: "Feb 2025",
     skills: ["DevOps Lifecycle", "CI/CD Concepts", "Automation"],
     color: "#ea580c",
-    image: "https://zeusbautista.site/Certifications/DevOps.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/DevOps.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/DevOps.webp",
     verifyUrl: badgeVerifyUrls.devOps101,
     actionLabel: "Verify Certificate"
@@ -99,7 +99,7 @@ const certificationsData = [
     date: "Feb 2025",
     skills: ["Cloud Concepts", "IaaS / PaaS / SaaS", "Virtualization"],
     color: "#0284c7",
-    image: "https://zeusbautista.site/Certifications/Cloud%20Computing.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Cloud%20Computing.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Cloud%20Computing.webp",
     verifyUrl: badgeVerifyUrls.introCloudComputing,
     actionLabel: "Verify Certificate"
@@ -110,7 +110,7 @@ const certificationsData = [
     date: "Feb 2025",
     skills: ["Git", "Version Control", "GitHub Workflows", "Branching"],
     color: "#f97316",
-    image: "https://zeusbautista.site/Certifications/Git%20Training.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Git%20Training.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Git%20Training.webp",
     verifyUrl: badgeVerifyUrls.gitTraining,
     actionLabel: "Verify Certificate"
@@ -121,7 +121,7 @@ const certificationsData = [
     date: "Aug 2024",
     skills: ["Modern HTML5", "Responsive CSS3", "Web Layouts"],
     color: "#059669",
-    image: "https://zeusbautista.site/Certifications/HTML%20and%20CSS.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/HTML%20and%20CSS.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/HTML%20and%20CSS.webp",
     verifyUrl: badgeVerifyUrls.htmlCssSpecialist
   },
@@ -131,7 +131,7 @@ const certificationsData = [
     date: "Aug 2024",
     skills: ["Database Design", "SQL Queries", "Relational Models", "Indexes"],
     color: "#7c3aed",
-    image: "https://zeusbautista.site/Certifications/Database.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Database.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Database.webp",
     verifyUrl: badgeVerifyUrls.databasesSpecialist
   },
@@ -141,7 +141,7 @@ const certificationsData = [
     date: "Feb 2024",
     skills: ["HTML5", "CSS3", "Flexbox", "CSS Grid", "Responsive Design"],
     color: "#0a0a23",
-    image: "https://zeusbautista.site/Certifications/Responsive%20Web%20Design.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Responsive%20Web%20Design.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Certifications/Responsive%20Web%20Design.webp",
     verifyUrl: badgeVerifyUrls.responsiveWebDesign,
     actionLabel: "Verify Certificate"
@@ -170,7 +170,7 @@ const badgesData = [
     date: "Verified",
     initials: "HTML",
     color: "#059669",
-    image: "https://zeusbautista.site/Badges/it-specialist-html-and-css.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/it-specialist-html-and-css.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/it-specialist-html-and-css.webp",
     verifyUrl: badgeVerifyUrls.htmlCssSpecialist
   },
@@ -180,7 +180,7 @@ const badgesData = [
     date: "Verified",
     initials: "DB",
     color: "#7c3aed",
-    image: "https://zeusbautista.site/Badges/it-specialist-databases.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/it-specialist-databases.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/it-specialist-databases.webp",
     verifyUrl: badgeVerifyUrls.databasesSpecialist
   },
@@ -190,7 +190,7 @@ const badgesData = [
     date: "Verified",
     initials: "WEB",
     color: "#0891b2",
-    image: "https://zeusbautista.site/Badges/web-development-fundamentals.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/web-development-fundamentals.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/web-development-fundamentals.webp",
     verifyUrl: badgeVerifyUrls.webDevelopmentFundamentals
   },
@@ -200,7 +200,7 @@ const badgesData = [
     date: "Verified",
     initials: "HTML",
     color: "#dc2626",
-    image: "https://zeusbautista.site/Badges/html-essentials.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/html-essentials.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/html-essentials.webp",
     verifyUrl: badgeVerifyUrls.htmlEssentials
   },
@@ -210,7 +210,7 @@ const badgesData = [
     date: "Verified",
     initials: "CSS",
     color: "#0ea5e9",
-    image: "https://zeusbautista.site/Badges/css-essentials.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/css-essentials.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/css-essentials.webp",
     verifyUrl: badgeVerifyUrls.cssEssentials
   },
@@ -220,7 +220,7 @@ const badgesData = [
     date: "Verified",
     initials: "JS1",
     color: "#ca8a04",
-    image: "https://zeusbautista.site/Badges/javascript-essentials-1.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/javascript-essentials-1.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/javascript-essentials-1.webp",
     verifyUrl: badgeVerifyUrls.javascriptEssentials1
   },
@@ -230,7 +230,7 @@ const badgesData = [
     date: "Verified",
     initials: "JS2",
     color: "#eab308",
-    image: "https://zeusbautista.site/Badges/javascript-essentials-2.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/javascript-essentials-2.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/javascript-essentials-2.webp",
     verifyUrl: badgeVerifyUrls.javascriptEssentials2
   },
@@ -240,7 +240,7 @@ const badgesData = [
     date: "Verified",
     initials: "AI",
     color: "#4285f4",
-    image: "https://zeusbautista.site/Badges/prompt-design-in-vertex-ai-skill-badge.webp",
+    image: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/prompt-design-in-vertex-ai-skill-badge.webp",
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Badges/prompt-design-in-vertex-ai-skill-badge.webp",
     verifyUrl: badgeVerifyUrls.vertexAiPromptDesign
   }

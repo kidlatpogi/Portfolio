@@ -50,7 +50,7 @@ const projectsData: ProjectItemData[] = [
       "https://raw.githubusercontent.com/kidlatpogi/talktics-capstone/main/docs/images/progress.png",
       "https://raw.githubusercontent.com/kidlatpogi/talktics-capstone/main/docs/images/achievements.png"
     ],
-    backupImage: "https://zeusbautista.site/Project%20Overview/TalkTics.webp"
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/TalkTics.webp"
   },
   {
     title: "L.I.N.N.Y",
@@ -72,7 +72,7 @@ const projectsData: ProjectItemData[] = [
       "https://raw.githubusercontent.com/kidlatpogi/L.I.N.N.Y/main/assets/screenshots/smart_lighting.png",
       "https://raw.githubusercontent.com/kidlatpogi/L.I.N.N.Y/main/assets/screenshots/app_shortcuts.png"
     ],
-    backupImage: "https://zeusbautista.site/Project%20Overview/Linny-1200.webp"
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/Linny-1200.webp"
   },
   {
     title: "Saddle Ranch",
@@ -118,7 +118,7 @@ const projectsData: ProjectItemData[] = [
       "https://raw.githubusercontent.com/kidlatpogi/WhatDayIsIt/main/assets/Customizing.gif",
       "https://raw.githubusercontent.com/kidlatpogi/WhatDayIsIt/main/assets/Layout.gif"
     ],
-    backupImage: "https://zeusbautista.site/Project%20Overview/CalendarWidget-1200.webp"
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/CalendarWidget-1200.webp"
   },
   {
     title: "Web-Tools",
@@ -136,7 +136,7 @@ const projectsData: ProjectItemData[] = [
     images: [
       "https://raw.githubusercontent.com/kidlatpogi/Web-tools/main/LandingPage.png"
     ],
-    backupImage: "https://zeusbautista.site/Project%20Overview/WebToolz-1200.webp"
+    backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/WebToolz-1200.webp"
   },
   {
     title: "Olympus",
