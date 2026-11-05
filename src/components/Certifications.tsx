@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ExternalLink, X } from 'lucide-react';
@@ -6,18 +7,17 @@ import { ExternalLink, X } from 'lucide-react';
 gsap.registerPlugin(ScrollTrigger);
 
 const badgeVerifyUrls = {
-  webDevelopmentFundamentals: "https://www.credly.com/badges/61fe2198-4c4b-4a50-b46a-7f61c3608ca4/public_url",
-  htmlEssentials: "https://www.credly.com/badges/c181fe6c-0331-41ee-8267-2704db662491/public_url",
-  cssEssentials: "https://www.credly.com/badges/1aebcc96-3fa1-4963-bfa5-7cf05f935f1a/public_url",
-  javascriptEssentials1: "https://www.credly.com/badges/1fe5fb6c-cb23-42e6-9fd6-cbfe88719ce3/public_url",
-  javascriptEssentials2: "https://www.credly.com/badges/e8838ee2-78d1-4db8-8422-799ffb738e4a/public_url",
-  vertexAiPromptDesign: "https://www.cloudskillsboost.google/public_profiles/80e9275a-4b9d-47be-a56e-6fe130fe300c/badges/14841961",
-  ciscoAcademyYear: "https://www.credly.com/organizations/cisco/badges",
-  devOps101: "https://simpli-web.app.link/e/E14x8Xg6bRb",
-  introCloudComputing: "https://simpli-web.app.link/e/Gf8Zq0wcbRb",
-  gitTraining: "https://simpli-web.app.link/e/i0i5iC0hbRb",
-  htmlCssSpecialist: "https://www.credly.com/badges/632488a0-7b56-4c9f-b98f-07e03aaec46c/public_url",
-  databasesSpecialist: "https://www.credly.com/badges/e05b5efb-6401-4475-b695-177ee13bbf7a/public_url",
+  webDevelopmentFundamentals: "https://www.credly.com/badges/1cce4817-3dd9-4fd5-b508-594add0cb399/public_url",
+  htmlEssentials: "https://www.credly.com/badges/b67c1cd5-ad38-4666-89fd-f4cdcf974d8c/public_url",
+  cssEssentials: "https://www.credly.com/badges/c1acd1ec-2db1-4b12-923b-0841a1668f38/public_url",
+  javascriptEssentials1: "https://www.credly.com/badges/6dac7d87-44c6-49fa-a6cf-6c7d55904935/public_url",
+  javascriptEssentials2: "https://www.credly.com/badges/83527a67-c83a-4711-a666-da79ab09933b/public_url",
+  vertexAiPromptDesign: "https://www.credly.com/badges/7276c4e4-eedb-48d6-b445-bc68aa49fcd4/public_url",
+  devOps101: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjc1IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU1MjgwMF84ODk1Mjg3MTc1MTM3MjkzMzM4Mi5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F6073%2FDevOps%2520101%3A%2520What%2520is%2520DevOps%253F%2Fcertificate%2Fdownload-skillup&%24web_only=true",
+  introCloudComputing: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxNTExIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODU0NjQ2MF84ODk1Mjg3MTc1MTI4NTA5MTE5Ny5wbmciLCJ1c2VybmFtZSI6IlpldXMgQW5nZWxvIEJhdXRpc3RhIn0%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3971%2FIntroduction-to-Cloud-Computing%2Fcertificate%2Fdownload-skillup&%24web_only=true",
+  gitTraining: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiI3NTgiLCJjZXJ0aWZpY2F0ZV91cmwiOiJodHRwczpcL1wvY2VydGlmaWNhdGVzLnNpbXBsaWNkbi5uZXRcL3NoYXJlXC84NTQxODQ4Xzg4OTUyODcxNzUxMjA2MjA0MjY0LnBuZyIsInVzZXJuYW1lIjoiWmV1cyBBbmdlbG8gQmF1dGlzdGEifQ%3D%3D&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F2823%2FGIT%2Fcertificate%2Fdownload-skillup&%24web_only=true",
+  htmlCssSpecialist: "https://www.credly.com/badges/0d6ce002-6844-49de-976f-df4cd26edea0/public_url",
+  databasesSpecialist: "https://www.credly.com/badges/ec097417-e36a-4642-b03b-df96919ae380/public_url",
   responsiveWebDesign: "https://www.freecodecamp.org/certification/Zeus_Angelo_Bautista/responsive-web-design"
 };
 
@@ -291,14 +291,17 @@ export default function Certifications() {
 
     if (selectedItem) {
       document.body.style.overflow = 'hidden';
+      window.dispatchEvent(new CustomEvent('modalStateChange', { detail: { isOpen: true } }));
       window.addEventListener('keydown', handleKeyDown);
     } else {
       document.body.style.overflow = '';
+      window.dispatchEvent(new CustomEvent('modalStateChange', { detail: { isOpen: false } }));
     }
 
     return () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', handleKeyDown);
+      window.dispatchEvent(new CustomEvent('modalStateChange', { detail: { isOpen: false } }));
     };
   }, [selectedItem]);
 
@@ -676,11 +679,11 @@ export default function Certifications() {
         </div>
       </div>
 
-      {/* Verification & Detail Modal (80% screen width on desktop) */}
-      {selectedItem && (
+      {/* Verification & Detail Modal (rendered via Portal to escape all stacking contexts) */}
+      {selectedItem && typeof document !== 'undefined' && createPortal(
         <div
           onClick={() => setSelectedItem(null)}
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-8"
+          className="fixed inset-0 z-[99990] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 md:p-8"
         >
           <div
             onClick={(e) => e.stopPropagation()}
@@ -702,7 +705,7 @@ export default function Certifications() {
                     <img
                       src={selectedItem.image}
                       alt={selectedItem.title || selectedItem.name || 'Credential'}
-                      className={`w-full h-full ${selectedItem.type === 'badge' ? 'object-contain' : 'object-contain'}`}
+                      className="w-full h-full object-contain"
                     />
                   </div>
                 </div>
@@ -757,7 +760,8 @@ export default function Certifications() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );

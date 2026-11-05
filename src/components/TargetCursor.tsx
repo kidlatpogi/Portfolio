@@ -385,7 +385,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   }
 
   return (
-    <div ref={cursorRef} className="fixed top-0 left-0 w-0 h-0 pointer-events-none z-[9999] mix-blend-difference -translate-x-1/2 -translate-y-1/2">
+    <div ref={cursorRef} className="fixed top-0 left-0 w-0 h-0 pointer-events-none z-[1000000] mix-blend-difference -translate-x-1/2 -translate-y-1/2">
       <div ref={dotRef} className="absolute left-1/2 top-1/2 w-1 h-1 bg-white rounded-full -translate-x-1/2 -translate-y-1/2 will-change-transform" />
       <div className="target-cursor-corner corner-tl absolute left-1/2 top-1/2 w-3 h-3 border-[3px] border-white will-change-transform border-r-0 border-b-0 -translate-x-[150%] -translate-y-[150%]" />
       <div className="target-cursor-corner corner-tr absolute left-1/2 top-1/2 w-3 h-3 border-[3px] border-white will-change-transform border-l-0 border-b-0 translate-x-[50%] -translate-y-[150%]" />
