@@ -137,19 +137,6 @@ const projectsData: ProjectItemData[] = [
       "https://raw.githubusercontent.com/kidlatpogi/Web-tools/main/LandingPage.png"
     ],
     backupImage: "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Project%20Overview/WebToolz-1200.webp"
-  },
-  {
-    title: "Olympus",
-    platform: "Code Vault",
-    year: "2024",
-    description: "“My all-in-one code vault: JS, Web, and more.” A centralized algorithmic vault housing core data structures, algorithms, utilities, and foundational software engineering implementations.",
-    tags: ["C++", "JavaScript", "Algorithms", "Web", "Data Structures"],
-    stack: "[C++] — [JAVASCRIPT] — [ALGORITHMS]",
-    bgGradient: "bg-[#B43E00]",
-    accentColor: "from-white/15 to-transparent",
-    link: "",
-    github: "https://github.com/kidlatpogi/Olympus",
-    isFolder: true
   }
 ];
 

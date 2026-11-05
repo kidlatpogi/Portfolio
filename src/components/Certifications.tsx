@@ -618,8 +618,8 @@ export default function Certifications() {
       </div>
 
       {/* Badges Section directly follows Certifications with natural clean spacing */}
-      <div ref={badgesContainerRef} className="relative z-10 w-full flex flex-col justify-center items-center py-12 md:py-16 md:min-h-screen overflow-hidden">
-        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-8 md:mb-8 flex-shrink-0">
+      <div ref={badgesContainerRef} id="badges" className="relative z-10 w-full flex flex-col justify-center items-center py-12 md:py-16 md:min-h-screen overflow-hidden scroll-mt-20">
+        <div className="w-full max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col items-center text-center mb-8 md:mb-10 flex-shrink-0">
           <span className="font-array-semibold text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-[#334155] text-center mb-1.5">
             Skill Endorsements
           </span>
@@ -628,12 +628,12 @@ export default function Certifications() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 justify-center items-stretch w-full max-w-[1300px] mx-auto px-6 md:px-24">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-7 lg:gap-8 justify-center items-stretch w-full max-w-[1500px] mx-auto px-4 sm:px-8 md:px-16 lg:px-20">
           {badgesData.map((badge, index) => (
             <div
               key={badge.name}
               onClick={() => setSelectedItem({ type: 'badge', ...badge })}
-              className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-between bg-white border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer p-4 sm:p-5 rounded-2xl min-h-[210px] text-center"
+              className="badge-emblem-card cursor-target relative group flex flex-col items-center justify-between bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 cursor-pointer p-5 sm:p-6 md:p-7 rounded-2xl sm:rounded-3xl min-h-[260px] sm:min-h-[290px] md:min-h-[320px] text-center"
             >
               <a
                 href={badge.verifyUrl}
@@ -641,13 +641,13 @@ export default function Certifications() {
                 rel="noopener noreferrer"
                 onClick={(event) => event.stopPropagation()}
                 aria-label={`Verify ${badge.name} badge`}
-                className="absolute top-3.5 right-3.5 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1 bg-white/80 hover:bg-white rounded-full shadow-sm"
+                className="absolute top-4 right-4 text-slate-400 hover:text-accent transition-colors duration-300 z-10 p-1.5 bg-white/90 hover:bg-white rounded-full shadow-sm border border-slate-100"
                 title="Verify Badge"
               >
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="w-4 h-4" />
               </a>
 
-              <div className="w-20 h-20 sm:w-24 sm:h-24 relative flex items-center justify-center my-auto transition-transform duration-300 group-hover:scale-110">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 relative flex items-center justify-center my-auto transition-transform duration-300 group-hover:scale-105">
                 <img
                   src={badge.image}
                   alt={badge.name}
@@ -659,15 +659,15 @@ export default function Certifications() {
                       image.src = badge.backupImage;
                     }
                   }}
-                  className="w-full h-full object-contain filter drop-shadow-sm select-none"
+                  className="w-full h-full object-contain filter drop-shadow-md select-none"
                 />
               </div>
 
-              <div className="flex flex-col items-center w-full mt-auto">
-                <span style={{ color: badge.color }} className="font-mono text-[9px] md:text-[10px] font-bold uppercase tracking-wider mb-1">
+              <div className="flex flex-col items-center w-full mt-4">
+                <span style={{ color: badge.color }} className="font-mono text-[10px] sm:text-xs md:text-xs font-bold uppercase tracking-wider mb-1.5">
                   {badge.issuer}
                 </span>
-                <h3 className="font-sans text-xs sm:text-[13px] font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors line-clamp-2">
+                <h3 className="font-sans text-xs sm:text-sm md:text-[15px] font-bold text-slate-800 tracking-tight leading-snug group-hover:text-accent transition-colors line-clamp-2">
                   {badge.name}
                 </h3>
               </div>

@@ -51,7 +51,7 @@ export default function Skills() {
   }, [selectedCategory]);
 
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 sm:px-8 md:px-20 lg:px-24 py-12 md:py-20 relative overflow-hidden bg-transparent z-10" id="skills">
+    <section className="min-h-screen w-full flex flex-col items-center justify-center px-4 sm:px-8 md:px-20 lg:px-24 py-12 md:py-20 relative overflow-hidden bg-transparent z-10" id="skills">
       <div className="w-full max-w-[1500px] flex flex-col items-center z-10">
 
         {/* Subheading */}
@@ -84,34 +84,36 @@ export default function Skills() {
           })}
         </div>
 
-        {/* Interactive Skills Grid: 3 cols (mobile), 4 cols (tablet), 6 cols (md), 8 cols (desktop/720p) with centered trailing items */}
-        <div className="w-full flex flex-wrap justify-center gap-2 sm:gap-2.5 md:gap-3 mx-auto">
+        {/* Interactive Skills Grid: 2 cols (mobile), 3 cols (sm), 4 cols (md), 5 cols (lg), 6 cols (xl) */}
+        <div className="w-full flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-5 mx-auto">
           {filteredSkills.map(skill => {
             return (
               <div
                 key={skill.name}
-                className="w-[calc((100%-1rem)/3)] sm:w-[calc((100%-1.875rem)/4)] md:w-[calc((100%-3.75rem)/6)] lg:w-[calc((100%-5.25rem)/8)] max-w-[180px] group relative border-2 border-slate-200/80 bg-white p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center gap-1.5 sm:gap-2 transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(196,73,0,0.12)] cursor-target overflow-hidden"
+                className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-2rem)/3)] md:w-[calc((100%-3.75rem)/4)] lg:w-[calc((100%-4rem)/5)] xl:w-[calc((100%-6.25rem)/6)] min-h-[140px] sm:min-h-[160px] md:min-h-[180px] group relative border-2 border-slate-200/90 bg-white p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-between gap-2 sm:gap-3 transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_16px_32px_-8px_rgba(196,73,0,0.15)] cursor-target overflow-hidden"
               >
                 {/* Tech Logo */}
-                <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110">
+                <div className="w-11 h-11 sm:w-13 sm:h-13 md:w-15 md:h-15 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110 my-auto">
                   <img
                     src={skill.logo}
                     alt={skill.name}
                     loading="lazy"
                     decoding="async"
-                    className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 object-contain drop-shadow-sm"
+                    className="w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 object-contain drop-shadow-sm"
                   />
                 </div>
 
-                {/* Skill Name */}
-                <span className="font-clash-semibold text-[11px] sm:text-xs md:text-sm font-bold text-slate-800 text-center relative z-10 group-hover:text-accent transition-colors duration-300 truncate max-w-full">
-                  {skill.name}
-                </span>
+                <div className="flex flex-col items-center w-full gap-1 mt-auto">
+                  {/* Skill Name */}
+                  <span className="font-clash-semibold text-xs sm:text-sm md:text-base font-bold text-slate-800 text-center relative z-10 group-hover:text-accent transition-colors duration-300 truncate max-w-full">
+                    {skill.name}
+                  </span>
 
-                {/* Skill Category Pill */}
-                <span className="font-mono text-[7px] sm:text-[8px] md:text-[9px] text-slate-400 uppercase font-semibold px-1 sm:px-1.5 py-0.5 bg-slate-50 border border-slate-100 rounded truncate max-w-full">
-                  {skill.category}
-                </span>
+                  {/* Skill Level or Category Pill */}
+                  <span className="font-mono text-[8px] sm:text-[9px] md:text-[10px] text-slate-500 uppercase font-semibold px-2 py-0.5 bg-slate-50 border border-slate-100 rounded-md truncate max-w-full">
+                    {skill.level || skill.category}
+                  </span>
+                </div>
               </div>
             );
           })}

@@ -1,10 +1,52 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { GitHubCalendar } from 'react-github-calendar';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function GithubHeatmap() {
   const sectionRef = useRef<HTMLElement>(null);
   const calendarContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeftPos = useRef(0);
+
+  const checkScroll = () => {
+    if (!calendarContainerRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = calendarContainerRef.current;
+    setCanScrollLeft(scrollLeft > 10);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+  };
+
+  const scrollCalendar = (direction: 'left' | 'right') => {
+    if (!calendarContainerRef.current) return;
+    const scrollAmount = Math.max(280, Math.round(calendarContainerRef.current.clientWidth * 0.65));
+    calendarContainerRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+  };
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    if (!calendarContainerRef.current) return;
+    isDragging.current = true;
+    startX.current = e.pageX - calendarContainerRef.current.offsetLeft;
+    scrollLeftPos.current = calendarContainerRef.current.scrollLeft;
+  };
+
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging.current || !calendarContainerRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - calendarContainerRef.current.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    calendarContainerRef.current.scrollLeft = scrollLeftPos.current - walk;
+    checkScroll();
+  };
+
+  const onMouseUpOrLeave = () => {
+    isDragging.current = false;
+  };
 
   useEffect(() => {
     const island = sectionRef.current?.parentElement;
@@ -13,18 +55,26 @@ export default function GithubHeatmap() {
       island.style.width = '100%';
     }
 
+    const container = calendarContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScroll, { passive: true });
+      checkScroll();
+    }
+
     // Automatically refresh ScrollTrigger whenever the GitHub calendar SVG finishes rendering or resizes
     let resizeObserver: ResizeObserver | null = null;
-    if (typeof ResizeObserver !== 'undefined' && calendarContainerRef.current) {
+    if (typeof ResizeObserver !== 'undefined' && container) {
       resizeObserver = new ResizeObserver(() => {
+        checkScroll();
         if (typeof window !== 'undefined' && ScrollTrigger) {
           ScrollTrigger.refresh();
         }
       });
-      resizeObserver.observe(calendarContainerRef.current);
+      resizeObserver.observe(container);
     }
 
     const timer = setTimeout(() => {
+      checkScroll();
       if (typeof window !== 'undefined' && ScrollTrigger) {
         ScrollTrigger.refresh();
       }
@@ -32,6 +82,9 @@ export default function GithubHeatmap() {
 
     return () => {
       clearTimeout(timer);
+      if (container) {
+        container.removeEventListener('scroll', checkScroll);
+      }
       if (resizeObserver) {
         resizeObserver.disconnect();
       }
@@ -46,6 +99,29 @@ export default function GithubHeatmap() {
 
   return (
     <section ref={sectionRef} className="w-full py-16 md:py-20 select-none relative z-10" id="github-activity">
+      <style>{`
+        #github-activity .calendar-scroll-track {
+          scrollbar-width: thin;
+          scrollbar-color: #cbd5e1 #f8fafc;
+        }
+        #github-activity .calendar-scroll-track::-webkit-scrollbar {
+          height: 7px;
+          display: block !important;
+        }
+        #github-activity .calendar-scroll-track::-webkit-scrollbar-track {
+          background: #f8fafc;
+          border-radius: 9999px;
+        }
+        #github-activity .calendar-scroll-track::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 9999px;
+          transition: background-color 0.2s;
+        }
+        #github-activity .calendar-scroll-track::-webkit-scrollbar-thumb:hover {
+          background: #C44900;
+        }
+      `}</style>
+
       <div className="w-full px-6 md:px-16 lg:px-24 max-w-[1400px] mx-auto">
       
       {/* Centered Section Header */}
@@ -61,12 +137,64 @@ export default function GithubHeatmap() {
         </p>
       </div>
 
-      {/* Card container containing only the Heatmap graph and bottom actions */}
-      <div className="w-full flex flex-col gap-6 md:gap-8 p-6 md:p-8 rounded-3xl bg-white border-2 border-slate-200/80 shadow-sm hover:shadow-md transition-shadow duration-300">
+      {/* Card container containing Header Bar, Heatmap graph, and bottom actions */}
+      <div className="w-full flex flex-col gap-5 md:gap-6 p-5 sm:p-6 md:p-8 rounded-3xl bg-white border-2 border-slate-200/80 shadow-sm hover:shadow-md transition-shadow duration-300">
         
-        {/* Heatmap graph container */}
-        <div ref={calendarContainerRef} className="w-full overflow-x-auto flex justify-center py-2 scrollbar-hide data-lenis-prevent min-h-[160px]">
-          <div className="min-w-[1000px] sm:min-w-0 min-h-[160px] flex items-center justify-center">
+        {/* Navigation & Hint Control Bar */}
+        <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-100 flex-wrap">
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-accent animate-pulse" />
+            <span className="font-mono text-xs uppercase tracking-wider text-slate-700 font-bold">
+              Activity Matrix
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <span className="hidden sm:inline-flex items-center gap-1 font-mono text-[11px] text-slate-400 font-medium">
+              ↔ Scroll or drag horizontally
+            </span>
+
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => scrollCalendar('left')}
+                disabled={!canScrollLeft}
+                aria-label="Scroll left in contributions"
+                className={`p-1.5 rounded-lg border transition-all duration-200 cursor-target ${
+                  canScrollLeft
+                    ? 'border-slate-200 text-slate-700 hover:border-accent hover:text-accent hover:bg-slate-50'
+                    : 'border-slate-100 text-slate-300 cursor-not-allowed opacity-40'
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollCalendar('right')}
+                disabled={!canScrollRight}
+                aria-label="Scroll right in contributions"
+                className={`p-1.5 rounded-lg border transition-all duration-200 cursor-target ${
+                  canScrollRight
+                    ? 'border-slate-200 text-slate-700 hover:border-accent hover:text-accent hover:bg-slate-50'
+                    : 'border-slate-100 text-slate-300 cursor-not-allowed opacity-40'
+                }`}
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Heatmap graph container with side scrolling and drag */}
+        <div
+          ref={calendarContainerRef}
+          onMouseDown={onMouseDown}
+          onMouseMove={onMouseMove}
+          onMouseUp={onMouseUpOrLeave}
+          onMouseLeave={onMouseUpOrLeave}
+          className="calendar-scroll-track w-full overflow-x-auto py-3 pb-4 scroll-smooth cursor-grab active:cursor-grabbing select-none data-lenis-prevent min-h-[160px]"
+        >
+          <div className="min-w-max flex justify-start lg:justify-center mx-auto px-1">
             <GitHubCalendar
               username="kidlatpogi"
               theme={brandTheme}
@@ -79,7 +207,7 @@ export default function GithubHeatmap() {
         </div>
 
         {/* Card Footer with Link */}
-        <div className="flex justify-end pt-4 border-t border-slate-100">
+        <div className="flex justify-end pt-3 border-t border-slate-100">
           <a
             href="https://github.com/kidlatpogi"
             target="_blank"

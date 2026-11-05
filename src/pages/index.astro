@@ -7,7 +7,6 @@ import About from '../components/About.tsx';
 import Skills from '../components/Skills.tsx';
 import Experience from '../components/Experience.tsx';
 import Projects from '../components/Projects.tsx';
-import Designs from '../components/Designs.tsx';
 import Certifications from '../components/Certifications.tsx';
 import ShapeGrid from '../components/ShapeGrid.tsx';
 import ChatBot from '../components/ChatBot.tsx';
@@ -34,8 +33,7 @@ const navItems = [
     bgColor: "#1A1A1A",
     textColor: "#ffffff",
     links: [
-      { label: "Projects", href: "#projects", ariaLabel: "Projects" },
-      { label: "Designs", href: "#designs", ariaLabel: "Designs" }
+      { label: "Projects", href: "#projects", ariaLabel: "Projects" }
     ]
   },
   {
@@ -43,7 +41,8 @@ const navItems = [
     bgColor: "#333333",
     textColor: "#ffffff",
     links: [
-      { label: "Certifications", href: "#certifications", ariaLabel: "Certifications" }
+      { label: "Certifications", href: "#certifications", ariaLabel: "Certifications" },
+      { label: "Badges", href: "#badges", ariaLabel: "Badges" }
     ]
   }
 ];
@@ -65,11 +64,10 @@ const navItems = [
 		<Experience client:visible />
 		<div class="h-12 md:h-16" />
 		<Projects client:visible />
-		<Designs client:visible />
-		<div class="h-12 md:h-16" />
-		<GithubHeatmap client:load />
 		<div class="h-12 md:h-16" />
 		<Certifications client:visible />
+		<div class="h-12 md:h-16" />
+		<GithubHeatmap client:load />
 	</main>
 	<Footer client:visible />
 	<ChatBot client:idle />

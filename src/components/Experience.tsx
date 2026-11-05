@@ -36,7 +36,7 @@ const experiences: ExperienceItem[] = [
 
 export default function Experience() {
   return (
-    <section className="w-full flex flex-col items-center justify-center px-4 py-10 sm:py-14 md:py-20 relative overflow-hidden" id="experience">
+    <section className="min-h-screen w-full flex flex-col items-center justify-center px-4 py-10 sm:py-14 md:py-20 relative overflow-hidden" id="experience">
       <div className="w-full max-w-[1600px] flex flex-col items-center z-10">
 
         {/* Subheading */}
