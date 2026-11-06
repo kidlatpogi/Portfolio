@@ -34,7 +34,7 @@ const allSkills: Skill[] = [
   { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg', category: 'Tools & DevOps', level: 'Advanced' },
   { name: 'GitHub', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg', category: 'Tools & DevOps', level: 'Advanced' },
   { name: 'Docker', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg', category: 'Tools & DevOps', level: 'Intermediate' },
-  { name: 'AntiGravity', logo: '/icons/antigravity.svg', category: 'Tools & DevOps', level: 'Agentic IDE' },
+  { name: 'AntiGravity', logo: '/icons/antigravity.webp', category: 'Tools & DevOps', level: 'Agentic IDE' },
   { name: 'Claude Code', logo: '/icons/claude.svg', category: 'Tools & DevOps', level: 'CLI AI' },
   { name: 'Cursor', logo: '/icons/cursor.svg', category: 'Tools & DevOps', level: 'Daily Driver' },
   { name: 'VS Code', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg', category: 'Tools & DevOps', level: 'Daily Driver' },
