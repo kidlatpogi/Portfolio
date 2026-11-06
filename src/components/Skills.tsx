@@ -34,8 +34,13 @@ const allSkills: Skill[] = [
   { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg', category: 'Tools & DevOps', level: 'Advanced' },
   { name: 'GitHub', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg', category: 'Tools & DevOps', level: 'Advanced' },
   { name: 'Docker', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg', category: 'Tools & DevOps', level: 'Intermediate' },
+  { name: 'Anti Gravity', logo: '/icons/antigravity.svg', category: 'Tools & DevOps', level: 'Agentic AI' },
+  { name: 'Claude Code', logo: '/icons/claude.svg', category: 'Tools & DevOps', level: 'CLI AI' },
+  { name: 'Cursor', logo: '/icons/cursor.svg', category: 'Tools & DevOps', level: 'Daily Driver' },
   { name: 'VS Code', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg', category: 'Tools & DevOps', level: 'Daily Driver' },
   { name: 'Linux', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg', category: 'Tools & DevOps', level: 'Proficient' },
+  { name: 'Raspberry Pi', logo: '/icons/raspberrypi.svg', category: 'Tools & DevOps', level: 'IoT / Linux' },
+  { name: 'Home Lab', logo: '/icons/homelab.svg', category: 'Tools & DevOps', level: 'Self-Hosted' },
   { name: 'Photoshop', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg', category: 'Tools & DevOps', level: 'Creative UI' },
   { name: 'Figma', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg', category: 'Tools & DevOps', level: 'UI / Wireframing' }
 ];
@@ -84,13 +89,13 @@ export default function Skills() {
           })}
         </div>
 
-        {/* Interactive Skills Grid: 2 cols (mobile), 3 cols (sm), 4 cols (md), 5 cols (lg), 6 cols (xl) */}
-        <div className="w-full flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-5 mx-auto">
+        {/* Adaptive Skills Grid: rows dynamically adapt to screen size with square cards */}
+        <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(175px,1fr))] gap-3 sm:gap-4 md:gap-5 justify-center">
           {filteredSkills.map(skill => {
             return (
               <div
                 key={skill.name}
-                className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-2rem)/3)] md:w-[calc((100%-3.75rem)/4)] lg:w-[calc((100%-4rem)/5)] xl:w-[calc((100%-6.25rem)/6)] min-h-[140px] sm:min-h-[160px] md:min-h-[180px] group relative border-2 border-slate-200/90 bg-white p-4 sm:p-5 md:p-6 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-between gap-2 sm:gap-3 transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_16px_32px_-8px_rgba(196,73,0,0.15)] cursor-target overflow-hidden"
+                className="w-full aspect-square min-h-[140px] sm:min-h-[160px] md:min-h-[175px] group relative border-2 border-slate-200/90 bg-white p-3.5 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-between transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_16px_32px_-8px_rgba(196,73,0,0.15)] cursor-target overflow-hidden"
               >
                 {/* Tech Logo */}
                 <div className="w-11 h-11 sm:w-13 sm:h-13 md:w-15 md:h-15 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110 my-auto">
