@@ -34,7 +34,7 @@ const allSkills: Skill[] = [
   { name: 'Git', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg', category: 'Tools & DevOps', level: 'Advanced' },
   { name: 'GitHub', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg', category: 'Tools & DevOps', level: 'Advanced' },
   { name: 'Docker', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg', category: 'Tools & DevOps', level: 'Intermediate' },
-  { name: 'Anti Gravity', logo: '/icons/antigravity.svg', category: 'Tools & DevOps', level: 'Agentic AI' },
+  { name: 'AntiGravity', logo: '/icons/antigravity.svg', category: 'Tools & DevOps', level: 'Agentic IDE' },
   { name: 'Claude Code', logo: '/icons/claude.svg', category: 'Tools & DevOps', level: 'CLI AI' },
   { name: 'Cursor', logo: '/icons/cursor.svg', category: 'Tools & DevOps', level: 'Daily Driver' },
   { name: 'VS Code', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg', category: 'Tools & DevOps', level: 'Daily Driver' },
@@ -89,22 +89,22 @@ export default function Skills() {
           })}
         </div>
 
-        {/* Adaptive Skills Grid: rows dynamically adapt to screen size with square cards */}
-        <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] md:grid-cols-[repeat(auto-fill,minmax(175px,1fr))] gap-3 sm:gap-4 md:gap-5 justify-center">
+        {/* Adaptive Skills Grid: up to 8 columns maximum per row with centered trailing row */}
+        <div className="w-full flex flex-wrap justify-center gap-3 sm:gap-4 md:gap-5 mx-auto">
           {filteredSkills.map(skill => {
             return (
               <div
                 key={skill.name}
-                className="w-full aspect-square min-h-[140px] sm:min-h-[160px] md:min-h-[175px] group relative border-2 border-slate-200/90 bg-white p-3.5 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-between transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_16px_32px_-8px_rgba(196,73,0,0.15)] cursor-target overflow-hidden"
+                className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-2rem)/3)] md:w-[calc((100%-3.75rem)/4)] lg:w-[calc((100%-6.25rem)/6)] xl:w-[calc((100%-8.75rem)/8)] max-w-[175px] aspect-square min-h-[140px] sm:min-h-[155px] md:min-h-[165px] lg:min-h-[170px] group relative border-2 border-slate-200/90 bg-white p-3.5 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-between transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_16px_32px_-8px_rgba(196,73,0,0.15)] cursor-target overflow-hidden"
               >
                 {/* Tech Logo */}
-                <div className="w-11 h-11 sm:w-13 sm:h-13 md:w-15 md:h-15 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110 my-auto">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110 my-auto">
                   <img
                     src={skill.logo}
                     alt={skill.name}
                     loading="lazy"
                     decoding="async"
-                    className="w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 object-contain drop-shadow-sm"
+                    className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain drop-shadow-sm"
                   />
                 </div>
 
