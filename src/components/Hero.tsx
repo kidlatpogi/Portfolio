@@ -1,12 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  getCurrentSeason,
-  getNextSeason,
-  getSeasonOverride,
-  setSeasonOverride,
-  SEASON_METADATA,
-  type Season,
-} from '../utils/seasonal';
+import { getCurrentSeason, type Season } from '../utils/seasonal';
 
 const profileImage = "/Common/Profile%20Picture.webp";
 const profileImageBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Profile%20Picture.webp";
@@ -16,55 +9,19 @@ const profileImageHoverBackup = "https://pub-6be64aebeca647248b39162d6d6633f8.r2
 export default function Hero() {
   const [startStrikethrough, setStartStrikethrough] = useState(false);
   const [isProfileHovered, setIsProfileHovered] = useState(false);
-  const [systemSeason, setSystemSeason] = useState<Season>('spring');
-  const [overrideSeason, setOverrideSeason] = useState<Season | null>(null);
+  const [season, setSeason] = useState<Season>('spring');
 
-  const activeSeason = overrideSeason ?? systemSeason;
-  const isWinter = activeSeason === 'winter';
-
-  const handleCycleSeason = () => {
-    const seasonsList: Season[] = ['spring', 'summer', 'autumn', 'winter'];
-    if (overrideSeason === null) {
-      setSeasonOverride('spring');
-      setOverrideSeason('spring');
-    } else {
-      const currentIdx = seasonsList.indexOf(overrideSeason);
-      if (currentIdx === seasonsList.length - 1) {
-        setSeasonOverride('auto');
-        setOverrideSeason(null);
-      } else {
-        const next = seasonsList[currentIdx + 1];
-        setSeasonOverride(next);
-        setOverrideSeason(next);
-      }
-    }
-  };
-
-  const handleSelectSeason = (target: Season | 'auto') => {
-    setSeasonOverride(target);
-    setOverrideSeason(target === 'auto' ? null : target);
-  };
+  const isWinter = season === 'winter';
 
   useEffect(() => {
-    setSystemSeason(getCurrentSeason());
-    setOverrideSeason(getSeasonOverride());
-
-    const handleSeasonChange = (e: Event) => {
-      const customEvent = e as CustomEvent<{ override: Season | null }>;
-      setOverrideSeason(customEvent.detail?.override ?? null);
-    };
-
-    window.addEventListener('seasonChange', handleSeasonChange);
+    setSeason(getCurrentSeason());
 
     const isPreloaderGone = typeof document !== 'undefined' && !document.getElementById('preloader');
     if (isPreloaderGone) {
       const timer = setTimeout(() => {
         setStartStrikethrough(true);
       }, 150);
-      return () => {
-        clearTimeout(timer);
-        window.removeEventListener('seasonChange', handleSeasonChange);
-      };
+      return () => clearTimeout(timer);
     }
 
     const handlePreloaderRemoved = () => {
@@ -77,7 +34,6 @@ export default function Hero() {
 
     return () => {
       window.removeEventListener('preloaderFullyRemoved', handlePreloaderRemoved);
-      window.removeEventListener('seasonChange', handleSeasonChange);
     };
   }, []);
 
@@ -374,64 +330,6 @@ export default function Hero() {
                 </svg>
                 Email
               </a>
-            </div>
-          </div>
-
-          {/* Temporary Seasonal Effect Switcher Button */}
-          <div className="hero-season-control mt-4 sm:mt-5 flex flex-wrap items-center gap-2.5">
-            <button
-              type="button"
-              onClick={handleCycleSeason}
-              className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-mono border border-slate-300/80 bg-white/85 hover:bg-white text-slate-800 hover:text-accent shadow-xs hover:shadow transition-all duration-200 backdrop-blur-md cursor-pointer select-none group"
-              aria-label="Switch season effect"
-              title="Temporary Season Switcher — Click to cycle seasons"
-            >
-              <span
-                className="w-2 h-2 rounded-full animate-ping"
-                style={{ backgroundColor: SEASON_METADATA[activeSeason].accentColor }}
-              />
-              <span className="text-sm sm:text-base leading-none">{SEASON_METADATA[activeSeason].icon}</span>
-              <span className="font-semibold">{SEASON_METADATA[activeSeason].name}</span>
-              <span className="text-[11px] text-slate-500 font-normal">
-                {overrideSeason
-                  ? `(Preview: ${overrideSeason.toUpperCase()})`
-                  : `(Auto: ${SEASON_METADATA[activeSeason].period})`}
-              </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider text-accent ml-1 bg-accent/10 px-1.5 py-0.5 rounded group-hover:bg-accent group-hover:text-white transition-colors">
-                Switch ↻
-              </span>
-            </button>
-
-            {/* Quick season selector pills for rapid testing */}
-            <div className="inline-flex items-center p-0.5 sm:p-1 rounded-full bg-slate-100/90 border border-slate-200 text-xs font-mono gap-0.5 sm:gap-1">
-              {(['spring', 'summer', 'autumn', 'winter'] as Season[]).map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => handleSelectSeason(s)}
-                  className={`px-2 sm:px-2.5 py-0.5 rounded-full text-xs transition-all cursor-pointer flex items-center gap-1 ${
-                    activeSeason === s && overrideSeason === s
-                      ? 'bg-white text-slate-900 font-bold shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                  title={`Switch to ${SEASON_METADATA[s].name} (${SEASON_METADATA[s].period})`}
-                >
-                  <span>{SEASON_METADATA[s].icon}</span>
-                  <span className="hidden md:inline">{SEASON_METADATA[s].name}</span>
-                </button>
-              ))}
-              <button
-                type="button"
-                onClick={() => handleSelectSeason('auto')}
-                className={`px-2 sm:px-2.5 py-0.5 rounded-full text-xs transition-all cursor-pointer ${
-                  overrideSeason === null
-                    ? 'bg-white text-slate-900 font-bold shadow-xs'
-                    : 'text-slate-500 hover:text-slate-900'
-                }`}
-                title="Reset to Auto (Month-based)"
-              >
-                Auto
-              </button>
             </div>
           </div>
         </div>
