@@ -93,7 +93,7 @@ export default function Footer() {
 
       {/* Massive Watermark display text */}
       <div className="absolute bottom-16 md:bottom-20 left-0 w-full overflow-hidden select-none pointer-events-none flex justify-center z-0">
-        <h3 className="font-clash-semibold text-[15vw] xl:text-[180px] 2xl:text-[220px] font-black text-black/[0.04] leading-none tracking-tighter text-center uppercase whitespace-nowrap">
+        <h3 className="font-clash-semibold text-[15vw] xl:text-[180px] 2xl:text-[220px] font-black text-white leading-none tracking-tighter text-center uppercase whitespace-nowrap">
           GETINTOUCH
         </h3>
       </div>
