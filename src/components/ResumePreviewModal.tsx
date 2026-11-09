@@ -42,41 +42,41 @@ export default function ResumePreviewModal() {
       <style>{`
         .resume-preview-body {
           scrollbar-width: thin !important;
-          scrollbar-color: #D9541E #e2e8f0 !important;
+          scrollbar-color: rgba(17, 17, 17, 0.3) #F3EEE3 !important;
         }
         .resume-preview-body::-webkit-scrollbar {
           display: block !important;
           width: 8px !important;
         }
         .resume-preview-body::-webkit-scrollbar-track {
-          background: #f1f5f9 !important;
+          background: #F3EEE3 !important;
           border-radius: 4px !important;
         }
         .resume-preview-body::-webkit-scrollbar-thumb {
-          background: #D9541E !important;
+          background: rgba(17, 17, 17, 0.25) !important;
           border-radius: 4px !important;
         }
         .resume-preview-body::-webkit-scrollbar-thumb:hover {
-          background: #B84314 !important;
+          background: #D9541E !important;
         }
       `}</style>
 
       {/* Glassmorphic Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/70 backdrop-blur-md transition-opacity duration-300"
+        className="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-300"
         onClick={() => setIsOpen(false)}
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-[950px] h-[92vh] max-h-[92vh] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col z-10 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-[950px] h-[92vh] max-h-[92vh] bg-[#FCFAF5] rounded-2xl shadow-2xl border border-black/10 overflow-hidden flex flex-col z-10 animate-in fade-in zoom-in-95 duration-200">
         
         {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-3.5 border-b border-slate-100 bg-slate-50/80 flex-shrink-0">
+        <div className="flex items-center justify-between px-6 py-3.5 border-b border-black/8 bg-[#FCFAF5] flex-shrink-0">
           <div className="flex flex-col">
-            <span className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-[#334155]/60 font-bold">
+            <span className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-black/50 font-bold">
               Resume Preview
             </span>
-            <h2 className="font-clash-bold text-base md:text-xl font-bold text-slate-900 uppercase">
+            <h2 className="font-clash-bold text-base md:text-xl font-bold text-black uppercase">
               Zeus Angelo Bautista
             </h2>
           </div>
@@ -86,7 +86,7 @@ export default function ResumePreviewModal() {
             <a
               href="/Zeus_Angelo_Bautista_Resume.pdf"
               download="Zeus_Angelo_Bautista_Resume.pdf"
-              className="flex items-center gap-1.5 px-4 py-2 bg-accent hover:bg-accent/90 text-white rounded-full text-[10px] md:text-xs font-mono tracking-wider font-bold transition-all uppercase cursor-target shadow-sm"
+              className="flex items-center gap-1.5 px-4 py-2 bg-accent hover:bg-[#B84314] text-[#F3EEE3] rounded-full text-[10px] md:text-xs font-mono tracking-wider font-bold transition-all uppercase cursor-pointer shadow-sm"
             >
               <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
@@ -99,7 +99,7 @@ export default function ResumePreviewModal() {
             {/* Close Button */}
             <button
               onClick={() => setIsOpen(false)}
-              className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 border border-slate-200/50 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-target"
+              className="w-9 h-9 rounded-full bg-black/5 hover:bg-black/10 border border-black/10 flex items-center justify-center text-black/60 hover:text-black transition-colors cursor-pointer"
               aria-label="Close preview"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -112,11 +112,11 @@ export default function ResumePreviewModal() {
 
         {/* Modal Body / PDF Image Viewer */}
         <div 
-          className="resume-preview-body w-full flex-1 min-h-0 bg-slate-100 relative overflow-y-auto overscroll-contain flex justify-center items-start py-6 px-4 data-lenis-prevent"
+          className="resume-preview-body w-full flex-1 min-h-0 bg-[#F3EEE3] relative overflow-y-auto overscroll-contain flex justify-center items-start py-6 px-4 data-lenis-prevent"
           onWheel={(e) => e.stopPropagation()}
           onTouchMove={(e) => e.stopPropagation()}
         >
-          <div className="max-w-full w-auto shadow-md border border-slate-200/80 rounded-lg overflow-hidden bg-white select-text">
+          <div className="max-w-full w-auto shadow-xl border border-black/10 rounded-lg overflow-hidden bg-white select-text">
             <img 
               src="https://pub-6be64aebeca647248b39162d6d6633f8.r2.dev/Common/Zeus_Angelo_Bautista_Resume.webp" 
               alt="Zeus Angelo Bautista Resume Preview"
