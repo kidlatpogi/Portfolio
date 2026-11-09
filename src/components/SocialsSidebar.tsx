@@ -176,7 +176,7 @@ export default function SocialsSidebar() {
                   setIsMobileOpen(false);
                 }}
                 aria-label={social.ariaLabel}
-                className="flex items-center gap-2.5 pl-3.5 pr-2.5 py-2 rounded-full bg-black/95 text-white border border-white/20 shadow-xl backdrop-blur-md active:bg-[#C44900] transition-colors"
+                className="flex items-center gap-2.5 pl-3.5 pr-2.5 py-2 rounded-full bg-black/95 text-white border border-white/20 shadow-xl backdrop-blur-md active:bg-[#D9541E] transition-colors"
               >
                 <span className="font-mono text-xs uppercase tracking-wider font-bold">
                   {social.name}
@@ -194,7 +194,7 @@ export default function SocialsSidebar() {
           type="button"
           onClick={() => setIsMobileOpen((prev) => !prev)}
           className={`cursor-target flex items-center justify-center w-12 h-12 rounded-full text-white shadow-xl border border-white/10 transition-all duration-300 active:scale-95 cursor-pointer ${
-            isMobileOpen ? 'bg-[#C44900]' : 'bg-black hover:bg-[#C44900]'
+            isMobileOpen ? 'bg-[#D9541E]' : 'bg-black hover:bg-[#D9541E]'
           }`}
           aria-label={isMobileOpen ? 'Close socials menu' : 'Open socials menu'}
           aria-expanded={isMobileOpen}

@@ -99,11 +99,11 @@ const canonicalURL = Astro.props.canonicalURL || new URL(Astro.url.pathname, Ast
 		<!-- Image Preloading for critical hero avatar asset -->
 		<link rel="preload" href="/Common/Profile%20Picture.webp" as="image" fetchpriority="high" />
 	</head>
-	<body class="bg-[#f8f8f8] text-black antialiased selection:bg-[#DF2935]/20 selection:text-black overflow-x-hidden min-h-screen">
+	<body class="bg-[#F3EEE3] text-black antialiased selection:bg-[#DF2935]/20 selection:text-black overflow-x-hidden min-h-screen">
 		<!-- Preloader Overlay (good-fella.com style) -->
 		<div id="preloader" class="fixed inset-0 z-[99999] overflow-hidden pointer-events-none">
-			<!-- Orange sweep layer using the website's burnt orange accent color (#C44900) -->
-			<div id="preloader-orange" class="fixed top-[-50vh] left-[-50vw] w-[200vw] h-[200vh] bg-[#C44900] z-[99997] pointer-events-auto" style="transform: rotate(-30deg) translateY(0%); transform-origin: center center; will-change: transform;"></div>
+			<!-- Orange sweep layer using the website's burnt orange accent color (#D9541E) -->
+			<div id="preloader-orange" class="fixed top-[-50vh] left-[-50vw] w-[200vw] h-[200vh] bg-[#D9541E] z-[99997] pointer-events-auto" style="transform: rotate(-30deg) translateY(0%); transform-origin: center center; will-change: transform;"></div>
 			<!-- Black sweep layer -->
 			<div id="preloader-black" class="fixed top-[-50vh] left-[-50vw] w-[200vw] h-[200vh] bg-black z-[99998] pointer-events-auto" style="transform: rotate(-30deg) translateY(0%); transform-origin: center center; will-change: transform;"></div>
 			
@@ -111,7 +111,7 @@ const canonicalURL = Astro.props.canonicalURL || new URL(Astro.url.pathname, Ast
 			<div id="preloader-text-container" class="fixed inset-0 flex items-center justify-center z-[99999] pointer-events-auto">
 				<div class="relative font-mono font-bold text-[6vw] sm:text-[4vw] md:text-[3vw] lg:text-[2.2vw] xl:text-[1.8vw] tracking-[0.25em] uppercase select-none">
 					<!-- Glitch shadow in burnt orange -->
-					<div class="absolute inset-0 text-[#C44900] opacity-35 blur-[2.5px] pointer-events-none select-none glitch-text translate-x-[2px] translate-y-[1px]">LOADING</div>
+					<div class="absolute inset-0 text-[#D9541E] opacity-35 blur-[2.5px] pointer-events-none select-none glitch-text translate-x-[2px] translate-y-[1px]">LOADING</div>
 					<!-- Main white text -->
 					<div id="preloader-text" class="relative text-white z-10">LOADING</div>
 				</div>
@@ -178,7 +178,7 @@ const canonicalURL = Astro.props.canonicalURL || new URL(Astro.url.pathname, Ast
 									char = chars[Math.floor(Math.random() * chars.length)];
 									this.queue[i].char = char;
 								}
-								output += `<span style="color: #C44900;">${char}</span>`;
+								output += `<span style="color: #D9541E;">${char}</span>`;
 							} else {
 								output += to;
 							}

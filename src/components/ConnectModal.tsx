@@ -162,7 +162,7 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}
             transition={{ type: 'spring', duration: 0.5, bounce: 0.15 }}
-            className="relative w-full max-w-[540px] bg-[#FAFAFA] border border-[#334155]/20 rounded-3xl p-8 md:p-10 z-10 overflow-hidden"
+            className="relative w-full max-w-[540px] bg-[#FCFAF5] border border-[#334155]/20 rounded-3xl p-8 md:p-10 z-10 overflow-hidden"
           >
             {/* Close Button */}
             <button
@@ -203,7 +203,7 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           placeholder="Enter your name"
-                          className="w-full px-4 py-3 rounded-xl border border-[#E5E7EB] bg-[#FAFAFA] text-black text-sm placeholder-zinc-400 focus:outline-none focus:border-2 focus:border-accent disabled:opacity-60 disabled:cursor-not-allowed transition-all font-sans"
+                          className="w-full px-4 py-3 rounded-xl border border-[#E5E7EB] bg-[#F3EEE3] text-black text-sm placeholder-zinc-400 focus:outline-none focus:border-2 focus:border-accent disabled:opacity-60 disabled:cursor-not-allowed transition-all font-sans"
                         />
                       </div>
                       <div className="flex flex-col">
@@ -214,7 +214,7 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="Enter your email"
-                          className="w-full px-4 py-3 rounded-xl border border-[#E5E7EB] bg-[#FAFAFA] text-black text-sm placeholder-zinc-400 focus:outline-none focus:border-2 focus:border-accent disabled:opacity-60 disabled:cursor-not-allowed transition-all font-sans"
+                          className="w-full px-4 py-3 rounded-xl border border-[#E5E7EB] bg-[#F3EEE3] text-black text-sm placeholder-zinc-400 focus:outline-none focus:border-2 focus:border-accent disabled:opacity-60 disabled:cursor-not-allowed transition-all font-sans"
                         />
                       </div>
                     </div>
@@ -228,7 +228,7 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                         onChange={(e) => setProjectDesc(e.target.value)}
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
-                        className="w-full h-full rounded-xl border border-[#E5E7EB] bg-[#FAFAFA] px-4 py-3 text-black text-sm focus:outline-none focus:border-2 focus:border-accent resize-none disabled:opacity-60 disabled:cursor-not-allowed transition-all font-sans"
+                        className="w-full h-full rounded-xl border border-[#E5E7EB] bg-[#F3EEE3] px-4 py-3 text-black text-sm focus:outline-none focus:border-2 focus:border-accent resize-none disabled:opacity-60 disabled:cursor-not-allowed transition-all font-sans"
                       />
 
                       {/* Animated Placeholder overlay */}
@@ -273,11 +273,11 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                     <button
                       type="submit"
                       disabled={isSending}
-                      className={`mt-4 mx-auto flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-accent text-[#FAFAFA] font-mono font-semibold tracking-wider transition-colors duration-250 cursor-pointer text-sm ${
+                      className={`mt-4 mx-auto flex items-center justify-center gap-2.5 px-6 py-3 rounded-full bg-accent text-[#F3EEE3] font-mono font-semibold tracking-wider transition-colors duration-250 cursor-pointer text-sm ${
                         isSending ? 'opacity-70 cursor-not-allowed' : ''
                       }`}
                     >
-                      <span className={`w-2.5 h-2.5 bg-[#FAFAFA] rounded-full ${isSending ? 'animate-ping' : ''}`} />
+                      <span className={`w-2.5 h-2.5 bg-[#F3EEE3] rounded-full ${isSending ? 'animate-ping' : ''}`} />
                       {isSending ? 'Sending...' : 'Submit Inquiry'}
                     </button>
                   </form>
@@ -337,7 +337,7 @@ export const ConnectModal: React.FC<ConnectModalProps> = ({ isOpen, onClose }) =
                   animate={{ opacity: 1, y: 0 }}
                   className="flex flex-col items-center justify-center py-10 text-center"
                 >
-                  <div className="w-16 h-16 bg-black text-[#FAFAFA] rounded-full flex items-center justify-center mb-6">
+                  <div className="w-16 h-16 bg-black text-[#F3EEE3] rounded-full flex items-center justify-center mb-6">
                     <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>

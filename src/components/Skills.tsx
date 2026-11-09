@@ -95,7 +95,7 @@ export default function Skills() {
             return (
               <div
                 key={skill.name}
-                className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-2rem)/3)] md:w-[calc((100%-3.75rem)/4)] lg:w-[calc((100%-6.25rem)/6)] xl:w-[calc((100%-8.75rem)/8)] max-w-[175px] aspect-square min-h-[140px] sm:min-h-[155px] md:min-h-[165px] lg:min-h-[170px] group relative border-2 border-slate-200/90 bg-white p-3.5 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-between transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_16px_32px_-8px_rgba(196,73,0,0.15)] cursor-target overflow-hidden"
+                className="w-[calc((100%-0.75rem)/2)] sm:w-[calc((100%-2rem)/3)] md:w-[calc((100%-3.75rem)/4)] lg:w-[calc((100%-6.25rem)/6)] xl:w-[calc((100%-8.75rem)/8)] max-w-[175px] aspect-square min-h-[140px] sm:min-h-[155px] md:min-h-[165px] lg:min-h-[170px] group relative border-2 border-slate-200/90 bg-white p-3.5 sm:p-4 md:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-between transition-all duration-300 hover:border-accent hover:-translate-y-1 hover:shadow-[0_16px_32px_-8px_rgba(217,84,30,0.15)] cursor-target overflow-hidden"
               >
                 {/* Tech Logo */}
                 <div className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:scale-110 my-auto">

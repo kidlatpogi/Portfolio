@@ -22,7 +22,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer id="contact" className="w-full bg-[#C44900] md:h-screen md:min-h-screen flex flex-col justify-between pt-20 pb-8 relative overflow-hidden border-t border-[#C44900]/20">
+    <footer id="contact" className="w-full bg-[#D9541E] md:h-screen md:min-h-screen flex flex-col justify-between pt-20 pb-8 relative overflow-hidden border-t border-[#D9541E]/20">
       <div className="w-[95%] md:w-[95%] max-w-[1600px] mx-auto px-6 md:px-24 flex flex-col justify-between h-full min-h-[calc(100vh-140px)] md:min-h-0 relative z-10">
         
         {/* Top Split Section */}

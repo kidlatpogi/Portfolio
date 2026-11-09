@@ -34,7 +34,7 @@ const projectsData: ProjectItemData[] = [
     description: "Multimodal AI public speaking & speech analysis platform using MediaPipe vision mesh and Librosa acoustic analytics to deliver real-time feedback on posture, vocal delivery, and presentation metrics.",
     tags: ["React 19", "FastAPI", "MediaPipe", "Librosa", "Supabase", "Cloudflare AI"],
     stack: "[REACT 19] — [FASTAPI] — [MEDIAPIPE]",
-    bgGradient: "bg-[#C44900]",
+    bgGradient: "bg-[#D9541E]",
     accentColor: "from-white/15 to-transparent",
     link: "https://bigkas.site/",
     actionLabel: "Visit Website",

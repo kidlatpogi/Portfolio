@@ -93,7 +93,7 @@ export default function About() {
         <div className="w-[95%] md:w-[95%] max-w-[1600px] grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 mx-auto">
           
           {/* Card 1: Philosophy */}
-          <div className="about-bento-card border-2 border-slate-200/80 bg-white p-6 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-start gap-2.5 sm:gap-3 hover:border-accent hover:shadow-[0_12px_28px_-8px_rgba(196,73,0,0.1)] transition-all duration-300 group cursor-target">
+          <div className="about-bento-card border-2 border-slate-200/80 bg-white p-6 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-start gap-2.5 sm:gap-3 hover:border-accent hover:shadow-[0_12px_28px_-8px_rgba(217,84,30,0.1)] transition-all duration-300 group cursor-target">
             <span className="font-mono text-xs uppercase tracking-wider text-slate-400 font-bold">
               Philosophy
             </span>
@@ -106,7 +106,7 @@ export default function About() {
           </div>
 
           {/* Card 2: Background */}
-          <div className="about-bento-card border-2 border-slate-200/80 bg-white p-6 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-start gap-2.5 sm:gap-3 hover:border-accent hover:shadow-[0_12px_28px_-8px_rgba(196,73,0,0.1)] transition-all duration-300 group cursor-target">
+          <div className="about-bento-card border-2 border-slate-200/80 bg-white p-6 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-start gap-2.5 sm:gap-3 hover:border-accent hover:shadow-[0_12px_28px_-8px_rgba(217,84,30,0.1)] transition-all duration-300 group cursor-target">
             <span className="font-mono text-xs uppercase tracking-wider text-slate-400 font-bold">
               Background
             </span>
@@ -119,7 +119,7 @@ export default function About() {
           </div>
 
           {/* Card 3: Key Accomplishments */}
-          <div className="about-bento-card border-2 border-slate-200/80 bg-white p-6 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-start gap-2.5 sm:gap-3 hover:border-accent hover:shadow-[0_12px_28px_-8px_rgba(196,73,0,0.1)] transition-all duration-300 group cursor-target">
+          <div className="about-bento-card border-2 border-slate-200/80 bg-white p-6 sm:p-7 md:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-start gap-2.5 sm:gap-3 hover:border-accent hover:shadow-[0_12px_28px_-8px_rgba(217,84,30,0.1)] transition-all duration-300 group cursor-target">
             <span className="font-mono text-xs uppercase tracking-wider text-slate-400 font-bold">
               Highlights
             </span>
@@ -128,13 +128,13 @@ export default function About() {
             </h3>
             
             <div className="grid grid-cols-2 gap-3 mt-1">
-              <div className="p-3.5 sm:p-4 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-100">
+              <div className="p-3.5 sm:p-4 bg-[#F3EEE3]/70 rounded-xl sm:rounded-2xl border border-black/8">
                 <span className="font-clash-semibold text-2xl sm:text-3xl font-bold text-accent">12+</span>
                 <p className="font-mono text-[10px] sm:text-xs text-slate-500 uppercase font-semibold leading-tight mt-1">
                   Verified Badges & Certifications
                 </p>
               </div>
-              <div className="p-3.5 sm:p-4 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-100">
+              <div className="p-3.5 sm:p-4 bg-[#F3EEE3]/70 rounded-xl sm:rounded-2xl border border-black/8">
                 <span className="font-clash-semibold text-2xl sm:text-3xl font-bold text-accent">8+</span>
                 <p className="font-mono text-[10px] sm:text-xs text-slate-500 uppercase font-semibold leading-tight mt-1">
                   Featured Projects Built

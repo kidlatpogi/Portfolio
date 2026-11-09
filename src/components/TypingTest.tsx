@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Volume2, VolumeX, RotateCcw } from 'lucide-react';
 import { TYPING_SENTENCES } from '../data/typingSentences';
@@ -154,22 +154,22 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25, ease: 'easeOut' }}
-          className="fixed inset-0 z-[100] flex flex-col justify-between bg-[#f8f8f8]/90 backdrop-blur-2xl px-6 py-8 sm:px-12 md:px-20 lg:px-28 select-none"
+          className="fixed inset-0 z-[100] flex flex-col justify-between bg-[#F3EEE3]/90 backdrop-blur-2xl px-6 py-8 sm:px-12 md:px-20 lg:px-28 select-none"
         >
           {/* Top Bar */}
           <div className="w-full flex items-center justify-between max-w-4xl mx-auto flex-shrink-0">
             {/* Left: Title & Audio Toggle */}
             <div className="flex items-center gap-3 sm:gap-4">
-              <span className="font-mono text-xs uppercase tracking-[0.2em] font-bold text-[#C44900]">
+              <span className="font-mono text-xs uppercase tracking-[0.2em] font-bold text-[#D9541E]">
                 TYPING TEST
               </span>
 
               <button
                 onClick={handleToggleMute}
-                className="cursor-target flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-[#C44900] text-slate-600 hover:text-[#C44900] text-xs font-mono transition-colors cursor-pointer shadow-2xs"
+                className="cursor-target flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 hover:border-[#D9541E] text-slate-600 hover:text-[#D9541E] text-xs font-mono transition-colors cursor-pointer shadow-2xs"
                 title={isMuted ? 'Unmute keyboard audio' : 'Mute keyboard audio'}
               >
-                {isMuted ? <VolumeX size={14} className="text-red-500" /> : <Volume2 size={14} className="text-[#C44900]" />}
+                {isMuted ? <VolumeX size={14} className="text-red-500" /> : <Volume2 size={14} className="text-[#D9541E]" />}
                 <span>{isMuted ? 'Muted' : 'Audio'}</span>
               </button>
             </div>
@@ -234,7 +234,7 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
                     <span key={index} className="relative inline">
                       {/* Blinking Cursor Bar */}
                       {isCurrent && (
-                        <span className="absolute -left-[1px] top-0 bottom-0 w-[2px] bg-[#C44900] animate-pulse" />
+                        <span className="absolute -left-[1px] top-0 bottom-0 w-[2px] bg-[#D9541E] animate-pulse" />
                       )}
 
                       <span
@@ -263,7 +263,7 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
                       key={k}
                       className={`w-8 h-8 sm:w-10 sm:h-10 rounded-md aspect-square flex items-center justify-center font-mono text-xs sm:text-sm font-bold uppercase transition-all duration-75 ${
                         activeKey === k
-                          ? 'bg-[#C44900] text-white scale-95 shadow-inner'
+                          ? 'bg-[#D9541E] text-white scale-95 shadow-inner'
                           : 'bg-white text-slate-700 border border-slate-300/80 shadow-2xs'
                       }`}
                     >
@@ -277,7 +277,7 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
               <div
                 className={`w-44 sm:w-60 h-8 sm:h-9 rounded-md flex items-center justify-center font-mono text-[10px] uppercase tracking-widest font-semibold transition-all duration-75 mt-0.5 ${
                   activeKey === 'space'
-                    ? 'bg-[#C44900] text-white scale-95 shadow-inner'
+                    ? 'bg-[#D9541E] text-white scale-95 shadow-inner'
                     : 'bg-white text-slate-400 border border-slate-300/80 shadow-2xs'
                 }`}
               >
@@ -294,7 +294,7 @@ export const TypingTest: React.FC<TypingTestProps> = ({ isOpen, onClose }) => {
               >
                 <button
                   onClick={loadNewSentence}
-                  className="cursor-target flex items-center gap-2 bg-black hover:bg-[#C44900] text-white font-mono text-xs font-bold px-5 py-2.5 rounded-full transition-colors duration-200 cursor-pointer shadow-md"
+                  className="cursor-target flex items-center gap-2 bg-black hover:bg-[#D9541E] text-white font-mono text-xs font-bold px-5 py-2.5 rounded-full transition-colors duration-200 cursor-pointer shadow-md"
                 >
                   <RotateCcw size={14} />
                   <span>Next Sentence (Tab)</span>

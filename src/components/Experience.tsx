@@ -64,7 +64,7 @@ export default function Experience() {
               <div className="absolute left-4 md:left-[23px] top-7 sm:top-8 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-white border-4 border-accent shadow-md shadow-accent/40 group-hover:scale-125 group-hover:bg-accent transition-all duration-300 hidden sm:block z-10" />
 
               {/* Experience Milestone Card - Proper ATS Structured */}
-              <div className="w-full border-2 border-slate-200/80 bg-white p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-between gap-4 sm:gap-5 transition-all duration-300 hover:border-accent hover:shadow-[0_16px_36px_-12px_rgba(196,73,0,0.12)] cursor-target">
+              <div className="w-full border-2 border-slate-200/80 bg-white p-5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-between gap-4 sm:gap-5 transition-all duration-300 hover:border-accent hover:shadow-[0_16px_36px_-12px_rgba(217,84,30,0.12)] cursor-target">
 
                 {/* Top ATS Header: Role, Company, Location & Date */}
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 sm:gap-4 border-b border-slate-100 pb-4 sm:pb-5">
@@ -78,7 +78,7 @@ export default function Experience() {
                   </div>
 
                   <div className="flex flex-wrap sm:flex-col gap-2 md:items-end flex-shrink-0">
-                    <span className="font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slate-700 font-bold bg-slate-100 px-3 py-1.5 rounded-full flex items-center gap-1.5 sm:gap-2">
+                    <span className="font-mono text-[11px] sm:text-xs uppercase tracking-wider text-slate-700 font-bold bg-[#F3EEE3]/80 border border-black/8 px-3 py-1.5 rounded-full flex items-center gap-1.5 sm:gap-2">
                       <Calendar className="w-3.5 h-3.5 text-accent" />
                       {exp.duration}
                     </span>

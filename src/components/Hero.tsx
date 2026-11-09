@@ -162,7 +162,7 @@ export default function Hero() {
                           </defs>
 
                           {/* Soft bottom contact shadow */}
-                          <ellipse cx="44" cy="56" rx="36" ry="5" fill="#000000" opacity="0.25" />
+                          <ellipse cx="44" cy="56" rx="36" ry="5" fill="#111111" opacity="0.25" />
 
                           {/* Solid Red Cone Body */}
                           <path

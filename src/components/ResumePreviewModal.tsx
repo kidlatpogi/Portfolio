@@ -42,7 +42,7 @@ export default function ResumePreviewModal() {
       <style>{`
         .resume-preview-body {
           scrollbar-width: thin !important;
-          scrollbar-color: #C44900 #e2e8f0 !important;
+          scrollbar-color: #D9541E #e2e8f0 !important;
         }
         .resume-preview-body::-webkit-scrollbar {
           display: block !important;
@@ -53,11 +53,11 @@ export default function ResumePreviewModal() {
           border-radius: 4px !important;
         }
         .resume-preview-body::-webkit-scrollbar-thumb {
-          background: #C44900 !important;
+          background: #D9541E !important;
           border-radius: 4px !important;
         }
         .resume-preview-body::-webkit-scrollbar-thumb:hover {
-          background: #a33c00 !important;
+          background: #B84314 !important;
         }
       `}</style>
 

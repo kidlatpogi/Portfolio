@@ -67,10 +67,10 @@ export default function GithubHeatmap() {
     return () => clearTimeout(timer);
   }, [selectedYear]);
 
-  // Brand color scheme: Slate-100 to Zeus's accent burnt orange (#C44900)
+  // Brand color scheme: Slate-100 to Zeus's accent burnt orange (#D9541E)
   const brandTheme = {
-    light: ['#ebebeb', '#ffc199', '#ff934d', '#ff6600', '#C44900'],
-    dark: ['#2e2e2e', '#ffc199', '#ff934d', '#ff6600', '#C44900']
+    light: ['#ebebeb', '#ffc199', '#ff934d', '#ff6600', '#D9541E'],
+    dark: ['#2e2e2e', '#ffc199', '#ff934d', '#ff6600', '#D9541E']
   };
 
   const currentCount = yearlyTotals[selectedYear] ?? (selectedYear === 2026 ? 3329 : selectedYear === 2025 ? 735 : 1);
@@ -147,7 +147,7 @@ export default function GithubHeatmap() {
                       className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-xl font-mono text-xs sm:text-sm font-bold transition-all duration-200 cursor-target ${
                         isSelected
                           ? 'bg-accent text-white shadow-md shadow-accent/25 scale-[1.02]'
-                          : 'bg-slate-50 border border-slate-200/80 text-slate-600 hover:border-slate-300 hover:text-slate-900 hover:bg-slate-100'
+                          : 'bg-[#F3EEE3]/80 border border-black/8 text-slate-600 hover:border-slate-300 hover:text-slate-900 hover:bg-[#F3EEE3]'
                       }`}
                     >
                       {year}
@@ -160,7 +160,7 @@ export default function GithubHeatmap() {
                 href="https://github.com/kidlatpogi"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-xs text-slate-600 hover:text-accent flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200/70 bg-slate-50 hover:bg-slate-100 transition-colors cursor-target font-semibold ml-0 sm:ml-2"
+                className="font-mono text-xs text-slate-600 hover:text-accent flex items-center gap-1.5 px-3 py-2 rounded-xl border border-black/8 bg-[#F3EEE3]/80 hover:bg-[#F3EEE3] transition-colors cursor-target font-semibold ml-0 sm:ml-2"
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />

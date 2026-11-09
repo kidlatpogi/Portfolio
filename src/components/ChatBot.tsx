@@ -196,7 +196,7 @@ const renderInlineMarkdown = (text: string) => {
         href={linkUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-[#C44900] font-semibold underline underline-offset-2 hover:text-[#9A3800] transition-colors inline-flex items-center gap-0.5 cursor-target"
+        className="text-[#D9541E] font-semibold underline underline-offset-2 hover:text-[#B84314] transition-colors inline-flex items-center gap-0.5 cursor-target"
       >
         <span>{linkText}</span>
         <ExternalLink size={11} className="inline opacity-70" />
@@ -250,9 +250,9 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
           return (
             <div
               key={index}
-              className="font-clash-bold text-xs md:text-sm font-bold text-[#C44900] uppercase tracking-wider mt-2 mb-0.5 pb-1 border-b border-[#C44900]/20 flex items-center gap-2"
+              className="font-clash-bold text-xs md:text-sm font-bold text-[#D9541E] uppercase tracking-wider mt-2 mb-0.5 pb-1 border-b border-[#D9541E]/20 flex items-center gap-2"
             >
-              <span className="w-2 h-2 rounded-[2px] bg-[#C44900] shrink-0" />
+              <span className="w-2 h-2 rounded-[2px] bg-[#D9541E] shrink-0" />
               <span>{trimmed.replace(/^###\s+/, '')}</span>
             </div>
           );
@@ -265,7 +265,7 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
               key={index}
               className="font-bold text-xs md:text-[13px] text-slate-900 mt-2 mb-0.5 flex items-center gap-2"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C44900] shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D9541E] shrink-0" />
               <span>{renderInlineMarkdown(trimmed.replace(/^####\s+/, ''))}</span>
             </div>
           );
@@ -287,7 +287,7 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
           const itemText = trimmed.replace(/^[-*]\s+/, '');
           return (
             <div key={index} className="flex items-start gap-2.5 ml-1.5 my-0.5 text-slate-800">
-              <span className="w-1.5 h-1.5 rounded-[1.5px] bg-[#C44900] mt-2 shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-[1.5px] bg-[#D9541E] mt-2 shrink-0" />
               <div className="flex-1">{renderInlineMarkdown(itemText)}</div>
             </div>
           );
@@ -299,7 +299,7 @@ const FormattedMessage: React.FC<{ content: string; isUser: boolean }> = ({ cont
           if (match) {
             return (
               <div key={index} className="flex items-start gap-2.5 ml-1.5 my-0.5 text-slate-800">
-                <span className="font-mono text-[11px] font-bold text-[#C44900] bg-orange-50 border border-[#C44900]/30 rounded px-1.5 py-0.2 shrink-0">
+                <span className="font-mono text-[11px] font-bold text-[#D9541E] bg-orange-50 border border-[#D9541E]/30 rounded px-1.5 py-0.2 shrink-0">
                   {match[1]}
                 </span>
                 <div className="flex-1">{renderInlineMarkdown(match[2])}</div>
@@ -588,7 +588,7 @@ export const ChatBot: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="chatbot-modal-overlay fixed inset-0 z-[100] flex flex-col justify-between bg-[#f8f8f8]/85 backdrop-blur-2xl px-5 py-5 sm:px-10 sm:py-8 md:px-16 md:py-10 lg:px-24"
+            className="chatbot-modal-overlay fixed inset-0 z-[100] flex flex-col justify-between bg-[#F3EEE3]/85 backdrop-blur-2xl px-5 py-5 sm:px-10 sm:py-8 md:px-16 md:py-10 lg:px-24"
           >
             {/* Height-aware responsive styling */}
             <style>{`
@@ -625,7 +625,7 @@ export const ChatBot: React.FC = () => {
             {/* Top Navigation Bar */}
             <div className="w-full flex items-center justify-between max-w-4xl mx-auto flex-shrink-0">
               <div className="flex items-center gap-3">
-                <span className="font-mono text-xs uppercase tracking-[0.2em] font-bold text-[#C44900]">
+                <span className="font-mono text-xs uppercase tracking-[0.2em] font-bold text-[#D9541E]">
                   PORTFOLIO ASSISTANT
                 </span>
               </div>
@@ -673,12 +673,12 @@ export const ChatBot: React.FC = () => {
                       onChange={(e) => setInputValue(e.target.value)}
                       placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Type a question or choose below..."}
                       disabled={isInputDisabled}
-                      className="chatbot-input-large w-full text-base sm:text-xl md:text-2xl lg:text-3xl font-sans text-slate-900 bg-transparent border-b-2 border-slate-300 focus:border-[#C44900] pb-2.5 sm:pb-3 pr-10 sm:pr-12 focus:outline-none transition-colors duration-200 placeholder:text-slate-400/70"
+                      className="chatbot-input-large w-full text-base sm:text-xl md:text-2xl lg:text-3xl font-sans text-slate-900 bg-transparent border-b-2 border-slate-300 focus:border-[#D9541E] pb-2.5 sm:pb-3 pr-10 sm:pr-12 focus:outline-none transition-colors duration-200 placeholder:text-slate-400/70"
                     />
                     <button
                       type="submit"
                       disabled={isInputDisabled || !inputValue.trim()}
-                      className="cursor-target absolute right-0 bottom-2.5 sm:bottom-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
+                      className="cursor-target absolute right-0 bottom-2.5 sm:bottom-3 text-slate-400 hover:text-[#D9541E] disabled:opacity-30 transition-colors cursor-pointer"
                       aria-label="Submit query"
                     >
                       <CornerDownLeft size={22} />
@@ -697,7 +697,7 @@ export const ChatBot: React.FC = () => {
                           type="button"
                           disabled={isInputDisabled}
                           onClick={() => handleSend(t.query)}
-                          className="cursor-target font-mono text-[11px] sm:text-xs font-semibold rounded-full border border-slate-300 hover:border-[#C44900] bg-white hover:bg-orange-50 disabled:opacity-50 px-3 sm:px-4 py-1.5 sm:py-2 text-slate-700 hover:text-[#C44900] transition-all duration-200 shadow-2xs cursor-pointer flex items-center gap-1.5"
+                          className="cursor-target font-mono text-[11px] sm:text-xs font-semibold rounded-full border border-slate-300 hover:border-[#D9541E] bg-white hover:bg-orange-50 disabled:opacity-50 px-3 sm:px-4 py-1.5 sm:py-2 text-slate-700 hover:text-[#D9541E] transition-all duration-200 shadow-2xs cursor-pointer flex items-center gap-1.5"
                         >
                           <span>{t.label}</span>
                           <ArrowRight size={12} className="opacity-60" />
@@ -726,7 +726,7 @@ export const ChatBot: React.FC = () => {
                           {msg.sender === 'user' ? (
                             <span>You</span>
                           ) : (
-                            <span className="text-[#C44900] font-bold">Zeus's Assistant</span>
+                            <span className="text-[#D9541E] font-bold">Zeus's Assistant</span>
                           )}
                         </div>
 
@@ -746,13 +746,13 @@ export const ChatBot: React.FC = () => {
                     {/* Thinking Indicator (Bouncing Dots) */}
                     {isThinking && (
                       <div className="flex flex-col gap-1 sm:gap-1.5 items-start">
-                        <span className="font-mono text-[10px] uppercase tracking-wider text-[#C44900] font-bold px-1">
+                        <span className="font-mono text-[10px] uppercase tracking-wider text-[#D9541E] font-bold px-1">
                           Zeus's Assistant
                         </span>
                         <div className="p-3 sm:p-3.5 rounded-2xl bg-white border border-slate-200/80 flex items-center gap-2 shadow-2xs">
-                          <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '0ms' }} />
-                          <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '150ms' }} />
-                          <span className="w-2 h-2 rounded-full bg-[#C44900] animate-bounce" style={{ animationDelay: '300ms' }} />
+                          <span className="w-2 h-2 rounded-full bg-[#D9541E] animate-bounce" style={{ animationDelay: '0ms' }} />
+                          <span className="w-2 h-2 rounded-full bg-[#D9541E] animate-bounce" style={{ animationDelay: '150ms' }} />
+                          <span className="w-2 h-2 rounded-full bg-[#D9541E] animate-bounce" style={{ animationDelay: '300ms' }} />
                           <span className="font-mono text-xs text-slate-400 ml-1.5">Thinking...</span>
                         </div>
                       </div>
@@ -774,12 +774,12 @@ export const ChatBot: React.FC = () => {
                         onChange={(e) => setInputValue(e.target.value)}
                         placeholder={cooldownRemaining > 0 ? `Cooldown active (${cooldownRemaining}s)...` : "Ask a follow-up question..."}
                         disabled={isInputDisabled}
-                        className="w-full text-xs sm:text-sm md:text-base font-sans text-slate-900 bg-white border border-slate-300 focus:border-[#C44900] rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 pr-10 focus:outline-none transition-colors duration-200 shadow-2xs"
+                        className="w-full text-xs sm:text-sm md:text-base font-sans text-slate-900 bg-white border border-slate-300 focus:border-[#D9541E] rounded-xl px-3.5 sm:px-4 py-2 sm:py-2.5 pr-10 focus:outline-none transition-colors duration-200 shadow-2xs"
                       />
                       <button
                         type="submit"
                         disabled={isInputDisabled || !inputValue.trim()}
-                        className="cursor-target absolute right-3 text-slate-400 hover:text-[#C44900] disabled:opacity-30 transition-colors cursor-pointer"
+                        className="cursor-target absolute right-3 text-slate-400 hover:text-[#D9541E] disabled:opacity-30 transition-colors cursor-pointer"
                         aria-label="Submit follow-up query"
                       >
                         <CornerDownLeft size={18} />
@@ -794,7 +794,7 @@ export const ChatBot: React.FC = () => {
                           type="button"
                           disabled={isInputDisabled}
                           onClick={() => handleSend(t.query)}
-                          className="cursor-target font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#C44900] bg-white hover:bg-orange-50 disabled:opacity-50 px-2.5 sm:px-3 py-1 text-slate-700 hover:text-[#C44900] transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
+                          className="cursor-target font-mono text-[10px] font-semibold rounded-full border border-slate-200 hover:border-[#D9541E] bg-white hover:bg-orange-50 disabled:opacity-50 px-2.5 sm:px-3 py-1 text-slate-700 hover:text-[#D9541E] transition-all duration-200 cursor-pointer shadow-2xs shrink-0"
                         >
                           {t.label}
                         </button>
@@ -816,7 +816,7 @@ export const ChatBot: React.FC = () => {
         <div className="hidden md:flex group relative items-center">
           <button
             onClick={() => setIsTypingTestOpen(true)}
-            className="cursor-target flex items-center h-12 rounded-full bg-black hover:bg-[#C44900] text-[#FAFAFA] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[200px] px-3.5 group-hover:pr-5 group-hover:pl-4"
+            className="cursor-target flex items-center h-12 rounded-full bg-black hover:bg-[#D9541E] text-[#F3EEE3] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[200px] px-3.5 group-hover:pr-5 group-hover:pl-4"
             aria-label="Open typing test"
           >
             <div className="flex items-center justify-center shrink-0">
@@ -832,7 +832,7 @@ export const ChatBot: React.FC = () => {
         <div className="group relative flex items-center">
           <button
             onClick={() => setIsOpen(true)}
-            className="cursor-target flex items-center h-12 rounded-full bg-black hover:bg-[#C44900] text-[#FAFAFA] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[180px] px-3.5 group-hover:pr-5 group-hover:pl-4"
+            className="cursor-target flex items-center h-12 rounded-full bg-black hover:bg-[#D9541E] text-[#F3EEE3] transition-all duration-300 shadow-xl border border-white/10 cursor-pointer overflow-hidden max-w-[48px] group-hover:max-w-[180px] px-3.5 group-hover:pr-5 group-hover:pl-4"
             aria-label="Open portfolio AI assistant"
           >
             <div className="flex items-center justify-center shrink-0">
